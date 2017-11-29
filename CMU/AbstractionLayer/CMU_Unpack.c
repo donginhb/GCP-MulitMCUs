@@ -30,7 +30,7 @@
 #define PACK_SIZE_LENSEG                        (2)         //帧长度字段长度
 #define PACK_SIZE_CHECKNUM                      (2)         //校验字长度
 
-#define PACK_PACK_MAX_LEN                       (64)        //单次发送的最大总长度
+#define PACK_PACK_MAX_LEN                       (128)       //单次发送的最大总长度
 //单次发送允许最大的发送数据区长度          
 #define PACK_DATA_MAX_LENGTH                    (PACK_PACK_MAX_LEN-PACK_SIZE_HEAD-PACK_SIZE_LENSEG-PACK_SIZE_CHECKNUM)
 

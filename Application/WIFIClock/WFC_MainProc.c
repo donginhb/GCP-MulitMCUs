@@ -16,10 +16,10 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "GCP_MainProc.h"
-#include "GCP_HwCtrl.h"
-#include "GCP_HardwareDef.h"
-#include "GCP_ComMan.h"
+#include "WFC_MainProc.h"
+#include "WFC_HwCtrl.h"
+#include "WFC_HardwareDef.h"
+#include "WFC_ComMan.h"
 
 #include "DataType/DataType.h"
 
@@ -30,10 +30,10 @@
   * @param  None
   * @retval None
   */
-void GCP_Init(void)
+void WFC_Init(void)
 {
     //硬件初始化
-    GCP_HwInit();
+    WFC_HwInit();
     
 }
 
@@ -43,18 +43,18 @@ void GCP_Init(void)
   * @param  None
   * @retval None
   */
-void GCP_MainProc(void)
+void WFC_MainProc(void)
 {
     //LED显示
-    GCP_MainWorkLedShow();
+    WFC_MainWorkLedShow();
     
     //通信处理
-    //GCP_ComHandler();
+    //WFC_ComHandler();
     
     //按键处理
-    //GCP_KeyProc();
+    //WFC_KeyProc();
     
     //传感器采样处理
-    //GCP_SensorSampleProc();
+    //WFC_SensorSampleProc();
     
 }

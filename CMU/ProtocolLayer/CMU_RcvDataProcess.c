@@ -5,11 +5,10 @@
 #include "CMU_CmdProcess.h"
 #include "CMU_SendDataProcess.h"
 #include "CMU_RcvDataProcess.h"
-#include "..\\CMU_ErrorCodeDef.h"
+#include "../CMU_ErrorCodeDef.h"
+#include "../AbstractionLayer/AbstractionLayer.h"
 
-
-//#include "..\\..\\GPIO\\GPIOCtrl.h"
-#include "..\\AbstractionLayer\\AbstractionLayer.h"
+extern void* CMU_Malloc(uBit32 ulSize);
 
 
 COM_RCV_CTRL_DATA            m_RcvCtrlData;            //接收控制数据

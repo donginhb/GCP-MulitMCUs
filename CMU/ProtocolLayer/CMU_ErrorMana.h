@@ -2,7 +2,7 @@
 #define _CMU_ERROR_MANA_H_
 
 #include "ComDataStructDef.h"
-//#include "..\\..\\DataStructDef\\ERR_DataStructDef.h"
+//#include "../../DataStructDef/ERR_DataStructDef.h"
 
 //------------------通信模块内部调用函数---------------------
 #ifdef __cplusplus

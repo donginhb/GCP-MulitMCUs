@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    SysCtrl.c
+  * @file    CoreCtrl.c
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.11.10
@@ -14,15 +14,15 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "SysCtrl.h"
+#include "CoreCtrl.h"
 #include "HAL/HAL_SysCtrl.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-static SYS_TIME_DATA m_ResetTimer = {0};   //复位管理定时器
-
+static SYS_TIME_DATA m_ResetTimer = {0};    //复位管理定时器
+static bool bResetState = false;            //复位标志
 
 /*****************************************************************************
  * 系统复位相关接口函数
@@ -33,7 +33,7 @@ static SYS_TIME_DATA m_ResetTimer = {0};   //复位管理定时器
   * @param  None
   * @retval None
   */
-void SysCtrl_ResetSystemNow(void)
+void CoreCtrl_ResetSystemNow(void)
 {
     HAL_SystemReset();
     
@@ -45,10 +45,23 @@ void SysCtrl_ResetSystemNow(void)
   * @param  ulDelayMs 延时的时间(单位:MS)
   * @retval None
   */
-void SysCtrl_ResetSystemDelay(uBit32 ulDelayMs)
+void CoreCtrl_ResetSystemDelay(uBit32 ulDelayMs)
 {
     SysTime_Start(&m_ResetTimer, ulDelayMs);
+    bResetState = true;
     
+}
+
+
+/**
+  * @brief  系统复位状态获取
+  * @param  None
+  * @retval true-正在复位(延时执行中) false-正常
+  */
+bool CoreCtrl_GetResetState(void)
+{
+    
+    return bResetState;
 }
 
 
@@ -57,11 +70,11 @@ void SysCtrl_ResetSystemDelay(uBit32 ulDelayMs)
   * @param  None
   * @retval None
   */
-void SysCtrl_ResetHandler(void)
+void CoreCtrl_ResetHandler(void)
 {
     if (SysTime_CheckExpiredState(&m_ResetTimer))
     {
-        SysCtrl_ResetSystemNow();
+        CoreCtrl_ResetSystemNow();
     }
     
 }

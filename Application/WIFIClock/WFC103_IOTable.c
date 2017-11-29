@@ -15,7 +15,7 @@
   */
    
 /***********************************<INCLUDES>**********************************/
-#include "ATK_IOTable.h"
+#include "WFC103_IOTable.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 
 
@@ -49,7 +49,7 @@ static GPIO_DATA m_OutputIOTable[] =
 
 
 //控制IO表
-GPIO_CTRL_TABLE g_ATKIOTable = 
+GPIO_CTRL_TABLE g_WFC103_IOTable = 
 {
     m_OutputIOTable,
     m_InputIOTable,

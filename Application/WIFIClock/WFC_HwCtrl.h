@@ -1,5 +1,5 @@
-#ifndef  __GCP_HW_CFG_H
-#define  __GCP_HW_CFG_H
+#ifndef  __WFC_HW_CFG_H
+#define  __WFC_HW_CFG_H
 
 #include "DataType/DataType.h"
 
@@ -16,7 +16,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void GCP_HwInit(void);
+void WFC_HwInit(void);
 
 
 /*****************************************************************************
@@ -28,7 +28,7 @@ void GCP_HwInit(void);
   * @param  None
   * @retval None
   */
-void GCP_MainWorkLedShow(void);
+void WFC_MainWorkLedShow(void);
 
 
 /*****************************************************************************
@@ -40,7 +40,7 @@ void GCP_MainWorkLedShow(void);
   * @param  None
   * @retval None
   */
-void GCP_KeyProc(void);
+void WFC_KeyProc(void);
 
 
 
@@ -53,7 +53,7 @@ void GCP_KeyProc(void);
   * @param  None
   * @retval None
   */
-void GCP_SensorSampleProc(void);
+void WFC_SensorSampleProc(void);
 
 
 #ifdef __cplusplus
@@ -61,4 +61,4 @@ void GCP_SensorSampleProc(void);
 #endif
 
 
-#endif /* __GCP_HW_CFG_H */
+#endif /* __WFC_HW_CFG_H */

@@ -15,8 +15,8 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "GCP_ComMan.h"
-#include "GCP_HardwareDef.h"
+#include "WFC_ComMan.h"
+#include "WFC_HardwareDef.h"
       
 #include "DataType/DataType.h"
 #include "SysPeripheral/UART/UART.h"
@@ -24,14 +24,14 @@
 #include <string.h>
 #include <stdio.h>
 
-#define GCP_CMD_BUFF_LEN     (64)
+#define WFC_CMD_BUFF_LEN     (64)
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
 
 
-static uBit8 uCmdBuff[GCP_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
+static uBit8 uCmdBuff[WFC_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
      
      
 /*****************************************************************************
@@ -44,7 +44,7 @@ static uBit8 uCmdBuff[GCP_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
   * @param  None
   * @retval 0-成功 非0-失败
   */
-uBit32 GCP_ComInit(void)
+uBit32 WFC_ComInit(void)
 {
     
     return 0;
@@ -56,17 +56,17 @@ uBit32 GCP_ComInit(void)
   * @param  None
   * @retval None
   */
-void GCP_ComHandler(void)
+void WFC_ComHandler(void)
 {
     static uBit32 ulRxIndex = 0;
     
     //如果成功接收到数据
-    if (UART_RecvBuff(GCP_UART_NODE, &uCmdBuff[ulRxIndex], 1))
+    if (UART_RecvBuff(WFC_UART_NODE, &uCmdBuff[ulRxIndex], 1))
     {
         //如果已经接收到结束符,则进行指令处理
         if (uCmdBuff[ulRxIndex] == '.')
         {
-            UART_SendBuff(GCP_UART_NODE, (uBit8 *)uCmdBuff, ulRxIndex);
+            UART_SendBuff(WFC_UART_NODE, (uBit8 *)uCmdBuff, ulRxIndex);
             ulRxIndex = 0;
             return;
         }

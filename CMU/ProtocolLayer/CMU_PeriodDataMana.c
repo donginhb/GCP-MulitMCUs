@@ -4,15 +4,15 @@
 #include "CMU_SendDataProcess.h"
 #include "CMU_CmdProcess.h"
 
-#include "..\\..\\CNC\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\..\\CNC\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\..\\CNC\\DataStructDef\\IO_DataStructDef.h"
+#include "../../CNC/DataStructDef/SYS_DataStructDef.h"
+#include "../../CNC/DataStructDef/CRD_DataStructDef.h"
+#include "../../CNC/DataStructDef/IO_DataStructDef.h"
 
-#include "..\\CMU_ErrorCodeDef.h"
+#include "../CMU_ErrorCodeDef.h"
 
 
-#include "..\\UIN_GlobalDataDef.h"
-//#include "..\\GPIO\\GPIOCtrl.h"
+#include "../UIN_GlobalDataDef.h"
+//#include "../GPIO/GPIOCtrl.h"
 
 
 

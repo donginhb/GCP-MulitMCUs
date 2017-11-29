@@ -1,25 +1,19 @@
 
 #include "string.h"
 #include "CMU_Interface.h"
-#include ".\\ProtocolLayer\\CMU_ExApi.h"
-#include ".\\ProtocolLayer\\CMU_PeriodDataMana.h"
-#include ".\\ProtocolLayer\\CMU_SendDataProcess.h"
-#include ".\\ProtocolLayer\\CMU_RcvDataProcess.h"
-#include ".\\AbstractionLayer\\AbstractionLayer.h"
+#include "./ProtocolLayer/CMU_ExApi.h"
+#include "./ProtocolLayer/CMU_PeriodDataMana.h"
+#include "./ProtocolLayer/CMU_SendDataProcess.h"
+#include "./ProtocolLayer/CMU_RcvDataProcess.h"
+#include "./AbstractionLayer/AbstractionLayer.h"
 
 #include "CMU_ErrorCodeDef.h"
 
 
-//#include "..\\SysPeripheral\\GPIO\\GPIOCtrl.h"
-//#include "..\\SysUpdate\\BootLoader\\BootLoaderDefine.h"
-//#include "..\\SysUpdate\\BootLoader\\BootLoader.h"
-
-
-
 static uBit8 m_uComSetDelayCycles = 0;
 
-static uBit32 m_ulCmuMemBase = 0;                    //当前可用缓冲区基地址
-static uBit32 m_ulCmuMemRestLen = 0;                //当前可用缓冲区剩余长度
+static uBit32 m_ulCmuMemBase = 0;                       //当前可用缓冲区基地址
+static uBit32 m_ulCmuMemRestLen = 0;                    //当前可用缓冲区剩余长度
 
 /*
 函数名称：uBit32 CMU_SetRSBufAddr(uBit32 ulStartAddr, uBit32 ulLen);

@@ -3,9 +3,9 @@
 
 #include "CMU_DataStructDef.h"
 
-#include "..\\SysPeripheral\\CAN\\CanDataStructDef.h"
-#include "..\\SysPeripheral\\Enet\\EnetDataStructDef.h"
-#include "..\\SysPeripheral\\UART\\UartDataStructDef.h"
+#include "CMU/AbstractionLayer/CMU_CanInterface.h"
+#include "CMU/AbstractionLayer/CMU_EnetInterface.h"
+#include "CMU/AbstractionLayer/CMU_UartInterface.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +24,7 @@ extern "C" {
     */
     uBit32 CMU_SetRSBufAddr(uBit32 ulStartAddr, uBit32 ulLen);
 
+#if 0
     /*
     函数名称：void CMU_SetCanInterface(uBit16 nCanNode, CAN_INTERFACE sCanInterface);
     功    能：挂接CAN通信接口
@@ -52,6 +53,33 @@ extern "C" {
     注意事项：在初始化通信模块之前调用，如果系统跟上位机通信支持UART通信方式，则需要挂接
     */
     void CMU_SetUartInterface(UART_INTERFACE sUartInterface);
+#endif
+    
+    
+    /**
+      * @brief  CMU CAN 接口设置
+      * @param  None
+      * @retval 0-成功 非0-失败
+      */
+    uBit32 CMU_CAN_SetInterface(uBit8 uCanNode, CMU_CAN_INTERFACE *pCanInterface);
+
+    
+    /**
+      * @brief  CMU ENET 接口设置
+      * @param  pEnetInterface 以太网接口指针
+      * @retval 0-成功 非0-失败
+      */
+    uBit32 CMU_ENET_SetInterface(CMU_ENET_INTERFACE *pEnetInterface);
+    
+    
+    /**
+      * @brief  CMU UART 接口设置
+      * @param  uCanNode CAN节点
+      * @param  pCanInterface CAN接口指针
+      * @retval 0-成功 非0-失败
+      */
+    uBit32 CMU_UART_SetInterface(uBit8 uUartNode, CMU_UART_INTERFACE *pUartInterface);
+        
 
     /*
     函数名称：void CMU_SetExternFun(CMU_EXTERNAL_FUN_TEBLE sCmuExternFunTable)

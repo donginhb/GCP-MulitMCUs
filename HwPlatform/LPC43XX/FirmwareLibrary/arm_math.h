@@ -90,7 +90,7 @@
    *
    * <b>Building the Library</b>
    *
-   * The library installer contains project files to re build libraries on MDK Tool chain in the <code>CMSIS\\DSP_Lib\\Source\\ARM</code> folder.
+   * The library installer contains project files to re build libraries on MDK Tool chain in the <code>CMSIS/DSP_Lib/Source/ARM</code> folder.
    * - arm_cortexM0b_math.uvproj
    * - arm_cortexM0l_math.uvproj
    * - arm_cortexM3b_math.uvproj

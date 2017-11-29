@@ -3,7 +3,7 @@
 #include "CMU_ExApi.h"
 #include "CMU_CmdProcess.h"
 
-#include "..\\CMU_ErrorCodeDef.h"
+#include "../CMU_ErrorCodeDef.h"
 
 #include "ComDataStructDef.h"
 

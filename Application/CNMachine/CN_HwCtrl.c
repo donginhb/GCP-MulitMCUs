@@ -67,10 +67,6 @@ void CN_HwInit(void)
     //初始化IO
     CN_IOConfig();
     
-    //初始化串口
-    UART_Init(CN_UART_NODE, 115200);
-    
-    
 }
 
 

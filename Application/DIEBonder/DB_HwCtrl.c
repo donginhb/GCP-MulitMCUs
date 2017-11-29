@@ -70,9 +70,6 @@ void DB_HwInit(void)
     //初始化IO
     DB_IOConfig();
     
-    //初始化串口
-    UART_Init(DB_UART_NODE, 115200);
-    
     //初始化按键
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY2};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));

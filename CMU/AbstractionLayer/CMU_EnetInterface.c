@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    CMU_UartInterface.c
+  * @file    CMU_EnetInterface.c
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.11.26
-  * @brief   CMU UART Interface
+  * @brief   CMU ENET Interface
   ******************************************************************************
   * @attention
   * 
@@ -15,7 +15,7 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "CMU_UartInterface.h"
+#include "CMU_EnetInterface.h"
 #include "DataType/DataType.h"
 #include "CMU_Unpack.h"
 
@@ -25,8 +25,8 @@
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-#define UART_MAX_SNED_LEN       (128)
-#define UART_MAX_RECV_LEN       (128)
+#define ENET_MAX_SNED_LEN       (128)
+#define ENET_MAX_RECV_LEN       (128)
 
 #define FRAME_HAND              ("HCZN")            //帧头
 #define FRAME_HAND_SIZE         (4)                 //帧头长度
@@ -44,24 +44,24 @@ typedef struct
 {
     uBit32 ulID;
     uBit32 ulDataLen;
-    uBit8  uDataBuff[UART_MAX_SNED_LEN];
-}UART_DATA_PACK;
+    uBit8  uDataBuff[ENET_MAX_SNED_LEN];
+}ENET_DATA_PACK;
 
-static UART_DATA_PACK m_UartRecvPack = {0};         //接收的数据包缓存(已解包)
-static uBit8 m_uSendBuff[UART_MAX_SNED_LEN] = {0};  //发送缓冲区
-static uBit8 m_uRecvBuff[UART_MAX_RECV_LEN] = {0};  //接收缓冲区
+static ENET_DATA_PACK m_EnetRecvPack = {0};         //接收的数据包缓存(已解包)
+static uBit8 m_uSendBuff[ENET_MAX_SNED_LEN] = {0};  //发送缓冲区
+static uBit8 m_uRecvBuff[ENET_MAX_RECV_LEN] = {0};  //接收缓冲区
 static uBit8 m_uRecvPackValidFlag = 0;              //接收数据包有效标志
 
-static CMU_UART_INTERFACE m_UartInterface = {0};    //串口控制接口
-static bool bUartInterfaceValidFlags = false;       //串口接口有效标志
-static uBit8 m_uUartNode = 0;
+static CMU_ENET_INTERFACE m_EnetInterface = {0};    //串口控制接口
+static bool bEnetInterfaceValidFlags = false;       //串口接口有效标志
+
 
 //解包接收适配
-static uBit32 CMU_UART_UnpackRecvAdapt(uBit8 *pRBuff, uBit32 ulSize)
+static uBit32 CMU_ENET_UnpackRecvAdapt(uBit8 *pRBuff, uBit32 ulSize)
 {
-    if (bUartInterfaceValidFlags)
+    if (bEnetInterfaceValidFlags)
     {
-        return m_UartInterface.pf_UART_RecvBuff(m_uUartNode, pRBuff, ulSize);
+        return m_EnetInterface.pf_ENET_RecvBuff(pRBuff, ulSize);
     }
     
     return 0;
@@ -69,41 +69,39 @@ static uBit32 CMU_UART_UnpackRecvAdapt(uBit8 *pRBuff, uBit32 ulSize)
 
 
 /*****************************************************************************
- * CMU UART相关控制接口
+ * CMU ENET相关控制接口
  ****************************************************************************/
 
 /**
-  * @brief  CMU UART 接口设置
-  * @param  uUartNode 串口节点
-  * @param  pUartInterface 串口接口指针
+  * @brief  CMU ENET 接口设置
+  * @param  pEnetInterface 以太网接口指针
   * @retval 0-成功 非0-失败
   */
-uBit32 CMU_UART_SetInterface(uBit8 uUartNode, CMU_UART_INTERFACE *pUartInterface)
+uBit32 CMU_ENET_SetInterface(CMU_ENET_INTERFACE *pEnetInterface)
 {
-    if (pUartInterface != NULL)
+    if (pEnetInterface != NULL)
     {
-        m_uUartNode = uUartNode;
-        bUartInterfaceValidFlags = true;
-        m_UartInterface = *pUartInterface;
+        bEnetInterfaceValidFlags = true;
+        m_EnetInterface = *pEnetInterface;
         
-        CMU_SetUnpackRecvInterface(CMU_UART_UnpackRecvAdapt);
+        CMU_SetUnpackRecvInterface(CMU_ENET_UnpackRecvAdapt);
         return 0;
     }
     
-    CMU_SetUnpackRecvInterface(CMU_UART_UnpackRecvAdapt);
+    CMU_SetUnpackRecvInterface(CMU_ENET_UnpackRecvAdapt);
     return 1;
 }
 
 
 /**
-  * @brief  CMU UART 接口有效性检测
+  * @brief  CMU ENEI 接口有效性检测
   * @param  None
   * @retval true-有效 false-无效
   */
-bool CMU_UART_CheckInterfaceValid(void)
+bool CMU_ENET_CheckInterfaceValid(void)
 {
     
-    return bUartInterfaceValidFlags;
+    return bEnetInterfaceValidFlags;
 }
 
 
@@ -112,9 +110,9 @@ bool CMU_UART_CheckInterfaceValid(void)
   * @param  None
   * @retval 0-成功  非0-失败
   */
-uBit32 CMU_UART_Open(void)
+uBit32 CMU_ENET_Open(void)
 {
-    m_UartInterface.pf_UART_Open(m_uUartNode);
+    m_EnetInterface.pf_ENET_Open();
     
     return 0;
 }
@@ -125,9 +123,9 @@ uBit32 CMU_UART_Open(void)
   * @param  None
   * @retval 0-成功  非0-失败
   */
-uBit32 CMU_UART_Close(void)
+uBit32 CMU_ENET_Close(void)
 {
-    m_UartInterface.pf_UART_Close(m_uUartNode);
+    m_EnetInterface.pf_ENET_Close();
     
     return 0;
 }
@@ -138,7 +136,7 @@ uBit32 CMU_UART_Close(void)
   * @param  None
   * @retval None
   */
-void CMU_UART_RecvHandler(void)
+void CMU_ENET_RecvHandler(void)
 {
     uBit32 ulPackLen = 0;
     
@@ -146,12 +144,12 @@ void CMU_UART_RecvHandler(void)
     if (CMU_UnPack(m_uRecvBuff, &ulPackLen) == 0)
     {
 #if 0
-        memcpy(&m_UartRecvPack, m_uRecvBuff, ulPackLen);
+        memcpy(&m_EnetRecvPack, m_uRecvBuff, ulPackLen);
 #endif
-        m_UartRecvPack.ulID = *(uBit32 *)m_uRecvBuff;
-        m_UartRecvPack.ulDataLen = ulPackLen;
+        m_EnetRecvPack.ulID = *(uBit32 *)m_uRecvBuff;
+        m_EnetRecvPack.ulDataLen = ulPackLen;
         
-        memcpy(m_UartRecvPack.uDataBuff, &m_uRecvBuff[4], ulPackLen);
+        memcpy(m_EnetRecvPack.uDataBuff, &m_uRecvBuff[4], ulPackLen);
         
         m_uRecvPackValidFlag = 1;
     }
@@ -166,15 +164,15 @@ void CMU_UART_RecvHandler(void)
   * @param  pRcvLen 数据缓冲区长度(出参)
   * @retval 0-成功  非0-失败
   */
-uBit32 CMU_UART_GetPack(uBit32 *pID, uBit8** pRcvBuf, uBit32* pRcvLen)
+uBit32 CMU_ENET_GetPack(uBit32 *pID, uBit8** pRcvBuf, uBit32* pRcvLen)
 {
     if (m_uRecvPackValidFlag)
     {
         m_uRecvPackValidFlag = 0;
         
-        *pID = m_UartRecvPack.ulID;
-        *pRcvLen = m_UartRecvPack.ulDataLen;
-        *pRcvBuf = m_UartRecvPack.uDataBuff;
+        *pID = m_EnetRecvPack.ulID;
+        *pRcvLen = m_EnetRecvPack.ulDataLen;
+        *pRcvBuf = m_EnetRecvPack.uDataBuff;
         
         return 0;
     }
@@ -190,7 +188,7 @@ uBit32 CMU_UART_GetPack(uBit32 *pID, uBit8** pRcvBuf, uBit32* pRcvLen)
   * @param  ulDataBufLen 数据缓冲区长度
   * @retval 0-成功  非0-失败
   */
-uBit32 CMU_UART_SendPack(uBit32 ulID, uBit8* pDataBuff, uBit32 ulBuffLen)
+uBit32 CMU_ENET_SendPack(uBit32 ulID, uBit8* pDataBuff, uBit32 ulBuffLen)
 {
     uBit16 uFrameLen = 0;
     uBit16 nFrameCheckValue = 0;
@@ -216,7 +214,7 @@ uBit32 CMU_UART_SendPack(uBit32 ulID, uBit8* pDataBuff, uBit32 ulBuffLen)
     memcpy(&m_uSendBuff[uFrameLen-2], (uBit8 *)&nFrameCheckValue, FRAME_CHECK_SIZE);
     
     //发送数据
-    m_UartInterface.pf_UART_SendBuff(m_uUartNode, (uBit8 *)&m_uSendBuff, uFrameLen);
+    m_EnetInterface.pf_ENET_SendBuff((uBit8 *)&m_uSendBuff, uFrameLen);
     
     return 0;
 }
@@ -224,12 +222,12 @@ uBit32 CMU_UART_SendPack(uBit32 ulID, uBit8* pDataBuff, uBit32 ulBuffLen)
 
 /**
   * @brief  单次能发送的最大数据长度获取
-  * @param  uUartNode 串口节点号
+  * @param  None
   * @retval 数据长度
   */
-uBit32 CMU_UART_GetMaxSendLen(void)
+uBit32 CMU_ENET_GetMaxSendLen(void)
 {
     
-    return UART_MAX_SNED_LEN;
+    return ENET_MAX_SNED_LEN;
 }
 

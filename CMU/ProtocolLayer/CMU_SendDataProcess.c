@@ -3,16 +3,15 @@
 #include "CMU_ErrorMana.h"
 #include "CMU_CmdProcess.h"
 #include "CMU_SendDataProcess.h"
-#include "..\\CMU_Interface.h"
+#include "../CMU_Interface.h"
+#include "../CMU_ErrorCodeDef.h"
+#include "../AbstractionLayer/AbstractionLayer.h"
 
-#include "..\\CMU_ErrorCodeDef.h"
-
-
-//#include "..\\..\\GPIO\\GPIOCtrl.h"
-#include "..\\AbstractionLayer\\AbstractionLayer.h"
+extern void* CMU_Malloc(uBit32 ulSize);
 
 
-#define MAX_PACK_COUNT_PER_CICLE        (1)        //单周期最大发送的数据包个数
+#define MAX_PACK_COUNT_PER_CICLE        (1)         //单周期最大发送的数据包个数
+#define SEND_DELAY_PERIOD           (10000)         //2777个循环约为1us
 
 COM_SLAVE_SEND_CTRL_DATA    m_SendCtrlData;        //发送控制数据
 
@@ -304,7 +303,7 @@ uBit32 CMU_MainSendProc(void)
             //需要加适当的延时，否则会出现发送失败,连续发送时硬件响应没那么快（约4us）
             if(ulSendCount<ulMaxPackPerTime)
             {
-                for(iDelayCycle=0; iDelayCycle<CAN_CONTINUE_SEND_GAP; iDelayCycle++);
+                for(iDelayCycle=0; iDelayCycle<SEND_DELAY_PERIOD; iDelayCycle++);
             }
 #endif
         }
@@ -334,7 +333,7 @@ uBit32 CMU_MainSendProc(void)
             ulRet = COM_AL_SendPack(m_SendCtrlData.ulSendID.ulFrameID, m_SendCtrlData.pBuf , m_SendCtrlData.ulRestLen);
             
             //需要加适当的延时，否则会出现发送失败,连续发送时硬件响应没那么快（约4us）
-            for(iDelayCycle=0; iDelayCycle<CAN_CONTINUE_SEND_GAP; iDelayCycle++);
+            for(iDelayCycle=0; iDelayCycle<SEND_DELAY_PERIOD; iDelayCycle++);
 #endif
             
             if (ulRet==CMU_ERR_SUCCESS)
@@ -393,7 +392,7 @@ uBit32 CMU_MainSendProc(void)
 
                     if(COM_AL_GetComType()==COM_TYPE_CAN && i<ulMaxPackPerTime)
                     {    //需要加适当的延时，否则会出现发送失败,连续发送时硬件响应没那么快（约4us）
-                        for(iDelayCycle=0; iDelayCycle<CAN_CONTINUE_SEND_GAP; iDelayCycle++);
+                        for(iDelayCycle=0; iDelayCycle<SEND_DELAY_PERIOD; iDelayCycle++);
                     }
 #endif
                 }else

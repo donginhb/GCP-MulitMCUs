@@ -4,19 +4,19 @@
 #include "CMU_SendDataProcess.h"
 #include "CMU_PeriodDataMana.h"
 
-#include "..\\..\\CNC\\DVM\\DEV_COM_CmdDef.h"
+#include "../../CNC/DVM/DEV_COM_CmdDef.h"
 
-#include "..\\..\\CNC\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\..\\CNC\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\..\\CNC\\DataStructDef\\DEV_DataStructDef.h"
-//#include "..\\..\\CNC\\DataStructDef\\VER_DataStructDef.h"
-#include "..\\..\\CNC\\DataStructDef\\IO_DataStructDef.h"
+#include "../../CNC/DataStructDef/SYS_DataStructDef.h"
+#include "../../CNC/DataStructDef/CRD_DataStructDef.h"
+#include "../../CNC/DataStructDef/DEV_DataStructDef.h"
+//#include "../../CNC/DataStructDef/VER_DataStructDef.h"
+#include "../../CNC/DataStructDef/IO_DataStructDef.h"
 
-#include "..\\CMU_ErrorCodeDef.h"
+#include "../CMU_ErrorCodeDef.h"
 
 
-#include "..\\UIN_GlobalDataDef.h"
-#include "..\\AbstractionLayer\\AbstractionLayer.h"
+#include "../UIN_GlobalDataDef.h"
+#include "../AbstractionLayer/AbstractionLayer.h"
 
 
 

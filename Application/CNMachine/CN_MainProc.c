@@ -48,7 +48,7 @@ void CN_MainProc(void)
     CN_MainWorkLedShow();
     
     //通信处理
-    CN_ComHandler();
+    //CN_ComHandler();
     
     //按键处理
     //CN_KeyProc();

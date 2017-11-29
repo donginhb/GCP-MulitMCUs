@@ -15,13 +15,14 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "SysInit/SYS_Init.h"
+#include "SysCtrl/SYS_Init.h"
 
 #if defined(LPC17XX)
 #include "Application/DIEBonder/DB_MainProc.h"
 #elif defined(LPC43XX)
 #include "Application/CNMachine/CN_MainProc.h"
 #endif
+
 
 int main(void)
 {

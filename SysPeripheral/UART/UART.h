@@ -3,6 +3,22 @@
 
 #include "DataType/DataType.h"
 
+typedef enum
+{
+    //串口节点定义
+    UART_NODE_0 = 0,
+    UART_NODE_1,
+    UART_NODE_2,
+    UART_NODE_3,
+    UART_NODE_4,
+    UART_NODE_5,
+    UART_NODE_6,
+    UART_NODE_7,
+    UART_NODE_8,
+    UART_NODE_9,
+    
+}UART_NODE;  
+
 
 #ifdef __cplusplus
 extern "C" {

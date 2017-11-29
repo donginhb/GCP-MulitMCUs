@@ -61,13 +61,23 @@
   * 修改日期: 2017.08.08
   * 
   * V1.3------------
-  * 修改描述: 1.将提供给外接的接口抽象,不再使用LPC_USART_T* 类型的入参作为串口号的索引,
-  *           而是依据具体入参的串口节点号,避免向外接暴露LPC平台的相关信息
+  * 修改描述: 1.将提供给外接的接口抽象,不再使用LPC_USART_T* 类型的入参作为串口号
+  *           的索引,而是依据具体入参的串口节点号,避免向外接暴露LPC平台的相关信息
   *           2.开放串口使能/禁止的接口
   * 修改作者: Duhanfeng
   * 当前版本: V1.3
   * 修改日期: 2017.11.07
   * 
+  * V1.4------------
+  * 修改描述: 修复对同一个端口多次初始化后,DMA发送会导致卡死的BUG
+  * 错误原因: 由于DMA通道是动态分配,若多次对同一个UART节点进行初始化,会导致同一个
+  *           UART节点分配了多个DMA通道,当触发DMA中断时,无法有效清除中断标志位,
+  *           最终重复触发中断,导致程序卡死;
+  * 修改作者: Duhanfeng
+  * 当前版本: V1.4
+  * 修改日期: 2017.11.29
+  * 
+  *  
   ******************************************************************************
   */
   
@@ -101,6 +111,9 @@ static const IRQn_Type USART_IRQn[HW_UART_COUNT] = {USART0_IRQn, UART1_IRQn, USA
 //DMA相关变量
 static uint8_t m_uDmaFreeChannel[HW_UART_COUNT] = {0};    //串口的空闲通道
 static const uint8_t m_uDmaUartTxMuxCode[HW_UART_COUNT] = {GPDMA_CONN_UART0_Tx, GPDMA_CONN_UART1_Tx, GPDMA_CONN_UART2_Tx, GPDMA_CONN_UART3_Tx};
+
+//UART初始化标志(避免多次初始化导致DMA通道分配出错)
+static uint8_t m_uUartInitFlags = 0;
 
 //中断回调函数
 static void HW_UART0_RX_IRQHandler(void);
@@ -261,6 +274,15 @@ static void HW_UART_DmaTxInit(uint8_t uUartNode)
   */
 void HW_UART_Init(uint8_t uUartNode, uint32_t ulBaudRate)
 {
+    //确认是否已经初始化过
+    if (m_uUartInitFlags & (0x1<<uUartNode))
+    {
+        return;
+    }
+    
+    //设置初始化标志位
+    m_uUartInitFlags |= (0x1<<uUartNode);
+    
     //初始化IO
     HW_UART_IO_Init(uUartNode);
     

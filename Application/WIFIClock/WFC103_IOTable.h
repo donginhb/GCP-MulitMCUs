@@ -1,5 +1,5 @@
-#ifndef  __DS1768_IO_TABLE_H
-#define  __DS1768_IO_TABLE_H
+#ifndef  __WFC103_IO_TABLE_H
+#define  __WFC103_IO_TABLE_H
 
 
 #ifdef __cplusplus
@@ -16,8 +16,6 @@ typedef enum
     INPUT_IO_KEY0 = 0,
     INPUT_IO_KEY1,
     INPUT_IO_KEY2,
-    INPUT_IO_KEY3,
-    INPUT_IO_KEY4,
 
 }INPUT_IO_TABLE;
 
@@ -27,14 +25,16 @@ typedef enum
 {
     OUTPUT_IO_LED0 = 0,     //LED
     OUTPUT_IO_LED1,
-    OUTPUT_IO_LED2,
-    OUTPUT_IO_LED3,
+    OUTPUT_IO_BEEP,         //BEEP
+    OUTPUT_IO_SCL,          //IIC
+    OUTPUT_IO_SDA,
+    OUTPUT_IO_DS18B20_BUS,  //DS18B20_BUS
 
 }OUTPUT_IO_TABLE;
 
 
 //格子柜控制IO资源表
-extern GPIO_CTRL_TABLE g_DS1768_IOTable;
+extern GPIO_CTRL_TABLE g_WFC103_IOTable;
     
     
 
@@ -43,4 +43,4 @@ extern GPIO_CTRL_TABLE g_DS1768_IOTable;
 #endif
 
 
-#endif /* __DS1768_IO_TABLE_H */
+#endif /* __WFCF10X_IO_TABLE_H */

@@ -1,5 +1,5 @@
-#ifndef  __GCP_COM_MAN_H
-#define  __GCP_COM_MAN_H
+#ifndef  __WFC_COM_MAN_H
+#define  __WFC_COM_MAN_H
 
 #include "DataType/DataType.h"
 
@@ -13,7 +13,7 @@ extern "C"
   * @param  None
   * @retval 0-成功 非0-失败
   */
-uBit32 GCP_ComInit(void);
+uBit32 WFC_ComInit(void);
 
 
 /**
@@ -21,11 +21,11 @@ uBit32 GCP_ComInit(void);
   * @param  None
   * @retval None
   */
-void GCP_ComHandler(void);
+void WFC_ComHandler(void);
     
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __GCP_COM_MAN_H */
+#endif /* __WFC_COM_MAN_H */

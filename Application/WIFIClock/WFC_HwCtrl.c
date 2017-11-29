@@ -16,14 +16,13 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "GCP_HwCtrl.h"
-#include "GCP_HardwareDef.h"
+#include "WFC_HwCtrl.h"
+#include "WFC_HardwareDef.h"
       
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include "SysPeripheral/KEY/KEY.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
-//#include "SysPeripheral/SysCtrl/SysCtrl.h"
 #include "SysPeripheral/EXTI/EXTI.h"
 #include "SysPeripheral/UART/UART.h"
 
@@ -42,7 +41,7 @@
   * @param  None
   * @retval None
   */
-static void GCP_IOConfig(void)
+static void WFC_IOConfig(void)
 {
     //设置控制IO资源表
     GPIO_SetCtrlTable(&g_GcpIOTable);
@@ -60,8 +59,6 @@ static void GCP_IOConfig(void)
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY0, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY1, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY2, 1);
-    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY3, 1);
-    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY4, 1);
     
 }
 
@@ -76,13 +73,13 @@ static void GCP_IOConfig(void)
   * @param  None
   * @retval None
   */
-void GCP_HwInit(void)
+void WFC_HwInit(void)
 {
     //初始化IO
-    GCP_IOConfig();
+    WFC_IOConfig();
     
     //初始化串口
-    UART_Init(GCP_UART_NODE, 115200);
+    UART_Init(WFC_UART_NODE, 115200);
     
     //初始化按键
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY2};
@@ -103,7 +100,7 @@ void GCP_HwInit(void)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define GCP_LED_TOGGLE_TIME          (100)       //LED翻转时间(MS)
+#define WFC_LED_TOGGLE_TIME          (100)       //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
 
 
@@ -112,11 +109,11 @@ static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
   * @param  None
   * @retval None
   */
-void GCP_MainWorkLedShow(void)
+void WFC_MainWorkLedShow(void)
 {
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
-        SysTime_StartOneShot(&m_LedCtrlTimer, GCP_LED_TOGGLE_TIME); //设置下一次执行的时间
+        SysTime_StartOneShot(&m_LedCtrlTimer, WFC_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED0);
         
@@ -128,7 +125,7 @@ void GCP_MainWorkLedShow(void)
 /*****************************************************************************
  * 按键处理线程接口
  ****************************************************************************/
-#define GCP_KEY_SCAN_INTERVAL       (50)        //按键扫描间隔(MS)
+#define WFC_KEY_SCAN_INTERVAL       (50)        //按键扫描间隔(MS)
 static  SYS_TIME_DATA m_ScanTimer = {1};        //扫描定时器
 
 
@@ -137,11 +134,11 @@ static  SYS_TIME_DATA m_ScanTimer = {1};        //扫描定时器
   * @param  None
   * @retval None
   */
-void GCP_KeyProc(void)
+void WFC_KeyProc(void)
 {
     if (SysTime_CheckExpiredState(&m_ScanTimer))
     {
-        SysTime_StartOneShot(&m_ScanTimer, GCP_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
+        SysTime_StartOneShot(&m_ScanTimer, WFC_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
         
         uBit32 ulKeyVlue = 0;
         uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
@@ -159,7 +156,7 @@ void GCP_KeyProc(void)
 /*****************************************************************************
  * 传感器数据处理线程接口
  ****************************************************************************/
-#define GCP_SENSOR_SAMPLE_INTERVAL          (500)        //温度采样间隔间隔(MS)
+#define WFC_SENSOR_SAMPLE_INTERVAL          (500)        //温度采样间隔间隔(MS)
 static  SYS_TIME_DATA m_SensorSampleTimer = {1};        //扫描定时器
 
 /**
@@ -167,13 +164,13 @@ static  SYS_TIME_DATA m_SensorSampleTimer = {1};        //扫描定时器
   * @param  None
   * @retval None
   */
-void GCP_SensorSampleProc(void)
+void WFC_SensorSampleProc(void)
 {
     static uBit8 s_uProStep = 0;    //工作步骤
     
     if (SysTime_CheckExpiredState(&m_SensorSampleTimer))
     {
-        SysTime_StartOneShot(&m_SensorSampleTimer, GCP_SENSOR_SAMPLE_INTERVAL);   //设置下一次执行的时间
+        SysTime_StartOneShot(&m_SensorSampleTimer, WFC_SENSOR_SAMPLE_INTERVAL);   //设置下一次执行的时间
         
 #if 1
         switch (s_uProStep)
@@ -189,7 +186,7 @@ void GCP_SensorSampleProc(void)
                 Bit32 TempValue = (Bit32)(TEMP_GetValue() * 10); 
                 uBit8 uDisBuff[128] = {0};
                 sprintf((char *)uDisBuff, (const char *)"TempValue: %d\r\n", TempValue);
-                UART_SendBuff(GCP_UART_NODE, uDisBuff, strlen((const char *)uDisBuff));
+                UART_SendBuff(WFC_UART_NODE, uDisBuff, strlen((const char *)uDisBuff));
                 
                 s_uProStep++;
                 break;     

@@ -2,8 +2,8 @@
 #define _CMD_PROCESS_H_
 
 #include "ComDataStructDef.h"
-#include "..\\CMU_DataStructDef.h"
-#include "..\\UIN_GlobalDataDef.h"
+#include "../CMU_DataStructDef.h"
+#include "../UIN_GlobalDataDef.h"
 
 
 

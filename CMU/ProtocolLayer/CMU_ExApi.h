@@ -18,7 +18,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
 #ifndef _CMU_EX_API_H_
 #define _CMU_EX_API_H_
-#include "..\\CMU_DataStructDef.h"
+#include "../CMU_DataStructDef.h"
 
 /*
 函数名称：void CMU_InitExApi(void)

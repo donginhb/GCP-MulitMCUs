@@ -1,5 +1,5 @@
-#ifndef __GCP_MAIN_PROC_H
-#define __GCP_MAIN_PROC_H
+#ifndef __WFC_MAIN_PROC_H
+#define __WFC_MAIN_PROC_H
 
 #include "DataType/DataType.h"
 
@@ -12,7 +12,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void GCP_Init(void);
+void WFC_Init(void);
 
 
 /**
@@ -20,11 +20,11 @@ void GCP_Init(void);
   * @param  None
   * @retval None
   */
-void GCP_MainProc(void);
+void WFC_MainProc(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif /* __GCP_MAIN_PROC_H */
+#endif /* __WFC_MAIN_PROC_H */

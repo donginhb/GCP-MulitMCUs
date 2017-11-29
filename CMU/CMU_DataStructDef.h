@@ -22,15 +22,15 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
 #include "UIN_GlobalDataDef.h"
 
-#include "..\\CNC\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\IO_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\DEV_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\CNC\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "../CNC/DataStructDef/SYS_DataStructDef.h"
+#include "../CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "../CNC/DataStructDef/CRD_DataStructDef.h"
+#include "../CNC/DataStructDef/IO_DataStructDef.h"
+#include "../CNC/DataStructDef/DEV_DataStructDef.h"
+#include "../CNC/DataStructDef/IPR_DataStructDef.h"
+#include "../CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-#include "..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 //定义通信方式---------------------------------------------------------------------
