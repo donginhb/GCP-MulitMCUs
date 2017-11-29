@@ -17,6 +17,8 @@ typedef struct _SoftwareVersion
     Bit8    cType[4];               //产品型号
     Bit8    cSoftVer[2];            //软件版本
     Bit8    cPart;                  //组件号(预留)
+    Bit8    cFlag;                  //版本标示
+}SOFTWARE_VERSION;
 
 
 
