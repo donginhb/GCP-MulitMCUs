@@ -18,9 +18,6 @@ typedef struct _SoftwareVersion
     Bit8    cSoftVer[2];            //软件版本
     Bit8    cPart;                  //组件号(预留)
 
-修改作者： 
 
 
-#define APP_VER_NO0             (2)
-#define APP_VER_NO1             (10)
 #endif /* __VERSION_H */
