@@ -46,6 +46,7 @@ uBit32 ProgArcC(uBit32 ulCrdNO, uBit32* pAxisNO,  Bit32 *pEndPos, Bit32* pCenter
 uBit32 ProgArcR(uBit32 ulCrdNO, uBit32* pAxisNO, Bit32 *pEndPos,  Bit32 iRadius, BooLean bClockWise,float32 fSpeed, BooLean bAbsFlag){return CMU_ERR_UNBAND;} 
 uBit32 ProgArcPT(uBit32 ulCrdNO, uBit32* pAxisNO, Bit32 *pEndPos,  Bit32 *pMidPos, float32 fSpeed, BooLean bAbsFlag){return CMU_ERR_UNBAND;}
 
+bool boolFun_u32(uBit32 a){return true;}
 
 uBit32 u32Fun_u32(uBit32 ulParm0){return CMU_ERR_UNBAND;};
 uBit32 u32Fun_p32(Bit32 *p){return CMU_ERR_UNBAND;};
@@ -102,6 +103,11 @@ uBit32 u32Fun_u32_pu32_u32(uBit32 ulStartRegIndex, uBit32* pData, uBit32 ulCount
 uBit32 u32Fun_u32_pu32_pu32(uBit32 ulDevNo, uBit32* pCmdType, uBit32 *pExeRes){return CMU_ERR_UNBAND;}        
 uBit32 u32Fun_32_32_pu32_pu32(Bit32 iCrdSysIndex, Bit32 iAxisIndex, uBit32 *pCmdType, uBit32 *pExeRes){return CMU_ERR_UNBAND;} 
 uBit32 u32Fun_u32_pu8_u32_u8(uBit32 b, uBit8* p, uBit32 c,uBit8 d){return CMU_ERR_UNBAND;}
+
+void voidFun_u32_bool(uBit32 a, bool b){}
+
+
+
 
 //错误管理模块接口
 uBit32 GetErrorCodeFun(uBit32 *pulErrorCode)
@@ -192,6 +198,20 @@ void CMU_InitExApi(void)
     if (m_sExternalFunTable.pf_GPIO_SetHSpdOutputState==0)
         m_sExternalFunTable.pf_GPIO_SetHSpdOutputState        =&u32Fun_u32_u32        ;
 
+    
+    //2017.12.01 新增 -- 杜寒枫----------------------------------------
+    
+    if (m_sExternalFunTable.pf_GPIO_SetOutputPinState==0)
+        m_sExternalFunTable.pf_GPIO_SetOutputPinState        =&voidFun_u32_bool        ;
+
+    if (m_sExternalFunTable.pf_GPIO_GetOutputPinState==0)
+        m_sExternalFunTable.pf_GPIO_GetOutputPinState        =&boolFun_u32        ;
+
+    if (m_sExternalFunTable.pf_GPIO_GetInputPinState==0)
+        m_sExternalFunTable.pf_GPIO_GetInputPinState         =&boolFun_u32        ;
+    
+    //----------------------------------------------------------------
+    
     if (m_sExternalFunTable.pf_MDAC_SetHSpdDaData==0)
         m_sExternalFunTable.pf_MDAC_SetHSpdDaData        =&u32Fun_u32_u32        ;
 

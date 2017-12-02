@@ -24,6 +24,7 @@
 #include "SysPeripheral/KEY/KEY.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
+#include "SysPeripheral/PWM/PWM.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -45,12 +46,14 @@ static void DB_IOConfig(void)
     //初始化资源表内的IO
     GPIO_InitIOTable(&g_GcpIOTable);
     
+#if 0
     //翻转按键的电平逻辑
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY0, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY1, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY2, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY3, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY4, 1);
+#endif
     
 }
 
@@ -70,9 +73,16 @@ void DB_HwInit(void)
     //初始化IO
     DB_IOConfig();
     
+#if 0
     //初始化按键
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY2};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
+#endif
+    
+    //初始化PWM
+    PWM_Init(0, 0x03);
+    PWM_OutputEnable(0, true);
+    
     
 }
 
@@ -120,13 +130,15 @@ void DB_KeyProc(void)
     {
         SysTime_StartOneShot(&m_ScanTimer, DB_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
         
+#if 0
         uBit32 ulKeyVlue = 0;
         uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
         
         if (ulCurTrg)
         {
-            GPIO_ToggleOutputState(OUTPUT_IO_LED1);
+            //GPIO_ToggleOutputState(OUTPUT_IO_LED1);
         }
+#endif
         
     }
       

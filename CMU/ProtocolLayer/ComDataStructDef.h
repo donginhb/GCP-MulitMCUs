@@ -270,14 +270,17 @@ typedef union _COM_DATA_ID{
 #define IO_SETCMD_PWM_DUTY_RATIO            (3)     //设置IO板IO口PWM占空比
 #define IO_SETCMD_PWM_FRQ                   (4)     //设置IO板IO口PWM频率
 #define IO_SETCMD_HSPD_STATE                (5)     //设置高速IO口输出状态
-#define IO_SETCMD_MUTEX_MONO_PULSE          (6)     //设置互斥型脉冲IO口产生单脉冲
-#define IO_SETCMD_MUTEX_PULSE_TIMING        (7)     //互斥型脉冲时序设置
-#define IO_SETCMD_HSPD_EDGE_TRG_EN          (8)     //高速IO边沿触发使能
+
+//以编号的方式对IO进行控制 2017.12.01 新增 -- 杜寒枫
+#define IO_SETCMD_HSPD_OUT_IONO             (6)     //设置输出IO状态(编号方式控制)
 
 //IO常规获取指令
 #define IO_GETCMD_HSPD_OUT_STATUS           (1)     //获取高速IO输出口状态
 #define IO_GETCMD_HSPD_IN_STATUS            (2)     //获取高速IO输入口状态   
-#define IO_GETCMD_HSPD_EDGE_TRG_STATUS      (3)     //获取高速IO边沿触发状态
+
+//以编号的方式对IO进行控制 2017.12.01 新增 -- 杜寒枫
+#define IO_GETCMD_HSPD_OUT_IONO             (3)     //获取输出IO状态(编号方式控制)
+#define IO_GETCMD_HSPD_IN_IONO              (4)     //获取输出IO状态(编号方式控制)
 
 /******************************************************************************/
 

@@ -143,7 +143,6 @@ typedef struct _ParmData
 #define COM_TYPE_MAX                                (4) //最大通信模式序号
 
 
-
 #define PROG_SEG_DATA_MASK_ABS_BIT                  (0x0001)//绝对编程标志位
 #define PROG_SEG_DATA_MASK_CW_BIT                   (0x0002)//顺时针标志位
 
@@ -151,10 +150,6 @@ typedef struct _ParmData
 #define COM_BLOCK_DATA_SIZE                         (512)   //升级文件等数据块(FLASH数据)大小
 #define COM_BLOCK_FILE_SIZE                         (512)   //下载文件数据块大小
 #define MIN_PERIOD_MS                               (50)    //最小查询周期
-
-
-
-
 
 
 //--------------------------周期性数据指令定义-------------------------------------

@@ -35,13 +35,16 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
 //定义通信方式---------------------------------------------------------------------
 #ifndef COM_TYPE_NULL
-#define COM_TYPE_NULL            (0)   //没有连接
+#define COM_TYPE_NULL               (0)   //没有连接
 #endif
 #ifndef COM_TYPE_CAN
-#define COM_TYPE_CAN            (1)   //CAN通信模式
+#define COM_TYPE_CAN                (1)   //CAN通信模式
 #endif
 #ifndef COM_TYPE_ENET
-#define COM_TYPE_ENET            (2)   //以太网通信模式
+#define COM_TYPE_ENET               (2)   //以太网通信模式
+#endif
+#ifndef COM_TYPE_UART
+#define COM_TYPE_UART               (4)   //以太网通信模式
 #endif
 
 #ifndef COM_TRANSMIT_BUF_SIZE
@@ -76,7 +79,11 @@ typedef struct _cmu_external_fun_table
      Bit32 (*pf_QEI_GetHSpdQeiPos)(void);
      Bit32 (*pf_QEI_GetHSpdQeiSpeed)(void);
     uBit32 (*pf_SYS_IPREnable)(Bit32 iEnable);  //使能解释器
-
+    
+    //以编号的方式对IO进行控制 2017.12.01 新增 -- 杜寒枫
+    void  (*pf_GPIO_SetOutputPinState)(uBit32 uOutputNO, bool uState);
+    bool   (*pf_GPIO_GetOutputPinState)(uBit32 ulIntputNO);
+    bool   (*pf_GPIO_GetInputPinState)(uBit32 ulIntputNO);
 
     //--------------------------------------------参数管理模块------------------------------------------------
     uBit32 (*pf_SPM_SetSysCtrlParm)(SYS_CTRL_PARM* pSysCtrlParm);

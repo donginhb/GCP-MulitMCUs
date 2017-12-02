@@ -19,7 +19,13 @@
 #include "DataType/DataType.h"
 
 #if defined(LPC17XX)
+#if 0
 #include "HwDrivers/HW_Pwm.h"
+#else
+#include "HwDrivers/HW_Pwm.h"
+#include "HwDrivers/HW_TimeOutput.h"
+#include "HwDrivers/HW_TimeInput.h"
+#endif
 #elif defined(STM32F10X)
 #include "HwDrivers/HW_TimeOutput.h"
 #endif
@@ -30,7 +36,7 @@
 
 
 /*****************************************************************************
- * PWM相关控制接口
+ * PWM 相关控制接口
  ****************************************************************************/
 
 /**
@@ -42,7 +48,12 @@
 void HAL_PWM_Init(uBit8 uPwmNode, uBit8 uChannelMask)
 {
 #if defined(LPC17XX)
+#if 0
     HW_PWM_Init(uPwmNode, uChannelMask);
+#else 
+    HW_PWM_Init(uPwmNode, uChannelMask);
+    HW_TIM_OutputInit(uPwmNode, uChannelMask, 0);
+#endif
 #elif defined(STM32F10X)
     HW_TIM_OutputInit(uPwmNode, uChannelMask, TIM_OUTPUT_MODE_PWM1);
 #endif
@@ -61,7 +72,11 @@ void HAL_PWM_Init(uBit8 uPwmNode, uBit8 uChannelMask)
 void HAL_PWM_EnableChannel(uBit8 uPwmNode, uBit8 uChannelMask, bool bIsEnble)
 {
 #if defined(LPC17XX)
+#if 0
     HW_PWM_EnableChannel(uPwmNode, uChannelMask, bIsEnble);
+#else 
+    
+#endif
 #elif defined(STM32F10X)
     
 #endif
@@ -79,7 +94,12 @@ void HAL_PWM_EnableChannel(uBit8 uPwmNode, uBit8 uChannelMask, bool bIsEnble)
 void HAL_PWM_SetOutputPwmDutyRatio(uBit8 uPwmNode, uBit8 uChannelMask, float fDutyRatio)
 {
 #if defined(LPC17XX)
+#if 0
     HW_PWM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
+#else 
+    HW_PWM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
+    HW_TIM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
+#endif
 #elif defined(STM32F10X)
     HW_TIM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
 #endif
@@ -96,7 +116,12 @@ void HAL_PWM_SetOutputPwmDutyRatio(uBit8 uPwmNode, uBit8 uChannelMask, float fDu
 void HAL_PWM_SetOutputPwmFrq(uBit8 uPwmNode, uBit32 ulFrequency)
 {
 #if defined(LPC17XX)
+#if 0
     HW_PWM_SetOutputPwmFrq(uPwmNode, ulFrequency);
+#else 
+    HW_PWM_SetOutputPwmFrq(uPwmNode, ulFrequency);
+    HW_TIM_SetOutputPwmFrq(uPwmNode, ulFrequency);
+#endif
 #elif defined(STM32F10X)
     HW_TIM_SetOutputPwmFrq(uPwmNode, ulFrequency);
 #endif
@@ -113,10 +138,72 @@ void HAL_PWM_SetOutputPwmFrq(uBit8 uPwmNode, uBit32 ulFrequency)
 void HAL_PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnablle)
 {
 #if defined(LPC17XX)
+#if 0
     HW_PWM_OutputEnable(uPwmNode, bIsEnablle);
+#else
+    HW_PWM_OutputEnable(uPwmNode, bIsEnablle);
+    HW_TIM_OutputEnable(uPwmNode, bIsEnablle);
+#endif
 #elif defined(STM32F10X)
     HW_TIM_OutputEnable(uPwmNode, bIsEnablle);
 #endif
     
 }
+
+
+/*****************************************************************************
+ * PWM 数量控制相关接口
+ ****************************************************************************/
+
+static uBit32 m_ulPwmCount = 0;
+static uBit8 m_uPwmOuputNode = 0;
+static uBit8 m_uOuputChNum = 0;
+static uBit8 m_uPwmCapNode = 0;
+static uBit8 m_uCapChNum = 0;
+
+
+//输入计数中断
+void HAL_PWM_InputCountHanlder()
+{
+    if (HW_TIM_GetInputITStatus(m_uPwmCapNode, m_uCapChNum))
+    {
+        HW_TIM_ClearInputITStatus(m_uPwmCapNode, m_uCapChNum);    //清标志位
+        
+        HAL_PWM_EnableChannel(m_uPwmOuputNode, m_uOuputChNum, false);   //关闭PWM输出
+        //HW_TIM_EnableInputIRQ(uPwmCapNode, uCapChNum, false);           //关闭PWM捕获
+    }
+    
+}
+
+
+
+
+void HAL_PWM_CountInit(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit8 uPwmCapNode, uBit8 uCapChNum)
+{
+#if defined(LPC17XX)
+    HW_TIM_OutputInit(uPwmOuputNode, 0x1<<uOuputChNum, 0);
+    HW_TIM_InputInit(uPwmCapNode, 0x1<<uCapChNum, 0);
+    HW_TIM_EnableInputIRQ(uPwmCapNode, uCapChNum, true);
+    
+    m_uPwmOuputNode = uPwmOuputNode;
+    m_uOuputChNum = uOuputChNum;
+    m_uPwmCapNode = uPwmCapNode;
+    m_uCapChNum = uCapChNum;
+    
+#elif defined(STM32F10X)
+#endif
+    
+}
+
+
+
+void HAL_PWM_SendCount(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit32 ulPwmCount)
+{
+    //设置捕获中断
+    
+}
+
+
+
+
 

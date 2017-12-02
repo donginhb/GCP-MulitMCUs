@@ -23,14 +23,17 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-#define TIM_GET_PR_BY_CNT_FRE(CntFre)            (Chip_PWM_GetClock(PWM[uPwmNode])/(CntFre) - 1)   //通过计数频率计算预分频值
-#define TIM_GET_PR_BY_OP_FRE(OutFre, AutoLoad)   (TIM_GET_PR_BY_CNT_FRE((OutFre) * (AutoLoad))) //通过输出频率计算预分频值(计数频率=输出频率*自动重装载值)
+#define PWM_GET_PR_BY_CNT_FRE(CntFre)            (Chip_PWM_GetClock(PWM[uPwmNode])/(CntFre) - 1)   //通过计数频率计算预分频值
+#define PWM_GET_PR_BY_OP_FRE(OutFre, AutoLoad)   (PWM_GET_PR_BY_CNT_FRE((OutFre) * (AutoLoad))) //通过输出频率计算预分频值(计数频率=输出频率*自动重装载值)
 
-static LPC_PWM_T * const PWM[HW_PWM_NODE_NUM] = {LPC_PWM1};
+//PWM数量定义
+#define HW_PWM_COUNT                (1)             //PWM数量
 
 #define PWM_CH_COUNT                (6)             //通道计数
 #define PWM_CH_MASK(n)              ((n)&0x3F)      //通道掩码
 #define PWM_DEFAULT_COUNT_RANG      (100)           //默认定时器计数范围
+
+static LPC_PWM_T * const PWM[HW_PWM_COUNT] = {LPC_PWM1};
 
 
 //PWM1 IO 引脚定义
@@ -97,8 +100,29 @@ static void HW_PWM_ModeConfig(uint8_t uPwmNode, uint8_t uChannelMask)
     PWM[uPwmNode]->MR4 = PWM_DEFAULT_COUNT_RANG / 2;
     PWM[uPwmNode]->MR5 = PWM_DEFAULT_COUNT_RANG / 2;
     PWM[uPwmNode]->MR6 = PWM_DEFAULT_COUNT_RANG / 2;
-    PWM[uPwmNode]->PR = TIM_GET_PR_BY_OP_FRE(1000, PWM[uPwmNode]->MR0); //设置PWM分频系数
+    //PWM[uPwmNode]->PR = PWM_GET_PR_BY_OP_FRE(1000, PWM[uPwmNode]->MR0); //设置PWM分频系数
+    HW_PWM_SetOutputPwmFrq(uPwmNode, 1000);
     
+}
+
+
+
+/**
+  * @brief  定时器外设时钟获取
+  * @param  uPwmNode 定时器节点
+  * @retval 定时器时钟
+  */
+static uint32_t HW_PWM_GetPeripheralClock(uint8_t uPwmNode)
+{
+    uint32_t ulTimeClock = 0;
+    
+    switch (uPwmNode)
+    {
+    case HW_PWM_NODE_0: ulTimeClock = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_PWM1); break;
+    default: break; //不应该到这里
+    }
+    
+    return ulTimeClock;
 }
 
 
@@ -197,7 +221,13 @@ void HW_PWM_SetOutputCmpVal(uint8_t uPwmNode, uint8_t uChannelMask, uint16_t nCo
   */
 void HW_PWM_SetOutputPwmFrq(uint8_t uPwmNode, uint32_t ulFrequency)
 {
-    PWM[uPwmNode]->PR  = TIM_GET_PR_BY_OP_FRE(ulFrequency, PWM[uPwmNode]->MR0);  //频率配置
+#if 0
+    PWM[uPwmNode]->PR  = PWM_GET_PR_BY_OP_FRE(ulFrequency, PWM[uPwmNode]->MR0);  //频率配置
+#else 
+    uint32_t ulPwmClock = HW_PWM_GetPeripheralClock(uPwmNode);
+    uint32_t ulPrescale = ((ulPwmClock / (ulFrequency*100)))-1;
+    PWM[uPwmNode]->PR = ulPrescale;
+#endif
     
 }
 

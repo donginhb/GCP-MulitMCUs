@@ -3,13 +3,8 @@
 
 #include "chip.h"
 
-//PWM节点定义
-typedef enum
-{
-    HW_PWM_NODE0 = 0,
-    HW_PWM_NODE_NUM,
-    
-}HW_PWM_NODE;
+
+#define HW_PWM_NODE_0      (0)
 
 #ifdef __cplusplus
 extern "C"

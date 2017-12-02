@@ -137,11 +137,11 @@ static void UART_IO_Init(uint8_t uUartNode)
 {
     switch (uUartNode)
     {
-    case 0:
+    case HW_UART_NODE_0:
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  2, IOCON_MODE_INACT, IOCON_FUNC1);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  3, IOCON_MODE_INACT, IOCON_FUNC1);
         break;                      
-    case 1:
+    case HW_UART_NODE_1:
 #if 1
         Chip_IOCON_PinMux(LPC_IOCON, 0x00, 15, IOCON_MODE_INACT, IOCON_FUNC1);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00, 16, IOCON_MODE_INACT, IOCON_FUNC1);
@@ -151,7 +151,7 @@ static void UART_IO_Init(uint8_t uUartNode)
         Chip_IOCON_PinMux(LPC_IOCON, 0x02,  1, IOCON_MODE_INACT, IOCON_FUNC2);
 #endif
         break;
-    case 2:
+    case HW_UART_NODE_2:
 #if 1
         Chip_IOCON_PinMux(LPC_IOCON, 0x00, 10, IOCON_MODE_INACT, IOCON_FUNC1);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00, 11, IOCON_MODE_INACT, IOCON_FUNC1);
@@ -160,7 +160,7 @@ static void UART_IO_Init(uint8_t uUartNode)
         Chip_IOCON_PinMux(LPC_IOCON, 0x02,  9, IOCON_MODE_INACT, IOCON_FUNC2);
 #endif
         break;
-    case 3:
+    case HW_UART_NODE_3:
 #if 1
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  1, IOCON_MODE_INACT, IOCON_FUNC2);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  0, IOCON_MODE_INACT, IOCON_FUNC2);
@@ -203,22 +203,22 @@ static void HW_UART_RxItInit(uint8_t uUartNode)
     //设置中断回调
     switch (uUartNode)
     {
-    case 0: 
+    case HW_UART_NODE_0: 
         {
             HW_IRQ_SetTrgCallback(HW_UART0_RX_IRQHandler, LPC_IRQ_TRG_UART0);
             break;
         }
-    case 1: 
+    case HW_UART_NODE_1: 
         {
             HW_IRQ_SetTrgCallback(HW_UART1_RX_IRQHandler, LPC_IRQ_TRG_UART1);
             break;
         }
-    case 2: 
+    case HW_UART_NODE_2: 
         {
             HW_IRQ_SetTrgCallback(HW_UART2_RX_IRQHandler, LPC_IRQ_TRG_UART2);
             break;
         }
-    case 3: 
+    case HW_UART_NODE_3: 
         {
             HW_IRQ_SetTrgCallback(HW_UART3_RX_IRQHandler, LPC_IRQ_TRG_UART3);
             break;
@@ -247,25 +247,25 @@ static void HW_UART_DmaTxInit(uint8_t uUartNode)
     //配置中断
     switch (uUartNode)
     {
-    case 0: 
+    case HW_UART_NODE_0: 
         {
             //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART0_DMATC_IRQHandler, LPC_IRQ_TRG_DMA_CH1 + m_uDmaFreeChannel[0]);
             break;
         }
-    case 1: 
+    case HW_UART_NODE_1: 
         {
             //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART1_DMATC_IRQHandler, LPC_IRQ_TRG_DMA_CH1 + m_uDmaFreeChannel[1]);
             break;
         }
-    case 2: 
+    case HW_UART_NODE_2: 
         {
             //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART2_DMATC_IRQHandler, LPC_IRQ_TRG_DMA_CH1 + m_uDmaFreeChannel[2]);
             break;
         }
-    case 3: 
+    case HW_UART_NODE_3: 
         {
             //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART3_DMATC_IRQHandler, LPC_IRQ_TRG_DMA_CH1 + m_uDmaFreeChannel[3]);
@@ -540,10 +540,10 @@ static UART_TX_NODE **List_GetHead(uint8_t uUartNode)
 
     switch (uUartNode)
     {
-    case 0: pHeadNode = &g_HeadNodePtr0; break;
-    case 1: pHeadNode = &g_HeadNodePtr1; break;
-    case 2: pHeadNode = &g_HeadNodePtr2; break;
-    case 3: pHeadNode = &g_HeadNodePtr3; break;
+    case HW_UART_NODE_0: pHeadNode = &g_HeadNodePtr0; break;
+    case HW_UART_NODE_1: pHeadNode = &g_HeadNodePtr1; break;
+    case HW_UART_NODE_2: pHeadNode = &g_HeadNodePtr2; break;
+    case HW_UART_NODE_3: pHeadNode = &g_HeadNodePtr3; break;
     default: break;
     }
 
@@ -661,7 +661,7 @@ void HW_UART_DmaSendStr(uint8_t uUartNode, uint8_t *pSBuff)
   */
 static void HW_UART0_RX_IRQHandler(void)
 {
-    Chip_UART_RXIntHandlerRB(LPC_UART0, &m_RxRing[0]);
+    Chip_UART_RXIntHandlerRB(LPC_UART0, &m_RxRing[HW_UART_NODE_0]);
     
 }
 
@@ -673,7 +673,7 @@ static void HW_UART0_RX_IRQHandler(void)
   */
 static void HW_UART1_RX_IRQHandler(void)
 {
-    Chip_UART_RXIntHandlerRB(LPC_UART1, &m_RxRing[1]);
+    Chip_UART_RXIntHandlerRB(LPC_UART1, &m_RxRing[HW_UART_NODE_1]);
     
 }
 
@@ -685,7 +685,7 @@ static void HW_UART1_RX_IRQHandler(void)
   */
 static void HW_UART2_RX_IRQHandler(void)
 {
-    Chip_UART_RXIntHandlerRB(LPC_UART2, &m_RxRing[2]);
+    Chip_UART_RXIntHandlerRB(LPC_UART2, &m_RxRing[HW_UART_NODE_2]);
     
 }
 
@@ -697,7 +697,7 @@ static void HW_UART2_RX_IRQHandler(void)
   */
 static void HW_UART3_RX_IRQHandler(void)
 {
-    Chip_UART_RXIntHandlerRB(LPC_UART3, &m_RxRing[3]);
+    Chip_UART_RXIntHandlerRB(LPC_UART3, &m_RxRing[HW_UART_NODE_3]);
     
 }
 
@@ -713,7 +713,7 @@ static void HW_UART0_DMATC_IRQHandler(void)
 
     if (g_HeadNodePtr0 != NULL)  //若当前的首节点非空
     {
-        HW_UART_SendHeadNodeBuff(0);
+        HW_UART_SendHeadNodeBuff(HW_UART_NODE_0);
     }
     
 }
@@ -730,7 +730,7 @@ static void HW_UART1_DMATC_IRQHandler(void)
 
     if (g_HeadNodePtr1 != NULL)  //若当前的首节点非空
     {
-        HW_UART_SendHeadNodeBuff(1);
+        HW_UART_SendHeadNodeBuff(HW_UART_NODE_1);
     }
     
 }
@@ -747,7 +747,7 @@ static void HW_UART2_DMATC_IRQHandler(void)
 
     if (g_HeadNodePtr2 != NULL)  //若当前的首节点非空
     {
-        HW_UART_SendHeadNodeBuff(2);
+        HW_UART_SendHeadNodeBuff(HW_UART_NODE_2);
     }
 
 }
@@ -764,7 +764,7 @@ static void HW_UART3_DMATC_IRQHandler(void)
 
     if (g_HeadNodePtr3 != NULL)  //若当前的首节点非空
     {
-        HW_UART_SendHeadNodeBuff(3);
+        HW_UART_SendHeadNodeBuff(HW_UART_NODE_3);
     }
 
 }

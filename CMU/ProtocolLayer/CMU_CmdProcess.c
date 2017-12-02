@@ -1722,14 +1722,14 @@ uBit32 Motor_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 */ 
 uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
-    uBit32 ulData;
-    uBit32 ulBitMask;
+    uBit32 ulData = 0;
+    uBit32 ulBitMask = 0;
     uBit32 ulRet=CMU_ERR_INVALID_CMD;
     uBit32 ulIoNo = pRcvCtrlData->ulRevID.ulComDataID.ulDevNo;
 
     memcpy(&ulBitMask, pRcvCtrlData->pRevBuf, sizeof(uBit32));
     memcpy(&ulData, pRcvCtrlData->pRevBuf+sizeof(uBit32),sizeof(uBit32));
-
+    
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
     case IO_SETCMD_STATE:                    //设置IO板输出状态
@@ -1758,6 +1758,20 @@ uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case IO_SETCMD_HSPD_STATE:            //设置高速IO口输出状态
         {
             ulRet = m_sExternalFunTable.pf_GPIO_SetHSpdOutputState(ulBitMask, ulData);
+            break;
+        }
+        
+    //2017.12.01 新增 -- 杜寒枫
+    case IO_SETCMD_HSPD_OUT_IONO:       //设置输出IO状态(编号方式控制)
+        {
+            uBit32 uIONO = 0; 
+            uBit32 ulState = 0;
+            memcpy(&uIONO, pRcvCtrlData->pRevBuf, sizeof(uBit32));
+            memcpy(&ulState, pRcvCtrlData->pRevBuf+sizeof(uBit32),sizeof(ulState));
+            
+            m_sExternalFunTable.pf_GPIO_SetOutputPinState(uIONO, ulState);
+            
+            ulRet = CMU_ERR_SUCCESS;
             break;
         }
     default:break;
@@ -1789,20 +1803,43 @@ uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
-    case IO_GETCMD_HSPD_OUT_STATUS://获取高速IO输出口状态
+    case IO_GETCMD_HSPD_OUT_STATUS: //获取高速IO输出口状态
         {
             *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_GPIO_GetHSpdOutputStatus();
             ulRet = CMU_ERR_SUCCESS;
             CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
         }
-        break;
-    case IO_GETCMD_HSPD_IN_STATUS://获取高速IO输入口状态
+        
+    case IO_GETCMD_HSPD_IN_STATUS:  //获取高速IO输入口状态
         {
             *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_GPIO_GetHSpdInputStatus();
             ulRet = CMU_ERR_SUCCESS;
             CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
         }
-        break;
+        
+    //2017.12.01 新增 -- 杜寒枫
+    case IO_GETCMD_HSPD_OUT_IONO:   //获取高速IO输出口状态(编号方式控制)
+        {
+            uBit32 uIONO = 0; 
+            memcpy(&uIONO, pRcvCtrlData->pRevBuf, sizeof(uBit32));
+            
+            *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_GPIO_GetOutputPinState(uIONO);
+            ulRet = CMU_ERR_SUCCESS;
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
+    case IO_GETCMD_HSPD_IN_IONO:   //获取高速IO输出口状态(编号方式控制)
+        {
+            uBit32 uIONO = 0; 
+            memcpy(&uIONO, pRcvCtrlData->pRevBuf, sizeof(uBit32));
+            
+            *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_GPIO_GetInputPinState(uIONO);
+            ulRet = CMU_ERR_SUCCESS;
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
     default:break;
     }
     

@@ -3,6 +3,14 @@
 
 #include "chip.h"
 
+
+//串口节点定义
+#define HW_UART_NODE_0      (0)
+#define HW_UART_NODE_1      (1)
+#define HW_UART_NODE_2      (2)
+#define HW_UART_NODE_3      (3)
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
