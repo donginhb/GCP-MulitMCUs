@@ -95,6 +95,12 @@ typedef enum
     //以太网
     LPC_IRQ_TRG_ENET,
     
+    //定时器
+    LPC_IRQ_TRG_TIME0,
+    LPC_IRQ_TRG_TIME1,
+    LPC_IRQ_TRG_TIME2,
+    LPC_IRQ_TRG_TIME3,
+    
 }LPC_IRQ_TRIGGER_SOURCE;
 
 

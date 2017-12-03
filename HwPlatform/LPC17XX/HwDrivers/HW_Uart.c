@@ -97,7 +97,7 @@
 #define HW_UART_COUNT       (4)
 
 //环形缓冲区定义
-#define UART_RB_SIZE    (32)
+#define UART_RB_SIZE    (128)
 static RINGBUFF_T m_RxRing[HW_UART_COUNT] = {0};
 static uint8_t    m_uRxBuff[HW_UART_COUNT][UART_RB_SIZE] = {0};
 

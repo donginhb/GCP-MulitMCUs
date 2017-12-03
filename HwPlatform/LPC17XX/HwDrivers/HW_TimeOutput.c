@@ -52,7 +52,7 @@
 
 #define TIME_CH_COUNT               (4)             //通道计数
 #define TIME_CH_MASK(n)             ((n)&0xF)       //通道掩码
-#define TIME_DEFAULT_COUNT_RANG     (100)           //默认定时器计数范围
+#define TIME_DEFAULT_COUNT_RANG     (2)             //默认定时器计数范围
 
 //串口相关变量定义
 static LPC_TIMER_T * const TIM[HW_TIME_COUNT] = {LPC_TIMER0, LPC_TIMER1, LPC_TIMER2, LPC_TIMER3};
@@ -269,7 +269,7 @@ void HW_TIM_SetOutputCmpVal(uint8_t uTimeNode, uint8_t uChannelMask, uint16_t nC
 void HW_TIM_SetOutputPwmFrq(uint8_t uTimeNode, uint32_t ulFrequency)
 {
     uint32_t ulTimeClock = HW_TIM_GetPeripheralClock(uTimeNode);
-    uint32_t ulPrescale = ((ulTimeClock / (ulFrequency*100*2)))-1;
+    uint32_t ulPrescale = ((ulTimeClock / (ulFrequency*TIME_DEFAULT_COUNT_RANG*2)))-1;
     Chip_TIMER_PrescaleSet(TIM[uTimeNode], ulPrescale);
         
 }

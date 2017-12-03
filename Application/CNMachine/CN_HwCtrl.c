@@ -67,6 +67,8 @@ void CN_HwInit(void)
     //初始化IO
     CN_IOConfig();
     
+    UART_Init(3, 115200);
+    
 }
 
 

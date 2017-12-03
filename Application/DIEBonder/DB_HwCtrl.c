@@ -63,6 +63,10 @@ static void DB_IOConfig(void)
  * 硬件配置接口
  ****************************************************************************/
 
+void HAL_PWM_CountInit(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit8 uPwmCapNode, uBit8 uCapChNum);
+void HAL_PWM_SendCount(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit32 ulPwmCount);
+
+
 /**
   * @brief  系统硬件初始化
   * @param  None
@@ -79,10 +83,6 @@ void DB_HwInit(void)
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
 #endif
     
-    //初始化PWM
-    PWM_Init(0, 0x03);
-    PWM_OutputEnable(0, true);
-    
     
 }
 
@@ -92,7 +92,6 @@ void DB_HwInit(void)
  ****************************************************************************/
 #define DB_LED_TOGGLE_TIME          (100)       //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
-
 
 /**
   * @brief  LED 流水灯循环
@@ -107,6 +106,7 @@ void DB_MainWorkLedShow(void)
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED0);
         
+        HAL_PWM_SendCount(0, 1, 10);
     }
 
 }

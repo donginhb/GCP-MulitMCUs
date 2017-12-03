@@ -258,6 +258,11 @@ void HW_IRQ_SetTrgCallback(void (*ptr)(void), uint32_t ulTrgSource)
     
     case LPC_IRQ_TRG_ENET: g_IRQInterface.pf_ENET_IRQHandler = ptr; break;
     
+    case LPC_IRQ_TRG_TIME0: g_IRQInterface.pf_TIMER0_IRQHandler = ptr;
+    case LPC_IRQ_TRG_TIME1: g_IRQInterface.pf_TIMER1_IRQHandler = ptr;
+    case LPC_IRQ_TRG_TIME2: g_IRQInterface.pf_TIMER2_IRQHandler = ptr;
+    case LPC_IRQ_TRG_TIME3: g_IRQInterface.pf_TIMER3_IRQHandler = ptr;
+    
     default: break;
     }
     
@@ -360,6 +365,11 @@ void HW_IRQ_ReleaseTrgCallback(uint32_t ulTrgSource)
     case LPC_IRQ_TRG_GPIOINT2_29:
     case LPC_IRQ_TRG_GPIOINT2_30:
     case LPC_IRQ_TRG_GPIOINT2_31: g_IRQInterface.pf_GPIO_IRQHandler[0][ulTrgSource - LPC_IRQ_TRG_GPIOINT0_00] = HW_IRQ_NullEntry; break;  //通过数组越界的方式去访问二维数组
+    
+    case LPC_IRQ_TRG_TIME0: g_IRQInterface.pf_TIMER0_IRQHandler = HW_IRQ_NullEntry;
+    case LPC_IRQ_TRG_TIME1: g_IRQInterface.pf_TIMER1_IRQHandler = HW_IRQ_NullEntry;
+    case LPC_IRQ_TRG_TIME2: g_IRQInterface.pf_TIMER2_IRQHandler = HW_IRQ_NullEntry;
+    case LPC_IRQ_TRG_TIME3: g_IRQInterface.pf_TIMER3_IRQHandler = HW_IRQ_NullEntry;
     
     default: break;
     }

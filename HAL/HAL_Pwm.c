@@ -25,6 +25,7 @@
 #include "HwDrivers/HW_Pwm.h"
 #include "HwDrivers/HW_TimeOutput.h"
 #include "HwDrivers/HW_TimeInput.h"
+#include "HwDrivers/HW_IRQHandler.h"
 #endif
 #elif defined(STM32F10X)
 #include "HwDrivers/HW_TimeOutput.h"
@@ -75,7 +76,7 @@ void HAL_PWM_EnableChannel(uBit8 uPwmNode, uBit8 uChannelMask, bool bIsEnble)
 #if 0
     HW_PWM_EnableChannel(uPwmNode, uChannelMask, bIsEnble);
 #else 
-    
+    HW_TIM_OutputEnable(uPwmNode, bIsEnble);
 #endif
 #elif defined(STM32F10X)
     
@@ -149,61 +150,4 @@ void HAL_PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnablle)
 #endif
     
 }
-
-
-/*****************************************************************************
- * PWM 数量控制相关接口
- ****************************************************************************/
-
-static uBit32 m_ulPwmCount = 0;
-static uBit8 m_uPwmOuputNode = 0;
-static uBit8 m_uOuputChNum = 0;
-static uBit8 m_uPwmCapNode = 0;
-static uBit8 m_uCapChNum = 0;
-
-
-//输入计数中断
-void HAL_PWM_InputCountHanlder()
-{
-    if (HW_TIM_GetInputITStatus(m_uPwmCapNode, m_uCapChNum))
-    {
-        HW_TIM_ClearInputITStatus(m_uPwmCapNode, m_uCapChNum);    //清标志位
-        
-        HAL_PWM_EnableChannel(m_uPwmOuputNode, m_uOuputChNum, false);   //关闭PWM输出
-        //HW_TIM_EnableInputIRQ(uPwmCapNode, uCapChNum, false);           //关闭PWM捕获
-    }
-    
-}
-
-
-
-
-void HAL_PWM_CountInit(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit8 uPwmCapNode, uBit8 uCapChNum)
-{
-#if defined(LPC17XX)
-    HW_TIM_OutputInit(uPwmOuputNode, 0x1<<uOuputChNum, 0);
-    HW_TIM_InputInit(uPwmCapNode, 0x1<<uCapChNum, 0);
-    HW_TIM_EnableInputIRQ(uPwmCapNode, uCapChNum, true);
-    
-    m_uPwmOuputNode = uPwmOuputNode;
-    m_uOuputChNum = uOuputChNum;
-    m_uPwmCapNode = uPwmCapNode;
-    m_uCapChNum = uCapChNum;
-    
-#elif defined(STM32F10X)
-#endif
-    
-}
-
-
-
-void HAL_PWM_SendCount(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit32 ulPwmCount)
-{
-    //设置捕获中断
-    
-}
-
-
-
-
 
