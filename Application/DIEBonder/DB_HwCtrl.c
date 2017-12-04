@@ -25,6 +25,7 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/PWM/PWM.h"
+#include "SysPeripheral/PWM/PWM_MotorCtrl.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -83,6 +84,19 @@ void DB_HwInit(void)
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
 #endif
     
+    //UART_Init(0, 115200);
+    
+#if 0
+    PWM_Init(3, 2);
+    PWM_OutputEnable(3, true);
+    PWM_SetOutputPwmFrq(3, 20*1000);
+#endif
+    
+#if 0
+    PWM_MotorPulseInit(0, 0, 1, 0);
+#else
+    PWM_MotorPulseInit(3, 1, 0, 0);
+#endif
     
 }
 
@@ -90,7 +104,7 @@ void DB_HwInit(void)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define DB_LED_TOGGLE_TIME          (100)       //LED翻转时间(MS)
+#define DB_LED_TOGGLE_TIME          (1)       //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
 
 /**
@@ -100,13 +114,20 @@ static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
   */
 void DB_MainWorkLedShow(void)
 {
+    static uBit32 s_ulMotorPulse = 0;
+    
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
         SysTime_StartOneShot(&m_LedCtrlTimer, DB_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED0);
         
-        HAL_PWM_SendCount(0, 1, 10);
+#if 0
+        PWM_SendPulse(0,  10);
+#else
+        PWM_SendPulseLimitMs(3, 10);
+#endif
+        s_ulMotorPulse += 1;
     }
 
 }
@@ -143,3 +164,17 @@ void DB_KeyProc(void)
     }
       
 }
+
+/*****************************************************************************
+ * 按键处理线程接口
+ ****************************************************************************/
+
+//电机控制接口
+static void DB_MotorCtrl(void)
+{
+    static uBit32 ulPulse = 0;
+    
+    
+        
+}
+

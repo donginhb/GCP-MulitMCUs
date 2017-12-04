@@ -4,7 +4,7 @@
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.11.07
-  * @brief   demo
+  * @brief   Exti drivers
   ******************************************************************************
   * @attention
   * 

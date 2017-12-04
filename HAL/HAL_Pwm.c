@@ -52,7 +52,7 @@ void HAL_PWM_Init(uBit8 uPwmNode, uBit8 uChannelMask)
 #if 0
     HW_PWM_Init(uPwmNode, uChannelMask);
 #else 
-    HW_PWM_Init(uPwmNode, uChannelMask);
+    //HW_PWM_Init(uPwmNode, uChannelMask);
     HW_TIM_OutputInit(uPwmNode, uChannelMask, 0);
 #endif
 #elif defined(STM32F10X)
@@ -98,7 +98,7 @@ void HAL_PWM_SetOutputPwmDutyRatio(uBit8 uPwmNode, uBit8 uChannelMask, float fDu
 #if 0
     HW_PWM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
 #else 
-    HW_PWM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
+    //HW_PWM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
     HW_TIM_SetOutputPwmDutyRatio(uPwmNode, uChannelMask, fDutyRatio);
 #endif
 #elif defined(STM32F10X)
@@ -120,7 +120,7 @@ void HAL_PWM_SetOutputPwmFrq(uBit8 uPwmNode, uBit32 ulFrequency)
 #if 0
     HW_PWM_SetOutputPwmFrq(uPwmNode, ulFrequency);
 #else 
-    HW_PWM_SetOutputPwmFrq(uPwmNode, ulFrequency);
+    //HW_PWM_SetOutputPwmFrq(uPwmNode, ulFrequency);
     HW_TIM_SetOutputPwmFrq(uPwmNode, ulFrequency);
 #endif
 #elif defined(STM32F10X)
@@ -142,7 +142,7 @@ void HAL_PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnablle)
 #if 0
     HW_PWM_OutputEnable(uPwmNode, bIsEnablle);
 #else
-    HW_PWM_OutputEnable(uPwmNode, bIsEnablle);
+    //HW_PWM_OutputEnable(uPwmNode, bIsEnablle);
     HW_TIM_OutputEnable(uPwmNode, bIsEnablle);
 #endif
 #elif defined(STM32F10X)

@@ -4,7 +4,7 @@
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.11.10
-  * @brief   demo
+  * @brief   System core control
   ******************************************************************************
   * @attention
   * 

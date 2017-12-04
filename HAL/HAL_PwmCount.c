@@ -3,8 +3,8 @@
   * @file    HAL_PwmCount.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2017.11.26
-  * @brief   demo
+  * @date    2017.12.04
+  * @brief   Pwm count mode driver
   ******************************************************************************
   * @attention
   * 

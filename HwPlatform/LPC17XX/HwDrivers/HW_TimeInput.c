@@ -3,7 +3,7 @@
   * @file    HW_TimeInput.c
   * @author  Duhanfeng
   * @version V4.2 寄存器版本
-  * @date    2017.11.20
+  * @date    2017.12.04
   * @brief   TIM input drivers
   ******************************************************************************
   * @attention
@@ -194,7 +194,6 @@ uint16_t HW_TIM_GetInputCapValue(uint8_t uTimeNode, uint8_t uChannelNum)
   * @brief  定时器输入模式初始化
   * @param  uTimeNode 定时器节点
   * @param  uChannelNum 通道编号(从0算起)
-  * @param  uInputMode 输入模式(普通/PWM输入/编码器模式)
   * @retval None
   */
 static void HW_TIM_InputCountConfig(uint8_t uTimeNode, uint8_t uChannelNum)

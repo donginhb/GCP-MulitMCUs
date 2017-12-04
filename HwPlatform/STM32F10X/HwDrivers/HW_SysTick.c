@@ -83,6 +83,6 @@ void HW_SysTick_Init(uint32_t ulTickTime)
     HW_SysTick_SetTickTime(ulTickTime);
     
     //设置系统滴答中断回调
-    HW_IRQ_SetTrgCallback(HW_SysTick_Update, IRQ_TRG_SYSTICK_UPDATE);
+    HW_IRQ_SetTrgCallback(HW_SysTick_Update, STM32F1_IRQ_TRG_SYSTICK_UPDATE);
  
 }

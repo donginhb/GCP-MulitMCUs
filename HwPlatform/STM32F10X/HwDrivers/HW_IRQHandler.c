@@ -175,83 +175,83 @@ void HW_IRQ_SetTrgCallback(void (*ptr)(void), uint32_t ulTrgSource)
     {
 
     //系统滴答
-    case IRQ_TRG_SYSTICK_UPDATE:        g_IRQInterface.pf_SysTick_Update                  = ptr; break;
-    case IRQ_TRG_SYSTICK_OS:            g_IRQInterface.pf_SysTick_Handler                 = ptr; break;
+    case STM32F1_IRQ_TRG_SYSTICK_UPDATE:        g_IRQInterface.pf_SysTick_Update                  = ptr; break;
+    case STM32F1_IRQ_TRG_SYSTICK_OS:            g_IRQInterface.pf_SysTick_Handler                 = ptr; break;
     
     //外部中断
-    case IRQ_TRG_EXTI0: 
-    case IRQ_TRG_EXTI1: 
-    case IRQ_TRG_EXTI2: 
-    case IRQ_TRG_EXTI3: 
-    case IRQ_TRG_EXTI4: 
-    case IRQ_TRG_EXTI5: 
-    case IRQ_TRG_EXTI6: 
-    case IRQ_TRG_EXTI7: 
-    case IRQ_TRG_EXTI8: 
-    case IRQ_TRG_EXTI9: 
-    case IRQ_TRG_EXTI10: 
-    case IRQ_TRG_EXTI11: 
-    case IRQ_TRG_EXTI12: 
-    case IRQ_TRG_EXTI13: 
-    case IRQ_TRG_EXTI14: 
-    case IRQ_TRG_EXTI15:                g_IRQInterface.pf_EXTI_IRQHandler[ulTrgSource-IRQ_TRG_EXTI0] = ptr; break;
+    case STM32F1_IRQ_TRG_EXTI0: 
+    case STM32F1_IRQ_TRG_EXTI1: 
+    case STM32F1_IRQ_TRG_EXTI2: 
+    case STM32F1_IRQ_TRG_EXTI3: 
+    case STM32F1_IRQ_TRG_EXTI4: 
+    case STM32F1_IRQ_TRG_EXTI5: 
+    case STM32F1_IRQ_TRG_EXTI6: 
+    case STM32F1_IRQ_TRG_EXTI7: 
+    case STM32F1_IRQ_TRG_EXTI8: 
+    case STM32F1_IRQ_TRG_EXTI9: 
+    case STM32F1_IRQ_TRG_EXTI10: 
+    case STM32F1_IRQ_TRG_EXTI11: 
+    case STM32F1_IRQ_TRG_EXTI12: 
+    case STM32F1_IRQ_TRG_EXTI13: 
+    case STM32F1_IRQ_TRG_EXTI14: 
+    case STM32F1_IRQ_TRG_EXTI15:                g_IRQInterface.pf_EXTI_IRQHandler[ulTrgSource-STM32F1_IRQ_TRG_EXTI0] = ptr; break;
 
     //DMA中断
-    case IRQ_TRG_DMA1_Channel1: 
-    case IRQ_TRG_DMA1_Channel2: 
-    case IRQ_TRG_DMA1_Channel3: 
-    case IRQ_TRG_DMA1_Channel4: 
-    case IRQ_TRG_DMA1_Channel5: 
-    case IRQ_TRG_DMA1_Channel6:     
-    case IRQ_TRG_DMA1_Channel7:         g_IRQInterface.pf_DMA_CH_IRQHandler[0][ulTrgSource-IRQ_TRG_DMA1_Channel1] = ptr; break;
-    case IRQ_TRG_DMA2_Channel1: 
-    case IRQ_TRG_DMA2_Channel2: 
-    case IRQ_TRG_DMA2_Channel3: 
-    case IRQ_TRG_DMA2_Channel4: 
-    case IRQ_TRG_DMA2_Channel5:         g_IRQInterface.pf_DMA_CH_IRQHandler[1][ulTrgSource-IRQ_TRG_DMA2_Channel1] = ptr; break;
+    case STM32F1_IRQ_TRG_DMA1_Channel1: 
+    case STM32F1_IRQ_TRG_DMA1_Channel2: 
+    case STM32F1_IRQ_TRG_DMA1_Channel3: 
+    case STM32F1_IRQ_TRG_DMA1_Channel4: 
+    case STM32F1_IRQ_TRG_DMA1_Channel5: 
+    case STM32F1_IRQ_TRG_DMA1_Channel6:     
+    case STM32F1_IRQ_TRG_DMA1_Channel7:         g_IRQInterface.pf_DMA_CH_IRQHandler[0][ulTrgSource-STM32F1_IRQ_TRG_DMA1_Channel1] = ptr; break;
+    case STM32F1_IRQ_TRG_DMA2_Channel1: 
+    case STM32F1_IRQ_TRG_DMA2_Channel2: 
+    case STM32F1_IRQ_TRG_DMA2_Channel3: 
+    case STM32F1_IRQ_TRG_DMA2_Channel4: 
+    case STM32F1_IRQ_TRG_DMA2_Channel5:         g_IRQInterface.pf_DMA_CH_IRQHandler[1][ulTrgSource-STM32F1_IRQ_TRG_DMA2_Channel1] = ptr; break;
 
-    case IRQ_TRG_WWDG:                  g_IRQInterface.pf_WWDG_IRQHandler                 = ptr; break;
-    case IRQ_TRG_PVD:                   g_IRQInterface.pf_PVD_IRQHandler                  = ptr; break;
-    case IRQ_TRG_TAMPER:                g_IRQInterface.pf_TAMPER_IRQHandler               = ptr; break;
-    case IRQ_TRG_RTC:                   g_IRQInterface.pf_RTC_IRQHandler                  = ptr; break;
-    case IRQ_TRG_FLASH:                 g_IRQInterface.pf_FLASH_IRQHandler                = ptr; break;
-    case IRQ_TRG_RCC:                   g_IRQInterface.pf_RCC_IRQHandler                  = ptr; break;
-    case IRQ_TRG_ADC1_2:                g_IRQInterface.pf_ADC1_2_IRQHandler               = ptr; break;
-    case IRQ_TRG_USB_HP_CAN1_TX:        g_IRQInterface.pf_USB_HP_CAN1_TX_IRQHandler       = ptr; break;
-    case IRQ_TRG_USB_LP_CAN1_RX0:       g_IRQInterface.pf_USB_LP_CAN1_RX0_IRQHandler      = ptr; break;
-    case IRQ_TRG_CAN1_RX1:              g_IRQInterface.pf_CAN1_RX1_IRQHandler             = ptr; break;
-    case IRQ_TRG_CAN1_SCE:              g_IRQInterface.pf_CAN1_SCE_IRQHandler             = ptr; break;
-    case IRQ_TRG_TIM1_BRK:              g_IRQInterface.pf_TIM1_BRK_IRQHandler             = ptr; break;
-    case IRQ_TRG_TIM1_UP:               g_IRQInterface.pf_TIM1_UP_IRQHandler              = ptr; break;
-    case IRQ_TRG_TIM1_TRG_COM:          g_IRQInterface.pf_TIM1_TRG_COM_IRQHandler         = ptr; break;
-    case IRQ_TRG_TIM1_CC:               g_IRQInterface.pf_TIM1_CC_IRQHandler              = ptr; break;
-    case IRQ_TRG_TIM2:                  g_IRQInterface.pf_TIM2_IRQHandler                 = ptr; break;
-    case IRQ_TRG_TIM3:                  g_IRQInterface.pf_TIM3_IRQHandler                 = ptr; break;
-    case IRQ_TRG_TIM4:                  g_IRQInterface.pf_TIM4_IRQHandler                 = ptr; break;
-    case IRQ_TRG_I2C1_EV:               g_IRQInterface.pf_I2C1_EV_IRQHandler              = ptr; break;
-    case IRQ_TRG_I2C1_ER:               g_IRQInterface.pf_I2C1_ER_IRQHandler              = ptr; break;
-    case IRQ_TRG_I2C2_EV:               g_IRQInterface.pf_I2C2_EV_IRQHandler              = ptr; break;
-    case IRQ_TRG_I2C2_ER:               g_IRQInterface.pf_I2C2_ER_IRQHandler              = ptr; break;
-    case IRQ_TRG_SPI1:                  g_IRQInterface.pf_SPI1_IRQHandler                 = ptr; break;
-    case IRQ_TRG_SPI2:                  g_IRQInterface.pf_SPI2_IRQHandler                 = ptr; break;
-    case IRQ_TRG_USART1:                g_IRQInterface.pf_USART1_IRQHandler               = ptr; break;
-    case IRQ_TRG_USART2:                g_IRQInterface.pf_USART2_IRQHandler               = ptr; break;
-    case IRQ_TRG_USART3:                g_IRQInterface.pf_USART3_IRQHandler               = ptr; break;
-    case IRQ_TRG_RTCAlarm:              g_IRQInterface.pf_RTCAlarm_IRQHandler             = ptr; break;
-    case IRQ_TRG_USBWakeUp:             g_IRQInterface.pf_USBWakeUp_IRQHandler            = ptr; break;
-    case IRQ_TRG_TIM8_BRK:              g_IRQInterface.pf_TIM8_BRK_IRQHandler             = ptr; break;
-    case IRQ_TRG_TIM8_UP:               g_IRQInterface.pf_TIM8_UP_IRQHandler              = ptr; break;
-    case IRQ_TRG_TIM8_TRG_COM:          g_IRQInterface.pf_TIM8_TRG_COM_IRQHandler         = ptr; break;
-    case IRQ_TRG_TIM8_CC:               g_IRQInterface.pf_TIM8_CC_IRQHandler              = ptr; break;
-    case IRQ_TRG_ADC3:                  g_IRQInterface.pf_ADC3_IRQHandler                 = ptr; break;
-    case IRQ_TRG_FSMC:                  g_IRQInterface.pf_FSMC_IRQHandler                 = ptr; break;
-    case IRQ_TRG_SDIO:                  g_IRQInterface.pf_SDIO_IRQHandler                 = ptr; break;
-    case IRQ_TRG_TIM5:                  g_IRQInterface.pf_TIM5_IRQHandler                 = ptr; break;
-    case IRQ_TRG_SPI3:                  g_IRQInterface.pf_SPI3_IRQHandler                 = ptr; break;
-    case IRQ_TRG_UART4:                 g_IRQInterface.pf_UART4_IRQHandler                = ptr; break;
-    case IRQ_TRG_UART5:                 g_IRQInterface.pf_UART5_IRQHandler                = ptr; break;
-    case IRQ_TRG_TIM6:                  g_IRQInterface.pf_TIM6_IRQHandler                 = ptr; break;
-    case IRQ_TRG_TIM7:                  g_IRQInterface.pf_TIM7_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_WWDG:                  g_IRQInterface.pf_WWDG_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_PVD:                   g_IRQInterface.pf_PVD_IRQHandler                  = ptr; break;
+    case STM32F1_IRQ_TRG_TAMPER:                g_IRQInterface.pf_TAMPER_IRQHandler               = ptr; break;
+    case STM32F1_IRQ_TRG_RTC:                   g_IRQInterface.pf_RTC_IRQHandler                  = ptr; break;
+    case STM32F1_IRQ_TRG_FLASH:                 g_IRQInterface.pf_FLASH_IRQHandler                = ptr; break;
+    case STM32F1_IRQ_TRG_RCC:                   g_IRQInterface.pf_RCC_IRQHandler                  = ptr; break;
+    case STM32F1_IRQ_TRG_ADC1_2:                g_IRQInterface.pf_ADC1_2_IRQHandler               = ptr; break;
+    case STM32F1_IRQ_TRG_USB_HP_CAN1_TX:        g_IRQInterface.pf_USB_HP_CAN1_TX_IRQHandler       = ptr; break;
+    case STM32F1_IRQ_TRG_USB_LP_CAN1_RX0:       g_IRQInterface.pf_USB_LP_CAN1_RX0_IRQHandler      = ptr; break;
+    case STM32F1_IRQ_TRG_CAN1_RX1:              g_IRQInterface.pf_CAN1_RX1_IRQHandler             = ptr; break;
+    case STM32F1_IRQ_TRG_CAN1_SCE:              g_IRQInterface.pf_CAN1_SCE_IRQHandler             = ptr; break;
+    case STM32F1_IRQ_TRG_TIM1_BRK:              g_IRQInterface.pf_TIM1_BRK_IRQHandler             = ptr; break;
+    case STM32F1_IRQ_TRG_TIM1_UP:               g_IRQInterface.pf_TIM1_UP_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_TIM1_TRG_COM:          g_IRQInterface.pf_TIM1_TRG_COM_IRQHandler         = ptr; break;
+    case STM32F1_IRQ_TRG_TIM1_CC:               g_IRQInterface.pf_TIM1_CC_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_TIM2:                  g_IRQInterface.pf_TIM2_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_TIM3:                  g_IRQInterface.pf_TIM3_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_TIM4:                  g_IRQInterface.pf_TIM4_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_I2C1_EV:               g_IRQInterface.pf_I2C1_EV_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_I2C1_ER:               g_IRQInterface.pf_I2C1_ER_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_I2C2_EV:               g_IRQInterface.pf_I2C2_EV_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_I2C2_ER:               g_IRQInterface.pf_I2C2_ER_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_SPI1:                  g_IRQInterface.pf_SPI1_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_SPI2:                  g_IRQInterface.pf_SPI2_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_USART1:                g_IRQInterface.pf_USART1_IRQHandler               = ptr; break;
+    case STM32F1_IRQ_TRG_USART2:                g_IRQInterface.pf_USART2_IRQHandler               = ptr; break;
+    case STM32F1_IRQ_TRG_USART3:                g_IRQInterface.pf_USART3_IRQHandler               = ptr; break;
+    case STM32F1_IRQ_TRG_RTCAlarm:              g_IRQInterface.pf_RTCAlarm_IRQHandler             = ptr; break;
+    case STM32F1_IRQ_TRG_USBWakeUp:             g_IRQInterface.pf_USBWakeUp_IRQHandler            = ptr; break;
+    case STM32F1_IRQ_TRG_TIM8_BRK:              g_IRQInterface.pf_TIM8_BRK_IRQHandler             = ptr; break;
+    case STM32F1_IRQ_TRG_TIM8_UP:               g_IRQInterface.pf_TIM8_UP_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_TIM8_TRG_COM:          g_IRQInterface.pf_TIM8_TRG_COM_IRQHandler         = ptr; break;
+    case STM32F1_IRQ_TRG_TIM8_CC:               g_IRQInterface.pf_TIM8_CC_IRQHandler              = ptr; break;
+    case STM32F1_IRQ_TRG_ADC3:                  g_IRQInterface.pf_ADC3_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_FSMC:                  g_IRQInterface.pf_FSMC_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_SDIO:                  g_IRQInterface.pf_SDIO_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_TIM5:                  g_IRQInterface.pf_TIM5_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_SPI3:                  g_IRQInterface.pf_SPI3_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_UART4:                 g_IRQInterface.pf_UART4_IRQHandler                = ptr; break;
+    case STM32F1_IRQ_TRG_UART5:                 g_IRQInterface.pf_UART5_IRQHandler                = ptr; break;
+    case STM32F1_IRQ_TRG_TIM6:                  g_IRQInterface.pf_TIM6_IRQHandler                 = ptr; break;
+    case STM32F1_IRQ_TRG_TIM7:                  g_IRQInterface.pf_TIM7_IRQHandler                 = ptr; break;
 
     default: break;
     }
@@ -270,83 +270,83 @@ void HW_IRQ_ReleaseTrgCallback(uint32_t ulTrgSource)
     {
 
     //系统滴答
-    case IRQ_TRG_SYSTICK_UPDATE:        g_IRQInterface.pf_SysTick_Update                  = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_SYSTICK_OS:            g_IRQInterface.pf_SysTick_Handler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SYSTICK_UPDATE:        g_IRQInterface.pf_SysTick_Update                  = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SYSTICK_OS:            g_IRQInterface.pf_SysTick_Handler                 = HW_IRQ_NullEntry; break;
     
     //外部中断
-    case IRQ_TRG_EXTI0: 
-    case IRQ_TRG_EXTI1: 
-    case IRQ_TRG_EXTI2: 
-    case IRQ_TRG_EXTI3: 
-    case IRQ_TRG_EXTI4: 
-    case IRQ_TRG_EXTI5: 
-    case IRQ_TRG_EXTI6: 
-    case IRQ_TRG_EXTI7: 
-    case IRQ_TRG_EXTI8: 
-    case IRQ_TRG_EXTI9: 
-    case IRQ_TRG_EXTI10: 
-    case IRQ_TRG_EXTI11: 
-    case IRQ_TRG_EXTI12: 
-    case IRQ_TRG_EXTI13: 
-    case IRQ_TRG_EXTI14: 
-    case IRQ_TRG_EXTI15:                g_IRQInterface.pf_EXTI_IRQHandler[ulTrgSource-IRQ_TRG_EXTI0] = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_EXTI0: 
+    case STM32F1_IRQ_TRG_EXTI1: 
+    case STM32F1_IRQ_TRG_EXTI2: 
+    case STM32F1_IRQ_TRG_EXTI3: 
+    case STM32F1_IRQ_TRG_EXTI4: 
+    case STM32F1_IRQ_TRG_EXTI5: 
+    case STM32F1_IRQ_TRG_EXTI6: 
+    case STM32F1_IRQ_TRG_EXTI7: 
+    case STM32F1_IRQ_TRG_EXTI8: 
+    case STM32F1_IRQ_TRG_EXTI9: 
+    case STM32F1_IRQ_TRG_EXTI10: 
+    case STM32F1_IRQ_TRG_EXTI11: 
+    case STM32F1_IRQ_TRG_EXTI12: 
+    case STM32F1_IRQ_TRG_EXTI13: 
+    case STM32F1_IRQ_TRG_EXTI14: 
+    case STM32F1_IRQ_TRG_EXTI15:                g_IRQInterface.pf_EXTI_IRQHandler[ulTrgSource-STM32F1_IRQ_TRG_EXTI0] = HW_IRQ_NullEntry; break;
 
     //DMA中断
-    case IRQ_TRG_DMA1_Channel1:         
-    case IRQ_TRG_DMA1_Channel2:         
-    case IRQ_TRG_DMA1_Channel3:         
-    case IRQ_TRG_DMA1_Channel4:         
-    case IRQ_TRG_DMA1_Channel5:         
-    case IRQ_TRG_DMA1_Channel6:         
-    case IRQ_TRG_DMA1_Channel7:         g_IRQInterface.pf_DMA_CH_IRQHandler[0][ulTrgSource-IRQ_TRG_DMA1_Channel1] = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_DMA2_Channel1:         
-    case IRQ_TRG_DMA2_Channel2:         
-    case IRQ_TRG_DMA2_Channel3:         
-    case IRQ_TRG_DMA2_Channel4:         
-    case IRQ_TRG_DMA2_Channel5:         g_IRQInterface.pf_DMA_CH_IRQHandler[1][ulTrgSource-IRQ_TRG_DMA2_Channel1] = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_DMA1_Channel1:         
+    case STM32F1_IRQ_TRG_DMA1_Channel2:         
+    case STM32F1_IRQ_TRG_DMA1_Channel3:         
+    case STM32F1_IRQ_TRG_DMA1_Channel4:         
+    case STM32F1_IRQ_TRG_DMA1_Channel5:         
+    case STM32F1_IRQ_TRG_DMA1_Channel6:         
+    case STM32F1_IRQ_TRG_DMA1_Channel7:         g_IRQInterface.pf_DMA_CH_IRQHandler[0][ulTrgSource-STM32F1_IRQ_TRG_DMA1_Channel1] = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_DMA2_Channel1:         
+    case STM32F1_IRQ_TRG_DMA2_Channel2:         
+    case STM32F1_IRQ_TRG_DMA2_Channel3:         
+    case STM32F1_IRQ_TRG_DMA2_Channel4:         
+    case STM32F1_IRQ_TRG_DMA2_Channel5:         g_IRQInterface.pf_DMA_CH_IRQHandler[1][ulTrgSource-STM32F1_IRQ_TRG_DMA2_Channel1] = HW_IRQ_NullEntry; break;
 
-    case IRQ_TRG_WWDG:                  g_IRQInterface.pf_WWDG_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_PVD:                   g_IRQInterface.pf_PVD_IRQHandler                  = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TAMPER:                g_IRQInterface.pf_TAMPER_IRQHandler               = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_RTC:                   g_IRQInterface.pf_RTC_IRQHandler                  = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_FLASH:                 g_IRQInterface.pf_FLASH_IRQHandler                = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_RCC:                   g_IRQInterface.pf_RCC_IRQHandler                  = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_ADC1_2:                g_IRQInterface.pf_ADC1_2_IRQHandler               = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USB_HP_CAN1_TX:        g_IRQInterface.pf_USB_HP_CAN1_TX_IRQHandler       = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USB_LP_CAN1_RX0:       g_IRQInterface.pf_USB_LP_CAN1_RX0_IRQHandler      = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_CAN1_RX1:              g_IRQInterface.pf_CAN1_RX1_IRQHandler             = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_CAN1_SCE:              g_IRQInterface.pf_CAN1_SCE_IRQHandler             = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM1_BRK:              g_IRQInterface.pf_TIM1_BRK_IRQHandler             = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM1_UP:               g_IRQInterface.pf_TIM1_UP_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM1_TRG_COM:          g_IRQInterface.pf_TIM1_TRG_COM_IRQHandler         = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM1_CC:               g_IRQInterface.pf_TIM1_CC_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM2:                  g_IRQInterface.pf_TIM2_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM3:                  g_IRQInterface.pf_TIM3_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM4:                  g_IRQInterface.pf_TIM4_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_I2C1_EV:               g_IRQInterface.pf_I2C1_EV_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_I2C1_ER:               g_IRQInterface.pf_I2C1_ER_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_I2C2_EV:               g_IRQInterface.pf_I2C2_EV_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_I2C2_ER:               g_IRQInterface.pf_I2C2_ER_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_SPI1:                  g_IRQInterface.pf_SPI1_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_SPI2:                  g_IRQInterface.pf_SPI2_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USART1:                g_IRQInterface.pf_USART1_IRQHandler               = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USART2:                g_IRQInterface.pf_USART2_IRQHandler               = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USART3:                g_IRQInterface.pf_USART3_IRQHandler               = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_RTCAlarm:              g_IRQInterface.pf_RTCAlarm_IRQHandler             = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_USBWakeUp:             g_IRQInterface.pf_USBWakeUp_IRQHandler            = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM8_BRK:              g_IRQInterface.pf_TIM8_BRK_IRQHandler             = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM8_UP:               g_IRQInterface.pf_TIM8_UP_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM8_TRG_COM:          g_IRQInterface.pf_TIM8_TRG_COM_IRQHandler         = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM8_CC:               g_IRQInterface.pf_TIM8_CC_IRQHandler              = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_ADC3:                  g_IRQInterface.pf_ADC3_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_FSMC:                  g_IRQInterface.pf_FSMC_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_SDIO:                  g_IRQInterface.pf_SDIO_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM5:                  g_IRQInterface.pf_TIM5_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_SPI3:                  g_IRQInterface.pf_SPI3_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_UART4:                 g_IRQInterface.pf_UART4_IRQHandler                = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_UART5:                 g_IRQInterface.pf_UART5_IRQHandler                = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM6:                  g_IRQInterface.pf_TIM6_IRQHandler                 = HW_IRQ_NullEntry; break;
-    case IRQ_TRG_TIM7:                  g_IRQInterface.pf_TIM7_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_WWDG:                  g_IRQInterface.pf_WWDG_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_PVD:                   g_IRQInterface.pf_PVD_IRQHandler                  = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TAMPER:                g_IRQInterface.pf_TAMPER_IRQHandler               = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_RTC:                   g_IRQInterface.pf_RTC_IRQHandler                  = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_FLASH:                 g_IRQInterface.pf_FLASH_IRQHandler                = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_RCC:                   g_IRQInterface.pf_RCC_IRQHandler                  = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_ADC1_2:                g_IRQInterface.pf_ADC1_2_IRQHandler               = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USB_HP_CAN1_TX:        g_IRQInterface.pf_USB_HP_CAN1_TX_IRQHandler       = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USB_LP_CAN1_RX0:       g_IRQInterface.pf_USB_LP_CAN1_RX0_IRQHandler      = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_CAN1_RX1:              g_IRQInterface.pf_CAN1_RX1_IRQHandler             = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_CAN1_SCE:              g_IRQInterface.pf_CAN1_SCE_IRQHandler             = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM1_BRK:              g_IRQInterface.pf_TIM1_BRK_IRQHandler             = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM1_UP:               g_IRQInterface.pf_TIM1_UP_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM1_TRG_COM:          g_IRQInterface.pf_TIM1_TRG_COM_IRQHandler         = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM1_CC:               g_IRQInterface.pf_TIM1_CC_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM2:                  g_IRQInterface.pf_TIM2_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM3:                  g_IRQInterface.pf_TIM3_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM4:                  g_IRQInterface.pf_TIM4_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_I2C1_EV:               g_IRQInterface.pf_I2C1_EV_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_I2C1_ER:               g_IRQInterface.pf_I2C1_ER_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_I2C2_EV:               g_IRQInterface.pf_I2C2_EV_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_I2C2_ER:               g_IRQInterface.pf_I2C2_ER_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SPI1:                  g_IRQInterface.pf_SPI1_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SPI2:                  g_IRQInterface.pf_SPI2_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USART1:                g_IRQInterface.pf_USART1_IRQHandler               = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USART2:                g_IRQInterface.pf_USART2_IRQHandler               = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USART3:                g_IRQInterface.pf_USART3_IRQHandler               = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_RTCAlarm:              g_IRQInterface.pf_RTCAlarm_IRQHandler             = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_USBWakeUp:             g_IRQInterface.pf_USBWakeUp_IRQHandler            = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM8_BRK:              g_IRQInterface.pf_TIM8_BRK_IRQHandler             = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM8_UP:               g_IRQInterface.pf_TIM8_UP_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM8_TRG_COM:          g_IRQInterface.pf_TIM8_TRG_COM_IRQHandler         = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM8_CC:               g_IRQInterface.pf_TIM8_CC_IRQHandler              = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_ADC3:                  g_IRQInterface.pf_ADC3_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_FSMC:                  g_IRQInterface.pf_FSMC_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SDIO:                  g_IRQInterface.pf_SDIO_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM5:                  g_IRQInterface.pf_TIM5_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_SPI3:                  g_IRQInterface.pf_SPI3_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_UART4:                 g_IRQInterface.pf_UART4_IRQHandler                = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_UART5:                 g_IRQInterface.pf_UART5_IRQHandler                = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM6:                  g_IRQInterface.pf_TIM6_IRQHandler                 = HW_IRQ_NullEntry; break;
+    case STM32F1_IRQ_TRG_TIM7:                  g_IRQInterface.pf_TIM7_IRQHandler                 = HW_IRQ_NullEntry; break;
 
     default: break;
     }

@@ -24,6 +24,7 @@
 #include "DataType/DataType.h"
 
 
+
 /**
   * @brief  格子柜相关资源初始化
   * @param  None
@@ -33,6 +34,9 @@ void DB_Init(void)
 {
     //硬件初始化
     DB_HwInit();
+    
+    
+    
     
 }
 

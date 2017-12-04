@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    PWM.c
+  * @file    PWM_Count.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2017.11.26
+  * @date    2017.12.04
   * @brief   pwm application
   ******************************************************************************
   * @attention
@@ -15,7 +15,7 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "PWM.h"
+#include "PWM_Count.h"
 #include "DataType/DataType.h"
 #include "HAL/HAL_PwmCount.h"
 

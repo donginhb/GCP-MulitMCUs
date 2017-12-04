@@ -2,6 +2,14 @@
 #define  __HAL_PWM_COUNT_H
 
 #include "DataType/DataType.h"
+#include "HAL_IRQHandler.h"
+
+#if defined(LPC17XX)
+#define PWM_COUNT_IRQ_BASE      (IRQ_TRG_TIME0)
+#elif defined(STM32F10X)
+#define PWM_COUNT_IRQ_BASE      (0)
+#endif
+
 
 #ifdef __cplusplus
 extern "C"

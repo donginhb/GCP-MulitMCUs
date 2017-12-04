@@ -234,26 +234,26 @@ static void HW_UART_ConfigItCallBack(uint8_t uUartNode)
     {
     case HW_UART_NODE0: 
         {
-            HW_IRQ_SetTrgCallback(HW_UART0_RX_IRQHandler, IRQ_TRG_USART1);
-            HW_IRQ_SetTrgCallback(HW_UART0_DMATC_IRQHandler, IRQ_TRG_DMA1_Channel4);
+            HW_IRQ_SetTrgCallback(HW_UART0_RX_IRQHandler, STM32F1_IRQ_TRG_USART1);
+            HW_IRQ_SetTrgCallback(HW_UART0_DMATC_IRQHandler, STM32F1_IRQ_TRG_DMA1_Channel4);
             break;
         }
     case HW_UART_NODE1: 
         {
-            HW_IRQ_SetTrgCallback(HW_UART1_RX_IRQHandler, IRQ_TRG_USART2);
-            HW_IRQ_SetTrgCallback(HW_UART1_DMATC_IRQHandler, IRQ_TRG_DMA1_Channel7);
+            HW_IRQ_SetTrgCallback(HW_UART1_RX_IRQHandler, STM32F1_IRQ_TRG_USART2);
+            HW_IRQ_SetTrgCallback(HW_UART1_DMATC_IRQHandler, STM32F1_IRQ_TRG_DMA1_Channel7);
             break;
         }
     case HW_UART_NODE2: 
         {
-            HW_IRQ_SetTrgCallback(HW_UART2_RX_IRQHandler, IRQ_TRG_USART3);
-            HW_IRQ_SetTrgCallback(HW_UART2_DMATC_IRQHandler, IRQ_TRG_DMA1_Channel2);
+            HW_IRQ_SetTrgCallback(HW_UART2_RX_IRQHandler, STM32F1_IRQ_TRG_USART3);
+            HW_IRQ_SetTrgCallback(HW_UART2_DMATC_IRQHandler, STM32F1_IRQ_TRG_DMA1_Channel2);
             break;
         }
     case HW_UART_NODE3: 
         {
-            HW_IRQ_SetTrgCallback(HW_UART3_RX_IRQHandler, IRQ_TRG_UART4);
-            HW_IRQ_SetTrgCallback(HW_UART3_DMATC_IRQHandler, IRQ_TRG_DMA2_Channel5);
+            HW_IRQ_SetTrgCallback(HW_UART3_RX_IRQHandler, STM32F1_IRQ_TRG_UART4);
+            HW_IRQ_SetTrgCallback(HW_UART3_DMATC_IRQHandler, STM32F1_IRQ_TRG_DMA2_Channel5);
             break;
         }
         

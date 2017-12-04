@@ -17,7 +17,7 @@ typedef enum
     UART_NODE_8,
     UART_NODE_9,
     
-}UART_NODE;  
+}UART_NODE;
 
 
 #ifdef __cplusplus
