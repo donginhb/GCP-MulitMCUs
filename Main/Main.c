@@ -21,6 +21,8 @@
 #include "Application/DIEBonder/DB_MainProc.h"
 #elif defined(LPC43XX)
 #include "Application/CNMachine/CN_MainProc.h"
+#elif defined(STM32F10X)
+#include "Application/WIFIClock/WFC_MainProc.h"
 #endif
 
 
@@ -32,6 +34,8 @@ int main(void)
     DB_Init();
 #elif defined(LPC43XX)
     CN_Init();
+#elif defined(STM32F10X)
+    WFC_Init();
 #endif
     
     while(1)
@@ -40,6 +44,8 @@ int main(void)
         DB_MainProc();
 #elif defined(LPC43XX)
         CN_MainProc();
+#elif defined(STM32F10X)
+        WFC_MainProc();
 #endif
         SYS_MainTaskHandler();
     }

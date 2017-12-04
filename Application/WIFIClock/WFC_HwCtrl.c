@@ -28,6 +28,7 @@
 
 //#include "ExtPeripheral/EEPROM/EEPROM.h"
 #include "ExtPeripheral/TempSensor/TempSensor.h"
+#include "ExtPeripheral/WIFI/ESP82XX.h"
       
 #include <stdio.h>
 #include <string.h>
@@ -49,6 +50,8 @@ static void WFC_IOConfig(void)
     //初始化资源表内的IO
     GPIO_InitIOTable(&g_GcpIOTable);
     
+#if 0
+    
     //初始化IIC引脚
     //GPIO_InitIOGroup(&g_GcpIOTable.pOutputGroup[OUTPUT_IO_SCL], 2, GPIO_MODE_OD);  //开漏模式
     
@@ -59,6 +62,7 @@ static void WFC_IOConfig(void)
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY0, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY1, 1);
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY2, 1);
+#endif
     
 }
 
@@ -81,6 +85,8 @@ void WFC_HwInit(void)
     //初始化串口
     UART_Init(WFC_UART_NODE, 115200);
     
+    
+#if 0
     //初始化按键
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY2};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
@@ -93,6 +99,29 @@ void WFC_HwInit(void)
     
     //初始化DS18B20
     //TEMP_InitInterface(OUTPUT_IO_DS18B20_BUS, SysTime_DelayUs);
+#endif
+    
+    //初始化ESP8266
+    UART_Init(1, 115200);
+    ESP82XX_InitInterface(1, UART_BlockSendBuff, UART_RecvBuff);
+    
+    if (ESP82XX_CheckDeviceConnect())
+    {
+        UART_SendStr(WFC_UART_NODE, "Init Esp8266 fail!\r\n");
+    }
+    else
+    {
+        UART_SendStr(WFC_UART_NODE, "Init Esp8266 success!\r\n");
+    }
+    
+    if (ESP82XX_SetWifiMode(ESP82XX_WIFI_STA_MODE))
+    {
+        UART_SendStr(WFC_UART_NODE, "Set Esp8266 station mode fail!\r\n");
+    }
+    else
+    {
+        UART_SendStr(WFC_UART_NODE, "Set Esp8266 station mode success!\r\n");
+    }
     
 }
 

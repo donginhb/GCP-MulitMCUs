@@ -25,10 +25,12 @@ typedef enum
 {
     OUTPUT_IO_LED0 = 0,     //LED
     OUTPUT_IO_LED1,
+#if 0
     OUTPUT_IO_BEEP,         //BEEP
     OUTPUT_IO_SCL,          //IIC
     OUTPUT_IO_SDA,
     OUTPUT_IO_DS18B20_BUS,  //DS18B20_BUS
+#endif
 
 }OUTPUT_IO_TABLE;
 

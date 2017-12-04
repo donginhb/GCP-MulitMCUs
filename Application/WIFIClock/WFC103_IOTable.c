@@ -37,6 +37,7 @@ static GPIO_DATA m_OutputIOTable[] =
     {1,   5},
     {4,   5},
     
+#if 0
     //BEEP
     {1,   8},
     
@@ -45,6 +46,7 @@ static GPIO_DATA m_OutputIOTable[] =
     {1,   7},//SDA
     
     {6,  11},//DS18B20
+#endif
 };
 
 

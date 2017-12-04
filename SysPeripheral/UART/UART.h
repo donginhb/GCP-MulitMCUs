@@ -67,7 +67,7 @@ uBit32 UART_GetTransStatus(uBit8 uUartNode);
   * @param  uUartNode 串口节点号
   * @param  pSBuff 数据缓冲区地址
   * @param  nSize 发送的数量
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
 uBit32 UART_BlockSendBuff(uBit8 uUartNode, uBit8 *pSBuff, uBit32 ulSize);
 
@@ -76,7 +76,7 @@ uBit32 UART_BlockSendBuff(uBit8 uUartNode, uBit8 *pSBuff, uBit32 ulSize);
   * @brief  串口字符串发送(阻塞)
   * @param  uUartNode 串口节点号
   * @param  pSString 字符串区地址(结尾必须有'\0')
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
 uBit32 UART_BlockSendStr(uBit8 uUartNode, uBit8 *pSString);
 
@@ -86,7 +86,7 @@ uBit32 UART_BlockSendStr(uBit8 uUartNode, uBit8 *pSString);
   * @param  uUartNode 串口节点号
   * @param  pSBuff 数据缓冲区地址
   * @param  nSize 发送的数量
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
 uBit32 UART_SendBuff(uBit8 uUartNode, uBit8 *pSBuff, uBit32 ulSize);
 
@@ -95,7 +95,7 @@ uBit32 UART_SendBuff(uBit8 uUartNode, uBit8 *pSBuff, uBit32 ulSize);
   * @brief  串口数据发送(非阻塞)
   * @param  uUartNode 串口节点号
   * @param  pSString 字符串区地址(结尾必须有'\0')
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
 uBit32 UART_SendStr(uBit8 uUartNode, uBit8 *pSString);
 
