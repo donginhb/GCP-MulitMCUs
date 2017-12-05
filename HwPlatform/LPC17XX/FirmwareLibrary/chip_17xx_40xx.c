@@ -54,57 +54,57 @@ uint32_t SystemCoreClock;
    a clock rate change */
 void SystemCoreClockUpdate(void)
 {
-	/* CPU core speed */
-	SystemCoreClock = Chip_Clock_GetSystemClockRate();
+    /* CPU core speed */
+    SystemCoreClock = Chip_Clock_GetSystemClockRate();
 }
 
 /* Sets up USB PLL, all needed clocks and enables USB PHY on the chip. USB pins which are
-	muxed to different pads are not initialized here. This routine assumes that the XTAL 
-	OSC is enabled and running prior to this call. */
+    muxed to different pads are not initialized here. This routine assumes that the XTAL 
+    OSC is enabled and running prior to this call. */
 void Chip_USB_Init(void)
 {
 
 #if defined(CHIP_LPC175X_6X)
-	/* Setup USB PLL1 for a 48MHz clock
-	   Input clock rate (FIN) is main oscillator = 12MHz
-	   PLL1 Output = USBCLK = 48MHz = FIN * MSEL, so MSEL = 4.
-	   FCCO = USBCLK = USBCLK * 2 * P. It must be between 156 MHz to 320 MHz.
-	   so P = 2 and FCCO = 48MHz * 2 * 2 = 192MHz */
-	Chip_Clock_SetupPLL(SYSCTL_USB_PLL, 3, 1);	/* Multiply by 4, Divide by 2 */
+    /* Setup USB PLL1 for a 48MHz clock
+       Input clock rate (FIN) is main oscillator = 12MHz
+       PLL1 Output = USBCLK = 48MHz = FIN * MSEL, so MSEL = 4.
+       FCCO = USBCLK = USBCLK * 2 * P. It must be between 156 MHz to 320 MHz.
+       so P = 2 and FCCO = 48MHz * 2 * 2 = 192MHz */
+    Chip_Clock_SetupPLL(SYSCTL_USB_PLL, 3, 1);    /* Multiply by 4, Divide by 2 */
 
-	/* Use PLL1 output as USB Clock Source */
-	/* Enable PLL1 */
-	Chip_Clock_EnablePLL(SYSCTL_USB_PLL, SYSCTL_PLL_ENABLE);
+    /* Use PLL1 output as USB Clock Source */
+    /* Enable PLL1 */
+    Chip_Clock_EnablePLL(SYSCTL_USB_PLL, SYSCTL_PLL_ENABLE);
 
-	/* Wait for PLL1 to lock */
-	while (!Chip_Clock_IsUSBPLLLocked()) {}
+    /* Wait for PLL1 to lock */
+    while (!Chip_Clock_IsUSBPLLLocked()) {}
 
-	/* Connect PLL1 */
-	Chip_Clock_EnablePLL(SYSCTL_USB_PLL, SYSCTL_PLL_ENABLE | SYSCTL_PLL_CONNECT);
+    /* Connect PLL1 */
+    Chip_Clock_EnablePLL(SYSCTL_USB_PLL, SYSCTL_PLL_ENABLE | SYSCTL_PLL_CONNECT);
 
-	/* Wait for PLL1 to be connected */
-	while (!Chip_Clock_IsUSBPLLConnected()) {}
+    /* Wait for PLL1 to be connected */
+    while (!Chip_Clock_IsUSBPLLConnected()) {}
 
 #else
 
-	/* Select XTAL as clock source for USB block and divider as 1 */
-	LPC_SYSCTL->USBCLKSEL = 0x1;
-	/* Setup USB PLL1 for a 48MHz clock
-	   Input clock rate (FIN) is main oscillator = 12MHz
-	   PLL output = 48MHz = FIN * MSEL, so MSEL = 4
-	   FCCO must be between 156 MHz to 320 MHz, where FCCO = PLL output * 2 * P,
-	   so P = 2 and FCCO = 48MHz * 2 * 2 = 192MHz */
-	Chip_Clock_SetupPLL(SYSCTL_USB_PLL, 3, 1);  
+    /* Select XTAL as clock source for USB block and divider as 1 */
+    LPC_SYSCTL->USBCLKSEL = 0x1;
+    /* Setup USB PLL1 for a 48MHz clock
+       Input clock rate (FIN) is main oscillator = 12MHz
+       PLL output = 48MHz = FIN * MSEL, so MSEL = 4
+       FCCO must be between 156 MHz to 320 MHz, where FCCO = PLL output * 2 * P,
+       so P = 2 and FCCO = 48MHz * 2 * 2 = 192MHz */
+    Chip_Clock_SetupPLL(SYSCTL_USB_PLL, 3, 1);  
 
-	/* Wait for USB PLL to lock */
-	while ((Chip_Clock_GetPLLStatus(SYSCTL_USB_PLL) & SYSCTL_PLLSTS_LOCKED) == 0) {}
+    /* Wait for USB PLL to lock */
+    while ((Chip_Clock_GetPLLStatus(SYSCTL_USB_PLL) & SYSCTL_PLLSTS_LOCKED) == 0) {}
 
-	/* Select PLL1/USBPLL as clock source for USB block and divider as 1 */
-	LPC_SYSCTL->USBCLKSEL = (SYSCTL_USBCLKSRC_USBPLL << 8) | 0x01;
+    /* Select PLL1/USBPLL as clock source for USB block and divider as 1 */
+    LPC_SYSCTL->USBCLKSEL = (SYSCTL_USBCLKSRC_USBPLL << 8) | 0x01;
 
 #endif /* defined(CHIP_LPC175X_6X) */
 
-	/* Enable AHB clock to the USB block and USB RAM. */
-	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_USB);
+    /* Enable AHB clock to the USB block and USB RAM. */
+    Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_USB);
 
 }

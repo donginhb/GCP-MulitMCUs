@@ -63,7 +63,7 @@ static const IRQn_Type TIM_IRQn[HW_TIME_COUNT] = {TIMER0_IRQn, TIMER1_IRQn, TIME
 static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][TIME_CH_COUNT] = 
 {
     //TIME0
-	{
+    {
         {0x01, 28,  IOCON_MODE_INACT | IOCON_FUNC3},
         {0x01, 29,  IOCON_MODE_INACT | IOCON_FUNC3},
     },

@@ -47,11 +47,11 @@
 STATIC INLINE uint8_t getFullConvClk(void)
 {
 #if defined(CHIP_LPC177X_8X) || defined(CHIP_LPC40XX)
-	return 31;
+    return 31;
 #elif defined(CHIP_LPC175X_6X)
-	return 65;
+    return 65;
 #else
-	return 0;
+    return 0;
 #endif
 
 }
@@ -59,56 +59,56 @@ STATIC INLINE uint8_t getFullConvClk(void)
 /* Get divider value */
 STATIC uint8_t getClkDiv(LPC_ADC_T *pADC, bool burstMode, uint32_t adcRate, uint8_t clks)
 {
-	uint32_t adcBlockFreq;
-	uint32_t fullAdcRate;
-	uint8_t div;
+    uint32_t adcBlockFreq;
+    uint32_t fullAdcRate;
+    uint8_t div;
 
-	/* The APB clock (PCLK_ADC0) is divided by (CLKDIV+1) to produce the clock for
-	   A/D converter, which should be less than or equal to 4.5MHz.
-	   A fully conversion requires (bits_accuracy+1) of these clocks.
-	   ADC Clock = PCLK_ADC0 / (CLKDIV + 1);
-	   ADC rate = ADC clock / (the number of clocks required for each conversion);
-	 */
+    /* The APB clock (PCLK_ADC0) is divided by (CLKDIV+1) to produce the clock for
+       A/D converter, which should be less than or equal to 4.5MHz.
+       A fully conversion requires (bits_accuracy+1) of these clocks.
+       ADC Clock = PCLK_ADC0 / (CLKDIV + 1);
+       ADC rate = ADC clock / (the number of clocks required for each conversion);
+     */
 #if defined(CHIP_LPC175X_6X)
-	adcBlockFreq = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_ADC);
+    adcBlockFreq = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_ADC);
 #else
-	adcBlockFreq = Chip_Clock_GetPeripheralClockRate();
+    adcBlockFreq = Chip_Clock_GetPeripheralClockRate();
 #endif
 #if defined(ADC_ACC_12BITS)
-	fullAdcRate = adcRate * getFullConvClk();
+    fullAdcRate = adcRate * getFullConvClk();
 #else
-	if (burstMode) {
-		fullAdcRate = adcRate * clks;
-	}
-	else {
-		fullAdcRate = adcRate * getFullConvClk();
-	}
+    if (burstMode) {
+        fullAdcRate = adcRate * clks;
+    }
+    else {
+        fullAdcRate = adcRate * getFullConvClk();
+    }
 #endif
-	/* Get the round value by fomular: (2*A + B)/(2*B) */
-	div = ((adcBlockFreq * 2 + fullAdcRate) / (fullAdcRate * 2)) - 1;
-	return div;
+    /* Get the round value by fomular: (2*A + B)/(2*B) */
+    div = ((adcBlockFreq * 2 + fullAdcRate) / (fullAdcRate * 2)) - 1;
+    return div;
 }
 
 /* Set start mode for ADC */
 void setStartMode(LPC_ADC_T *pADC, uint8_t start_mode)
 {
-	uint32_t temp;
-	temp = pADC->CR & (~ADC_CR_START_MASK);
-	pADC->CR = temp | (ADC_CR_START_MODE_SEL((uint32_t) start_mode));
+    uint32_t temp;
+    temp = pADC->CR & (~ADC_CR_START_MASK);
+    pADC->CR = temp | (ADC_CR_START_MODE_SEL((uint32_t) start_mode));
 }
 
 /* Get the ADC value */
 Status readAdcVal(LPC_ADC_T *pADC, uint8_t channel, uint16_t *data)
 {
-	uint32_t temp;
-	temp = pADC->DR[channel];
-	if (!ADC_DR_DONE(temp)) {
-		return ERROR;
-	}
-	/*	if(ADC_DR_OVERRUN(temp) && (pADC->CR & ADC_CR_BURST)) */
-	/*	return ERROR; */
-	*data = (uint16_t) ADC_DR_RESULT(temp);
-	return SUCCESS;
+    uint32_t temp;
+    temp = pADC->DR[channel];
+    if (!ADC_DR_DONE(temp)) {
+        return ERROR;
+    }
+    /*    if(ADC_DR_OVERRUN(temp) && (pADC->CR & ADC_CR_BURST)) */
+    /*    return ERROR; */
+    *data = (uint16_t) ADC_DR_RESULT(temp);
+    return SUCCESS;
 }
 
 /*****************************************************************************
@@ -118,139 +118,139 @@ Status readAdcVal(LPC_ADC_T *pADC, uint8_t channel, uint16_t *data)
 /* Initialize the ADC peripheral and the ADC setup structure to default value */
 void Chip_ADC_Init(LPC_ADC_T *pADC, ADC_CLOCK_SETUP_T *ADCSetup)
 {
-	uint8_t div;
-	uint32_t cr = 0;
-	uint32_t clk;
+    uint8_t div;
+    uint32_t cr = 0;
+    uint32_t clk;
 
-	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_ADC);
+    Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_ADC);
 
 #if defined(ADC_TRIM_SUPPORT)
-	pADC->ADTRM = 0xF00;
+    pADC->ADTRM = 0xF00;
 #endif
-	pADC->INTEN = 0;		/* Disable all interrupts */
+    pADC->INTEN = 0;        /* Disable all interrupts */
 
-	cr |= ADC_CR_PDN;
+    cr |= ADC_CR_PDN;
 
-	ADCSetup->adcRate = ADC_MAX_SAMPLE_RATE;
-	ADCSetup->bitsAccuracy = 0;	/* LPC17xx/40xx doesn't support this setting */
-	clk = 0;
-	ADCSetup->burstMode = false;
-	div = getClkDiv(pADC, false, ADCSetup->adcRate, clk);
-	cr |= ADC_CR_CLKDIV(div);
+    ADCSetup->adcRate = ADC_MAX_SAMPLE_RATE;
+    ADCSetup->bitsAccuracy = 0;    /* LPC17xx/40xx doesn't support this setting */
+    clk = 0;
+    ADCSetup->burstMode = false;
+    div = getClkDiv(pADC, false, ADCSetup->adcRate, clk);
+    cr |= ADC_CR_CLKDIV(div);
 #if !defined(ADC_ACC_12BITS)
-	cr |= ADC_CR_BITACC(ADCSetup->bitsAccuracy);
+    cr |= ADC_CR_BITACC(ADCSetup->bitsAccuracy);
 #endif /*defined(ADC_ACC_12BITS)*/
-	pADC->CR = cr;
+    pADC->CR = cr;
 }
 
 /* Shutdown ADC */
 void Chip_ADC_DeInit(LPC_ADC_T *pADC)
 {
-	pADC->INTEN = 0x00000100;
-	pADC->CR = 0;
-	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_ADC);
+    pADC->INTEN = 0x00000100;
+    pADC->CR = 0;
+    Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_ADC);
 }
 
 /* Get the ADC value */
 Status Chip_ADC_ReadValue(LPC_ADC_T *pADC, uint8_t channel, uint16_t *data)
 {
-	return readAdcVal(pADC, channel, data);
+    return readAdcVal(pADC, channel, data);
 }
 
 /* Get ADC Channel status from ADC data register */
 FlagStatus Chip_ADC_ReadStatus(LPC_ADC_T *pADC, uint8_t channel, uint32_t StatusType)
 {
-	switch (StatusType) {
-	case ADC_DR_DONE_STAT:
-		return (pADC->STAT & (1UL << channel)) ? SET : RESET;
+    switch (StatusType) {
+    case ADC_DR_DONE_STAT:
+        return (pADC->STAT & (1UL << channel)) ? SET : RESET;
 
-	case ADC_DR_OVERRUN_STAT:
-		channel += 8;
-		return (pADC->STAT & (1UL << channel)) ? SET : RESET;
+    case ADC_DR_OVERRUN_STAT:
+        channel += 8;
+        return (pADC->STAT & (1UL << channel)) ? SET : RESET;
 
-	case ADC_DR_ADINT_STAT:
-		return pADC->STAT >> 16 ? SET : RESET;
+    case ADC_DR_ADINT_STAT:
+        return pADC->STAT >> 16 ? SET : RESET;
 
-	default:
-		break;
-	}
-	return RESET;
+    default:
+        break;
+    }
+    return RESET;
 }
 
 /* Enable/Disable interrupt for ADC channel */
 void Chip_ADC_Int_SetChannelCmd(LPC_ADC_T *pADC, uint8_t channel, FunctionalState NewState)
 {
-	if (NewState == ENABLE) {
-		pADC->INTEN |= (1UL << channel);
-	}
-	else {
-		pADC->INTEN &= (~(1UL << channel));
-	}
+    if (NewState == ENABLE) {
+        pADC->INTEN |= (1UL << channel);
+    }
+    else {
+        pADC->INTEN &= (~(1UL << channel));
+    }
 }
 
 /* Select the mode starting the AD conversion */
 void Chip_ADC_SetStartMode(LPC_ADC_T *pADC, ADC_START_MODE_T mode, ADC_EDGE_CFG_T EdgeOption)
 {
-	if ((mode != ADC_START_NOW) && (mode != ADC_NO_START)) {
-		if (EdgeOption) {
-			pADC->CR |= ADC_CR_EDGE;
-		}
-		else {
-			pADC->CR &= ~ADC_CR_EDGE;
-		}
-	}
-	setStartMode(pADC, (uint8_t) mode);
+    if ((mode != ADC_START_NOW) && (mode != ADC_NO_START)) {
+        if (EdgeOption) {
+            pADC->CR |= ADC_CR_EDGE;
+        }
+        else {
+            pADC->CR &= ~ADC_CR_EDGE;
+        }
+    }
+    setStartMode(pADC, (uint8_t) mode);
 }
 
 /* Set the ADC Sample rate */
 void Chip_ADC_SetSampleRate(LPC_ADC_T *pADC, ADC_CLOCK_SETUP_T *ADCSetup, uint32_t rate)
 {
-	uint8_t div;
-	uint32_t cr;
+    uint8_t div;
+    uint32_t cr;
 
-	cr = pADC->CR & (~ADC_SAMPLE_RATE_CONFIG_MASK);
-	ADCSetup->adcRate = rate;
-	div = getClkDiv(pADC, ADCSetup->burstMode, rate, (11 - ADCSetup->bitsAccuracy));
-	cr |= ADC_CR_CLKDIV(div);
+    cr = pADC->CR & (~ADC_SAMPLE_RATE_CONFIG_MASK);
+    ADCSetup->adcRate = rate;
+    div = getClkDiv(pADC, ADCSetup->burstMode, rate, (11 - ADCSetup->bitsAccuracy));
+    cr |= ADC_CR_CLKDIV(div);
 #if !defined(ADC_ACC_12BITS)
-	cr |= ADC_CR_BITACC(ADCSetup->bitsAccuracy);
+    cr |= ADC_CR_BITACC(ADCSetup->bitsAccuracy);
 #endif /*defined(ADC_ACC_12BITS)*/
-	pADC->CR = cr;
+    pADC->CR = cr;
 }
 
 /* Enable or disable the ADC channel on ADC peripheral */
 void Chip_ADC_EnableChannel(LPC_ADC_T *pADC, ADC_CHANNEL_T channel, FunctionalState NewState)
 {
-	if (NewState == ENABLE) {
-		pADC->CR |= ADC_CR_CH_SEL(channel);
-	}
-	else {
-		pADC->CR &= ~ADC_CR_START_MASK;
-		pADC->CR &= ~ADC_CR_CH_SEL(channel);
-	}
+    if (NewState == ENABLE) {
+        pADC->CR |= ADC_CR_CH_SEL(channel);
+    }
+    else {
+        pADC->CR &= ~ADC_CR_START_MASK;
+        pADC->CR &= ~ADC_CR_CH_SEL(channel);
+    }
 }
 
 /* Enable burst mode */
 void Chip_ADC_SetBurstCmd(LPC_ADC_T *pADC, FunctionalState NewState)
 {
-	setStartMode(pADC, ADC_NO_START);
+    setStartMode(pADC, ADC_NO_START);
 
-	if (NewState == DISABLE) {
-		pADC->CR &= ~ADC_CR_BURST;
-	}
-	else {
-		pADC->CR |= ADC_CR_BURST;
-	}
+    if (NewState == DISABLE) {
+        pADC->CR &= ~ADC_CR_BURST;
+    }
+    else {
+        pADC->CR |= ADC_CR_BURST;
+    }
 }
 
 /* Read the ADC value and convert it to 8bits value */
 Status Chip_ADC_ReadByte(LPC_ADC_T *pADC, ADC_CHANNEL_T channel, uint8_t *data)
 {
-	uint16_t temp;
-	Status rt;
+    uint16_t temp;
+    Status rt;
 
-	rt = readAdcVal(pADC, channel, &temp);
-	*data = (uint8_t) temp;
+    rt = readAdcVal(pADC, channel, &temp);
+    *data = (uint8_t) temp;
 
-	return rt;
+    return rt;
 }

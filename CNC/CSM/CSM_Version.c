@@ -18,9 +18,9 @@ Copyright (c) 2016, 东莞华科精机有限公司 All rights reserved.
 
 #include "string.h"
 #include "CSM_Interface.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
-#include "..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 
@@ -39,7 +39,7 @@ uBit32 CSM_GetVersion(SOFTWARE_VERSION* pVersion)
     memset(&CSMVersion, 0, sizeof(CSMVersion));
 
     memcpy(CSMVersion.cType, "NC20", 4);
-    CSMVersion.cPart = SYS_PART_CSM;
+    CSMVersion.cPart = 0;
     CSMVersion.cSoftVer[1] = 2;            
     CSMVersion.cFlag = 0;
 

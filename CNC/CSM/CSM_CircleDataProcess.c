@@ -19,10 +19,10 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "math.h"
 #include "stdlib.h"
 #include "CSM_CircleDataProcess.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
 
 uBit32 CSM_CircleDataProcess_ThreePT(double64* pStartPos, IIP_BUF* pProgData, SEGMENT_MOTION_DATA* pMotionData)

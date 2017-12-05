@@ -25,9 +25,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CSM_CrdSysState.h"
 
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\ErrorCodeDef\\CSM_ErrorCodeDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/ErrorCodeDef/CSM_ErrorCodeDef.h"
 
 //
 extern CSM_INTERFACE m_CSMInterface;

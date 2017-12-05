@@ -3,8 +3,8 @@
   * @file    SYS_CmuConfig.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2017.11.08
-  * @brief   System cmu initialize
+  * @date    2017.11.30
+  * @brief   System cmu module initialize
   ******************************************************************************
   * @attention
   * 

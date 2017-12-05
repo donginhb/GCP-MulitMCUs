@@ -4,10 +4,10 @@
 #include "CAN_DEV_ComMana.h"
 #include "CAN_DEV_Interface.h"
 
-#include "..\\..\\ErrorCodeDef\\DVM_ErrorCodeDef.h"
-#include "..\\..\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "../../ErrorCodeDef/DVM_ErrorCodeDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-//#include "..\\..\\GPIO\\GPIOCtrl.h"
+//#include "../../GPIO/GPIOCtrl.h"
 
 #define MAX_PULSE_INC            (511)    //单周期最大允许脉冲数
 

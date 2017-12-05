@@ -236,7 +236,7 @@ void I2C_Init(I2C_TypeDef* I2Cx, I2C_InitTypeDef* I2C_InitStruct)
       result = 0x04;  
     }
     /* Set speed value for standard mode */
-    tmpreg |= result;	  
+    tmpreg |= result;      
     /* Set Maximum Rise Time for standard mode */
     I2Cx->TRISE = freqrange + 1; 
   }
@@ -1274,7 +1274,7 @@ ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
 }
 
 /**
-  * @brief  Clears the I2Cx’s interrupt pending bits.
+  * @brief  Clears the I2CxæŠ¯ interrupt pending bits.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_IT: specifies the interrupt pending bit to clear. 
   *   This parameter can be any combination of the following values:

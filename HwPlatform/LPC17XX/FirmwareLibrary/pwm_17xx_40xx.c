@@ -50,22 +50,22 @@
 /* Returns clock for the peripheral block */
 STATIC CHIP_SYSCTL_CLOCK_T Chip_PWM_GetClockIndex(LPC_PWM_T *pPWM)
 {
-	CHIP_SYSCTL_CLOCK_T clkPWM;
+    CHIP_SYSCTL_CLOCK_T clkPWM;
 
-	if (pPWM == LPC_PWM1) {
-		clkPWM = SYSCTL_CLOCK_PWM1;
-	}
+    if (pPWM == LPC_PWM1) {
+        clkPWM = SYSCTL_CLOCK_PWM1;
+    }
 #if defined(CHIP_LPC177X_8X)
-	else if (pPWM == LPC_PWM0) {
-		clkPWM = SYSCTL_CLOCK_PWM0;
-	}
+    else if (pPWM == LPC_PWM0) {
+        clkPWM = SYSCTL_CLOCK_PWM0;
+    }
 #endif
     else
     {
         clkPWM = SYSCTL_CLOCK_PWM1;
     }
 
-	return clkPWM;
+    return clkPWM;
 }
 
 /*****************************************************************************
@@ -73,34 +73,34 @@ STATIC CHIP_SYSCTL_CLOCK_T Chip_PWM_GetClockIndex(LPC_PWM_T *pPWM)
  ****************************************************************************/
 
 /*********************************************************************//**
- * @brief 		Initializes the pPWM peripheral corresponding to the specified
+ * @brief         Initializes the pPWM peripheral corresponding to the specified
  *               parameters in the PWM_ConfigStruct.
- * @param[in]	pPWM PWM peripheral, should be LPC_PWM1
- * @param[in]	PWMTimerCounterMode Timer or Counter mode, should be:
- * 				- PWM_MODE_TIMER: Counter of PWM peripheral is in Timer mode
- * 				- PWM_MODE_COUNTER: Counter of PWM peripheral is in Counter mode
- * @param[in]	PWM_ConfigStruct Pointer to structure (PWM_TIMERCFG_Type or
- * 				 PWM_COUNTERCFG_Type) which will be initialized.
- * @return 		None
+ * @param[in]    pPWM PWM peripheral, should be LPC_PWM1
+ * @param[in]    PWMTimerCounterMode Timer or Counter mode, should be:
+ *                 - PWM_MODE_TIMER: Counter of PWM peripheral is in Timer mode
+ *                 - PWM_MODE_COUNTER: Counter of PWM peripheral is in Counter mode
+ * @param[in]    PWM_ConfigStruct Pointer to structure (PWM_TIMERCFG_Type or
+ *                  PWM_COUNTERCFG_Type) which will be initialized.
+ * @return         None
  * Note: PWM_ConfigStruct pointer will be assigned to corresponding structure
- * 		(PWM_TIMERCFG_Type or PWM_COUNTERCFG_Type) due to PWMTimerCounterMode.
+ *         (PWM_TIMERCFG_Type or PWM_COUNTERCFG_Type) due to PWMTimerCounterMode.
  **********************************************************************/
 void Chip_PWM_Init(LPC_PWM_T *pPWM)
 {
-	Chip_Clock_EnablePeriphClock(Chip_PWM_GetClockIndex(pPWM));
+    Chip_Clock_EnablePeriphClock(Chip_PWM_GetClockIndex(pPWM));
     
 }
 
 
 /*********************************************************************//**
- * @brief		De-initializes the PWM peripheral registers to their
+ * @brief        De-initializes the PWM peripheral registers to their
 *                  default reset values.
- * @param[in]	pPWM	PWM peripheral selected, should be LPC_PWM1
- * @return 		None
+ * @param[in]    pPWM    PWM peripheral selected, should be LPC_PWM1
+ * @return         None
  **********************************************************************/
 void Chip_PWM_DeInit (LPC_PWM_T *pPWM)
 {
-	Chip_Clock_DisablePeriphClock(Chip_PWM_GetClockIndex(pPWM));
+    Chip_Clock_DisablePeriphClock(Chip_PWM_GetClockIndex(pPWM));
 
 }
 

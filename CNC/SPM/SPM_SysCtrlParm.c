@@ -19,28 +19,19 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 #include <string.h>
 #include "SPM_ParmCheck.h"
 #include "SPM_SysCtrlParm.h"
-#include "..\\AHB\\AHB_Init.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_ConfigDef.h"
-#include "..\\ErrorCodeDef\\SPM_ErrorCodeDef.h"
-#include "..\\ErrorCodeMan\\ECM_ErrorCodeMan.h"
-#include "..\\DVM\\DEV_Interface.h"
-#include "..\\CSM\\CSM_Interface.h"
-#include "..\\CNCSYS\\CNCSYS_Interface.h"
+//#include "../AHB/AHB_Init.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_ConfigDef.h"
+#include "CNC/ErrorCodeDef/SPM_ErrorCodeDef.h"
+#include "CNC/ErrorCodeMan/ECM_ErrorCodeMan.h"
+#include "CNC/DVM/DEV_Interface.h"
+#include "CNC/CSM/CSM_Interface.h"
+#include "CNC/CNCSYS/CNCSYS_Interface.h"
 
-
-
-#include "lpc43xx_cgu.h"
-#include "..\\IPO\\IPO_M0\\IPO_Interface.h"
-
-#include "..\\..\\SysPeripheral\\FlashRW\\FlashAddrDef.h"
-#include "..\\..\\SysPeripheral\\FlashRW\\lpc43xx_flash.h"
-//#include "..\\GPIO\\GPIOCtrl.h"
-
-
+#include "../IPO/IPO_Interface.h"
 
 
 //常用参数再本地建立数据区
@@ -135,11 +126,13 @@ void SPM_InitSysCtrlParm()
     int i, j, k;   
 
     //
+#if 0   //杜寒枫 2017.12.05
     m_SPM_pSysCtrlParm = &(g_pAHBDataStruct->SysCtrlParm);
     m_SPM_pCrdAxisMapTable = g_pAHBDataStruct->CrdAxisMapTable;
     m_SPM_pCrdParm = g_pAHBDataStruct->CrdParm;
     m_SPM_pAxisParm = g_pAHBDataStruct->AxisParm;
-
+#endif
+    
 #if ENABLE_AXIS_PITCH_CMP_PARM > 0    
     m_SPM_pAxisPitchCmpParm = g_pAHBDataStruct->AxisPitchCmpParm;
 #endif
@@ -1085,6 +1078,8 @@ uBit32 SPM_SaveParm(void)
 */
 uBit32 SPM_WriteParmToFlash(void)
 {
+#if 0
+    
     unsigned long ulErrorCode;
     int iParmItemCount;
     char* pDataAddr[4];
@@ -1232,12 +1227,15 @@ uBit32 SPM_WriteParmToFlash(void)
         }
     }
 
+#endif
+    
     return 0;
 }
 
 //从FLASH读取系统参数，成功返回0，否则返回非0值
 uBit32 SPM_ReadParmFromFlash()
 {
+#if 0
     int iParmItemCount;
     char* pDataAddr[4];
     uBit32 DataLen[4];
@@ -1366,6 +1364,7 @@ uBit32 SPM_ReadParmFromFlash()
 
     //__enable_irq();
 
+#endif
 
     return 0;
 }
@@ -2168,10 +2167,10 @@ Bit32 SPM_GetAxisMapTable(Bit32 nCh, Bit32 iAxisNo)
 参    数：    nCh        --通道序号，从0开始
             iAxisNo    --轴序号，从0开始
 返 回 值：轴类型
-            #define AXIS_TYPE_NULL            (0)            //未安装
-            #define AXIS_TYPE_LINE            (1)            //直线轴
-            #define AXIS_TYPE_ROTATE        (2)            //旋转轴(角度值任意)
-            #define AXIS_TYPE_ROTATE_360    (3)            //旋转轴(角度值为0-360)
+            #define AXIS_TYPE_NULL              (0)            //未安装
+            #define AXIS_TYPE_LINE              (1)            //直线轴
+            #define AXIS_TYPE_ROTATE            (2)            //旋转轴(角度值任意)
+            #define AXIS_TYPE_ROTATE_360        (3)            //旋转轴(角度值为0-360)
 调用位置：
 注意事项：
 */

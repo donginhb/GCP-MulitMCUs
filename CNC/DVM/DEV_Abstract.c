@@ -24,14 +24,14 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "string.h"
 #include "DEV_Abstract.h"
 #include "DEV_Interface.h"
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\DEV_DataStructDef.h"
-#include "..\\ErrorCodeDef\\DVM_ErrorCodeDef.h"
-#include "..\\ErrorCodeMan\\ECM_ErrorCodeMan.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
+#include "CNC/ErrorCodeDef/DVM_ErrorCodeDef.h"
+#include "CNC/ErrorCodeMan/ECM_ErrorCodeMan.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-//#include "..\\GPIO\\GPIOCtrl.h"
+//#include "../GPIO/GPIOCtrl.h"
 
 #define DEV_INVALID_BUS_INDEX        (0XFF)
 

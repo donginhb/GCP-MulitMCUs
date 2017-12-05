@@ -27,9 +27,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 extern CSM_INTERFACE    m_CSMInterface;
 
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\ErrorCodeDef\\CSM_ErrorCodeDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/ErrorCodeDef/CSM_ErrorCodeDef.h"
 
 
 
@@ -193,7 +193,7 @@ uBit32 CSM_SetCtrlMode(Bit32 iCrdSysIndex, uBit32 ulMode)
         m_CrdSysStateData[iCrdSysIndex].ulStatus |= ulMode;
 
         //清空坐标系当前的执行行号
-        //m_CrdSysStateData[iCrdSysIndex].ulUserLineNO = 0;\\Alan del at 2016-8-6
+        //m_CrdSysStateData[iCrdSysIndex].ulUserLineNO = 0;/Alan del at 2016-8-6
         m_CrdSysStateData[iCrdSysIndex].ulCurProgLineNO = 0;
     }    
 
@@ -881,7 +881,7 @@ void CSM_ClearProgExeState(Bit32 iCrdSysIndex)
     m_CSM_AutoCtrl[iCrdSysIndex].ulReleaseLineNO = 0;
 
     m_CrdSysStateData[iCrdSysIndex].ulCurProgLineNO = 0;
-    //m_CrdSysStateData[iCrdSysIndex].ulUserLineNO = 0;\\Alan del at 2016-8-6
+    //m_CrdSysStateData[iCrdSysIndex].ulUserLineNO = 0;/Alan del at 2016-8-6
     m_CrdSysStateData[iCrdSysIndex].ulStartLineCount = 0;
     m_CrdSysStateData[iCrdSysIndex].ulFinishLineCount = 0;
 

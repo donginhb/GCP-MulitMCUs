@@ -53,7 +53,7 @@ extern "C" {
 #define CMD_BIT_APP         (1 << 23)
 #define CMD_BIT_INIT        (1 << 22)
 #define CMD_BIT_BUSY        (1 << 21)
-#define CMD_BIT_LS          (1 << 20)	/* Low speed, used during acquire */
+#define CMD_BIT_LS          (1 << 20)    /* Low speed, used during acquire */
 #define CMD_BIT_DATA        (1 << 19)
 #define CMD_BIT_WRITE       (1 << 18)
 #define CMD_BIT_STREAM      (1 << 17)
@@ -84,59 +84,59 @@ extern "C" {
 
 /* Card specific setup data */
 typedef struct _mci_card_struct {
-	sdif_device sdif_dev;
-	SDMMC_CARD_T card_info;
+    sdif_device sdif_dev;
+    SDMMC_CARD_T card_info;
 } mci_card_struct;
 
 /**
- * @brief	Get card's current state (idle, transfer, program, etc.)
- * @param	pSDMMC	: SDMMC peripheral selected
- * @return	Current SD card transfer state
+ * @brief    Get card's current state (idle, transfer, program, etc.)
+ * @param    pSDMMC    : SDMMC peripheral selected
+ * @return    Current SD card transfer state
  */
 int32_t Chip_SDMMC_GetState(LPC_SDMMC_T *pSDMMC);
 
 /**
- * @brief	Function to enumerate the SD/MMC/SDHC/MMC+ cards
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	pcardinfo	: Pointer to pre-allocated card info structure
- * @return	1 if a card is acquired, otherwise 0
+ * @brief    Function to enumerate the SD/MMC/SDHC/MMC+ cards
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    pcardinfo    : Pointer to pre-allocated card info structure
+ * @return    1 if a card is acquired, otherwise 0
  */
 uint32_t Chip_SDMMC_Acquire(LPC_SDMMC_T *pSDMMC, mci_card_struct *pcardinfo);
 
 /**
- * @brief	Get the device size of SD/MMC card (after enumeration)
- * @param	pSDMMC	: SDMMC peripheral selected
- * @return	Card size in number of bytes (capacity)
+ * @brief    Get the device size of SD/MMC card (after enumeration)
+ * @param    pSDMMC    : SDMMC peripheral selected
+ * @return    Card size in number of bytes (capacity)
  */
 uint64_t Chip_SDMMC_GetDeviceSize(LPC_SDMMC_T *pSDMMC);
 
 /**
- * @brief	Get the number of device blocks of SD/MMC card (after enumeration)
+ * @brief    Get the number of device blocks of SD/MMC card (after enumeration)
  * Since Chip_SDMMC_GetDeviceSize is limited to 32 bits cards with greater than
  * 2 GBytes of data will not be correct, in such cases users can use this function
  * to get the size of the card in blocks.
- * @param	pSDMMC	: SDMMC peripheral selected
- * @return	Number of 512 bytes blocks in the card
+ * @param    pSDMMC    : SDMMC peripheral selected
+ * @return    Number of 512 bytes blocks in the card
  */
 int32_t Chip_SDMMC_GetDeviceBlocks(LPC_SDMMC_T *pSDMMC);
 
 /**
- * @brief	Performs the read of data from the SD/MMC card
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	buffer		: Pointer to data buffer to copy to
- * @param	start_block	: Start block number
- * @param	num_blocks	: Number of block to read
- * @return	Bytes read, or 0 on error
+ * @brief    Performs the read of data from the SD/MMC card
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    buffer        : Pointer to data buffer to copy to
+ * @param    start_block    : Start block number
+ * @param    num_blocks    : Number of block to read
+ * @return    Bytes read, or 0 on error
  */
 int32_t Chip_SDMMC_ReadBlocks(LPC_SDMMC_T *pSDMMC, void *buffer, int32_t start_block, int32_t num_blocks);
 
 /**
- * @brief	Performs write of data to the SD/MMC card
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	buffer		: Pointer to data buffer to copy to
- * @param	start_block	: Start block number
- * @param	num_blocks	: Number of block to write
- * @return	Number of bytes actually written, or 0 on error
+ * @brief    Performs write of data to the SD/MMC card
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    buffer        : Pointer to data buffer to copy to
+ * @param    start_block    : Start block number
+ * @param    num_blocks    : Number of block to write
+ * @return    Number of bytes actually written, or 0 on error
  */
 int32_t Chip_SDMMC_WriteBlocks(LPC_SDMMC_T *pSDMMC, void *buffer, int32_t start_block, int32_t num_blocks);
 

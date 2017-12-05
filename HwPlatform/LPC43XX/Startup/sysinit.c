@@ -60,32 +60,32 @@ const uint32_t OscRateIn = 12000000;
 void SystemInit(void)
 {
 #if defined(CORE_M3) || defined(CORE_M4)
-	unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
+    unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
 
 #if defined(__IAR_SYSTEMS_ICC__)
-	extern void *__vector_table;
+    extern void *__vector_table;
 
-	*pSCB_VTOR = (unsigned int) &__vector_table;
+    *pSCB_VTOR = (unsigned int) &__vector_table;
 #elif defined(__CODE_RED)
-	extern void *g_pfnVectors;
+    extern void *g_pfnVectors;
 
-	*pSCB_VTOR = (unsigned int) &g_pfnVectors;
+    *pSCB_VTOR = (unsigned int) &g_pfnVectors;
 #elif defined(__ARMCC_VERSION)
-	extern void *__Vectors;
+    extern void *__Vectors;
 
-	*pSCB_VTOR = (unsigned int) &__Vectors;
+    *pSCB_VTOR = (unsigned int) &__Vectors;
 #endif
 
 #if defined(__FPU_PRESENT) && __FPU_PRESENT == 1
-	fpuInit();
+    fpuInit();
 #endif
 
 #if defined(NO_BOARD_LIB)
-	/* Chip specific SystemInit */
-	Chip_SystemInit();
+    /* Chip specific SystemInit */
+    Chip_SystemInit();
 #else
-	/* Board specific SystemInit */
-	Board_SystemInit();
+    /* Board specific SystemInit */
+    Board_SystemInit();
 #endif
 
 #endif /* defined(CORE_M3) || defined(CORE_M4) */

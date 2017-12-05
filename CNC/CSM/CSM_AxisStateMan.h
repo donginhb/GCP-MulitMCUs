@@ -20,7 +20,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef CSM_AXISSTATEMAN_H
 #define CSM_AXISSTATEMAN_H
 
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 #ifdef __cplusplus
 extern "C" {

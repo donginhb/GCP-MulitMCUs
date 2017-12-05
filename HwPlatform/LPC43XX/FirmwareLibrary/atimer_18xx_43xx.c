@@ -50,15 +50,15 @@
 /* Initialize Alarm Timer */
 void Chip_ATIMER_Init(LPC_ATIMER_T *pATIMER, uint32_t PresetValue)
 {
-	Chip_ATIMER_UpdatePresetValue(pATIMER, PresetValue);
-	Chip_ATIMER_ClearIntStatus(pATIMER);
+    Chip_ATIMER_UpdatePresetValue(pATIMER, PresetValue);
+    Chip_ATIMER_ClearIntStatus(pATIMER);
 }
 
 /* Close ATIMER device */
 void Chip_ATIMER_DeInit(LPC_ATIMER_T *pATIMER)
 {
-	Chip_ATIMER_ClearIntStatus(pATIMER);
-	Chip_ATIMER_IntDisable(pATIMER);
+    Chip_ATIMER_ClearIntStatus(pATIMER);
+    Chip_ATIMER_IntDisable(pATIMER);
 }
 
 

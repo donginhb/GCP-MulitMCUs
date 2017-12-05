@@ -47,7 +47,7 @@
 /**
  * @brief Boolean Type definition
  */
-//typedef enum {FALSE = 0, TRUE = !FALSE} Bool;		// in earlier versions
+//typedef enum {FALSE = 0, TRUE = !FALSE} Bool;        // in earlier versions
 #ifndef TRUE
 #define TRUE (1)
 #endif
@@ -83,8 +83,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} Status;
  * Read/Write transfer type mode (Block or non-block)
  */
 typedef enum {
-	NONE_BLOCKING = 0,		/**< None Blocking type */
-	BLOCKING,				/**< Blocking type */
+    NONE_BLOCKING = 0,        /**< None Blocking type */
+    BLOCKING,                /**< Blocking type */
 } TRANSFER_BLOCK_T;
 
 /** Pointer to Function returning Void (any number of parameters) */

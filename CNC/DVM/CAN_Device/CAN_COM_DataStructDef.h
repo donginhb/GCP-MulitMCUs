@@ -28,7 +28,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 #ifndef _CAN_DATA_STRUCT_DEF_H_
 #define _CAN_DATA_STRUCT_DEF_H_
 
-#include "..\\..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 #pragma pack(push)
 #pragma pack(8)        

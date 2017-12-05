@@ -1,7 +1,7 @@
 #ifndef  __HW_FLASH_H
 #define  __HW_FLASH_H
 
-#include "../../SysCore/Core/data_types.h"
+#include "chip.h"
 
 #ifdef __cplusplus
 extern "C" {

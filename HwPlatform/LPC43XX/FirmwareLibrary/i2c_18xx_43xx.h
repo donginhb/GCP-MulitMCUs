@@ -43,14 +43,14 @@ extern "C" {
  */
 
 /**
- * @brief	Return values for SLAVE handler
+ * @brief    Return values for SLAVE handler
  * @note
  * Chip drivers will usally be designed to match their events with this value
  */
-#define RET_SLAVE_TX    6	/**< Return value, when 1 byte TX'd successfully */
-#define RET_SLAVE_RX    5	/**< Return value, when 1 byte RX'd successfully */
-#define RET_SLAVE_IDLE  2	/**< Return value, when slave enter idle mode */
-#define RET_SLAVE_BUSY  0	/**< Return value, when slave is busy */
+#define RET_SLAVE_TX    6    /**< Return value, when 1 byte TX'd successfully */
+#define RET_SLAVE_RX    5    /**< Return value, when 1 byte RX'd successfully */
+#define RET_SLAVE_IDLE  2    /**< Return value, when slave enter idle mode */
+#define RET_SLAVE_BUSY  0    /**< Return value, when slave is busy */
 
 /**
  * @brief I2C state handle return values
@@ -66,9 +66,9 @@ extern "C" {
 /*
  * @brief I2C status values
  */
-#define I2C_SETUP_STATUS_ARBF   (1 << 8)	/**< Arbitration false */
-#define I2C_SETUP_STATUS_NOACKF (1 << 9)	/**< No ACK returned */
-#define I2C_SETUP_STATUS_DONE   (1 << 10)	/**< Status DONE */
+#define I2C_SETUP_STATUS_ARBF   (1 << 8)    /**< Arbitration false */
+#define I2C_SETUP_STATUS_NOACKF (1 << 9)    /**< No ACK returned */
+#define I2C_SETUP_STATUS_DONE   (1 << 10)    /**< Status DONE */
 
 /*
  * @brief I2C state handle return values
@@ -89,49 +89,49 @@ extern "C" {
 /*
  * @brief I2C monitor control configuration defines
  */
-#define I2C_MONITOR_CFG_SCL_OUTPUT  I2C_I2MMCTRL_ENA_SCL		/**< SCL output enable */
-#define I2C_MONITOR_CFG_MATCHALL    I2C_I2MMCTRL_MATCH_ALL		/**< Select interrupt register match */
+#define I2C_MONITOR_CFG_SCL_OUTPUT  I2C_I2MMCTRL_ENA_SCL        /**< SCL output enable */
+#define I2C_MONITOR_CFG_MATCHALL    I2C_I2MMCTRL_MATCH_ALL        /**< Select interrupt register match */
 
 /**
- * @brief	I2C Slave Identifiers
+ * @brief    I2C Slave Identifiers
  */
 typedef enum {
-	I2C_SLAVE_GENERAL,	/**< Slave ID for general calls */
-	I2C_SLAVE_0,		/**< Slave ID fo Slave Address 0 */
-	I2C_SLAVE_1,		/**< Slave ID fo Slave Address 1 */
-	I2C_SLAVE_2,		/**< Slave ID fo Slave Address 2 */
-	I2C_SLAVE_3,		/**< Slave ID fo Slave Address 3 */
-	I2C_SLAVE_NUM_INTERFACE	/**< Number of slave interfaces */
+    I2C_SLAVE_GENERAL,    /**< Slave ID for general calls */
+    I2C_SLAVE_0,        /**< Slave ID fo Slave Address 0 */
+    I2C_SLAVE_1,        /**< Slave ID fo Slave Address 1 */
+    I2C_SLAVE_2,        /**< Slave ID fo Slave Address 2 */
+    I2C_SLAVE_3,        /**< Slave ID fo Slave Address 3 */
+    I2C_SLAVE_NUM_INTERFACE    /**< Number of slave interfaces */
 } I2C_SLAVE_ID;
 
 /**
- * @brief	I2C transfer status
+ * @brief    I2C transfer status
  */
 typedef enum {
-	I2C_STATUS_DONE,	/**< Transfer done successfully */
-	I2C_STATUS_NAK,		/**< NAK received during transfer */
-	I2C_STATUS_ARBLOST,	/**< Aribitration lost during transfer */
-	I2C_STATUS_BUSERR,	/**< Bus error in I2C transfer */
-	I2C_STATUS_BUSY,	/**< I2C is busy doing transfer */
-	I2C_STATUS_SLAVENAK,/**< NAK received after SLA+W or SLA+R */
+    I2C_STATUS_DONE,    /**< Transfer done successfully */
+    I2C_STATUS_NAK,        /**< NAK received during transfer */
+    I2C_STATUS_ARBLOST,    /**< Aribitration lost during transfer */
+    I2C_STATUS_BUSERR,    /**< Bus error in I2C transfer */
+    I2C_STATUS_BUSY,    /**< I2C is busy doing transfer */
+    I2C_STATUS_SLAVENAK,/**< NAK received after SLA+W or SLA+R */
 } I2C_STATUS_T;
 
 /**
  * @brief Master transfer data structure definitions
  */
 typedef struct {
-	uint8_t slaveAddr;		/**< 7-bit I2C Slave address */
-	const uint8_t *txBuff;	/**< Pointer to array of bytes to be transmitted */
-	int     txSz;			/**< Number of bytes in transmit array,
-							   if 0 only receive transfer will be carried on */
-	uint8_t *rxBuff;		/**< Pointer memory where bytes received from I2C be stored */
-	int     rxSz;			/**< Number of bytes to received,
-							   if 0 only transmission we be carried on */
-	I2C_STATUS_T status;	/**< Status of the current I2C transfer */
+    uint8_t slaveAddr;        /**< 7-bit I2C Slave address */
+    const uint8_t *txBuff;    /**< Pointer to array of bytes to be transmitted */
+    int     txSz;            /**< Number of bytes in transmit array,
+                               if 0 only receive transfer will be carried on */
+    uint8_t *rxBuff;        /**< Pointer memory where bytes received from I2C be stored */
+    int     rxSz;            /**< Number of bytes to received,
+                               if 0 only transmission we be carried on */
+    I2C_STATUS_T status;    /**< Status of the current I2C transfer */
 } I2C_XFER_T;
 
 /**
- * @brief	I2C interface IDs
+ * @brief    I2C interface IDs
  * @note
  * All Chip functions will take this as the first parameter,
  * I2C_NUM_INTERFACE must never be used for calling any Chip
@@ -139,47 +139,47 @@ typedef struct {
  * available in the Chip.
  */
 typedef enum I2C_ID {
-	I2C0,				/**< ID I2C0 */
-	I2C1,				/**< ID I2C1 */
-	I2C_NUM_INTERFACE	/**< Number of I2C interfaces in the chip */
+    I2C0,                /**< ID I2C0 */
+    I2C1,                /**< ID I2C1 */
+    I2C_NUM_INTERFACE    /**< Number of I2C interfaces in the chip */
 } I2C_ID_T;
 
 /**
- * @brief	I2C master events
+ * @brief    I2C master events
  */
 typedef enum {
-	I2C_EVENT_WAIT = 1,	/**< I2C Wait event */
-	I2C_EVENT_DONE,		/**< Done event that wakes up Wait event */
-	I2C_EVENT_LOCK,		/**< Re-entrency lock event for I2C transfer */
-	I2C_EVENT_UNLOCK,	/**< Re-entrency unlock event for I2C transfer */
-	I2C_EVENT_SLAVE_RX,	/**< Slave receive event */
-	I2C_EVENT_SLAVE_TX,	/**< Slave transmit event */
+    I2C_EVENT_WAIT = 1,    /**< I2C Wait event */
+    I2C_EVENT_DONE,        /**< Done event that wakes up Wait event */
+    I2C_EVENT_LOCK,        /**< Re-entrency lock event for I2C transfer */
+    I2C_EVENT_UNLOCK,    /**< Re-entrency unlock event for I2C transfer */
+    I2C_EVENT_SLAVE_RX,    /**< Slave receive event */
+    I2C_EVENT_SLAVE_TX,    /**< Slave transmit event */
 } I2C_EVENT_T;
 
 /**
- * @brief	Event handler function type
+ * @brief    Event handler function type
  */
 typedef void (*I2C_EVENTHANDLER_T)(I2C_ID_T, I2C_EVENT_T);
 
 /**
- * @brief	Initializes the LPC_I2C peripheral with specified parameter.
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Nothing
+ * @brief    Initializes the LPC_I2C peripheral with specified parameter.
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Nothing
  */
 void Chip_I2C_Init(I2C_ID_T id);
 
 /**
- * @brief	De-initializes the I2C peripheral registers to their default reset values
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Nothing
+ * @brief    De-initializes the I2C peripheral registers to their default reset values
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Nothing
  */
 void Chip_I2C_DeInit(I2C_ID_T id);
 
 /**
- * @brief	Set up clock rate for LPC_I2C peripheral.
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	clockrate	: Target clock rate value to initialized I2C peripheral (Hz)
- * @return	Nothing
+ * @brief    Set up clock rate for LPC_I2C peripheral.
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    clockrate    : Target clock rate value to initialized I2C peripheral (Hz)
+ * @return    Nothing
  * @note
  * Parameter @a clockrate for I2C0 should be from 1000 up to 1000000
  * (1 KHz to 1 MHz), as I2C0 support Fast Mode Plus. If the @a clockrate
@@ -189,16 +189,16 @@ void Chip_I2C_DeInit(I2C_ID_T id);
 void Chip_I2C_SetClockRate(I2C_ID_T id, uint32_t clockrate);
 
 /**
- * @brief	Get current clock rate for LPC_I2C peripheral.
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	The current I2C peripheral clock rate
+ * @brief    Get current clock rate for LPC_I2C peripheral.
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    The current I2C peripheral clock rate
  */
 uint32_t Chip_I2C_GetClockRate(I2C_ID_T id);
 
 /**
- * @brief	Transmit and Receive data in master mode
- * @param	id		: I2C peripheral selected (I2C0, I2C1 etc)
- * @param	xfer	: Pointer to a I2C_XFER_T structure see notes below
+ * @brief    Transmit and Receive data in master mode
+ * @param    id        : I2C peripheral selected (I2C0, I2C1 etc)
+ * @param    xfer    : Pointer to a I2C_XFER_T structure see notes below
  * @return
  * Any of #I2C_STATUS_T values, xfer->txSz will have number of bytes
  * not sent due to error, xfer->rxSz will have the number of bytes yet
@@ -217,86 +217,86 @@ uint32_t Chip_I2C_GetClockRate(I2C_ID_T id);
 int Chip_I2C_MasterTransfer(I2C_ID_T id, I2C_XFER_T *xfer);
 
 /**
- * @brief	Transmit data to I2C slave using I2C Master mode
- * @param	id			: I2C peripheral ID (I2C0, I2C1 .. etc)
- * @param	slaveAddr	: Slave address to which the data be written
- * @param	buff		: Pointer to buffer having the array of data
- * @param	len			: Number of bytes to be transfered from @a buff
- * @return	Number of bytes successfully transfered
+ * @brief    Transmit data to I2C slave using I2C Master mode
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 .. etc)
+ * @param    slaveAddr    : Slave address to which the data be written
+ * @param    buff        : Pointer to buffer having the array of data
+ * @param    len            : Number of bytes to be transfered from @a buff
+ * @return    Number of bytes successfully transfered
  */
 int Chip_I2C_MasterSend(I2C_ID_T id, uint8_t slaveAddr, const uint8_t *buff, uint8_t len);
 
 /**
- * @brief	Transfer a command to slave and receive data from slave after a repeated start
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	slaveAddr	: Slave address of the I2C device
- * @param	cmd			: Command (Address/Register) to be written
- * @param	buff		: Pointer to memory that will hold the data received
- * @param	len			: Number of bytes to receive
- * @return	Number of bytes successfully received
+ * @brief    Transfer a command to slave and receive data from slave after a repeated start
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    slaveAddr    : Slave address of the I2C device
+ * @param    cmd            : Command (Address/Register) to be written
+ * @param    buff        : Pointer to memory that will hold the data received
+ * @param    len            : Number of bytes to receive
+ * @return    Number of bytes successfully received
  */
 int Chip_I2C_MasterCmdRead(I2C_ID_T id, uint8_t slaveAddr, uint8_t cmd, uint8_t *buff, int len);
 
 /**
- * @brief	Get pointer to current function handling the events
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Pointer to function handing events of I2C
+ * @brief    Get pointer to current function handling the events
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Pointer to function handing events of I2C
  */
 I2C_EVENTHANDLER_T Chip_I2C_GetMasterEventHandler(I2C_ID_T id);
 
 /**
- * @brief	Set function that must handle I2C events
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	event		: Pointer to function that will handle the event (Should not be NULL)
- * @return	1 when successful, 0 when a transfer is on going with its own event handler
+ * @brief    Set function that must handle I2C events
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    event        : Pointer to function that will handle the event (Should not be NULL)
+ * @return    1 when successful, 0 when a transfer is on going with its own event handler
  */
 int Chip_I2C_SetMasterEventHandler(I2C_ID_T id, I2C_EVENTHANDLER_T event);
 
 /**
- * @brief	Set function that must handle I2C events
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	slaveAddr	: Slave address from which data be read
- * @param	buff		: Pointer to memory where data read be stored
- * @param	len			: Number of bytes to read from slave
- * @return	Number of bytes read successfully
+ * @brief    Set function that must handle I2C events
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    slaveAddr    : Slave address from which data be read
+ * @param    buff        : Pointer to memory where data read be stored
+ * @param    len            : Number of bytes to read from slave
+ * @return    Number of bytes read successfully
  */
 int Chip_I2C_MasterRead(I2C_ID_T id, uint8_t slaveAddr, uint8_t *buff, int len);
 
 /**
- * @brief	Default event handler for polling operation
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	event	: Event ID of the event that called the function
- * @return	Nothing
+ * @brief    Default event handler for polling operation
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    event    : Event ID of the event that called the function
+ * @return    Nothing
  */
 void Chip_I2C_EventHandlerPolling(I2C_ID_T id, I2C_EVENT_T event);
 
 /**
- * @brief	Default event handler for interrupt base operation
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	event	: Event ID of the event that called the function
- * @return	Nothing
+ * @brief    Default event handler for interrupt base operation
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    event    : Event ID of the event that called the function
+ * @return    Nothing
  */
 void Chip_I2C_EventHandler(I2C_ID_T id, I2C_EVENT_T event);
 
 /**
- * @brief	I2C Master transfer state change handler
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Nothing
- * @note	Usually called from the appropriate Interrupt handler
+ * @brief    I2C Master transfer state change handler
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Nothing
+ * @note    Usually called from the appropriate Interrupt handler
  */
 void Chip_I2C_MasterStateHandler(I2C_ID_T id);
 
 /**
- * @brief	Disable I2C peripheral's operation
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Nothing
+ * @brief    Disable I2C peripheral's operation
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Nothing
  */
 void Chip_I2C_Disable(I2C_ID_T id);
 
 /**
- * @brief	Checks if master xfer in progress
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	1 if master xfer in progress 0 otherwise
+ * @brief    Checks if master xfer in progress
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    1 if master xfer in progress 0 otherwise
  * @note
  * This API is generally used in interrupt handler
  * of the application to decide whether to call
@@ -305,13 +305,13 @@ void Chip_I2C_Disable(I2C_ID_T id);
 int Chip_I2C_IsMasterActive(I2C_ID_T id);
 
 /**
- * @brief	Setup a slave I2C device
- * @param	id			: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @param	sid			: I2C Slave peripheral ID (I2C_SLAVE_0, I2C_SLAVE_1 etc)
- * @param	xfer		: Pointer to transfer structure (see note below for more info)
- * @param	event		: Event handler for slave transfers
- * @param	addrMask	: Address mask to use along with slave address (see notes below for more info)
- * @return	Nothing
+ * @brief    Setup a slave I2C device
+ * @param    id            : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @param    sid            : I2C Slave peripheral ID (I2C_SLAVE_0, I2C_SLAVE_1 etc)
+ * @param    xfer        : Pointer to transfer structure (see note below for more info)
+ * @param    event        : Event handler for slave transfers
+ * @param    addrMask    : Address mask to use along with slave address (see notes below for more info)
+ * @return    Nothing
  * @note
  * Parameter @a xfer should point to a valid I2C_XFER_T structure object
  * and must have @a slaveAddr initialized with 7bit Slave address (From Bit1 to Bit7),
@@ -366,22 +366,22 @@ int Chip_I2C_IsMasterActive(I2C_ID_T id);
  * the process repeats.
  */
 void Chip_I2C_SlaveSetup(I2C_ID_T id,
-						 I2C_SLAVE_ID sid,
-						 I2C_XFER_T *xfer,
-						 I2C_EVENTHANDLER_T event,
-						 uint8_t addrMask);
+                         I2C_SLAVE_ID sid,
+                         I2C_XFER_T *xfer,
+                         I2C_EVENTHANDLER_T event,
+                         uint8_t addrMask);
 
 /**
- * @brief	I2C Slave event handler
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	Nothing
+ * @brief    I2C Slave event handler
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    Nothing
  */
 void Chip_I2C_SlaveStateHandler(I2C_ID_T id);
 
 /**
- * @brief	I2C peripheral state change checking
- * @param	id		: I2C peripheral ID (I2C0, I2C1 ... etc)
- * @return	1 if I2C peripheral @a id has changed its state,
+ * @brief    I2C peripheral state change checking
+ * @param    id        : I2C peripheral ID (I2C0, I2C1 ... etc)
+ * @return    1 if I2C peripheral @a id has changed its state,
  *          0 if there is no state change
  * @note
  * This function must be used by the application when

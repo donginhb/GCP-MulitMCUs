@@ -12,14 +12,15 @@ extern "C"
  * 数码管控制接口
  ****************************************************************************/
 
+
 /**
   * @brief  数码管控制引脚编号设置
   * @param  ulDataPinNO  数据引脚编号(IO资源表中输出IO组的位置)
   * @param  ulClockPinNO 时钟引脚编号(IO资源表中输出IO组的位置)
   * @param  ulStbPinNO   片选引脚编号(IO资源表中输出IO组的位置)
-  * @retval None
+  * @retval 0-成功 非0-失败
   */
-void NixieTube_SetCtrlPinNO(uBit32 ulDataPinNO, uBit32 ulClockPinNO, uBit32 ulStbPinNO);
+uBit32 NixieTube_SetCtrlPinNO(uBit32 ulDataPinNO, uBit32 ulClockPinNO, uBit32 ulStbPinNO);
 
 
 /**

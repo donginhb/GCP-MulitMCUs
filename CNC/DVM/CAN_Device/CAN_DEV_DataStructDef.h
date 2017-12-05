@@ -25,7 +25,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define CAN_DEV_DATA_STRUCT_DEF_H_
 
 
-#include "..\\..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 //#define CAN_DEV_MAX_COUNT            (8)            //CAN总线（单个通道上的）设备的最大数量

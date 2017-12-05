@@ -42,94 +42,94 @@ extern "C" {
  */
 
 /**
- * @brief	OTP Register block
+ * @brief    OTP Register block
  */
 typedef struct {
-	__IO uint32_t OTP0_0;				/*!< (@ 0x40045000) OTP content */
-	__IO uint32_t OTP0_1;				/*!< (@ 0x40045004) OTP content */
-	__IO uint32_t OTP0_2;				/*!< (@ 0x40045008) OTP content */
-	__IO uint32_t OTP0_3;				/*!< (@ 0x4004500C) OTP content */
-	__IO uint32_t OTP1_0;				/*!< (@ 0x40045010) OTP content */
-	__IO uint32_t OTP1_1;				/*!< (@ 0x40045014) OTP content */
-	__IO uint32_t OTP1_2;				/*!< (@ 0x40045018) OTP content */
-	__IO uint32_t OTP1_3;				/*!< (@ 0x4004501C) OTP content */
-	__IO uint32_t OTP2_0;				/*!< (@ 0x40045020) OTP content */
-	__IO uint32_t OTP2_1;				/*!< (@ 0x40045024) OTP content */
-	__IO uint32_t OTP2_2;				/*!< (@ 0x40045028) OTP content */
-	__IO uint32_t OTP2_3;				/*!< (@ 0x4004502C) OTP content */
-	__IO uint32_t OTP3_0;				/*!< (@ 0x40045030) OTP content */
-	__IO uint32_t OTP3_1;				/*!< (@ 0x40045034) OTP content */
-	__IO uint32_t OTP3_2;				/*!< (@ 0x40045038) OTP content */
-	__IO uint32_t OTP3_3;				/*!< (@ 0x4004503C) OTP content */
+    __IO uint32_t OTP0_0;                /*!< (@ 0x40045000) OTP content */
+    __IO uint32_t OTP0_1;                /*!< (@ 0x40045004) OTP content */
+    __IO uint32_t OTP0_2;                /*!< (@ 0x40045008) OTP content */
+    __IO uint32_t OTP0_3;                /*!< (@ 0x4004500C) OTP content */
+    __IO uint32_t OTP1_0;                /*!< (@ 0x40045010) OTP content */
+    __IO uint32_t OTP1_1;                /*!< (@ 0x40045014) OTP content */
+    __IO uint32_t OTP1_2;                /*!< (@ 0x40045018) OTP content */
+    __IO uint32_t OTP1_3;                /*!< (@ 0x4004501C) OTP content */
+    __IO uint32_t OTP2_0;                /*!< (@ 0x40045020) OTP content */
+    __IO uint32_t OTP2_1;                /*!< (@ 0x40045024) OTP content */
+    __IO uint32_t OTP2_2;                /*!< (@ 0x40045028) OTP content */
+    __IO uint32_t OTP2_3;                /*!< (@ 0x4004502C) OTP content */
+    __IO uint32_t OTP3_0;                /*!< (@ 0x40045030) OTP content */
+    __IO uint32_t OTP3_1;                /*!< (@ 0x40045034) OTP content */
+    __IO uint32_t OTP3_2;                /*!< (@ 0x40045038) OTP content */
+    __IO uint32_t OTP3_3;                /*!< (@ 0x4004503C) OTP content */
 } LPC_OTP_T;
 
 /**
- * @brief	OTP Boot Source selection used in Chip driver
+ * @brief    OTP Boot Source selection used in Chip driver
  */
 typedef enum CHIP_OTP_BOOT_SRC {
-	CHIP_OTP_BOOTSRC_PINS,		/*!< Boot source - External pins */
-	CHIP_OTP_BOOTSRC_UART0,		/*!< Boot source - UART0 */
-	CHIP_OTP_BOOTSRC_SPIFI,		/*!< Boot source - EMC 8-bit memory */
-	CHIP_OTP_BOOTSRC_EMC8,		/*!< Boot source - EMC 16-bit memory */
-	CHIP_OTP_BOOTSRC_EMC16,		/*!< Boot source - EMC 32-bit memory */
-	CHIP_OTP_BOOTSRC_EMC32,		/*!< Boot source - EMC 32-bit memory */
-	CHIP_OTP_BOOTSRC_USB0,		/*!< Boot source - DFU USB0 boot */
-	CHIP_OTP_BOOTSRC_USB1,		/*!< Boot source - DFU USB1 boot */
-	CHIP_OTP_BOOTSRC_SPI,		/*!< Boot source - SPI boot */
-	CHIP_OTP_BOOTSRC_UART3		/*!< Boot source - UART3 */
+    CHIP_OTP_BOOTSRC_PINS,        /*!< Boot source - External pins */
+    CHIP_OTP_BOOTSRC_UART0,        /*!< Boot source - UART0 */
+    CHIP_OTP_BOOTSRC_SPIFI,        /*!< Boot source - EMC 8-bit memory */
+    CHIP_OTP_BOOTSRC_EMC8,        /*!< Boot source - EMC 16-bit memory */
+    CHIP_OTP_BOOTSRC_EMC16,        /*!< Boot source - EMC 32-bit memory */
+    CHIP_OTP_BOOTSRC_EMC32,        /*!< Boot source - EMC 32-bit memory */
+    CHIP_OTP_BOOTSRC_USB0,        /*!< Boot source - DFU USB0 boot */
+    CHIP_OTP_BOOTSRC_USB1,        /*!< Boot source - DFU USB1 boot */
+    CHIP_OTP_BOOTSRC_SPI,        /*!< Boot source - SPI boot */
+    CHIP_OTP_BOOTSRC_UART3        /*!< Boot source - UART3 */
 } CHIP_OTP_BOOT_SRC_T;
 
 /**
- * @brief	Initialize for OTP Controller functions
- * @return	 Status of Otp_Init function
+ * @brief    Initialize for OTP Controller functions
+ * @return     Status of Otp_Init function
  * This function will initialise all the OTP driver function pointers
  * and call the ROM OTP Initialisation function.
  */
 uint32_t Chip_OTP_Init(void);
 
 /**
- * @brief	Program boot source in OTP Controller
- * @param	BootSrc	: Boot Source enum value
- * @return	Status
+ * @brief    Program boot source in OTP Controller
+ * @param    BootSrc    : Boot Source enum value
+ * @return    Status
  */
 uint32_t Chip_OTP_ProgBootSrc(CHIP_OTP_BOOT_SRC_T BootSrc);
 
 /**
- * @brief	Program the JTAG bit in OTP Controller
- * @return	Status
+ * @brief    Program the JTAG bit in OTP Controller
+ * @return    Status
  */
 uint32_t Chip_OTP_ProgJTAGDis(void);
 
 /**
- * @brief	Program USB ID in OTP Controller
- * @param	ProductID	: USB Product ID
- * @param	VendorID	: USB Vendor ID
- * @return	Status
+ * @brief    Program USB ID in OTP Controller
+ * @param    ProductID    : USB Product ID
+ * @param    VendorID    : USB Vendor ID
+ * @return    Status
  */
 uint32_t Chip_OTP_ProgUSBID(uint32_t ProductID, uint32_t VendorID);
 
 /**
- * @brief	Program OTP GP Word memory
+ * @brief    Program OTP GP Word memory
  * @param   WordNum     : Word Number (Select word 0 or word 1 or word 2)
- * @param	Data	    : Data value
- * @param	Mask        : Mask value
- * @return	Status
+ * @param    Data        : Data value
+ * @param    Mask        : Mask value
+ * @return    Status
  * This function available in devices which are not AES capable
  */
 uint32_t Chip_OTP_ProgGPWord(uint32_t WordNum, uint32_t Data, uint32_t Mask);
 
 /**
- * @brief	Program AES Key
+ * @brief    Program AES Key
  * @param   KeyNum      : Key Number (Select 0 or 1)
- * @param	key         : Pointer to AES Key (16 bytes required)
- * @return	Status
+ * @param    key         : Pointer to AES Key (16 bytes required)
+ * @return    Status
  * This function available in devices which are AES capable
  */
 uint32_t Chip_OTP_ProgKey(uint32_t KeyNum, uint8_t *key);
 
 /**
- * @brief	Generate Random Number using HW Random Number Generator
- * @return	Error code of the random number generation. To load the random number into AES, call Chip_AES_LoadKeyRNG
+ * @brief    Generate Random Number using HW Random Number Generator
+ * @return    Error code of the random number generation. To load the random number into AES, call Chip_AES_LoadKeyRNG
  */
 uint32_t Chip_OTP_GenRand(void);
 

@@ -26,13 +26,13 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 
 #include "DEV_COM_CmdDef.h"
-#include "..\\CMU\\UIN_GlobalDataDef.h"
-#include "..\\DataStructDef\\DEV_DataStructDef.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
+//#include "../CMU/UIN_GlobalDataDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-#include "..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 //设备驱动数据结构体(要求各种总线设备必须提供下面列出的标准接口)
@@ -316,6 +316,7 @@ typedef struct _BusDeviceDriveData {
     注意事项：
     */
     uBit32 (*pf_DEV_GetDriverVersion)(SOFTWARE_VERSION* pVersion);
+    
 }BUS_DEVICE_DRIVE;
 
 

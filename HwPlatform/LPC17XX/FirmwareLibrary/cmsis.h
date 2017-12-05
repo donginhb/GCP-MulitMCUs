@@ -43,17 +43,17 @@ extern "C" {
 #if defined(CHIP_LPC175X_6X)
 #include "cmsis_175x_6x.h"
 typedef LPC175X_6X_IRQn_Type IRQn_Type;
-#include "core_cm3.h"						/*!< Cortex-M3 processor and core peripherals */
+#include "core_cm3.h"                        /*!< Cortex-M3 processor and core peripherals */
 
 #elif defined(CHIP_LPC177X_8X)
 #include "cmsis_177x_8x.h"
 typedef LPC177X_8X_IRQn_Type IRQn_Type;
-#include "core_cm3.h"						/*!< Cortex-M3 processor and core peripherals */
+#include "core_cm3.h"                        /*!< Cortex-M3 processor and core peripherals */
 
 #elif defined(CHIP_LPC40XX)
 #include "cmsis_40xx.h"
 typedef LPC40XX_IRQn_Type IRQn_Type;
-#include "core_cm4.h"						/*!< Cortex-M4 processor and core peripherals */
+#include "core_cm4.h"                        /*!< Cortex-M4 processor and core peripherals */
 
 #else
 #error "No CHIP_* definition is defined"

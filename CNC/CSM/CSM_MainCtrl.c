@@ -28,10 +28,10 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CSM_CrdSysState.h"
 #include "CSM_MainCtrl.h"
 
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\DataStructDef\\MST_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/MST_DataStructDef.h"
 
 
 extern CSM_INTERFACE    m_CSMInterface;
@@ -166,7 +166,7 @@ void CSM_ProcessCtrlStatus(int iCrdSysIndex)
                 m_CSM_AutoCtrl[iCrdSysIndex].ulReleaseLineNO = 0;
 
                 pCrdSysState->ulCurProgLineNO = 0;
-                //pCrdSysState->ulUserLineNO = 0;\\Alan del at 2016-8-6
+                //pCrdSysState->ulUserLineNO = 0;/Alan del at 2016-8-6
                 pCrdSysState->ulStartLineCount = 0;
                 pCrdSysState->ulFinishLineCount = 0;  
                 m_pIprStartLineCount[iCrdSysIndex] = 0;       

@@ -22,26 +22,22 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include <string.h>
 
 #include "CNCSYS_Interface.h"
-#include "..\\ErrorCodeMan\\ECM_ErrorCodeMan.h"
-#include "..\\ErrorCodeDef\\IPR_ErrorCodeDef.h"
-#include "..\\AHB\\AHB_Init.h"
-#include "..\\MemoryAddr\\SDRAM_AddrDef.h"
-#include "..\\MemoryAddr\\UREG_Interface.h"
-#include "..\\MST\\MST_Interface.h"
-#include "..\\DVM\\DEV_Interface.h"
-#include "..\\CSM\\CSM_Interface.h"
-#include "..\\CMU\\CMU_Interface.h"
-#include "..\\SPM\\SPM_SysCtrlParm.h"
+#include "CNC/ErrorCodeMan/ECM_ErrorCodeMan.h"
+#include "CNC/ErrorCodeDef/IPR_ErrorCodeDef.h"
+#include "CNC/AHB/AHB_Init.h"
+#include "CNC/MemoryAddr/SDRAM_AddrDef.h"
+#include "CNC/MemoryAddr/UREG_Interface.h"
+#include "CNC/DVM/DEV_Interface.h"
+#include "CNC/CSM/CSM_Interface.h"
+#include "CNC/MST/MST_Interface.h"
+#include "CNC/SPM/SPM_SysCtrlParm.h"
+#include "CNC/IPO/IPO_Interface.h"
+
+#include "CNC/CNCSYS/CNCSYS_Interface.h"
 
 
-//#include "..\\GPIO\\GPIOCtrl.h"
 
-/*
-#include "..\\DAC\\DAC.h"
-#include "..\\QEI\\QEI.h"
-#include "..\\Version\\Version.h"
-*/
-
+#if 0
 
 #include "LPC43xx.h"
 #include "lpc43xx_cgu.h"
@@ -51,43 +47,35 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 #include "CNCSYS_Interface.h"
 
-#include "..\\CMU\\UIN_GlobalDataDef.h"
-#include "..\\IPO\\IPO_M0\\IPO_Interface.h"
-#include "..\\DatastructDef\\SYS_ConfigDef.h"
-
-#include "..\\..\\SysPeripheral\\FlashRW\\FlashAddrDef.h"
-#include "..\\..\\SysPeripheral\\FlashRW\\lpc43xx_flash.h"
-#include "..\\..\\SysPeripheral\\SystemTick\\SystemTick.h"
+#include "../CMU/UIN_GlobalDataDef.h"
+#include "../IPO/IPO_M0/IPO_Interface.h"
+#include "../DatastructDef/SYS_ConfigDef.h"
 
 
-#include "..\\..\\SysPeripheral\\CAN\\CanInterface.h"
-#include "..\\..\\SysPeripheral\\Enet\\EnetInterface.h"
+#include "../../SysPeripheral/FlashRW/FlashAddrDef.h"
+#include "../../SysPeripheral/FlashRW/lpc43xx_flash.h"
+#include "../../SysPeripheral/SystemTick/SystemTick.h"
 
-/*
-#if(MAINCTRL_TYPE==MAINCTRL_TYPE_CARD)
-#define ENABLE_MIII_BUS            0    //使能MIII总线
-#else
-#define ENABLE_MIII_BUS            0    //使能MIII总线
+
+#include "../../SysPeripheral/CAN/CanInterface.h"
+#include "../../SysPeripheral/Enet/EnetInterface.h"
 #endif
-
-#define ENABLE_CAN_BUS            1    //使能CAN总线
-*/
 
 
 #if ENABLE_CAN_BUS
-#include "..\\DVM\\CAN_Device\\CAN_DEV_Interface.h"
-#include "..\\DVM\\CAN_Device\\CAN_DEV_DataStructDef.h"
+#include "CNC/DVM/CAN_Device/CAN_DEV_Interface.h"
+#include "CNC/DVM/CAN_Device/CAN_DEV_DataStructDef.h"
 #define DEV_CAN_NODE_MASK   (0X01)
 #endif
 
 #if ENABLE_MIII_BUS
-#include "..\\DVM\\MIII_Device\\MIII_DEV_Interface.h"
-#include "..\\DVM\\MIII_Device\\MIII_DEV_DataStructDef.h"
+#include "CNC/DVM/MIII_Device/MIII_DEV_Interface.h"
+#include "CNC/DVM/MIII_Device/MIII_DEV_DataStructDef.h"
 #endif
 
-
-
 //
+
+
 static uBit8 m_uIpoInitFlag = 0;            //IPO初始化标志，只有IPO已经初始化了，timer0中断才可以执行IPO主函数
 static uBit8 m_uEnableIPOInTime0 = 1;       //插补中断使用TIMER0标志，如果挂接了MIII总线驱动，则使用MIII中断作为插补中断
 
@@ -163,35 +151,8 @@ void CNCSYS_IPOInSysTick(void)
 //更新插补器插补中断周期
 uBit32 SYS_UpdateIPOTimeCycle(uBit32 ulTimeCycleUs)
 {
-    TIM_TIMERCFG_Type    TIM_ConfigStruct;   // 定时/计数器配置结构变量
-    TIM_MATCHCFG_Type    TIM_MatchConfigStruct ;
 
-    if (ulTimeCycleUs < 1000 || ulTimeCycleUs % 200)
-    {
-        return 1;
-    }
-
-    // 定时器初始化
-    TIM_ConfigStruct.PrescaleOption          = TIM_PRESCALE_USVAL;
-    TIM_ConfigStruct.PrescaleValue           = 10;                     /* 配置TC的计数单位/US          */
-
-    TIM_MatchConfigStruct.MatchChannel       = 0;                       /* 匹配通道0                    */
-    TIM_MatchConfigStruct.IntOnMatch         = TRUE;                    /* 匹配产生中断                 */
-    TIM_MatchConfigStruct.ResetOnMatch       = TRUE;                    /* 匹配产生复位                 */
-    TIM_MatchConfigStruct.StopOnMatch        = FALSE;                   /* 匹配后停止                   */
-    TIM_MatchConfigStruct.ExtMatchOutputType = TIM_EXTMATCH_TOGGLE;     /* 如果设置MAT0.0则翻转输出     */
-    TIM_MatchConfigStruct.MatchValue         = ulTimeCycleUs / 10 - 1;  /* 设置中断TC计数（若值为99，表示1mS中断一次数   */
-
-    TIM_Init(LPC_TIMER0, TIM_TIMER_MODE, &TIM_ConfigStruct);
-    TIM_ConfigMatch(LPC_TIMER0, &TIM_MatchConfigStruct);
-
-    TIM_Cmd(LPC_TIMER0, ENABLE);                                        /* 开启定时器                   */
     
-    //////////////////////
-    //laomao 2016-05-13 添加
-    SystemTickConfig();
-    //////////////////////
-
     return 0;
 }
 
@@ -314,9 +275,10 @@ int SYS_InitIPO()
 
     IPOInterface.pf_ECM_GenerateErrorCode = ECM_GenerateErrorCode;
     IPOInterface.pf_ECM_PutErrorToBuf = ECM_PutErrorToBuf;
-
     
-     IPOInterface.pf_SYS_UpdateIPOTimeCycle = SYS_UpdateIPOTimeCycle;
+    IPOInterface.pf_SYS_UpdateIPOTimeCycle = SYS_UpdateIPOTimeCycle;
+    
+#if 0
     IPOInterface.pf_IPOTick_TimingStart = IPOTick_TimingStart;
     IPOInterface.pf_IPOTick_GetTimePassed = IPOTick_GetTimePassed;
    
@@ -326,7 +288,7 @@ int SYS_InitIPO()
     IPOInterface.pf_SysTick_CountSysTickEnd = SysTick_CountSysTickEnd;
     IPOInterface.pf_SysTick_GetCycleTime = SysTick_GetCycleTime;
     ////////////////
-   
+#endif
     
     if (IPO_InitInterface(&IPOInterface))
     {
@@ -347,6 +309,8 @@ int SYS_InitIPO()
     
     return 0;
 }
+
+
 
 /*
 函 数 名：int MST()
@@ -379,6 +343,7 @@ int SYS_InitMST()
 
     return 0;
 }
+
 
 
 /*

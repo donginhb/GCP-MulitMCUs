@@ -13,4 +13,4 @@ extern "C"
 }
 #endif
 
-#endif /* __DEMO_H */
+#endif /* __HW_MCPWM_H */

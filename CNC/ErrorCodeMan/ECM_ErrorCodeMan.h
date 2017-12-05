@@ -20,8 +20,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef ERROR_CODE_MAN_H
 #define ERROR_CODE_MAN_H
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
 
 
 

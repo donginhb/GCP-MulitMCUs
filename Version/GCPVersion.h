@@ -26,6 +26,11 @@
   * 修改时间: 2017.12.02
   * 修改描述: 1.实现CMU中GPIO的控制接口,新增由IO编号来控制的接口,以避免原接口的
   *             限制(原接口最大只支持32个IO,且读取IO状态的接口效率低下);
+  * 
+  * 系统版本: GC10_0_4_D
+  * 修改时间: 2017.12.05
+  * 修改描述: 1.实现LPC17XX平台的定时器输出PWM(比较模式)以及PWM计数两个功能,并
+  *             在SysPeripheral/PWM/PWM_MotorCtrl中实现PWM输出指定
   *  
   ******************************************************************************
   */
@@ -39,7 +44,7 @@
 //APP版本定义
 #define GCP_VER_STR                     "GC10XXXD"      //项目版本
 #define GCP_VER_NO0                     (0)             //大版本号
-#define GCP_VER_NO1                     (3)             //小版本号
+#define GCP_VER_NO1                     (4)             //小版本号
 #define GCP_VER_PART                    (0)             //组件号(预留)
 #define GCP_VER_FLAG                    'D'             //版本标示
 

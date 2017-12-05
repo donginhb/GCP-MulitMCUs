@@ -32,7 +32,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
 //----------------------------------------------系统运行能力配置------------------------------------------------------
 
-#define ENABLE_CAN_BUS  (1)    //使能CAN总线设备
+#define ENABLE_CAN_BUS  (0)    //使能CAN总线设备
 #define ENABLE_MIII_BUS (0)    //使能MIII总线设备
 
 //#define ENABLE_AXIS_PITCH_CMP_PARM  （1）     //使能轴螺距补偿参数

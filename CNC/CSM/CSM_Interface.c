@@ -17,7 +17,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 */
 
 #include "CSM_Interface.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 

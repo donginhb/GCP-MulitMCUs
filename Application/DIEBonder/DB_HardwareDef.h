@@ -10,7 +10,7 @@
  ****************************************************************************/
 
 //定义IO资源表
-//#define g_GcpIOTable                    g_VD1768_IOTable    //使用鼎尚1768的IO资源表
+//#define g_GcpIOTable                    g_VD1768_IOTable  //使用图书机V3(1768)的IO资源表
 #define g_GcpIOTable                    g_DB1768_IOTable    //使用鼎尚1768的IO资源表
 
 #define DB_UART_NODE                   (0)                 //串口节点

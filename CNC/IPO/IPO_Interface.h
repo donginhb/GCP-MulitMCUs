@@ -19,7 +19,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 使用说明：
 1、IPO初始化顺序（M0）
 (1) 等待系统参数管理模块初始化完成(系统启动时务必初始化坐标系映射表),
-(2) 设置系统控制参数读取地址IPO_SetSysParmReadAddr 
+(2) 设置系统控制参数读取地址 IPO_SetSysParmReadAddr 
 (3) 设置插补器缓冲区地址 IPO_SetIPOBufAddr
 (4) 设置快速速度规划表存储地址 IPO_SetRapidSpeedCtrlTableAddr
 (5) 设置插补器AHB数据交换起始地址 IPO_SetAHBDataTransAddr
@@ -38,16 +38,16 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
 
 //
-#include "..\\..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\..\\DataStructDef\\ERR_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
 
-#include "..\\..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 /////////////////////////
-//#include "..\\IPO_Simulator\\IPO_SimConf.h"
+//#include "../IPO_Simulator/IPO_SimConf.h"
 
 #ifdef IPO_SIMULATOR_WIN
 

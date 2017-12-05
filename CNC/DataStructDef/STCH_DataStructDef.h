@@ -20,7 +20,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 #ifndef STITCH_DATA_STRUCT_DEFINE_H
 #define STITCH_DATA_STRUCT_DEFINE_H
 
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 #define STITCH_START_SLOW           //标示是否采用启动慢速

@@ -49,35 +49,35 @@ extern "C" {
  * @brief LPC17XX/40XX High level ROM API structure
  */
 typedef struct {
-	const uint32_t usbdApiBase;			/*!< USBD API function table base address */
-	const uint32_t reserved0;			/*!< Reserved */
-	const uint32_t reserved1;			/*!< Reserved */
-	const uint32_t reserved2;			/*!< Reserved */
-	const uint32_t reserved3;			/*!< Reserved */
-	const uint32_t reserved4;			/*!< Reserved */
-	const uint32_t reserved5;			/*!< Reserved */
-	const uint32_t reserved6;			/*!< Reserved */
-	const uint32_t reserved7;			/*!< Reserved */
-	const uint32_t reserved8;			/*!< Reserved */
-	const uint32_t reserved9;			/*!< Reserved */
-	const uint32_t reserved10;		/*!< Reserved */
+    const uint32_t usbdApiBase;            /*!< USBD API function table base address */
+    const uint32_t reserved0;            /*!< Reserved */
+    const uint32_t reserved1;            /*!< Reserved */
+    const uint32_t reserved2;            /*!< Reserved */
+    const uint32_t reserved3;            /*!< Reserved */
+    const uint32_t reserved4;            /*!< Reserved */
+    const uint32_t reserved5;            /*!< Reserved */
+    const uint32_t reserved6;            /*!< Reserved */
+    const uint32_t reserved7;            /*!< Reserved */
+    const uint32_t reserved8;            /*!< Reserved */
+    const uint32_t reserved9;            /*!< Reserved */
+    const uint32_t reserved10;        /*!< Reserved */
 } LPC_ROM_API_T;
 
 /* Pointer to ROM API function address */
-#define LPC_ROM_API_BASE_LOC	0x1FFF1FF8
-#define LPC_ROM_API		(*(LPC_ROM_API_T * *) LPC_ROM_API_BASE_LOC)
+#define LPC_ROM_API_BASE_LOC    0x1FFF1FF8
+#define LPC_ROM_API        (*(LPC_ROM_API_T * *) LPC_ROM_API_BASE_LOC)
 
 #endif /* !defined(CHIP_LPC175X_6X) */
 
 /* Pointer to ROM IAP entry functions */
-#define IAP_ENTRY_LOCATION		0X1FFF1FF1
+#define IAP_ENTRY_LOCATION        0X1FFF1FF1
 
 /**
  * @brief LPC17XX/40XX IAP_ENTRY API function type
  */
 static INLINE void iap_entry(unsigned int cmd_param[5], unsigned int status_result[4])
 {
-	((IAP_ENTRY_T) IAP_ENTRY_LOCATION)(cmd_param, status_result);
+    ((IAP_ENTRY_T) IAP_ENTRY_LOCATION)(cmd_param, status_result);
 }
 
 /**

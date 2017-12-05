@@ -1,8 +1,8 @@
 #include "SPM_ParmCheck.h"
-#include "..\\DVM\\DEV_Interface.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
+#include "CNC/DVM/DEV_Interface.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
 
 //检验系统控制参数合法性，参数合法返回1，否则返回0
 int SPM_CheckSysCtrlParm(SYS_CTRL_PARM* pSysCtrlParm)

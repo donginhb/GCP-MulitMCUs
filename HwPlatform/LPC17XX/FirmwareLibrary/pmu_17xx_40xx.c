@@ -50,69 +50,69 @@
 /* Enter MCU Sleep mode */
 void Chip_PMU_SleepState(LPC_PMU_T *pPMU)
 {
-	/* Select Sleep/Deep Sleep mode */
-	pPMU->PCON &= ~(PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG);
+    /* Select Sleep/Deep Sleep mode */
+    pPMU->PCON &= ~(PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG);
 
-	/* Clearing SLEEPDEEP bit in SCR makes it Sleep mode */
-	SCB->SCR &= ~(1UL << SCB_SCR_SLEEPDEEP_Pos);
+    /* Clearing SLEEPDEEP bit in SCR makes it Sleep mode */
+    SCB->SCR &= ~(1UL << SCB_SCR_SLEEPDEEP_Pos);
 
-	/* Enter sleep mode */
-	__WFI();
+    /* Enter sleep mode */
+    __WFI();
 }
 
 /* Enter MCU Deep Sleep mode */
 void Chip_PMU_DeepSleepState(LPC_PMU_T *pPMU)
 {
-	/* Select Sleep/Deep Sleep mode */
-	pPMU->PCON &= ~(PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG);
+    /* Select Sleep/Deep Sleep mode */
+    pPMU->PCON &= ~(PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG);
 
-	/* Setting SLEEPDEEP bit in SCR makes it Deep Sleep mode */
-	SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
+    /* Setting SLEEPDEEP bit in SCR makes it Deep Sleep mode */
+    SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
 
-	/* Enter sleep mode */
-	__WFI();
+    /* Enter sleep mode */
+    __WFI();
 }
 
 /* Enter MCU Power down mode */
 void Chip_PMU_PowerDownState(LPC_PMU_T *pPMU)
 {
-	/* Select power down mode */
-	pPMU->PCON = (pPMU->PCON & ~PMU_PCON_PM1_FLAG) | PMU_PCON_PM0_FLAG;
+    /* Select power down mode */
+    pPMU->PCON = (pPMU->PCON & ~PMU_PCON_PM1_FLAG) | PMU_PCON_PM0_FLAG;
 
-	/* Setting SLEEPDEEP bit in SCR makes it power down mode */
-	SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
+    /* Setting SLEEPDEEP bit in SCR makes it power down mode */
+    SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
 
-	/* Enter sleep mode */
-	__WFI();
+    /* Enter sleep mode */
+    __WFI();
 }
 
 /* Enter MCU Deep Power down mode */
 void Chip_PMU_DeepPowerDownState(LPC_PMU_T *pPMU)
 {
-	/* Select deep power down mode */
-	pPMU->PCON |= PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG;
+    /* Select deep power down mode */
+    pPMU->PCON |= PMU_PCON_PM1_FLAG | PMU_PCON_PM0_FLAG;
 
-	/* Setting SLEEPDEEP bit in SCR makes it deep power down mode */
-	SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
+    /* Setting SLEEPDEEP bit in SCR makes it deep power down mode */
+    SCB->SCR |= (1UL << SCB_SCR_SLEEPDEEP_Pos);
 
-	/* Enter sleep mode */
-	__WFI();
+    /* Enter sleep mode */
+    __WFI();
 }
 
 /* Put some of the peripheral in sleep mode */
 void Chip_PMU_Sleep(LPC_PMU_T *pPMU, CHIP_PMU_MCUPOWER_T SleepMode)
 {
-	if (SleepMode == PMU_MCU_DEEP_SLEEP) {
-		Chip_PMU_DeepSleepState(pPMU);
-	}
-	else if (SleepMode == PMU_MCU_POWER_DOWN) {
-		Chip_PMU_PowerDownState(pPMU);
-	}
-	else if (SleepMode == PMU_MCU_DEEP_PWRDOWN) {
-		Chip_PMU_DeepPowerDownState(pPMU);
-	}
-	else {
-		/* PMU_MCU_SLEEP */
-		Chip_PMU_SleepState(pPMU);
-	}
+    if (SleepMode == PMU_MCU_DEEP_SLEEP) {
+        Chip_PMU_DeepSleepState(pPMU);
+    }
+    else if (SleepMode == PMU_MCU_POWER_DOWN) {
+        Chip_PMU_PowerDownState(pPMU);
+    }
+    else if (SleepMode == PMU_MCU_DEEP_PWRDOWN) {
+        Chip_PMU_DeepPowerDownState(pPMU);
+    }
+    else {
+        /* PMU_MCU_SLEEP */
+        Chip_PMU_SleepState(pPMU);
+    }
 }

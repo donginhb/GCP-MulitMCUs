@@ -21,9 +21,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CSM_ParmMan.h"
 #include "CSM_Interface.h"
 #include "CSM_MainCtrl.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
 
 #if(__FPU_USED ==1)
     #include <arm_math.h>

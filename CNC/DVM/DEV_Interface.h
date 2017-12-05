@@ -25,11 +25,11 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define DEV_INTERFACE_H
 
 #include "DEV_DriveStructDef.h"
-#include "..\\CMU\\UIN_GlobalDataDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
+//#include "../CMU/UIN_GlobalDataDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-#include "..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 #ifdef __cplusplus

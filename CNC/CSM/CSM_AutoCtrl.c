@@ -30,10 +30,10 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CSM_ProgBuf.h"
 #include "CSM_CircleDataProcess.h"
 
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
 //
 extern CSM_INTERFACE    m_CSMInterface;

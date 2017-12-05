@@ -5,10 +5,10 @@
 #include "CAN_DEV_Driver.h"
 #include "CAN_COM_DataStructDef.h"
 
-#include "..\\..\\ErrorCodeDef\\DVM_ErrorCodeDef.h"
+#include "../../ErrorCodeDef/DVM_ErrorCodeDef.h"
 
 
-//#include "..\\..\\GPIO\\GPIOCtrl.h"
+//#include "../../GPIO/GPIOCtrl.h"
 
 
 

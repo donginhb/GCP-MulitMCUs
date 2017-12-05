@@ -46,21 +46,21 @@
 /* Setup EEPROM clock */
 STATIC void setClkDiv(LPC_EEPROM_T *pEEPROM)
 {
-	uint32_t clk;
+    uint32_t clk;
 
-	/* Setup EEPROM timing to 375KHz based on PCLK rate */
-	clk = Chip_Clock_GetRate(CLK_MX_EEPROM);
+    /* Setup EEPROM timing to 375KHz based on PCLK rate */
+    clk = Chip_Clock_GetRate(CLK_MX_EEPROM);
 
-	/* Set EEPROM clock divide value*/
-	pEEPROM->CLKDIV = clk / EEPROM_CLOCK_DIV - 1;
+    /* Set EEPROM clock divide value*/
+    pEEPROM->CLKDIV = clk / EEPROM_CLOCK_DIV - 1;
 }
 
 /* Setup EEPROM clock */
 STATIC INLINE void setWaitState(LPC_EEPROM_T *pEEPROM)
 {
-	/* Setup EEPROM wait states*/
-	Chip_EEPROM_SetReadWaitState(pEEPROM, EEPROM_READ_WAIT_STATE_VAL);
-	Chip_EEPROM_SetWaitState(pEEPROM, EEPROM_WAIT_STATE_VAL);
+    /* Setup EEPROM wait states*/
+    Chip_EEPROM_SetReadWaitState(pEEPROM, EEPROM_READ_WAIT_STATE_VAL);
+    Chip_EEPROM_SetWaitState(pEEPROM, EEPROM_WAIT_STATE_VAL);
 
 }
 
@@ -71,31 +71,31 @@ STATIC INLINE void setWaitState(LPC_EEPROM_T *pEEPROM)
 /* Initializes the EEPROM peripheral with specified parameter */
 void Chip_EEPROM_Init(LPC_EEPROM_T *pEEPROM)
 {
-	/* Disable EEPROM power down mode */
-	Chip_EEPROM_DisablePowerDown(pEEPROM);
-	setClkDiv(pEEPROM);
-	setWaitState(pEEPROM);
+    /* Disable EEPROM power down mode */
+    Chip_EEPROM_DisablePowerDown(pEEPROM);
+    setClkDiv(pEEPROM);
+    setWaitState(pEEPROM);
 }
 
 /* Write data from page register to non-volatile memory */
 void Chip_EEPROM_EraseProgramPage(LPC_EEPROM_T *pEEPROM)
 {
-	Chip_EEPROM_ClearIntStatus(pEEPROM, EEPROM_CMD_ERASE_PRG_PAGE);
-	Chip_EEPROM_SetCmd(pEEPROM, EEPROM_CMD_ERASE_PRG_PAGE);
-	Chip_EEPROM_WaitForIntStatus(pEEPROM, EEPROM_INT_ENDOFPROG);
+    Chip_EEPROM_ClearIntStatus(pEEPROM, EEPROM_CMD_ERASE_PRG_PAGE);
+    Chip_EEPROM_SetCmd(pEEPROM, EEPROM_CMD_ERASE_PRG_PAGE);
+    Chip_EEPROM_WaitForIntStatus(pEEPROM, EEPROM_INT_ENDOFPROG);
 }
 
 /* Wait for interrupt */
 void Chip_EEPROM_WaitForIntStatus(LPC_EEPROM_T *pEEPROM, uint32_t mask)
 {
-	uint32_t status;
-	while (1) {
-		status = Chip_EEPROM_GetIntStatus(pEEPROM);
-		if ((status & mask) == mask) {
-			break;
-		}
-	}
-	Chip_EEPROM_ClearIntStatus(pEEPROM, mask);
+    uint32_t status;
+    while (1) {
+        status = Chip_EEPROM_GetIntStatus(pEEPROM);
+        if ((status & mask) == mask) {
+            break;
+        }
+    }
+    Chip_EEPROM_ClearIntStatus(pEEPROM, mask);
 }
 
 

@@ -44,16 +44,16 @@ extern "C" {
 /**
  * @brief FLASH Memory Controller Unit register block structure
  */
-typedef struct {		/*!< FMC Structure */
-	__I  uint32_t  RESERVED1[8];
-	__IO uint32_t  FMSSTART;
-	__IO uint32_t  FMSSTOP;
-	__I  uint32_t  RESERVED3;
-	__I  uint32_t  FMSW[4];
-	__I  uint32_t  RESERVED4[1001];
-	__I  uint32_t  FMSTAT;
-	__I  uint32_t  RESERVED5;
-	__O  uint32_t  FMSTATCLR;
+typedef struct {        /*!< FMC Structure */
+    __I  uint32_t  RESERVED1[8];
+    __IO uint32_t  FMSSTART;
+    __IO uint32_t  FMSSTOP;
+    __I  uint32_t  RESERVED3;
+    __I  uint32_t  FMSW[4];
+    __I  uint32_t  RESERVED4[1001];
+    __I  uint32_t  FMSTAT;
+    __I  uint32_t  RESERVED5;
+    __O  uint32_t  FMSTATCLR;
 } LPC_FMC_T;
 
 /* Flash signature start and busy status bit */
@@ -63,63 +63,63 @@ typedef struct {		/*!< FMC Structure */
 #define FMC_FLASHSIG_STAT       (1 << 2)
 
 /**
- * @brief	Start computation of a signature for a FLASH memory range
- * @param	start	: Starting FLASH address for computation, must be aligned on 16 byte boundary
- * @param	stop	: Ending FLASH address for computation, must be aligned on 16 byte boundary
- * @return	Nothing
- * @note	Only bits 20..4 are used for the FLASH signature computation.
- *			Use the Chip_FMC_IsSignatureBusy() function to determine when the
- *			signature computation operation is complete and use the
- *			Chip_FMC_GetSignature() function to get the computed signature.
+ * @brief    Start computation of a signature for a FLASH memory range
+ * @param    start    : Starting FLASH address for computation, must be aligned on 16 byte boundary
+ * @param    stop    : Ending FLASH address for computation, must be aligned on 16 byte boundary
+ * @return    Nothing
+ * @note    Only bits 20..4 are used for the FLASH signature computation.
+ *            Use the Chip_FMC_IsSignatureBusy() function to determine when the
+ *            signature computation operation is complete and use the
+ *            Chip_FMC_GetSignature() function to get the computed signature.
  */
 STATIC INLINE void Chip_FMC_ComputeSignature(uint32_t start, uint32_t stop)
 {
-	LPC_FMC->FMSSTART = (start >> 4);
-	LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
-	LPC_FMC->FMSSTOP = (stop >> 4) | FMC_FLASHSIG_BUSY;
+    LPC_FMC->FMSSTART = (start >> 4);
+    LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
+    LPC_FMC->FMSSTOP = (stop >> 4) | FMC_FLASHSIG_BUSY;
 }
 
 /**
- * @brief	Start computation of a signature for a FLASH memory address and block count
- * @param	start	: Starting FLASH address for computation, must be aligned on 16 byte boundary
- * @param	blocks	: Number of 16 byte blocks used for computation
- * @return	Nothing
- * @note	Only bits 20..4 are used for the FLASH signature computation.
- *			Use the Chip_FMC_IsSignatureBusy() function to determine when the
- *			signature computation operation is complete and the
- *			Chip_FMC_GetSignature() function to get the computed signature.
+ * @brief    Start computation of a signature for a FLASH memory address and block count
+ * @param    start    : Starting FLASH address for computation, must be aligned on 16 byte boundary
+ * @param    blocks    : Number of 16 byte blocks used for computation
+ * @return    Nothing
+ * @note    Only bits 20..4 are used for the FLASH signature computation.
+ *            Use the Chip_FMC_IsSignatureBusy() function to determine when the
+ *            signature computation operation is complete and the
+ *            Chip_FMC_GetSignature() function to get the computed signature.
  */
 STATIC INLINE void Chip_FMC_ComputeSignatureBlocks(uint32_t start, uint32_t blocks)
 {
-	Chip_FMC_ComputeSignature(start, (start + (blocks * 16)));
+    Chip_FMC_ComputeSignature(start, (start + (blocks * 16)));
 }
 
 /**
- * @brief	Clear signature generation completion flag
- * @return	Nothing
+ * @brief    Clear signature generation completion flag
+ * @return    Nothing
  */
 STATIC INLINE void Chip_FMC_ClearSignatureBusy(void)
 {
-	LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
+    LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
 }
 
 /**
- * @brief	Check for signature generation completion
- * @return	true if the signature computation is running, false if finished
+ * @brief    Check for signature generation completion
+ * @return    true if the signature computation is running, false if finished
  */
 STATIC INLINE bool Chip_FMC_IsSignatureBusy(void)
 {
-	return (bool) ((LPC_FMC->FMSTAT & FMC_FLASHSIG_STAT) == 0);
+    return (bool) ((LPC_FMC->FMSTAT & FMC_FLASHSIG_STAT) == 0);
 }
 
 /**
- * @brief	Returns the generated FLASH signature value
- * @param	index	: Signature index to get - use 0 to FMSW0, 1 to FMSW1, etc.
- * @return	the generated FLASH signature value
+ * @brief    Returns the generated FLASH signature value
+ * @param    index    : Signature index to get - use 0 to FMSW0, 1 to FMSW1, etc.
+ * @return    the generated FLASH signature value
  */
 STATIC INLINE uint32_t Chip_FMC_GetSignature(int index)
 {
-	return LPC_FMC->FMSW[index];
+    return LPC_FMC->FMSW[index];
 }
 
 /**

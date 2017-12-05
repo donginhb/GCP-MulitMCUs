@@ -29,16 +29,16 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef CSM_INTERFACE_H
 #define CSM_INTERFACE_H
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\DataStructDef\\MST_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/DataStructDef/MST_DataStructDef.h"
 
-#include "..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 //

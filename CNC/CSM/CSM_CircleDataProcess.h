@@ -21,9 +21,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define CSM_CIRCLE_DATA_PROCESS_H
 
 
-#include "..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 #ifdef __cplusplus

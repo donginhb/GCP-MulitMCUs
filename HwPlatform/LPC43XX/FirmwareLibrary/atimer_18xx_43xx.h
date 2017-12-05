@@ -44,92 +44,92 @@ extern "C" {
 /**
  * @brief Alarm Timer register block structure
  */
-typedef struct {					/*!< ATIMER Structure       */
-	__IO uint32_t DOWNCOUNTER;		/*!< Downcounter register   */
-	__IO uint32_t PRESET;			/*!< Preset value register  */
-	__I  uint32_t RESERVED0[1012];
-	__O  uint32_t CLR_EN;			/*!< Interrupt clear enable register */
-	__O  uint32_t SET_EN;			/*!< Interrupt set enable register */
-	__I  uint32_t STATUS;			/*!< Status register        */
-	__I  uint32_t ENABLE;			/*!< Enable register        */
-	__O  uint32_t CLR_STAT;			/*!< Clear register         */
-	__O  uint32_t SET_STAT;			/*!< Set register           */
+typedef struct {                    /*!< ATIMER Structure       */
+    __IO uint32_t DOWNCOUNTER;        /*!< Downcounter register   */
+    __IO uint32_t PRESET;            /*!< Preset value register  */
+    __I  uint32_t RESERVED0[1012];
+    __O  uint32_t CLR_EN;            /*!< Interrupt clear enable register */
+    __O  uint32_t SET_EN;            /*!< Interrupt set enable register */
+    __I  uint32_t STATUS;            /*!< Status register        */
+    __I  uint32_t ENABLE;            /*!< Enable register        */
+    __O  uint32_t CLR_STAT;            /*!< Clear register         */
+    __O  uint32_t SET_STAT;            /*!< Set register           */
 } LPC_ATIMER_T;
 
 /**
- * @brief	Initialize Alarm Timer
- * @param	pATIMER		: The base of ATIMER peripheral on the chip
- * @param	PresetValue	: Count of 1 to 1024s for Alarm
- * @return	None
+ * @brief    Initialize Alarm Timer
+ * @param    pATIMER        : The base of ATIMER peripheral on the chip
+ * @param    PresetValue    : Count of 1 to 1024s for Alarm
+ * @return    None
  */
 void Chip_ATIMER_Init(LPC_ATIMER_T *pATIMER, uint32_t PresetValue);
 
 /**
- * @brief	Close ATIMER device
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	None
+ * @brief    Close ATIMER device
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    None
  */
 void Chip_ATIMER_DeInit(LPC_ATIMER_T *pATIMER);
 
 /**
- * @brief	Enable ATIMER Interrupt
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	None
+ * @brief    Enable ATIMER Interrupt
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    None
  */
 STATIC INLINE void Chip_ATIMER_IntEnable(LPC_ATIMER_T *pATIMER)
 {
-	pATIMER->SET_EN = 1;
+    pATIMER->SET_EN = 1;
 }
 
 /**
- * @brief	Disable ATIMER Interrupt
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	None
+ * @brief    Disable ATIMER Interrupt
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    None
  */
 STATIC INLINE void Chip_ATIMER_IntDisable(LPC_ATIMER_T *pATIMER)
 {
-	pATIMER->CLR_EN = 1;
+    pATIMER->CLR_EN = 1;
 }
 
 /**
- * @brief	Clear ATIMER Interrupt Status
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	None
+ * @brief    Clear ATIMER Interrupt Status
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    None
  */
 STATIC INLINE void Chip_ATIMER_ClearIntStatus(LPC_ATIMER_T *pATIMER)
 {
-	pATIMER->CLR_STAT = 1;
+    pATIMER->CLR_STAT = 1;
 }
 
 /**
- * @brief	Set ATIMER Interrupt Status
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	None
+ * @brief    Set ATIMER Interrupt Status
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    None
  */
 STATIC INLINE void Chip_ATIMER_SetIntStatus(LPC_ATIMER_T *pATIMER)
 {
-	pATIMER->SET_STAT = 1;
+    pATIMER->SET_STAT = 1;
 }
 
 /**
- * @brief	Update Preset value
- * @param	pATIMER		: The base of ATIMER peripheral on the chip
- * @param	PresetValue	: updated preset value
- * @return	Nothing
+ * @brief    Update Preset value
+ * @param    pATIMER        : The base of ATIMER peripheral on the chip
+ * @param    PresetValue    : updated preset value
+ * @return    Nothing
  */
 STATIC INLINE void Chip_ATIMER_UpdatePresetValue(LPC_ATIMER_T *pATIMER, uint32_t PresetValue)
 {
-	pATIMER->PRESET = PresetValue;
+    pATIMER->PRESET = PresetValue;
 }
 
 /**
- * @brief	Read value of preset register
- * @param	pATIMER	: The base of ATIMER peripheral on the chip
- * @return	Value of capture register
+ * @brief    Read value of preset register
+ * @param    pATIMER    : The base of ATIMER peripheral on the chip
+ * @return    Value of capture register
  */
 STATIC INLINE uint32_t Chip_ATIMER_GetPresetValue(LPC_ATIMER_T *pATIMER)
 {
-	return pATIMER->PRESET;
+    return pATIMER->PRESET;
 }
 
 /**

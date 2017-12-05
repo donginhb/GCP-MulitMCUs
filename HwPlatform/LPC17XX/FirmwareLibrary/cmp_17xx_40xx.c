@@ -52,13 +52,13 @@
 /* Initializes the CMP */
 void Chip_CMP_Init(void)
 {
-	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_CMP);
+    Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_CMP);
 }
 
 /* De-initializes the CMP */
 void Chip_CMP_DeInit(void)
 {
-	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_CMP);
+    Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_CMP);
 }
 
 #endif /* defined(CHIP_LPC40XX) */

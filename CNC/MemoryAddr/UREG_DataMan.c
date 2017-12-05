@@ -28,9 +28,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 */
 #include "string.h"
 #include "SDRAM_AddrDef.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
-#include "..\\..\\CMU\\CMU_ErrorCodeDef.h"
+#include "../../CMU/CMU_ErrorCodeDef.h"
 
 #define MAX_REG_NO  (UREG_BUF_TOTAL_LEN/4 -1)
 

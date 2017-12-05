@@ -64,10 +64,10 @@ extern "C" {
  * @{
  */
 
-#define __MPU_PRESENT             0			/*!< MPU present or not                    */
-#define __NVIC_PRIO_BITS          2			/*!< Number of Bits used for Priority Levels */
-#define __Vendor_SysTickConfig    0			/*!< Set to 1 if different SysTick Config is used */
-#define __FPU_PRESENT             0			/*!< FPU present or not                    */
+#define __MPU_PRESENT             0            /*!< MPU present or not                    */
+#define __NVIC_PRIO_BITS          2            /*!< Number of Bits used for Priority Levels */
+#define __Vendor_SysTickConfig    0            /*!< Set to 1 if different SysTick Config is used */
+#define __FPU_PRESENT             0            /*!< FPU present or not                    */
 
 /**
  * @}
@@ -78,51 +78,51 @@ extern "C" {
  */
 
 typedef enum {
-	/* -------------------------  Cortex-M0 Processor Exceptions Numbers  ----------------------------- */
-	Reset_IRQn                        = -15,/*!<   1  Reset Vector, invoked on Power up and warm reset */
-	NonMaskableInt_IRQn               = -14,/*!<   2  Non maskable Interrupt, cannot be stopped or preempted */
-	HardFault_IRQn                    = -13,/*!<   3  Hard Fault, all classes of Fault */
-	SVCall_IRQn                       = -5,	/*!<  11  System Service Call via SVC instruction */
-	DebugMonitor_IRQn                 = -4,	/*!<  12  Debug Monitor                    */
-	PendSV_IRQn                       = -2,	/*!<  14  Pendable request for system service */
-	SysTick_IRQn                      = -1,	/*!<  15  System Tick Timer           */
+    /* -------------------------  Cortex-M0 Processor Exceptions Numbers  ----------------------------- */
+    Reset_IRQn                        = -15,/*!<   1  Reset Vector, invoked on Power up and warm reset */
+    NonMaskableInt_IRQn               = -14,/*!<   2  Non maskable Interrupt, cannot be stopped or preempted */
+    HardFault_IRQn                    = -13,/*!<   3  Hard Fault, all classes of Fault */
+    SVCall_IRQn                       = -5,    /*!<  11  System Service Call via SVC instruction */
+    DebugMonitor_IRQn                 = -4,    /*!<  12  Debug Monitor                    */
+    PendSV_IRQn                       = -2,    /*!<  14  Pendable request for system service */
+    SysTick_IRQn                      = -1,    /*!<  15  System Tick Timer           */
 
-	/* ---------------------------  LPC18xx/43xx Specific Interrupt Numbers  ------------------------------- */
-	DAC_IRQn                          =   0,/*!<   0  DAC                              */
-	M4_IRQn                           =   1,/*!<   1  M0a                              */
-	DMA_IRQn                          =   2,/*!<   2  DMA                              */
-	RESERVED1_IRQn                    =   3,/*!<   3                                   */
-	SGPIO_INPUT_IRQn                  =   4,/*!<   4  SGPIO Input bit match            */
-	SGPIO_MATCH_IRQn                  =   5,/*!<   5  SGPIO Pattern Match              */
-	SGPIO_SHIFT_IRQn                  =   6,/*!<   6  SGPIO Shift Clock                */
-	SGPIO_POS_IRQn                    =   7,/*!<   7  SGPIO Capture Clock              */
-	USB0_IRQn                         =   8,/*!<   8  USB0                             */
-	USB1_IRQn                         =   9,/*!<   9  USB1                             */
-	SCT_IRQn                          =  10,/*!<  10  SCT                              */
-	RITIMER_IRQn                      =  11,/*!<  11  RITIMER                          */
-	GINT1_IRQn                        =  12,/*!<  12  GINT1                            */
-	TIMER1_IRQn                       =  13,/*!<  13  TIMER1                           */
-	TIMER2_IRQn                       =  14,/*!<  14  TIMER2                           */
-	PIN_INT5_IRQn                     =  15,/*!<  15  GPIO Pin interrupt 5             */
-	MCPWM_IRQn                        =  16,/*!<  16  MCPWM                            */
-	ADC0_IRQn                         =  17,/*!<  17  ADC0                             */
-	I2C0_IRQn                         =  18,/*!<  18  I2C0                             */
-	I2C1_IRQn                         =  19,/*!<  19  I2C1                             */
-	SPI_INT_IRQn                      =  20,/*!<  20  SPI_INT                          */
-	ADC1_IRQn                         =  21,/*!<  21  ADC1                             */
-	SSP0_IRQn                         =  22,/*!<  22  ORed SSP0, SSP1                  */
-	SSP1_IRQn                         =  22,/*!<  22  ORed SSP0, SSP1                  */
-	EVENTROUTER_IRQn                  =  23,/*!<  23  EVENTROUTER                      */
-	USART0_IRQn                       =  24,/*!<  24  USART0                           */
-	UART1_IRQn                        =  25,/*!<  25  UART1                            */
-	USART2_IRQn                       =  26,/*!<  26  ORed USART2/C_CAN1               */
-	C_CAN1_IRQn                       =  26,/*!<  26  ORed USART2/C_CAN1               */
-	USART3_IRQn                       =  27,/*!<  27  USART3                           */
-	I2S0_IRQn                         =  28,/*!<  28  ORed I2S0, I2S1                  */
-	I2S1_IRQn                         =  28,/*!<  28  ORed I2S0, I2S1                  */
-	C_CAN0_IRQn                       =  29,/*!<  29  C_CAN0                           */
-	ADCHS_IRQn                        =  30,/*!<  30  ADCHS interrupt                  */
-	M0APP_IRQn                        =  31,/*!<  31  M0SUB                            */
+    /* ---------------------------  LPC18xx/43xx Specific Interrupt Numbers  ------------------------------- */
+    DAC_IRQn                          =   0,/*!<   0  DAC                              */
+    M4_IRQn                           =   1,/*!<   1  M0a                              */
+    DMA_IRQn                          =   2,/*!<   2  DMA                              */
+    RESERVED1_IRQn                    =   3,/*!<   3                                   */
+    SGPIO_INPUT_IRQn                  =   4,/*!<   4  SGPIO Input bit match            */
+    SGPIO_MATCH_IRQn                  =   5,/*!<   5  SGPIO Pattern Match              */
+    SGPIO_SHIFT_IRQn                  =   6,/*!<   6  SGPIO Shift Clock                */
+    SGPIO_POS_IRQn                    =   7,/*!<   7  SGPIO Capture Clock              */
+    USB0_IRQn                         =   8,/*!<   8  USB0                             */
+    USB1_IRQn                         =   9,/*!<   9  USB1                             */
+    SCT_IRQn                          =  10,/*!<  10  SCT                              */
+    RITIMER_IRQn                      =  11,/*!<  11  RITIMER                          */
+    GINT1_IRQn                        =  12,/*!<  12  GINT1                            */
+    TIMER1_IRQn                       =  13,/*!<  13  TIMER1                           */
+    TIMER2_IRQn                       =  14,/*!<  14  TIMER2                           */
+    PIN_INT5_IRQn                     =  15,/*!<  15  GPIO Pin interrupt 5             */
+    MCPWM_IRQn                        =  16,/*!<  16  MCPWM                            */
+    ADC0_IRQn                         =  17,/*!<  17  ADC0                             */
+    I2C0_IRQn                         =  18,/*!<  18  I2C0                             */
+    I2C1_IRQn                         =  19,/*!<  19  I2C1                             */
+    SPI_INT_IRQn                      =  20,/*!<  20  SPI_INT                          */
+    ADC1_IRQn                         =  21,/*!<  21  ADC1                             */
+    SSP0_IRQn                         =  22,/*!<  22  ORed SSP0, SSP1                  */
+    SSP1_IRQn                         =  22,/*!<  22  ORed SSP0, SSP1                  */
+    EVENTROUTER_IRQn                  =  23,/*!<  23  EVENTROUTER                      */
+    USART0_IRQn                       =  24,/*!<  24  USART0                           */
+    UART1_IRQn                        =  25,/*!<  25  UART1                            */
+    USART2_IRQn                       =  26,/*!<  26  ORed USART2/C_CAN1               */
+    C_CAN1_IRQn                       =  26,/*!<  26  ORed USART2/C_CAN1               */
+    USART3_IRQn                       =  27,/*!<  27  USART3                           */
+    I2S0_IRQn                         =  28,/*!<  28  ORed I2S0, I2S1                  */
+    I2S1_IRQn                         =  28,/*!<  28  ORed I2S0, I2S1                  */
+    C_CAN0_IRQn                       =  29,/*!<  29  C_CAN0                           */
+    ADCHS_IRQn                        =  30,/*!<  30  ADCHS interrupt                  */
+    M0APP_IRQn                        =  31,/*!<  31  M0SUB                            */
 } LPC43XX_M0_IRQn_Type;
 
 /**

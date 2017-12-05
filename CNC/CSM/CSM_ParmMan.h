@@ -21,8 +21,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define CSM_PARM_MAN_H
 
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\SYS_ConfigDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/SYS_ConfigDef.h"
 
 
 extern int m_CSM_CrdSysMotorIndex[CRDSYS_MAX_COUNT][AXIS_MAX_COUNT];        //坐标系中的坐标轴对应的电机索引

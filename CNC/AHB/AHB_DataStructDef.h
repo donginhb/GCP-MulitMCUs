@@ -20,12 +20,12 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef AHB_DATA_STRUCT_DEF_H
 #define AHB_DATA_STRUCT_DEF_H
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
 
-#include "..\\IPO\\IPO_M0_M4\\IPO_DataStructDefPte.h"
+#include "../IPO/IPO_DataStructDefPte.h"
 
 /*
 //M0月M4数据交换共享内存地址定义

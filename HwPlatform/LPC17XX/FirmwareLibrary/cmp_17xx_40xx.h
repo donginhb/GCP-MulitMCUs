@@ -49,19 +49,19 @@ extern "C" {
 /**
  * @brief Comparator (CMP) register block structure
  */
-typedef struct {										/*!< Comparator structure                                   */
-	__IO uint32_t  CMP_CTRL;							/*!< Comparator block control register                      */
-	__IO uint32_t  CMP_CTRLx[CMP_NUM];					/*!< Specific comparator control register                          */
+typedef struct {                                        /*!< Comparator structure                                   */
+    __IO uint32_t  CMP_CTRL;                            /*!< Comparator block control register                      */
+    __IO uint32_t  CMP_CTRLx[CMP_NUM];                    /*!< Specific comparator control register                          */
 } LPC_CMP_T;
 
 /**
  * @brief Comparator control definition
  */
 typedef enum {
-	CMP_ENCTRL_DISABLE,			/*!< Disable */
-	CMP_ENCTRL_DIS_IN_DS_PWD,	/*!< Disable in deep sleep mode and power down mode*/
-	CMP_ENCTRL_DIS_IN_PWD,		/*!< Disable in power down mode*/
-	CMP_ENCTRL_ENABLE,			/*!< Enable/Power-up*/
+    CMP_ENCTRL_DISABLE,            /*!< Disable */
+    CMP_ENCTRL_DIS_IN_DS_PWD,    /*!< Disable in deep sleep mode and power down mode*/
+    CMP_ENCTRL_DIS_IN_PWD,        /*!< Disable in power down mode*/
+    CMP_ENCTRL_ENABLE,            /*!< Enable/Power-up*/
 } CMP_ENCTRL_T;
 
 /*!< Comparator control register Bitmask */
@@ -160,239 +160,239 @@ typedef enum {
  * @brief Comparator VM/VP input definitions
  */
 typedef enum {
-	CMP_INPUT_VREF_DIV,			/*!< Vref divider.*/
-	CMP_INPUT_CMPx_IN0,			/*!< Use the input 0 of the comparator*/
-	CMP_INPUT_CMPx_IN1,			/*!< Use the input 1 of the comparator*/
-	CMP_INPUT_CMPx_IN2,			/*!< Use the input 2 of the comparator*/
-	CMP_INPUT_CMPx_IN3,			/*!< Use the input 3 of the comparator*/
-	CMP_INPUT_CMP_OTHER_IN0,	/*!< Use the input 0 of the other comparator.*/
-	CMP_INPUT_INTERNAL_09VBG,	/*!< internal 0.9 V band gap reference.*/
+    CMP_INPUT_VREF_DIV,            /*!< Vref divider.*/
+    CMP_INPUT_CMPx_IN0,            /*!< Use the input 0 of the comparator*/
+    CMP_INPUT_CMPx_IN1,            /*!< Use the input 1 of the comparator*/
+    CMP_INPUT_CMPx_IN2,            /*!< Use the input 2 of the comparator*/
+    CMP_INPUT_CMPx_IN3,            /*!< Use the input 3 of the comparator*/
+    CMP_INPUT_CMP_OTHER_IN0,    /*!< Use the input 0 of the other comparator.*/
+    CMP_INPUT_INTERNAL_09VBG,    /*!< internal 0.9 V band gap reference.*/
 } CMP_INPUT_T;
 
 /**
  * @brief Comparator hysteresis selection definitions
  */
 typedef enum {
-	CMP_HYS_NONE = CMP_CTRLx_HYS(0),		/*!<No hysteresis (the output will switch as the voltages cross) */
-	CMP_HYS_5MV  = CMP_CTRLx_HYS(1),		/*!< 5mV hysteresis */
-	CMP_HYS_10MV = CMP_CTRLx_HYS(2),		/*!< 10mV hysteresis */
-	CMP_HYS_15MV = CMP_CTRLx_HYS(3),		/*!< 15mV hysteresis */
+    CMP_HYS_NONE = CMP_CTRLx_HYS(0),        /*!<No hysteresis (the output will switch as the voltages cross) */
+    CMP_HYS_5MV  = CMP_CTRLx_HYS(1),        /*!< 5mV hysteresis */
+    CMP_HYS_10MV = CMP_CTRLx_HYS(2),        /*!< 10mV hysteresis */
+    CMP_HYS_15MV = CMP_CTRLx_HYS(3),        /*!< 15mV hysteresis */
 } CMP_HYS_T;
 
 /**
  * @brief Comparator interrupt edge selection definitions
  */
 typedef enum {
-	CMP_INTEDGE_FALLING = CMP_CTRLx_INTEDGE(0),	/*!< Interrupt is active on falling edge */
-	CMP_INTEDGE_RISING  = CMP_CTRLx_INTEDGE(1),	/*!< Interrupt is active on rising edge */
-	CMP_INTEDGE_BOTH    = CMP_CTRLx_INTEDGE(2),	/*!< Interrupt is active on falling and rising edges */
+    CMP_INTEDGE_FALLING = CMP_CTRLx_INTEDGE(0),    /*!< Interrupt is active on falling edge */
+    CMP_INTEDGE_RISING  = CMP_CTRLx_INTEDGE(1),    /*!< Interrupt is active on rising edge */
+    CMP_INTEDGE_BOTH    = CMP_CTRLx_INTEDGE(2),    /*!< Interrupt is active on falling and rising edges */
 } CMP_INTEDGE_T;
 
 /**
- * @brief	Initializes the CMP
- * @return	Nothing
+ * @brief    Initializes the CMP
+ * @return    Nothing
  */
 void Chip_CMP_Init(void);
 
 /**
- * @brief	Deinitializes the CMP
- * @return	Nothing
+ * @brief    Deinitializes the CMP
+ * @return    Nothing
  */
 void Chip_CMP_DeInit(void);
 
 /**
- * @brief	Enables comparator current source
- * @param	en		: Enable mode
- * @return	Nothing
+ * @brief    Enables comparator current source
+ * @param    en        : Enable mode
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_EnableCurrentSrc(CMP_ENCTRL_T en)
 {
-	LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_PD_IREF_BITMASK)) | CMP_CTRL_PD_IREF(en);
+    LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_PD_IREF_BITMASK)) | CMP_CTRL_PD_IREF(en);
 }
 
 /**
- * @brief	Enables comparator bandgap reference
- * @param	en		: Enable mode
- * @return	Nothing
+ * @brief    Enables comparator bandgap reference
+ * @param    en        : Enable mode
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_EnableBandGap(CMP_ENCTRL_T en)
 {
-	LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_PD_VBG_BITMASK)) | CMP_CTRL_PD_VBG(en);
+    LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_PD_VBG_BITMASK)) | CMP_CTRL_PD_VBG(en);
 }
 
 /**
- * @brief	Control CMP_ROSC
- * @param	flag		: Or-ed bit value of CMP_CTRL_ROSCCTL_* and CMP_CTRL_EXT_RESET_*
- * @return	Nothing
+ * @brief    Control CMP_ROSC
+ * @param    flag        : Or-ed bit value of CMP_CTRL_ROSCCTL_* and CMP_CTRL_EXT_RESET_*
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_ControlROSC(uint32_t flag)
 {
-	LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_ROSC_BITMASK)) | flag;
+    LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_ROSC_BITMASK)) | flag;
 }
 
 /**
- * @brief	Control CMP_ROSC
- * @param	flag		: Or-ed bit value of CMP_CTRL_T*CAP*
- * @return	Nothing
+ * @brief    Control CMP_ROSC
+ * @param    flag        : Or-ed bit value of CMP_CTRL_T*CAP*
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_SetTimerCapInput(uint32_t flag)
 {
-	LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_TIMERCAPTURE_BITMASK)) | flag;
+    LPC_CMP->CMP_CTRL = (LPC_CMP->CMP_CTRL & (~CMP_CTRL_TIMERCAPTURE_BITMASK)) | flag;
 }
 
 /**
- * @brief	Sets up voltage ladder
- * @param	id				: Comparator ID
- * @param	ladSel			: Voltage ladder value (0~31).
- * @param	flag				:0(CMP_VREF used)/CMP_CTRLx_VLADREF_VDDA (VDDA used)
- * @return	Nothing
- * @note		VREF divider 0 = ladSel*VRef0/31
+ * @brief    Sets up voltage ladder
+ * @param    id                : Comparator ID
+ * @param    ladSel            : Voltage ladder value (0~31).
+ * @param    flag                :0(CMP_VREF used)/CMP_CTRLx_VLADREF_VDDA (VDDA used)
+ * @return    Nothing
+ * @note        VREF divider 0 = ladSel*VRef0/31
  */
 STATIC INLINE void Chip_CMP_SetupVoltLadder(uint8_t id,
-											uint16_t ladSel, uint32_t flag)
+                                            uint16_t ladSel, uint32_t flag)
 {
-	LPC_CMP->CMP_CTRLx[id] =
-		(LPC_CMP->CMP_CTRLx[id] & (~(CMP_CTRLx_VSEL_BITMASK | CMP_CTRLx_VLADREF_VDDA))) | CMP_CTRLx_VSEL(
-			ladSel) | flag;
+    LPC_CMP->CMP_CTRLx[id] =
+        (LPC_CMP->CMP_CTRLx[id] & (~(CMP_CTRLx_VSEL_BITMASK | CMP_CTRLx_VLADREF_VDDA))) | CMP_CTRLx_VSEL(
+            ladSel) | flag;
 }
 
 /**
- * @brief	Enables voltage ladder
- * @param	id		: Comparator ID
- * @param	en		: enable option
- * @return	Nothing
+ * @brief    Enables voltage ladder
+ * @param    id        : Comparator ID
+ * @param    en        : enable option
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_EnableVoltLadder(uint8_t id, CMP_ENCTRL_T en)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VLADEN_BITMASK)) | CMP_CTRLx_VLADEN(en);
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VLADEN_BITMASK)) | CMP_CTRLx_VLADEN(en);
 }
 
 /**
- * @brief	Selects positive voltage input
- * @param	id		: Comparator ID
- * @param	input	: Selected input
- * @return	Nothing
+ * @brief    Selects positive voltage input
+ * @param    id        : Comparator ID
+ * @param    input    : Selected input
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_SetPosVoltRef(uint8_t id, CMP_INPUT_T input)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VP_BITMASK)) | CMP_CTRLx_VP(input);
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VP_BITMASK)) | CMP_CTRLx_VP(input);
 }
 
 /**
- * @brief	Selects negative voltage input
- * @param	id		: Comparator ID
- * @param	input	: Selected input
- * @return	Nothing
+ * @brief    Selects negative voltage input
+ * @param    id        : Comparator ID
+ * @param    input    : Selected input
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_SetNegVoltRef(uint8_t id, CMP_INPUT_T input)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VM_BITMASK)) | CMP_CTRLx_VM(input);
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_VM_BITMASK)) | CMP_CTRLx_VM(input);
 }
 
 /**
- * @brief	Selects hysteresis level
- * @param	id		: Comparator ID
- * @param	hys		: Selected Hysteresis level
- * @return	Nothing
+ * @brief    Selects hysteresis level
+ * @param    id        : Comparator ID
+ * @param    hys        : Selected Hysteresis level
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_SetHysteresis(uint8_t id, CMP_HYS_T hys)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_HYS_BITMASK)) | hys;
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_HYS_BITMASK)) | hys;
 }
 
 /**
- * @brief	Enables specified comparator
- * @param	id		: Comparator ID
- * @param	en		: Enable mode
- * @return	Nothing
+ * @brief    Enables specified comparator
+ * @param    id        : Comparator ID
+ * @param    en        : Enable mode
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_Enable(uint8_t id, CMP_ENCTRL_T en)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_EN_BITMASK)) | CMP_CTRLx_EN(en);
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_EN_BITMASK)) | CMP_CTRLx_EN(en);
 }
 
 /**
- * @brief	Returns the current comparator status
- * @param	id	: Comparator Id (0/1)
- * @return	SET/RESET
+ * @brief    Returns the current comparator status
+ * @param    id    : Comparator Id (0/1)
+ * @return    SET/RESET
  */
 STATIC INLINE FlagStatus Chip_CMP_GetCmpStatus(uint8_t id)
 {
-	return (LPC_CMP->CMP_CTRLx[id] & CMP_CTRLx_STAT) ? SET : RESET;
+    return (LPC_CMP->CMP_CTRLx[id] & CMP_CTRLx_STAT) ? SET : RESET;
 }
 
 /**
- * @brief	Enable comparator output
- * @param	id		: Comparator ID
- * @return	Nothing
+ * @brief    Enable comparator output
+ * @param    id        : Comparator ID
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_EnableOuput(uint8_t id)
 {
-	LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_OE;
+    LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_OE;
 }
 
 /**
- * @brief		Disable comparator output
- * @param	id		: Comparator ID
- * @return	Nothing
+ * @brief        Disable comparator output
+ * @param    id        : Comparator ID
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_DisableOutput(uint8_t id)
 {
-	LPC_CMP->CMP_CTRLx[id] &= ~CMP_CTRLx_OE;
+    LPC_CMP->CMP_CTRLx[id] &= ~CMP_CTRLx_OE;
 }
 
 /**
- * @brief	Synchronizes Comparator output to bus clock
- * @param	id		: Comparator ID
- * @return	Nothing
+ * @brief    Synchronizes Comparator output to bus clock
+ * @param    id        : Comparator ID
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_EnableSyncCmpOut(uint8_t id)
 {
-	LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_SYNC;
+    LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_SYNC;
 }
 
 /**
- * @brief	Sets comparator output to be used directly (no sync)
- * @param	id		: Comparator ID
- * @return	Nothing
+ * @brief    Sets comparator output to be used directly (no sync)
+ * @param    id        : Comparator ID
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_DisableSyncCmpOut(uint8_t id)
 {
-	LPC_CMP->CMP_CTRLx[id] &= ~CMP_CTRLx_SYNC;
+    LPC_CMP->CMP_CTRLx[id] &= ~CMP_CTRLx_SYNC;
 }
 
 /**
- * @brief	Sets up comparator interrupt
- * @param	id		: Comparator ID
- * @param	intFlag	: Or-ed value of CMP_CTRLx_INTTYPE_*, CMP_CTRLx_INTPOL_*
- * @param	edgeSel	: the edge on which interrupt occurs.
- * @return	Nothing
+ * @brief    Sets up comparator interrupt
+ * @param    id        : Comparator ID
+ * @param    intFlag    : Or-ed value of CMP_CTRLx_INTTYPE_*, CMP_CTRLx_INTPOL_*
+ * @param    edgeSel    : the edge on which interrupt occurs.
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_ConfigInt(uint8_t id,
-									  uint32_t intFlag,
-									  CMP_INTEDGE_T edgeSel)
+                                      uint32_t intFlag,
+                                      CMP_INTEDGE_T edgeSel)
 {
-	LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_INTCTRL_BITMASK)) | intFlag | edgeSel;
+    LPC_CMP->CMP_CTRLx[id] = (LPC_CMP->CMP_CTRLx[id] & (~CMP_CTRLx_INTCTRL_BITMASK)) | intFlag | edgeSel;
 }
 
 /**
- * @brief	Get the CMP interrupt status
- * @param	id		: Comparator ID
- * @return	SET/RESET
+ * @brief    Get the CMP interrupt status
+ * @param    id        : Comparator ID
+ * @return    SET/RESET
  */
 STATIC INLINE FlagStatus Chip_CMP_GetIntStatus(uint8_t id)
 {
-	return (LPC_CMP->CMP_CTRLx[id] & CMP_CTRLx_INTFLAG) ? SET : RESET;
+    return (LPC_CMP->CMP_CTRLx[id] & CMP_CTRLx_INTFLAG) ? SET : RESET;
 }
 
 /**
- * @brief	Clears the CMP interrupt
- * @param	id		: Comparator ID
- * @return	Nothing
+ * @brief    Clears the CMP interrupt
+ * @param    id        : Comparator ID
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CMP_ClearIntStatus(uint8_t id)
 {
-	LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_INTFLAG;
+    LPC_CMP->CMP_CTRLx[id] |= CMP_CTRLx_INTFLAG;
 }
 
 #endif /* defined(CHIP_LPC40XX) */

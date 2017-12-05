@@ -48,86 +48,86 @@ extern "C" {
  * @brief CAN AF RAM section definitions
  */
 typedef enum {
-	CANAF_RAM_FULLCAN_SEC,	/*!<FullCAN Section*/
-	CANAF_RAM_SFF_SEC,		/*!<Standard ID Section*/
-	CANAF_RAM_SFF_GRP_SEC,	/*!<Group Standard ID Section*/
-	CANAF_RAM_EFF_SEC,		/*!<Extended ID Section*/
-	CANAF_RAM_EFF_GRP_SEC,	/*!<Group Extended ID Section*/
-	CANAF_RAM_SECTION_NUM,
+    CANAF_RAM_FULLCAN_SEC,    /*!<FullCAN Section*/
+    CANAF_RAM_SFF_SEC,        /*!<Standard ID Section*/
+    CANAF_RAM_SFF_GRP_SEC,    /*!<Group Standard ID Section*/
+    CANAF_RAM_EFF_SEC,        /*!<Extended ID Section*/
+    CANAF_RAM_EFF_GRP_SEC,    /*!<Group Extended ID Section*/
+    CANAF_RAM_SECTION_NUM,
 } CANAF_RAM_SECTION_T;
 
 /**
  * @brief CAN acceptance filter RAM register block structure
  */
-typedef struct							/*!< AF RAM Mask Table        */
+typedef struct                            /*!< AF RAM Mask Table        */
 {
-	__IO uint32_t MASK[CANAF_RAM_ENTRY_NUM];	/*!< Acceptance Filter RAM ID mask register */
+    __IO uint32_t MASK[CANAF_RAM_ENTRY_NUM];    /*!< Acceptance Filter RAM ID mask register */
 } LPC_CANAF_RAM_T;
 
 /**
  * @brief CAN acceptance filter register block structure
  */
-typedef struct							/*!< CAN AF structure        */
+typedef struct                            /*!< CAN AF structure        */
 {
-	__IO uint32_t AFMR;						/*!< Acceptance Filter Register */
-	__IO uint32_t ENDADDR[CANAF_RAM_SECTION_NUM];				/*!< Start/End Address Registers */
-	__I  uint32_t LUTERRAD;					/*!< LUT Error Address Register */
-	__I  uint32_t LUTERR;					/*!< LUT Error Register */
-	__IO uint32_t FCANIE;					/*!< Global FullCANInterrupt Enable Register */
-	__IO uint32_t FCANIC[2];				/*!< FullCAN Interrupt and Capture Registers */
+    __IO uint32_t AFMR;                        /*!< Acceptance Filter Register */
+    __IO uint32_t ENDADDR[CANAF_RAM_SECTION_NUM];                /*!< Start/End Address Registers */
+    __I  uint32_t LUTERRAD;                    /*!< LUT Error Address Register */
+    __I  uint32_t LUTERR;                    /*!< LUT Error Register */
+    __IO uint32_t FCANIE;                    /*!< Global FullCANInterrupt Enable Register */
+    __IO uint32_t FCANIC[2];                /*!< FullCAN Interrupt and Capture Registers */
 } LPC_CANAF_T;
 
 /**
  * @brief Central CAN register block structure
  */
-typedef struct							/*!< Central CAN structure                  */
+typedef struct                            /*!< Central CAN structure                  */
 {
-	__I  uint32_t TXSR;						/*!< CAN Central Transmit Status Register */
-	__I  uint32_t RXSR;						/*!< CAN Central Receive Status Register */
-	__I  uint32_t MSR;						/*!< CAN Central Miscellaneous Register */
+    __I  uint32_t TXSR;                        /*!< CAN Central Transmit Status Register */
+    __I  uint32_t RXSR;                        /*!< CAN Central Receive Status Register */
+    __I  uint32_t MSR;                        /*!< CAN Central Miscellaneous Register */
 } IP_CAN_001_CR_T;
 
 /**
  * @brief CAN Transmit register block structure
  */
-typedef struct							/*!< CAN Transmit structure                  */
+typedef struct                            /*!< CAN Transmit structure                  */
 {
-	__IO uint32_t TFI;					/*!< CAN Transmit Frame Information register*/
-	__IO uint32_t TID;					/*!< CAN Transfer Identifier register*/
-	__IO uint32_t TD[2];				/*!<CAN Transmit Data register*/
+    __IO uint32_t TFI;                    /*!< CAN Transmit Frame Information register*/
+    __IO uint32_t TID;                    /*!< CAN Transfer Identifier register*/
+    __IO uint32_t TD[2];                /*!<CAN Transmit Data register*/
 } LPC_CAN_TX_T;
 
 /**
  * @brief CAN Receive register block structure
  */
-typedef struct				/*!< CAN Receive Frame structure                  */
+typedef struct                /*!< CAN Receive Frame structure                  */
 {
-	__IO uint32_t RFS;		/*!< Characteristic of the received frame. It includes the following characteristics:
-							   CAN_RFS_BP: indicate that the current message is received in Bypass mode.
-							 *							CAN_RFS_RTR: indicate the value of Remote Transmission Request bit in the current message.
-							 *							CAN_RFS_FF: indicate that the identifier in the current message is 11-bit or 29-bit identifier.
-							   Use CAN_RFS_ID_INDEX(RFS value) to get the ID Index of the matched entry in the Lookup Table RAM.
-							   Use CAN_RFS_DLC(RFS value) to get the Data Length Code field of the current received message.
-							 */
-	__IO uint32_t RID;		/*!<Identifier in the received message. Use RFS field to determine if it is 11-bit or 29-bit identifier.*/
-	__IO uint32_t RD[2];	/*!< Data bytes of the received message. Use DLC value in RFS fied to determine the number of data bytes.*/
+    __IO uint32_t RFS;        /*!< Characteristic of the received frame. It includes the following characteristics:
+                               CAN_RFS_BP: indicate that the current message is received in Bypass mode.
+                             *                            CAN_RFS_RTR: indicate the value of Remote Transmission Request bit in the current message.
+                             *                            CAN_RFS_FF: indicate that the identifier in the current message is 11-bit or 29-bit identifier.
+                               Use CAN_RFS_ID_INDEX(RFS value) to get the ID Index of the matched entry in the Lookup Table RAM.
+                               Use CAN_RFS_DLC(RFS value) to get the Data Length Code field of the current received message.
+                             */
+    __IO uint32_t RID;        /*!<Identifier in the received message. Use RFS field to determine if it is 11-bit or 29-bit identifier.*/
+    __IO uint32_t RD[2];    /*!< Data bytes of the received message. Use DLC value in RFS fied to determine the number of data bytes.*/
 } IP_CAN_001_RX_T;
 
 /**
  * @brief CAN register block structure
  */
-typedef struct							/*!< CANn structure               */
+typedef struct                            /*!< CANn structure               */
 {
-	__IO uint32_t MOD;					/*!< CAN Mode Register */
-	__O  uint32_t CMR;					/*!< CAN Command Register */
-	__IO uint32_t GSR;					/*!< CAN Global Status Register */
-	__I  uint32_t ICR;					/*!< CAN Interrupt and Capture Register */
-	__IO uint32_t IER;					/*!< CAN Interrupt Enable Register*/
-	__IO uint32_t BTR;					/*!< CAN Bus Timing Register*/
-	__IO uint32_t EWL;					/*!< CAN Error Warning Limit Register*/
-	__I  uint32_t SR;					/*!< CAN Status Register*/
-	__IO IP_CAN_001_RX_T RX;			/*!< CAN Receive Registers*/
-	__IO LPC_CAN_TX_T TX[3];		/*!< CAN Transmit Registers*/
+    __IO uint32_t MOD;                    /*!< CAN Mode Register */
+    __O  uint32_t CMR;                    /*!< CAN Command Register */
+    __IO uint32_t GSR;                    /*!< CAN Global Status Register */
+    __I  uint32_t ICR;                    /*!< CAN Interrupt and Capture Register */
+    __IO uint32_t IER;                    /*!< CAN Interrupt Enable Register*/
+    __IO uint32_t BTR;                    /*!< CAN Bus Timing Register*/
+    __IO uint32_t EWL;                    /*!< CAN Error Warning Limit Register*/
+    __I  uint32_t SR;                    /*!< CAN Status Register*/
+    __IO IP_CAN_001_RX_T RX;            /*!< CAN Receive Registers*/
+    __IO LPC_CAN_TX_T TX[3];        /*!< CAN Transmit Registers*/
 } LPC_CAN_T;
 
 /*
@@ -647,82 +647,82 @@ typedef struct							/*!< CANn structure               */
  * @brief CAN Buffer ID definition
  */
 typedef enum {
-	CAN_BUFFER_1 = 0,	/*!< Buffer 1 */
-	CAN_BUFFER_2,		/*!< Buffer 2 */
-	CAN_BUFFER_3,		/*!< Buffer 3 */
-	CAN_BUFFER_LAST,	/*!< Last Buffer */
+    CAN_BUFFER_1 = 0,    /*!< Buffer 1 */
+    CAN_BUFFER_2,        /*!< Buffer 2 */
+    CAN_BUFFER_3,        /*!< Buffer 3 */
+    CAN_BUFFER_LAST,    /*!< Last Buffer */
 } CAN_BUFFER_ID_T;
 
 /**
  * @brief CAN Message Object Structure
  */
-typedef struct						/*!< Message structure */
+typedef struct                        /*!< Message structure */
 {
-	uint32_t ID;					/*!< Message Identifier. If 30th-bit is set, this is 29-bit ID, othewise 11-bit ID */
-	uint32_t Type;					/*!< Message Type. which can include: - CAN_REMOTE_MSG type*/
-	uint32_t DLC;					/*!< Message Data Length: 0~8 */
-	uint8_t  Data[CAN_MSG_MAX_DATA_LEN];/*!< Message Data */
+    uint32_t ID;                    /*!< Message Identifier. If 30th-bit is set, this is 29-bit ID, othewise 11-bit ID */
+    uint32_t Type;                    /*!< Message Type. which can include: - CAN_REMOTE_MSG type*/
+    uint32_t DLC;                    /*!< Message Data Length: 0~8 */
+    uint8_t  Data[CAN_MSG_MAX_DATA_LEN];/*!< Message Data */
 } CAN_MSG_T;
 
 /**
  * @brief CAN Bus Timing Structure
  */
-typedef struct						/*!< Bus Timing structure */
+typedef struct                        /*!< Bus Timing structure */
 {
-	uint16_t BRP;					/*!< Baud Rate Prescaler */
-	uint8_t SJW;					/*!< SJW value*/
-	uint8_t TESG1;					/*!< TESG1 value */
-	uint8_t TESG2;					/*!< TESG2 value */
-	uint8_t SAM;					/*!<0: The bus is sampled once, 1: sampled 3 times */
+    uint16_t BRP;                    /*!< Baud Rate Prescaler */
+    uint8_t SJW;                    /*!< SJW value*/
+    uint8_t TESG1;                    /*!< TESG1 value */
+    uint8_t TESG2;                    /*!< TESG2 value */
+    uint8_t SAM;                    /*!<0: The bus is sampled once, 1: sampled 3 times */
 } IP_CAN_BUS_TIMING_T;
 
 /**
  * @brief Standard ID Entry structure
  */
 typedef struct {
-	uint8_t CtrlNo;				/*!<Controller Number: 0 for CAN1 and 1 for CAN2*/
-	uint8_t Disable;			/*!< 0(ENABLE)/1(DISABLE): Response On/Off dynamically*/
-	uint16_t ID_11;				/*!< Standard ID, should be 11-bit value */
+    uint8_t CtrlNo;                /*!<Controller Number: 0 for CAN1 and 1 for CAN2*/
+    uint8_t Disable;            /*!< 0(ENABLE)/1(DISABLE): Response On/Off dynamically*/
+    uint16_t ID_11;                /*!< Standard ID, should be 11-bit value */
 } CAN_STD_ID_ENTRY_T;
 
 /**
  * @brief Standard ID Range structure
  */
 typedef struct {
-	CAN_STD_ID_ENTRY_T LowerID;	/*!< Lower ID Bound, should be in 11-bit value*/
-	CAN_STD_ID_ENTRY_T UpperID;	/*!< Upper ID Bound, should be in 11-bit value*/
+    CAN_STD_ID_ENTRY_T LowerID;    /*!< Lower ID Bound, should be in 11-bit value*/
+    CAN_STD_ID_ENTRY_T UpperID;    /*!< Upper ID Bound, should be in 11-bit value*/
 } CAN_STD_ID_RANGE_ENTRY_T;
 
 /**
  * @brief Extended ID  Entry structure
  */
 typedef struct {
-	uint8_t CtrlNo;			/*!<Controller Number: 0 for CAN1 and 1 for CAN2*/
-	uint32_t ID_29;			/*!< Extend ID, shoud be 29-bit value */
+    uint8_t CtrlNo;            /*!<Controller Number: 0 for CAN1 and 1 for CAN2*/
+    uint32_t ID_29;            /*!< Extend ID, shoud be 29-bit value */
 } CAN_EXT_ID_ENTRY_T;
 
 /**
  * @brief Extended ID Range structure
  */
 typedef struct {
-	CAN_EXT_ID_ENTRY_T LowerID;	/*!< Lower ID Bound, should be in 29-bit value*/
-	CAN_EXT_ID_ENTRY_T UpperID;	/*!< Upper ID Bound, should be in 29-bit value*/
+    CAN_EXT_ID_ENTRY_T LowerID;    /*!< Lower ID Bound, should be in 29-bit value*/
+    CAN_EXT_ID_ENTRY_T UpperID;    /*!< Upper ID Bound, should be in 29-bit value*/
 } CAN_EXT_ID_RANGE_ENTRY_T;
 
 /**
  * @brief Acceptance Filter Section Table structure
  */
 typedef struct {
-	CAN_STD_ID_ENTRY_T *FullCANSec;		/*!< The pointer to fullCAN section */
-	uint16_t FullCANEntryNum;					/*!< FullCAN Entry Number */
-	CAN_STD_ID_ENTRY_T *SffSec;			/*!< The pointer to individual Standard ID Section */
-	uint16_t SffEntryNum;						/*!< Standard ID Entry Number */
-	CAN_STD_ID_RANGE_ENTRY_T *SffGrpSec;	/*!< The pointer to  Group Standard ID  Section */
-	uint16_t SffGrpEntryNum;					/*!< Group Standard ID Entry Number */
-	CAN_EXT_ID_ENTRY_T *EffSec;			/*!< The pointer to Extended ID Section */
-	uint16_t EffEntryNum;						/*!< Extended ID Entry Number */
-	CAN_EXT_ID_RANGE_ENTRY_T *EffGrpSec;	/*!< The pointer to Group Extended ID Section */
-	uint16_t EffGrpEntryNum;					/*!< Group Extended ID Entry Number */
+    CAN_STD_ID_ENTRY_T *FullCANSec;        /*!< The pointer to fullCAN section */
+    uint16_t FullCANEntryNum;                    /*!< FullCAN Entry Number */
+    CAN_STD_ID_ENTRY_T *SffSec;            /*!< The pointer to individual Standard ID Section */
+    uint16_t SffEntryNum;                        /*!< Standard ID Entry Number */
+    CAN_STD_ID_RANGE_ENTRY_T *SffGrpSec;    /*!< The pointer to  Group Standard ID  Section */
+    uint16_t SffGrpEntryNum;                    /*!< Group Standard ID Entry Number */
+    CAN_EXT_ID_ENTRY_T *EffSec;            /*!< The pointer to Extended ID Section */
+    uint16_t EffEntryNum;                        /*!< Extended ID Entry Number */
+    CAN_EXT_ID_RANGE_ENTRY_T *EffGrpSec;    /*!< The pointer to Group Extended ID Section */
+    uint16_t EffGrpEntryNum;                    /*!< Group Extended ID Entry Number */
 } CANAF_LUT_T;
 
 #define CAN_SEG1_DEFAULT_VAL 5
@@ -733,391 +733,391 @@ typedef struct {
  * @brief CAN Mode definition
  */
 typedef enum {
-	CAN_RESET_MODE = CAN_MOD_RM,				/*!< CAN Reset Mode */
-	CAN_SELFTEST_MODE = CAN_MOD_STM,			/*!< CAN Selftest Mode */
-	CAN_TEST_MODE = CAN_MOD_TM,					/*!< CAN Test Mode */
-	CAN_LISTEN_ONLY_MODE = CAN_MOD_LOM,			/*!< CAN Listen Only Mode */
-	CAN_SLEEP_MODE = CAN_MOD_SM,				/*!< CAN Sleep Mode */
-	CAN_OPERATION_MODE = CAN_MOD_OPERATION,		/*!< CAN Operation Mode */
-	CAN_TRANSMIT_PRIORITY_MODE = CAN_MOD_TPM,	/*!< CAN Transmit Priority Mode */
-	CAN_RECEIVE_PRIORITY_MODE = CAN_MOD_RPM,	/*!< CAN Receive Priority Mode */
+    CAN_RESET_MODE = CAN_MOD_RM,                /*!< CAN Reset Mode */
+    CAN_SELFTEST_MODE = CAN_MOD_STM,            /*!< CAN Selftest Mode */
+    CAN_TEST_MODE = CAN_MOD_TM,                    /*!< CAN Test Mode */
+    CAN_LISTEN_ONLY_MODE = CAN_MOD_LOM,            /*!< CAN Listen Only Mode */
+    CAN_SLEEP_MODE = CAN_MOD_SM,                /*!< CAN Sleep Mode */
+    CAN_OPERATION_MODE = CAN_MOD_OPERATION,        /*!< CAN Operation Mode */
+    CAN_TRANSMIT_PRIORITY_MODE = CAN_MOD_TPM,    /*!< CAN Transmit Priority Mode */
+    CAN_RECEIVE_PRIORITY_MODE = CAN_MOD_RPM,    /*!< CAN Receive Priority Mode */
 } CAN_MODE_T;
 
 /**
  * @brief CAN AF Mode definition
  */
 typedef enum {
-	CAN_AF_NORMAL_MODE = 0,					/*!< Acceptance Filter Normal Mode */
-	CAN_AF_OFF_MODE = CANAF_AFMR_ACCOFF,	/*!< Acceptance Filter Off Mode */
-	CAN_AF_BYBASS_MODE = CANAF_AFMR_ACCBP,	/*!< Acceptance Fileter Bypass Mode */
-	CAN_AF_FULL_MODE = CANAF_AFMR_EFCAN,	/*!< FullCAN Mode Enhancement */
+    CAN_AF_NORMAL_MODE = 0,                    /*!< Acceptance Filter Normal Mode */
+    CAN_AF_OFF_MODE = CANAF_AFMR_ACCOFF,    /*!< Acceptance Filter Off Mode */
+    CAN_AF_BYBASS_MODE = CANAF_AFMR_ACCBP,    /*!< Acceptance Fileter Bypass Mode */
+    CAN_AF_FULL_MODE = CANAF_AFMR_EFCAN,    /*!< FullCAN Mode Enhancement */
 } CAN_AF_MODE_T;
 
 /**
- * @brief	Set the CAN command request
- * @param	pCAN	: Pointer to CAN peripheral block
- * @param	command	: Command request (Or'ed bit values of CAN_CMR_*).
- * @return	None
+ * @brief    Set the CAN command request
+ * @param    pCAN    : Pointer to CAN peripheral block
+ * @param    command    : Command request (Or'ed bit values of CAN_CMR_*).
+ * @return    None
  */
 STATIC INLINE void Chip_CAN_SetCmd(LPC_CAN_T *pCAN, uint32_t command)
 {
-	pCAN->CMR = command;
+    pCAN->CMR = command;
 }
 
 /**
- * @brief	Set Error Warning Limit for the CAN Controller
- * @param	pCAN	: Pointer to CAN peripheral block
- * @param	ewl		: expected limit
- * @return	None
+ * @brief    Set Error Warning Limit for the CAN Controller
+ * @param    pCAN    : Pointer to CAN peripheral block
+ * @param    ewl        : expected limit
+ * @return    None
  */
 STATIC INLINE void Chip_CAN_SetEWL(LPC_CAN_T *pCAN, uint32_t ewl)
 {
-	pCAN->EWL = ewl & CAN_EWL_BITMASK;
+    pCAN->EWL = ewl & CAN_EWL_BITMASK;
 }
 
 /**
- * @brief	Get Error Warning Limit of the CAN Controller
- * @param	pCAN	: Pointer to CAN peripheral block
- * @return	Error warning limit value
+ * @brief    Get Error Warning Limit of the CAN Controller
+ * @param    pCAN    : Pointer to CAN peripheral block
+ * @return    Error warning limit value
  */
 STATIC INLINE uint8_t Chip_CAN_GetEWL(LPC_CAN_T *pCAN)
 {
-	return CAN_EWL_VAL(pCAN->EWL);
+    return CAN_EWL_VAL(pCAN->EWL);
 }
 
 /**
- * @brief	Get global status register contents of the CAN Controller
- * @param	pCAN	: Pointer to CAN peripheral block
- * @return	Gloabl Status register contents (Or'ed bit values of CAN_GSR_*)
+ * @brief    Get global status register contents of the CAN Controller
+ * @param    pCAN    : Pointer to CAN peripheral block
+ * @return    Gloabl Status register contents (Or'ed bit values of CAN_GSR_*)
  */
 STATIC INLINE uint32_t Chip_CAN_GetGlobalStatus(LPC_CAN_T *pCAN)
 {
-	return pCAN->GSR;
+    return pCAN->GSR;
 }
 
 /**
- * @brief	Get the status of the CAN Controller
- * @param	pCAN	: Pointer to CAN controller register block
- * @return	Status (Or'ed bit values of CAN_SR_*(n) with n = CAN_BUFFER_1/2/3).
+ * @brief    Get the status of the CAN Controller
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @return    Status (Or'ed bit values of CAN_SR_*(n) with n = CAN_BUFFER_1/2/3).
  */
 STATIC INLINE uint32_t Chip_CAN_GetStatus(LPC_CAN_T *pCAN)
 {
-	return pCAN->SR;
+    return pCAN->SR;
 }
 
 /**
- * @brief	Enable the CAN Interrupts
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	IntMask	: Interrupt Mask (Or-ed bits value of CAN_IER_*)
- * @return	Nothing
+ * @brief    Enable the CAN Interrupts
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    IntMask    : Interrupt Mask (Or-ed bits value of CAN_IER_*)
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CAN_EnableInt(LPC_CAN_T *pCAN, uint32_t IntMask)
 {
-	pCAN->IER |= IntMask;
+    pCAN->IER |= IntMask;
 }
 
 /**
- * @brief	Disable the CAN Interrupts
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	IntMask	: Interrupt Mask (Or-ed bits value of CAN_IER_*)
- * @return	Nothing
+ * @brief    Disable the CAN Interrupts
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    IntMask    : Interrupt Mask (Or-ed bits value of CAN_IER_*)
+ * @return    Nothing
  */
 STATIC INLINE void Chip_CAN_DisableInt(LPC_CAN_T *pCAN, uint32_t IntMask)
 {
-	pCAN->IER &= (~IntMask) & CAN_IER_BITMASK;
+    pCAN->IER &= (~IntMask) & CAN_IER_BITMASK;
 }
 
 /**
- * @brief	Get interrupt status of the given CAN Controller
- * @param	pCAN	: Pointer to CAN controller register block
- * @return	Status (Or'ed bit values of CAN_ICR_* )
+ * @brief    Get interrupt status of the given CAN Controller
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @return    Status (Or'ed bit values of CAN_ICR_* )
  */
 STATIC INLINE uint32_t Chip_CAN_GetIntStatus(LPC_CAN_T *pCAN)
 {
-	return pCAN->ICR;
+    return pCAN->ICR;
 }
 
 /**
- * @brief	Enable/Disable CAN controller FullCAN Interrupts
- * @param	pCANAF		: Pointer to CAN AF Register block
- * @param	NewState	: Enable/Disable
- * @return	Nothing
+ * @brief    Enable/Disable CAN controller FullCAN Interrupts
+ * @param    pCANAF        : Pointer to CAN AF Register block
+ * @param    NewState    : Enable/Disable
+ * @return    Nothing
  */
 void Chip_CAN_ConfigFullCANInt(LPC_CANAF_T *pCANAF, FunctionalState NewState);
 
 /**
- * @brief	Get FullCAN interrupt status of the given object
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	ObjID	: Object ID
+ * @brief    Get FullCAN interrupt status of the given object
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    ObjID    : Object ID
  * @return  Status
  */
 uint32_t Chip_CAN_GetFullCANIntStatus(LPC_CANAF_T *pCANAF, uint8_t ObjID);
 
 /**
- * @brief	Set CAN controller enter/exit to a given mode
- * @param	pCAN		: Pointer to CAN controller register block
- * @param	Mode		: Mode selected
- * @param	NewState	: ENABLE: enter, DISABLE: exit
- * @return	None
+ * @brief    Set CAN controller enter/exit to a given mode
+ * @param    pCAN        : Pointer to CAN controller register block
+ * @param    Mode        : Mode selected
+ * @param    NewState    : ENABLE: enter, DISABLE: exit
+ * @return    None
  */
 void Chip_CAN_SetMode(LPC_CAN_T *pCAN, CAN_MODE_T Mode, FunctionalState NewState);
 
 /**
- * @brief	Get current mode register settings of the CAN controller
- * @param	pCAN	: Pointer to CAN peripheral block
- * @return	Current Mode register value of the CAN Controller (Bit values of CAN_MOD_*)
+ * @brief    Get current mode register settings of the CAN controller
+ * @param    pCAN    : Pointer to CAN peripheral block
+ * @return    Current Mode register value of the CAN Controller (Bit values of CAN_MOD_*)
  */
 STATIC INLINE CAN_MODE_T Chip_CAN_GetMode(LPC_CAN_T *pCAN)
 {
-	return (CAN_MODE_T) (pCAN->MOD & CAN_MOD_BITMASK);
+    return (CAN_MODE_T) (pCAN->MOD & CAN_MOD_BITMASK);
 }
 
 /**
- * @brief	Set CAN AF Mode
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	AfMode	: Mode selected
- * @return	None
+ * @brief    Set CAN AF Mode
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    AfMode    : Mode selected
+ * @return    None
  */
 STATIC INLINE void Chip_CAN_SetAFMode(LPC_CANAF_T *pCANAF, CAN_AF_MODE_T AfMode)
 {
-	pCANAF->AFMR = AfMode;
+    pCANAF->AFMR = AfMode;
 }
 
 /**
- * @brief	Get CAN AF Mode
- * @param	pCanAF	: Pointer to CAN AF Register block
- * @return	Mode
+ * @brief    Get CAN AF Mode
+ * @param    pCanAF    : Pointer to CAN AF Register block
+ * @return    Mode
  */
 STATIC INLINE CAN_AF_MODE_T Chip_CAN_GetAFMode(LPC_CANAF_T *pCanAF)
 {
-	return (CAN_AF_MODE_T) pCanAF->AFMR;
+    return (CAN_AF_MODE_T) pCanAF->AFMR;
 }
 
 /**
- * @brief	Set CAN AF LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pAFSections	: Pointer to buffer storing AF Section Data
- * @return	SUCCESS/ERROR
+ * @brief    Set CAN AF LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pAFSections    : Pointer to buffer storing AF Section Data
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_SetAFLUT(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CANAF_LUT_T *pAFSections);
 
 /**
- * @brief	Insert a FullCAN Entry into the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pEntry	: Pointer to the entry which will be inserted
- * @return	SUCCESS/ERROR
+ * @brief    Insert a FullCAN Entry into the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pEntry    : Pointer to the entry which will be inserted
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_InsertFullCANEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CAN_STD_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Insert an individual Standard Entry into the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pEntry	: Pointer to the entry which will be inserted
- * @return	SUCCESS/ERROR
+ * @brief    Insert an individual Standard Entry into the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pEntry    : Pointer to the entry which will be inserted
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_InsertSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CAN_STD_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Insert an Group Standard Entry into the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pEntry	: Pointer to the entry which will be inserted
- * @return	SUCCESS/ERROR
+ * @brief    Insert an Group Standard Entry into the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pEntry    : Pointer to the entry which will be inserted
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_InsertGroupSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CAN_STD_ID_RANGE_ENTRY_T *pEntry);
 
 /**
- * @brief	Insert an individual Extended Entry into the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pEntry	: Pointer to the entry which will be inserted
- * @return	SUCCESS/ERROR
+ * @brief    Insert an individual Extended Entry into the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pEntry    : Pointer to the entry which will be inserted
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_InsertEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CAN_EXT_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Insert an Group Extended Entry into the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	pEntry	: Pointer to the entry which will be inserted
- * @return	SUCCESS/ERROR
+ * @brief    Insert an Group Extended Entry into the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    pEntry    : Pointer to the entry which will be inserted
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_InsertGroupEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CAN_EXT_ID_RANGE_ENTRY_T *pEntry);
 
 /**
- * @brief	Remove a FullCAN Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry removed
- * @return	SUCCESS/ERROR
+ * @brief    Remove a FullCAN Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry removed
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_RemoveFullCANEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, int16_t Position);
 
 /**
- * @brief	Remove an individual Standard Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry removed
- * @return	SUCCESS/ERROR
+ * @brief    Remove an individual Standard Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry removed
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_RemoveSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, int16_t Position);
 
 /**
- * @brief	Remove an Group Standard Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry removed
- * @return	SUCCESS/ERROR
+ * @brief    Remove an Group Standard Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry removed
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_RemoveGroupSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, int16_t Position);
 
 /**
- * @brief	Remove an individual Extended  Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry removed
- * @return	SUCCESS/ERROR
+ * @brief    Remove an individual Extended  Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry removed
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_RemoveEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, int16_t Position);
 
 /**
- * @brief	Remove an Group Extended  Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry removed
- * @return	SUCCESS/ERROR
+ * @brief    Remove an Group Extended  Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry removed
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_RemoveGroupEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, int16_t Position);
 
 /**
- * @brief	Get the number of entries in the given section
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	SectionID	: Section ID
- * @return	Number of entries
+ * @brief    Get the number of entries in the given section
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    SectionID    : Section ID
+ * @return    Number of entries
  */
 uint16_t Chip_CAN_GetEntriesNum(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, CANAF_RAM_SECTION_T SectionID);
 
 /**
- * @brief	Read a FullCAN Entry into from current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	:  Position of the entry in the given section (started from 0)
- * @param	pEntry		:  Pointer to the entry which will be read
- * @return	SUCCESS/ERROR
+ * @brief    Read a FullCAN Entry into from current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    :  Position of the entry in the given section (started from 0)
+ * @param    pEntry        :  Pointer to the entry which will be read
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_ReadFullCANEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, uint16_t Position,
-								 CAN_STD_ID_ENTRY_T *pEntry);
+                                 CAN_STD_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Read an individual Standard Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	:  Position of the entry in the given section (started from 0)
- * @param	pEntry		:  Pointer to the entry which will be read
- * @return	SUCCESS/ERROR
+ * @brief    Read an individual Standard Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    :  Position of the entry in the given section (started from 0)
+ * @param    pEntry        :  Pointer to the entry which will be read
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_ReadSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, uint16_t Position,
-							 CAN_STD_ID_ENTRY_T *pEntry);
+                             CAN_STD_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Read an Group Standard Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry in the given section (started from 0)
- * @param	pEntry		: Pointer to the entry which will be read
- * @return	SUCCESS/ERROR
+ * @brief    Read an Group Standard Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry in the given section (started from 0)
+ * @param    pEntry        : Pointer to the entry which will be read
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_ReadGroupSTDEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, uint16_t Position,
-								  CAN_STD_ID_RANGE_ENTRY_T *pEntry);
+                                  CAN_STD_ID_RANGE_ENTRY_T *pEntry);
 
 /**
- * @brief	Read an individual Extended Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry in the given section (started from 0)
- * @param	pEntry		: Pointer to the entry which will be read
- * @return	SUCCESS/ERROR
+ * @brief    Read an individual Extended Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry in the given section (started from 0)
+ * @param    pEntry        : Pointer to the entry which will be read
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_ReadEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, uint16_t Position,
-							 CAN_EXT_ID_ENTRY_T *pEntry);
+                             CAN_EXT_ID_ENTRY_T *pEntry);
 
 /**
- * @brief	Read an Group Extended Entry from the current LUT
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	Position	: Position of the entry in the given section (started from 0)
- * @param	pEntry		: Pointer to the entry which will be read
- * @return	SUCCESS/ERROR
+ * @brief    Read an Group Extended Entry from the current LUT
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    Position    : Position of the entry in the given section (started from 0)
+ * @param    pEntry        : Pointer to the entry which will be read
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_ReadGroupEXTEntry(LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam, uint16_t Position,
-								  CAN_EXT_ID_RANGE_ENTRY_T *pEntry);
+                                  CAN_EXT_ID_RANGE_ENTRY_T *pEntry);
 
 /**
- * @brief	Initialize CAN Interface
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @return	Nothing
+ * @brief    Initialize CAN Interface
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @return    Nothing
  */
 void Chip_CAN_Init(LPC_CAN_T *pCAN, LPC_CANAF_T *pCANAF, LPC_CANAF_RAM_T *pCANAFRam);
 
 /**
- * @brief	De-Initialize CAN Interface
- * @param	pCAN	: Pointer to CAN controller register block
- * @return	Nothing
+ * @brief    De-Initialize CAN Interface
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @return    Nothing
  */
 void Chip_CAN_DeInit(LPC_CAN_T *pCAN);
 
 /**
- * @brief	Set CAN bitrate
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	BitRate	: Expected bitrate
- * @return	SUCCESS/ERROR
+ * @brief    Set CAN bitrate
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    BitRate    : Expected bitrate
+ * @return    SUCCESS/ERROR
  */
 Status Chip_CAN_SetBitRate(LPC_CAN_T *pCAN, uint32_t BitRate);
 
 /**
- * @brief	Get Free TxBuffer
- * @param	pCAN	: Pointer to CAN controller register block
- * @return	Buffer ID
+ * @brief    Get Free TxBuffer
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @return    Buffer ID
  */
 CAN_BUFFER_ID_T Chip_CAN_GetFreeTxBuf(LPC_CAN_T *pCAN);
 
 /**
- * @brief	Request the given CAN Controller to send message
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	TxBufID	: ID of the buffer which will be used for transmission
- * @param	pMsg	: Pointer to the buffer of message which will be sent
- * @return	SUCCESS (message information saved) or ERROR (no message received)
+ * @brief    Request the given CAN Controller to send message
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    TxBufID    : ID of the buffer which will be used for transmission
+ * @param    pMsg    : Pointer to the buffer of message which will be sent
+ * @return    SUCCESS (message information saved) or ERROR (no message received)
  */
 Status Chip_CAN_Send(LPC_CAN_T *pCAN, CAN_BUFFER_ID_T TxBufID, CAN_MSG_T *pMsg);
 
 /**
- * @brief	Get message received by the CAN Controller
- * @param	pCAN	: Pointer to CAN controller register block
- * @param	pMsg	: Pointer to the buffer storing the information of the received message
- * @return	SUCCESS (message information saved) or ERROR (no message received)
+ * @brief    Get message received by the CAN Controller
+ * @param    pCAN    : Pointer to CAN controller register block
+ * @param    pMsg    : Pointer to the buffer storing the information of the received message
+ * @return    SUCCESS (message information saved) or ERROR (no message received)
  */
 Status Chip_CAN_Receive(LPC_CAN_T *pCAN, CAN_MSG_T *pMsg);
 
 /**
- * @brief	Get message received automatically by the AF
- * @param	pCANAF	: Pointer to CAN AF Register block
- * @param	pCANAFRam	: Pointer to CAN AF RAM Register block
- * @param	ObjID	: Object ID
- * @param	pMsg	: Pointer to the buffer storing the information of the received message
- * @param	pSCC	: Pointer to the buffer storing the controller ID of the received message
- * @return	SUCCESS (message information saved) or ERROR (no message received)
+ * @brief    Get message received automatically by the AF
+ * @param    pCANAF    : Pointer to CAN AF Register block
+ * @param    pCANAFRam    : Pointer to CAN AF RAM Register block
+ * @param    ObjID    : Object ID
+ * @param    pMsg    : Pointer to the buffer storing the information of the received message
+ * @param    pSCC    : Pointer to the buffer storing the controller ID of the received message
+ * @return    SUCCESS (message information saved) or ERROR (no message received)
  */
 Status Chip_CAN_FullCANReceive(LPC_CANAF_T *pCANAF,
-							   LPC_CANAF_RAM_T *pCANAFRam,
-							   uint8_t ObjID,
-							   CAN_MSG_T *pMsg,
-							   uint8_t *pSCC);
+                               LPC_CANAF_RAM_T *pCANAFRam,
+                               uint8_t ObjID,
+                               CAN_MSG_T *pMsg,
+                               uint8_t *pSCC);
 
 /**
  * @}

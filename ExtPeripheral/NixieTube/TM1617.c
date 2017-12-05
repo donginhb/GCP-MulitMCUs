@@ -161,24 +161,32 @@ static void TM1617_SendData(uBit8 uCmd, uBit8 cData)
  ****************************************************************************/
 
 /**
-  * @brief  TM1617控制引脚编号设置
+  * @brief  TM1617 接口初始化
   * @param  pf_SetDIO 数据引脚控制接口
   * @param  pf_SetCLK 时钟引脚控制接口
   * @param  pf_SetSTB 片选引脚控制接口
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
-void TM1617_SetCtrlPin(void (*pf_SetDIO)(bool bState), 
-                       void (*pf_SetCLK)(bool bState), 
-                       void (*pf_SetSTB)(bool bState))
+uBit32 TM1617_InitInterface(void (*pf_SetDIO)(bool bState), 
+                            void (*pf_SetCLK)(bool bState), 
+                            void (*pf_SetSTB)(bool bState))
 {
-    if ((pf_SetDIO != NULL) && (pf_SetCLK != NULL) && (pf_SetSTB != NULL))
+    do 
+    {
+        if (pf_SetDIO == NULL) break;
+        if (pf_SetCLK == NULL) break;
+        if (pf_SetSTB == NULL) break;
+        
+        m_TmBitOps.pf_SetDIO = pf_SetDIO;
+        m_TmBitOps.pf_SetCLK = pf_SetCLK;
+        m_TmBitOps.pf_SetSTB = pf_SetSTB;
+        
+        m_TmBitOps.ulOpsValidFlag = 1;
+        
+        return 0;
+    }while (0);
     
-    m_TmBitOps.pf_SetDIO = pf_SetDIO;
-    m_TmBitOps.pf_SetCLK = pf_SetCLK;
-    m_TmBitOps.pf_SetSTB = pf_SetSTB;
-    
-    m_TmBitOps.ulOpsValidFlag = 1;
-    
+    return 1;
 }
 
 

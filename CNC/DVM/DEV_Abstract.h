@@ -26,7 +26,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 
 #include "DEV_DriveStructDef.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 #define DEV_BUS_MAX_COUNT    (3)            //系统支持的设备总线种类最大数量

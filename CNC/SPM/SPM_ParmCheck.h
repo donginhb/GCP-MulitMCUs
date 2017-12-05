@@ -1,20 +1,15 @@
 
-//
-
 #ifndef SPM_PARM_CHECK_H
 #define SPM_PARM_CHECK_H
 
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-
-
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
     int SPM_CheckSysCtrlParm(SYS_CTRL_PARM* pSysCtrlParm);
     int SPM_CheckCrdSysParm(CRDSYS_PARM* pCrdSysParm);
@@ -25,9 +20,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
 
 #endif 

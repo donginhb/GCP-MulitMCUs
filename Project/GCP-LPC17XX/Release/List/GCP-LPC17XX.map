@@ -1,0 +1,1206 @@
+###############################################################################
+#
+# IAR ELF Linker V7.40.7.9843/W32 for ARM                 05/Dec/2017  15:40:54
+# Copyright 2007-2015 IAR Systems AB.
+#
+#    Output file  =  
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Exe\GCP-LPC17XX.out.tmp
+#    Map file     =  
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\List\GCP-LPC17XX.map
+#    Command line =  
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\AbstractionLayer.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\adc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Ammeter_Spm91.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\at24cxx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\can_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\chip_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\clock_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\cmp_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_CanInterface.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_CmdProcess.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_EnetInterface.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_ErrorMana.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_ExApi.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_PeriodDataMana.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_PubFun.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_RcvDataProcess.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_SendDataProcess.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_UartInterface.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CMU_Unpack.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CNCSYS_Init.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CNCSYS_StateMan.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CoreCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\crc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_AutoCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_AxisMotion.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_AxisStateMan.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_CircleDataProcess.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_CrdSysState.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_Interface.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_MainCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_ParmMan.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_ProgBuf.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_UserBuf.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_UserProgData.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\CSM_Version.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\dac_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\DB1768_IOTable.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\DB_HwCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\DB_MainProc.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Demo.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\DEV_Abstract.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Ds18b20.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\ECM_ErrorCodeMan.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Eeprom.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\eeprom_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\emc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\enet_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\EXTI.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\fpu_init.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\gpdma_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\gpio_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\GPIO_Man.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\gpioint_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Delay.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Exti.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Flash.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Gpio.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_IRQHandler.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Pwm.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_PwmCount.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Spi.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_SysCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_SysTick.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Uart.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HAL_Watchdog.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Can.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Exti.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Flash.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Gpio.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_IRQHandler.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Mcpwm.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Pwm.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_SysCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_SysTick.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_TimeDelay.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_TimeInput.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_TimeOutput.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Uart.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\HW_Watchdog.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\i2c_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\I2C_BaseOps.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\I2C_DeviceAPI.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\I2C_DeviceOps.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\i2s_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\iap.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\iar_startup_LPC17xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\iocon_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\CNC\IPO\IPO-LIB-17xx.a
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\IRQ_Man.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\KEY.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\LCD1602.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\lcd_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Main.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\MST_Interface.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\MST_MainCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\MST_MCode.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\MST_TCode.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\NixieTube.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\pmu_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\PWM.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\pwm_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\PWM_Count.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\PWM_MotorCtrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\ring_buffer.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\ritimer_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\rtc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\sdc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\sdmmc_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\spi_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SPM_ParmCheck.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SPM_SysCtrlParm.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\ssp_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SYS_CmuConfig.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SYS_CncConfig.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SYS_Ctrl.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SYS_Init.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\sysctl_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\sysinit.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\sysinit_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\SysTimer.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\TempSensor.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\timer_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\TM1617.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\UART.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\uart_17xx_40xx.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\VD_MachineIO.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\Watchdog.o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj\wwdt_17xx_40xx.o
+#        -o
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Exe\GCP-LPC17XX.out.tmp
+#        --map
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\List\GCP-LPC17XX.map
+#        --config
+#        E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\settings\GCP-LPC17XX.icf
+#        --semihosting --entry __iar_program_start --inline --vfe
+#
+###############################################################################
+
+*******************************************************************************
+*** RUNTIME MODEL ATTRIBUTES
+***
+
+CppFlavor       = *
+__Heap_Handler  = DLMalloc
+__SystemLibrary = DLib
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A1":  place at 0x00000000 { ro section .intvec };
+"P1":  place in [from 0x00000000 to 0x000002fb] |
+                [from 0x00000300 to 0x0007ffff] { ro };
+"P2":  place in [from 0x10000000 to 0x10007fdf] { rw, block CSTACK, block HEAP };
+
+  Section            Kind        Address    Size  Object
+  -------            ----        -------    ----  ------
+"A1":                                       0xcc
+  .intvec            ro code  0x00000000    0xcc  iar_startup_LPC17xx.o [1]
+                            - 0x000000cc    0xcc
+
+"P1", part 1 of 2:                          0xf0
+  CRPKEY             ro code  0x000000cc     0x0  iar_startup_LPC17xx.o [1]
+  .rodata            const    0x000000cc     0x0  zero_init3.o [6]
+  .rodata            const    0x000000cc     0x0  copy_init3.o [6]
+  Initializer bytes  const    0x000000cc    0xf0  <for P2 s0>
+                            - 0x000001bc    0xf0
+
+"P1", part 2 of 2:                        0x8dd4
+  .text              ro code  0x00000300  0x1adc  CMU_CmdProcess.o [1]
+  .text              ro code  0x00001ddc   0x388  CMU_SendDataProcess.o [1]
+  .text              ro code  0x00002164   0x8c0  CMU_PeriodDataMana.o [1]
+  .text              ro code  0x00002a24    0x76  ABImemcpy_unaligned.o [6]
+  .rodata            const    0x00002a9a     0x2  HW_IRQHandler.o [1]
+  .text              ro code  0x00002a9c    0x66  ABImemset.o [6]
+  .text              ro code  0x00002b04   0x12e  CMU_PubFun.o [1]
+  .text              ro code  0x00002c32    0x48  CMU_ErrorMana.o [1]
+  .text              ro code  0x00002c7c   0x1dc  AbstractionLayer.o [1]
+  .text              ro code  0x00002e58   0xe6c  CMU_ExApi.o [1]
+  .text              ro code  0x00003cc4   0x35c  CMU_RcvDataProcess.o [1]
+  .text              ro code  0x00004020    0x34  CMU_CanInterface.o [1]
+  .text              ro code  0x00004054   0x17c  CMU_EnetInterface.o [1]
+  .text              ro code  0x000041d0   0x1e4  CMU_UartInterface.o [1]
+  .text              ro code  0x000043b4   0x180  DblSub.o [5]
+  .text              ro code  0x00004534    0x1c  I32ToDbl.o [5]
+  .text              ro code  0x00004550    0x2e  DblCmpLe.o [5]
+  .text              ro code  0x00004580   0x380  CMU_Unpack.o [1]
+  .text              ro code  0x00004900    0xd4  DblAdd.o [5]
+  .text              ro code  0x000049d4    0x62  memcmp_unaligned.o [6]
+  .text              ro code  0x00004a38  0x14f0  dlmalloc.o [4]
+  .text              ro code  0x00005f28     0x6  abort.o [4]
+  .text              ro code  0x00005f30    0x2c  xgetmemchunk.o [4]
+  .text              ro code  0x00005f5c    0x14  exit.o [7]
+  .text              ro code  0x00005f70   0x574  HW_Uart.o [1]
+  .text              ro code  0x000064e4    0xa0  iocon_17xx_40xx.o [1]
+  .text              ro code  0x00006584   0x138  ring_buffer.o [1]
+  .text              ro code  0x000066bc   0x498  HW_IRQHandler.o [1]
+  .text              ro code  0x00006b54   0x450  gpdma_17xx_40xx.o [1]
+  .text              ro code  0x00006fa4   0x1b8  uart_17xx_40xx.o [1]
+  .text              ro code  0x0000715c   0x244  clock_17xx_40xx.o [1]
+  .text              ro code  0x000073a0   0x4b8  GPIO_Man.o [1]
+  .text              ro code  0x00007858    0x56  HAL_Gpio.o [1]
+  .text              ro code  0x000078b0    0xb6  SysTimer.o [1]
+  .text              ro code  0x00007968     0x6  ABImemclr4.o [6]
+  .text              ro code  0x00007970   0x118  HW_Gpio.o [1]
+  .text              ro code  0x00007a88    0x14  HAL_SysTick.o [1]
+  .text              ro code  0x00007a9c     0xa  HAL_Delay.o [1]
+  .text              ro code  0x00007aa8    0x32  ABImemset48.o [6]
+  .text              ro code  0x00007adc    0xc0  HW_SysTick.o [1]
+  .text              ro code  0x00007b9c    0x48  HW_TimeDelay.o [1]
+  .text              ro code  0x00007be4    0x10  chip_17xx_40xx.o [1]
+  .text              ro code  0x00007bf4    0x1e  ritimer_17xx_40xx.o [1]
+  .text              ro code  0x00007c14   0x288  HW_TimeOutput.o [1]
+  .text              ro code  0x00007e9c    0xa6  timer_17xx_40xx.o [1]
+  .text              ro code  0x00007f44    0x1e  I32ToFlt.o [5]
+  .text              ro code  0x00007f64    0xd8  FltMul.o [5]
+  .text              ro code  0x0000803c    0x4e  FltToDbl.o [5]
+  .text              ro code  0x0000808c   0x256  DblDiv.o [5]
+  .text              ro code  0x000082e4    0x58  DblToI32.o [5]
+  .text              ro code  0x0000833c   0x248  PWM_MotorCtrl.o [1]
+  .text              ro code  0x00008584    0x84  HAL_PwmCount.o [1]
+  .text              ro code  0x00008608    0x3c  HAL_Pwm.o [1]
+  .text              ro code  0x00008644    0x18  HAL_IRQHandler.o [1]
+  .text              ro code  0x0000865c   0x1a2  DblMul.o [5]
+  .text              ro code  0x00008800   0x230  HW_TimeInput.o [1]
+  .text              ro code  0x00008a30    0xf8  SYS_CmuConfig.o [1]
+  .text              ro code  0x00008b28    0x70  UART.o [1]
+  .text              ro code  0x00008b98    0x74  HAL_Uart.o [1]
+  .text              ro code  0x00008c0c    0xc0  sysinit_17xx_40xx.o [1]
+  .text              ro code  0x00008ccc    0x78  DB_HwCtrl.o [1]
+  .text              ro code  0x00008d44    0x68  HW_SysCtrl.o [1]
+  .text              ro code  0x00008dac    0x60  SYS_Ctrl.o [1]
+  .rodata            const    0x00008e0c    0x40  HW_TimeOutput.o [1]
+  .text              ro code  0x00008e4c    0x40  zero_init3.o [6]
+  .text              ro code  0x00008e8c    0x30  SYS_Init.o [1]
+  .text              ro code  0x00008ebc     0x8  IRQ_Man.o [1]
+  .text              ro code  0x00008ec4    0x20  CoreCtrl.o [1]
+  .text              ro code  0x00008ee4     0x8  HAL_SysCtrl.o [1]
+  .text              ro code  0x00008eec    0x2c  copy_init3.o [6]
+  .text              ro code  0x00008f18    0x28  data_init.o [6]
+  .iar.init_table    const    0x00008f40    0x24  - Linker created -
+  .rodata            const    0x00008f64    0x20  HW_TimeInput.o [1]
+  .text              ro code  0x00008f84    0x1a  cmain.o [6]
+  .text              ro code  0x00008f9e    0x14  Main.o [1]
+  .text              ro code  0x00008fb2     0x4  exit.o [4]
+  .text              ro code  0x00008fb6    0x14  DB_MainProc.o [1]
+  .text              ro code  0x00008fcc     0xa  cexit.o [6]
+  .rodata            const    0x00008fd8    0x18  gpdma_17xx_40xx.o [1]
+  .rodata            const    0x00008ff0    0x18  gpdma_17xx_40xx.o [1]
+  .text              ro code  0x00009008    0x18  sysinit.o [1]
+  .rodata            const    0x00009020    0x10  HW_TimeInput.o [1]
+  .rodata            const    0x00009030    0x10  HW_TimeOutput.o [1]
+  .rodata            const    0x00009040    0x10  HW_Uart.o [1]
+  .text              ro code  0x00009050    0x10  iar_startup_LPC17xx.o [1]
+  .rodata            const    0x00009060     0xc  SYS_Ctrl.o [1]
+  .rodata            const    0x0000906c     0xc  SYS_Ctrl.o [1]
+  .text              ro code  0x00009078     0xc  cstartup_M.o [6]
+  .rodata            const    0x00009084     0x8  CMU_EnetInterface.o [1]
+  .rodata            const    0x0000908c     0x8  CMU_UartInterface.o [1]
+  .rodata            const    0x00009094     0x8  CMU_Unpack.o [1]
+  .rodata            const    0x0000909c     0x4  HW_SysCtrl.o [1]
+  .rodata            const    0x000090a0     0x4  HW_SysCtrl.o [1]
+  .rodata            const    0x000090a4     0x4  HW_TimeInput.o [1]
+  .rodata            const    0x000090a8     0x4  HW_Uart.o [1]
+  .rodata            const    0x000090ac     0x4  HW_Uart.o [1]
+  .text              ro code  0x000090b0     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090b4     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090b8     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090bc     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090c0     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090c4     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090c8     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090cc     0x4  iar_startup_LPC17xx.o [1]
+  .text              ro code  0x000090d0     0x4  iar_startup_LPC17xx.o [1]
+                            - 0x000090d4  0x8dd4
+
+"P2":                                     0x3b58
+  P2 s0                       0x10000000    0xf0  <Init block>
+    .data            inited   0x10000000    0x60  gpdma_17xx_40xx.o [1]
+    .data            inited   0x10000060    0x20  PWM_MotorCtrl.o [1]
+    .data            inited   0x10000080    0x14  DB1768_IOTable.o [1]
+    .data            inited   0x10000094    0x10  DB1768_IOTable.o [1]
+    .data            inited   0x100000a4    0x10  DB1768_IOTable.o [1]
+    .data            inited   0x100000b4    0x10  DB_HwCtrl.o [1]
+    .data            inited   0x100000c4    0x10  DB_HwCtrl.o [1]
+    .data            inited   0x100000d4    0x10  GPIO_Man.o [1]
+    .data            inited   0x100000e4     0x4  CMU_Unpack.o [1]
+    .data            inited   0x100000e8     0x4  CMU_Unpack.o [1]
+    .data            inited   0x100000ec     0x4  HW_SysTick.o [1]
+  .bss               zero     0x100000f0   0xf00  SYS_CmuConfig.o [1]
+  .bss               zero     0x10000ff0   0x228  CMU_ExApi.o [1]
+  .bss               zero     0x10001218   0x200  CMU_PeriodDataMana.o [1]
+  .bss               zero     0x10001418   0x200  HW_Uart.o [1]
+  .bss               zero     0x10001618   0x1d8  dlmalloc.o [4]
+  .bss               zero     0x100017f0   0x1ac  HW_IRQHandler.o [1]
+  .bss               zero     0x1000199c   0x100  GPIO_Man.o [1]
+  .bss               zero     0x10001a9c   0x100  GPIO_Man.o [1]
+  .bss               zero     0x10001b9c    0x88  CMU_EnetInterface.o [1]
+  .bss               zero     0x10001c24    0x88  CMU_UartInterface.o [1]
+  .bss               zero     0x10001cac    0x80  CMU_EnetInterface.o [1]
+  .bss               zero     0x10001d2c    0x80  CMU_EnetInterface.o [1]
+  .bss               zero     0x10001dac    0x80  CMU_UartInterface.o [1]
+  .bss               zero     0x10001e2c    0x80  CMU_UartInterface.o [1]
+  .bss               zero     0x10001eac    0x80  CMU_Unpack.o [1]
+  .bss               zero     0x10001f2c    0x50  HW_Uart.o [1]
+  .bss               zero     0x10001f7c    0x14  CMU_CanInterface.o [1]
+  .bss               zero     0x10001f90    0x30  CMU_RcvDataProcess.o [1]
+  .bss               zero     0x10001fc0    0x20  GPIO_Man.o [1]
+  .bss               zero     0x10001fe0    0x20  GPIO_Man.o [1]
+  .bss               zero     0x10002000    0x20  GPIO_Man.o [1]
+  .bss               zero     0x10002020    0x20  GPIO_Man.o [1]
+  .bss               zero     0x10002040    0x20  PWM_MotorCtrl.o [1]
+  .bss               zero     0x10002060    0x18  CMU_SendDataProcess.o [1]
+  .bss               zero     0x10002078    0x18  dlmalloc.o [4]
+  .bss               zero     0x10002090    0x14  CMU_EnetInterface.o [1]
+  .bss               zero     0x100020a4    0x14  CMU_UartInterface.o [1]
+  .bss               zero     0x100020b8    0x10  CoreCtrl.o [1]
+  .bss               zero     0x100020c8    0x10  GPIO_Man.o [1]
+  .bss               zero     0x100020d8     0xc  CMU_RcvDataProcess.o [1]
+  .bss               zero     0x100020e4     0xc  CMU_RcvDataProcess.o [1]
+  .bss               zero     0x100020f0     0x8  gpdma_17xx_40xx.o [1]
+  .bss               zero     0x100020f8     0x8  PWM_MotorCtrl.o [1]
+  .bss               zero     0x10002100     0x4  AbstractionLayer.o [1]
+  .bss               zero     0x10002104     0x4  chip_17xx_40xx.o [1]
+  .bss               zero     0x10002108     0x4  CMU_PubFun.o [1]
+  .bss               zero     0x1000210c     0x4  CMU_PubFun.o [1]
+  .bss               zero     0x10002110     0x4  CMU_RcvDataProcess.o [1]
+  .bss               zero     0x10002114     0x4  CMU_SendDataProcess.o [1]
+  .bss               zero     0x10002118     0x4  DB_HwCtrl.o [1]
+  .bss               zero     0x1000211c     0x4  HW_SysTick.o [1]
+  .bss               zero     0x10002120     0x4  HW_TimeDelay.o [1]
+  .bss               zero     0x10002124     0x4  HW_Uart.o [1]
+  .bss               zero     0x10002128     0x4  HW_Uart.o [1]
+  .bss               zero     0x1000212c     0x4  HW_Uart.o [1]
+  .bss               zero     0x10002130     0x4  HW_Uart.o [1]
+  .bss               zero     0x10002134     0x4  HW_Uart.o [1]
+  .bss               zero     0x10002138     0x4  xgetmemchunk.o [4]
+  .bss               zero     0x1000213c     0x2  CMU_Unpack.o [1]
+  .bss               zero     0x1000213e     0x2  CMU_Unpack.o [1]
+  .bss               zero     0x10002140     0x2  CMU_Unpack.o [1]
+  .bss               zero     0x10002142     0x1  AbstractionLayer.o [1]
+  .bss               zero     0x10002143     0x1  CMU_CanInterface.o [1]
+  .bss               zero     0x10002144     0x1  CMU_CanInterface.o [1]
+  .bss               zero     0x10002145     0x1  CMU_EnetInterface.o [1]
+  .bss               zero     0x10002146     0x1  CMU_EnetInterface.o [1]
+  .bss               zero     0x10002147     0x1  CMU_PeriodDataMana.o [1]
+  .bss               zero     0x10002148     0x1  CMU_PeriodDataMana.o [1]
+  .bss               zero     0x10002149     0x1  CMU_PeriodDataMana.o [1]
+  .bss               zero     0x1000214a     0x1  CMU_PubFun.o [1]
+  .bss               zero     0x1000214b     0x1  CMU_UartInterface.o [1]
+  .bss               zero     0x1000214c     0x1  CMU_UartInterface.o [1]
+  .bss               zero     0x1000214d     0x1  CMU_UartInterface.o [1]
+  .bss               zero     0x1000214e     0x1  CMU_Unpack.o [1]
+  .bss               zero     0x1000214f     0x1  HW_Uart.o [1]
+  .bss               zero     0x10002150     0x1  SysTimer.o [1]
+  CSTACK                      0x10002158   0x800  <Block>
+    CSTACK           uninit   0x10002158   0x800  <Block tail>
+  HEAP                        0x10002958  0x1200  <Block>
+    HEAP             uninit   0x10002958  0x1200  <Block tail>
+                            - 0x10003b58  0x3b58
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+          Address     Size
+          -------     ----
+Zero (__iar_zero_init3)
+    1 destination range, total size 0x2061:
+          0x100000f0  0x2061
+
+Copy (__iar_copy_init3)
+    1 source range, total size 0xf0:
+          0x000000cc    0xf0
+    1 destination range, total size 0xf0:
+          0x10000000    0xf0
+
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module                 ro code  ro data  rw data
+    ------                 -------  -------  -------
+E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj: [1]
+    AbstractionLayer.o         476                 5
+    CMU_CanInterface.o          52                22
+    CMU_CmdProcess.o         6 876
+    CMU_EnetInterface.o        380        8      414
+    CMU_ErrorMana.o             72
+    CMU_ExApi.o              3 692               552
+    CMU_PeriodDataMana.o     2 240               515
+    CMU_PubFun.o               302                 9
+    CMU_RcvDataProcess.o       860                76
+    CMU_SendDataProcess.o      904                28
+    CMU_UartInterface.o        484        8      415
+    CMU_Unpack.o               896       16      143
+    CoreCtrl.o                  32                16
+    DB1768_IOTable.o                     52       52
+    DB_HwCtrl.o                120       32       36
+    DB_MainProc.o               20
+    GPIO_Man.o               1 208       16      672
+    HAL_Delay.o                 10
+    HAL_Gpio.o                  86
+    HAL_IRQHandler.o            24
+    HAL_Pwm.o                   60
+    HAL_PwmCount.o             132
+    HAL_SysCtrl.o                8
+    HAL_SysTick.o               20
+    HAL_Uart.o                 116
+    HW_Gpio.o                  280
+    HW_IRQHandler.o          1 176        2      428
+    HW_SysCtrl.o               104        8
+    HW_SysTick.o               192        4        8
+    HW_TimeDelay.o              72                 4
+    HW_TimeInput.o             560       52
+    HW_TimeOutput.o            648       80
+    HW_Uart.o                1 396       24      613
+    IRQ_Man.o                    8
+    Main.o                      20
+    PWM_MotorCtrl.o            584       32       72
+    SYS_CmuConfig.o            248             3 840
+    SYS_Ctrl.o                  96       24
+    SYS_Init.o                  48
+    SysTimer.o                 182                 1
+    UART.o                     112
+    chip_17xx_40xx.o            16                 4
+    clock_17xx_40xx.o          580
+    gpdma_17xx_40xx.o        1 104      144      104
+    iar_startup_LPC17xx.o      256
+    iocon_17xx_40xx.o          160
+    ring_buffer.o              312
+    ritimer_17xx_40xx.o         30
+    sysinit.o                   24
+    sysinit_17xx_40xx.o        192
+    timer_17xx_40xx.o          166
+    uart_17xx_40xx.o           440
+    ------------------------------------------------
+    Total:                  28 076      502    8 029
+
+command line: [2]
+    ------------------------------------------------
+    Total:
+
+IPO-LIB-17xx.a: [3]
+    ------------------------------------------------
+    Total:
+
+dl7M_tln.a: [4]
+    abort.o                      6
+    dlmalloc.o               5 360               496
+    exit.o                       4
+    xgetmemchunk.o              44                 4
+    ------------------------------------------------
+    Total:                   5 414               500
+
+m7M_tl.a: [5]
+    DblAdd.o                   212
+    DblCmpLe.o                  46
+    DblDiv.o                   598
+    DblMul.o                   418
+    DblSub.o                   384
+    DblToI32.o                  88
+    FltMul.o                   216
+    FltToDbl.o                  78
+    I32ToDbl.o                  28
+    I32ToFlt.o                  30
+    ------------------------------------------------
+    Total:                   2 098
+
+rt7M_tl.a: [6]
+    ABImemclr4.o                 6
+    ABImemcpy_unaligned.o      118
+    ABImemset.o                102
+    ABImemset48.o               50
+    cexit.o                     10
+    cmain.o                     26
+    copy_init3.o                44
+    cstartup_M.o                12
+    data_init.o                 40
+    memcmp_unaligned.o          98
+    zero_init3.o                64
+    ------------------------------------------------
+    Total:                     570
+
+shb_l.a: [7]
+    exit.o                      20
+    ------------------------------------------------
+    Total:                      20
+
+    Gaps                        34        2
+    Linker created                       36    6 656
+----------------------------------------------------
+    Grand Total:            36 212      540   15 185
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                      Address   Size  Type      Object
+-----                      -------   ----  ----      ------
+.iar.init_table$$Base   0x00008f40          --   Gb  - Linker created -
+.iar.init_table$$Limit  0x00008f64          --   Gb  - Linker created -
+?main                   0x00008f85         Code  Gb  cmain.o [6]
+ADC_IRQHandler          0x00006a93    0xa  Code  Gb  HW_IRQHandler.o [1]
+Adda_CmdProcess         0x00001be1   0x74  Code  Gb  CMU_CmdProcess.o [1]
+Adda_NomalGetCmdProcess
+                        0x00001b99   0x48  Code  Gb  CMU_CmdProcess.o [1]
+Adda_NomalSetCmdProcess
+                        0x00001b45   0x54  Code  Gb  CMU_CmdProcess.o [1]
+ArcCCmdTranslate        0x000006fb   0x56  Code  Gb  CMU_CmdProcess.o [1]
+ArcPTCmdTranslate       0x000007a5   0x42  Code  Gb  CMU_CmdProcess.o [1]
+ArcRCmdTranslate        0x00000751   0x54  Code  Gb  CMU_CmdProcess.o [1]
+AxisPosCtrlMotionFun    0x00002eb5    0x6  Code  Gb  CMU_ExApi.o [1]
+AxisSpeedCtrlMotionFun  0x00002ebb    0x6  Code  Gb  CMU_ExApi.o [1]
+BOD_IRQHandler          0x00006a9d    0xa  Code  Gb  HW_IRQHandler.o [1]
+Board_SystemInit        0x00008d77   0x1a  Code  Gb  HW_SysCtrl.o [1]
+CANActivity_IRQHandler  0x00006b35    0xc  Code  Gb  HW_IRQHandler.o [1]
+CAN_IRQHandler          0x00006ab1    0xa  Code  Gb  HW_IRQHandler.o [1]
+CMU_AddInqRecord        0x0000219d  0x16a  Code  Gb  CMU_PeriodDataMana.o [1]
+CMU_AddToSendCtrlData   0x00001e9d   0x44  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_CAN_CheckInterfaceValid
+                        0x00004021    0x6  Code  Gb  CMU_CanInterface.o [1]
+CMU_CAN_Close           0x00004037   0x10  Code  Gb  CMU_CanInterface.o [1]
+CMU_CAN_Open            0x00004027   0x10  Code  Gb  CMU_CanInterface.o [1]
+CMU_CheckSendBufFreeSize
+                        0x00001e67   0x12  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_CmdProcess          0x00001d0f   0xc4  Code  Gb  CMU_CmdProcess.o [1]
+CMU_CreateError         0x00002c33   0x48  Code  Gb  CMU_ErrorMana.o [1]
+CMU_ENET_CheckInterfaceValid
+                        0x00004055    0x6  Code  Gb  CMU_EnetInterface.o [1]
+CMU_ENET_Close          0x00004067    0xc  Code  Gb  CMU_EnetInterface.o [1]
+CMU_ENET_GetPack        0x000040ad   0x2c  Code  Gb  CMU_EnetInterface.o [1]
+CMU_ENET_Open           0x0000405b    0xc  Code  Gb  CMU_EnetInterface.o [1]
+CMU_ENET_RecvHandler    0x00004073   0x3a  Code  Gb  CMU_EnetInterface.o [1]
+CMU_ENET_SendPack       0x000040d9   0xc6  Code  Gb  CMU_EnetInterface.o [1]
+CMU_GetSendBufAddr      0x00001e79   0x24  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_Init                0x00002b83   0x44  Code  Gb  CMU_PubFun.o [1]
+CMU_InitExApi           0x0000300f  0xb84  Code  Gb  CMU_ExApi.o [1]
+CMU_InitRecCtrlData     0x00003cc5   0x64  Code  Gb  CMU_RcvDataProcess.o [1]
+CMU_IsSendFinished      0x00001ddd   0x12  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_MainProc            0x00002bc7   0x5a  Code  Gb  CMU_PubFun.o [1]
+CMU_MainRcvProc         0x00003f8b   0x82  Code  Gb  CMU_RcvDataProcess.o [1]
+CMU_MainSendProc        0x00001f1b  0x23e  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_Malloc              0x00002b1d   0x66  Code  Gb  CMU_PubFun.o [1]
+CMU_PeriodDataManaInit  0x00002165   0x30  Code  Gb  CMU_PeriodDataMana.o [1]
+CMU_PeriodSendSwitch    0x00002195    0x8  Code  Gb  CMU_PeriodDataMana.o [1]
+CMU_RecvHardwareBuff    0x00004587   0x14  Code  Lc  CMU_Unpack.o [1]
+CMU_RecvNullEntry       0x00004581    0x6  Code  Lc  CMU_Unpack.o [1]
+CMU_ResetSendCtrlData   0x00001def   0x78  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_SendPeriodDataProc  0x000029bd   0x54  Code  Gb  CMU_PeriodDataMana.o [1]
+CMU_SendResponsePack    0x00001ee1   0x3a  Code  Gb  CMU_SendDataProcess.o [1]
+CMU_SetComType          0x00002c2d    0x6  Code  Gb  CMU_PubFun.o [1]
+CMU_SetExternFun        0x00003b99   0x16  Code  Gb  CMU_ExApi.o [1]
+CMU_SetRSBufAddr        0x00002b05   0x18  Code  Gb  CMU_PubFun.o [1]
+CMU_SetUnpackRecvInterface
+                        0x0000459b   0x16  Code  Gb  CMU_Unpack.o [1]
+CMU_UART_CheckInterfaceValid
+                        0x00004225    0x6  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_Close          0x0000423b   0x10  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_GetPack        0x00004285   0x2c  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_Open           0x0000422b   0x10  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_RecvHandler    0x0000424b   0x3a  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_SendPack       0x000042b1   0xca  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_SetInterface   0x000041f3   0x32  Code  Gb  CMU_UartInterface.o [1]
+CMU_UART_UnpackRecvAdapt
+                        0x000041d1   0x22  Code  Lc  CMU_UartInterface.o [1]
+CMU_UnPack              0x000045b1  0x32c  Code  Gb  CMU_Unpack.o [1]
+COM_AL_GetComType       0x00002d4f    0x6  Code  Gb  AbstractionLayer.o [1]
+COM_AL_GetMaxSendLen    0x00002ddb   0x2a  Code  Gb  AbstractionLayer.o [1]
+COM_AL_GetMaxSendPacks  0x00002e05   0x22  Code  Gb  AbstractionLayer.o [1]
+COM_AL_GetPack          0x00002d55   0x44  Code  Gb  AbstractionLayer.o [1]
+COM_AL_Init             0x00002c7d    0xe  Code  Gb  AbstractionLayer.o [1]
+COM_AL_Open             0x00002c8b   0xc4  Code  Gb  AbstractionLayer.o [1]
+COM_AL_RcvHandle        0x00002e27   0x28  Code  Gb  AbstractionLayer.o [1]
+COM_AL_SendPack         0x00002d99   0x42  Code  Gb  AbstractionLayer.o [1]
+COM_PL_PackDataProc     0x00003e79  0x112  Code  Gb  CMU_RcvDataProcess.o [1]
+COM_PL_ResetRcvCtrlData
+                        0x00003d29   0x3e  Code  Gb  CMU_RcvDataProcess.o [1]
+COM_PL_SavePackToRcvCtrlData
+                        0x00003e03   0x76  Code  Gb  CMU_RcvDataProcess.o [1]
+COM_PL_WaitForProcResult
+                        0x00003d67   0x9c  Code  Gb  CMU_RcvDataProcess.o [1]
+CRP_Value               0x000000cd         Code  Gb  iar_startup_LPC17xx.o [1]
+CSTACK$$Base            0x10002158          --   Gb  - Linker created -
+CSTACK$$Limit           0x10002958          --   Gb  - Linker created -
+ChannelHandlerArray     0x100020f0    0x8  Data  Lc  gpdma_17xx_40xx.o [1]
+Chip_Clock_DisablePLL   0x000071d5   0x24  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_EnableCrystal
+                        0x00008c31    0xe  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_EnablePLL    0x000071b1   0x24  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_EnablePeriphClock
+                        0x00007233   0x12  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_FeedPLL      0x00007175   0x1a  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetCPUClockDiv
+                        0x00007265    0xa  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetCPUClockSource
+                        0x00007245   0x1a  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetIntOscRate
+                        0x0000719f    0x4  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetMainClockRate
+                        0x00007359   0x1e  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetMainOscRate
+                        0x00007199    0x6  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetMainPLLInClockRate
+                        0x000071a9    0x8  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetMainPLLOutClockRate
+                        0x000072fb   0x36  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetMainPLLSource
+                        0x0000718f    0xa  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetPCLKDiv   0x0000726f   0x64  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetPeripheralClockRate
+                        0x00007389   0x18  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetRTCOscRate
+                        0x000071a3    0x6  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_GetSYSCLKRate
+                        0x000072d3   0x28  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_GetSystemClockRate
+                        0x00007377   0x12  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_IsCrystalEnabled
+                        0x00008c3f    0xc  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_IsMainPLLConnected
+                        0x00007169    0xc  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_IsMainPLLConnected
+                        0x00008c25    0xc  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_IsMainPLLEnabled
+                        0x0000715d    0xc  Code  Lc  clock_17xx_40xx.o [1]
+Chip_Clock_IsMainPLLEnabled
+                        0x00008c0d    0xc  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_IsMainPLLLocked
+                        0x00008c19    0xc  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_SetCPUClockDiv
+                        0x0000725f    0x6  Code  Gb  clock_17xx_40xx.o [1]
+Chip_Clock_SetMainPLLSource
+                        0x00008c4b    0x8  Code  Lc  sysinit_17xx_40xx.o [1]
+Chip_Clock_SetupPLL     0x000071f9   0x3a  Code  Gb  clock_17xx_40xx.o [1]
+Chip_GPDMA_ChannelCmd   0x00006e65   0x2a  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_ClearIntPending
+                        0x00006e4b   0x1a  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_GetFreeChannel
+                        0x00006f4d   0x42  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_Init         0x00006cfb   0x46  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_InitChannelCfg
+                        0x00006d41   0xa2  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_IntGetStatus
+                        0x00006de3   0x68  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPDMA_Transfer     0x00006e8f   0xbe  Code  Gb  gpdma_17xx_40xx.o [1]
+Chip_GPIOINT_ClearIntStatus
+                        0x000066d9    0xe  Code  Lc  HW_IRQHandler.o [1]
+Chip_GPIOINT_GetStatusFalling
+                        0x000066bd    0xe  Code  Lc  HW_IRQHandler.o [1]
+Chip_GPIOINT_GetStatusRising
+                        0x000066cb    0xe  Code  Lc  HW_IRQHandler.o [1]
+Chip_GPIOINT_IsIntPending
+                        0x000066e7    0xa  Code  Lc  HW_IRQHandler.o [1]
+Chip_GPIO_GetPinState   0x000079c7   0x10  Code  Lc  HW_Gpio.o [1]
+Chip_GPIO_Init          0x00008d6b    0xc  Code  Lc  HW_SysCtrl.o [1]
+Chip_GPIO_SetPinDIRInput
+                        0x000079ef   0x18  Code  Lc  HW_Gpio.o [1]
+Chip_GPIO_SetPinDIROutput
+                        0x000079d7   0x18  Code  Lc  HW_Gpio.o [1]
+Chip_GPIO_SetPinState   0x0000798d   0x3a  Code  Lc  HW_Gpio.o [1]
+Chip_IOCON_DisableOD    0x00007971   0x1c  Code  Lc  HW_Gpio.o [1]
+Chip_IOCON_Init         0x00008d5f    0xc  Code  Lc  HW_SysCtrl.o [1]
+Chip_IOCON_PinMux       0x00006507   0x7e  Code  Gb  iocon_17xx_40xx.o [1]
+Chip_IOCON_PinMuxSet    0x000064e5   0x22  Code  Gb  iocon_17xx_40xx.o [1]
+Chip_RIT_Disable        0x00007b9d    0xa  Code  Lc  HW_TimeDelay.o [1]
+Chip_RIT_EnableCTRL     0x00007ba7    0x8  Code  Lc  HW_TimeDelay.o [1]
+Chip_RIT_Init           0x00007bf5   0x1e  Code  Gb  ritimer_17xx_40xx.o [1]
+Chip_SetupXtalClocking  0x00008c61   0x6c  Code  Gb  sysinit_17xx_40xx.o [1]
+Chip_TIMER_ClearMatch   0x00008837    0x8  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_Disable      0x00008849    0xa  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_Disable      0x00007c1f    0xa  Code  Lc  HW_TimeOutput.o [1]
+Chip_TIMER_Enable       0x0000883f    0xa  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_Enable       0x00007c15    0xa  Code  Lc  HW_TimeOutput.o [1]
+Chip_TIMER_ExtMatchControlSet
+                        0x00007f05   0x3e  Code  Gb  timer_17xx_40xx.o [1]
+Chip_TIMER_Init         0x00007ed9   0x12  Code  Gb  timer_17xx_40xx.o [1]
+Chip_TIMER_MatchEnableInt
+                        0x0000885d   0x16  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_MatchPending
+                        0x00008829    0xe  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_PrescaleSet  0x00007c29    0x4  Code  Lc  HW_TimeOutput.o [1]
+Chip_TIMER_Reset        0x00007eeb   0x1a  Code  Gb  timer_17xx_40xx.o [1]
+Chip_TIMER_ResetOnMatchEnable
+                        0x00008873   0x1a  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_ResetOnMatchEnable
+                        0x00007c37   0x1a  Code  Lc  HW_TimeOutput.o [1]
+Chip_TIMER_SetMatch     0x00008853    0xa  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_SetMatch     0x00007c2d    0xa  Code  Lc  HW_TimeOutput.o [1]
+Chip_TIMER_TIMER_SetCountClockSrc
+                        0x0000888d    0xc  Code  Lc  HW_TimeInput.o [1]
+Chip_TIMER_TIMER_SetCountClockSrc
+                        0x00007c51    0xc  Code  Lc  HW_TimeOutput.o [1]
+Chip_Timer_GetClockIndex
+                        0x00007e9d   0x2e  Code  Lc  timer_17xx_40xx.o [1]
+Chip_UART_ConfigData    0x00005fdb    0x4  Code  Lc  HW_Uart.o [1]
+Chip_UART_ConfigData    0x00006faf    0x4  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_DisableDivisorAccess
+                        0x00006fbd    0xa  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_EnableDivisorAccess
+                        0x00006fb3    0xa  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_GetClkIndex   0x00007009   0x34  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_GetClockIndex
+                        0x00006fd5   0x34  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_Init          0x0000703d   0x56  Code  Gb  uart_17xx_40xx.o [1]
+Chip_UART_IntDisable    0x00005fcf    0x8  Code  Lc  HW_Uart.o [1]
+Chip_UART_IntEnable     0x00005fc7    0x8  Code  Lc  HW_Uart.o [1]
+Chip_UART_RXIntHandlerRB
+                        0x00007115   0x26  Code  Gb  uart_17xx_40xx.o [1]
+Chip_UART_Read          0x00007093   0x34  Code  Gb  uart_17xx_40xx.o [1]
+Chip_UART_ReadByte      0x00006fa5    0x6  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_ReadLineStatus
+                        0x00006fd1    0x4  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_ReadRB        0x0000713b   0x16  Code  Gb  uart_17xx_40xx.o [1]
+Chip_UART_SetBaud       0x000070c7   0x4e  Code  Gb  uart_17xx_40xx.o [1]
+Chip_UART_SetDivisorLatches
+                        0x00006fc7    0xa  Code  Lc  uart_17xx_40xx.o [1]
+Chip_UART_SetupFIFOS    0x00005fd7    0x4  Code  Lc  HW_Uart.o [1]
+Chip_UART_SetupFIFOS    0x00006fab    0x4  Code  Lc  uart_17xx_40xx.o [1]
+CoreCtrl_ResetHandler   0x00008ecd   0x12  Code  Gb  CoreCtrl.o [1]
+CoreCtrl_ResetSystemNow
+                        0x00008ec5    0x8  Code  Gb  CoreCtrl.o [1]
+CrdGetAxisMapFun        0x00002e81    0x4  Code  Gb  CMU_ExApi.o [1]
+CrdGetCtrlParmFun       0x00002e85    0x4  Code  Gb  CMU_ExApi.o [1]
+CrdGetProgBufStateFun   0x00002e8f    0x6  Code  Gb  CMU_ExApi.o [1]
+CrdGetStateFun          0x00002e89    0x6  Code  Gb  CMU_ExApi.o [1]
+CrdLoadIIPDataFun       0x00002e7b    0x6  Code  Gb  CMU_ExApi.o [1]
+CrdSetAxisMapFun        0x00002e6f    0x6  Code  Gb  CMU_ExApi.o [1]
+CrdSetCtrlParmFun       0x00002e75    0x6  Code  Gb  CMU_ExApi.o [1]
+Crd_CmdProcess          0x000012c5   0x74  Code  Gb  CMU_CmdProcess.o [1]
+Crd_NomalGetCmdProcess  0x0000103d  0x288  Code  Gb  CMU_CmdProcess.o [1]
+Crd_NomalSetCmdProcess  0x000008fd  0x73c  Code  Gb  CMU_CmdProcess.o [1]
+Crd_SetCrdCtrlParmEx    0x000007e7  0x116  Code  Gb  CMU_CmdProcess.o [1]
+DB_HwInit               0x00008cdd   0x14  Code  Gb  DB_HwCtrl.o [1]
+DB_IOConfig             0x00008ccd   0x10  Code  Lc  DB_HwCtrl.o [1]
+DB_Init                 0x00008fb7    0x8  Code  Gb  DB_MainProc.o [1]
+DB_KeyProc              0x00008d1f   0x16  Code  Gb  DB_HwCtrl.o [1]
+DB_MainProc             0x00008fbf    0xc  Code  Gb  DB_MainProc.o [1]
+DB_MainWorkLedShow      0x00008cf1   0x2e  Code  Gb  DB_HwCtrl.o [1]
+DMA_IRQHandler          0x00006abb   0x3a  Code  Gb  HW_IRQHandler.o [1]
+EINT0_IRQHandler        0x000069f7    0xa  Code  Gb  HW_IRQHandler.o [1]
+EINT1_IRQHandler        0x00006a01    0xa  Code  Gb  HW_IRQHandler.o [1]
+EINT2_IRQHandler        0x00006a0b    0xa  Code  Gb  HW_IRQHandler.o [1]
+EINT3_IRQHandler        0x00006a15   0x7e  Code  Gb  HW_IRQHandler.o [1]
+GPDMA_LUTPerAddr        0x10000000   0x60  Data  Gb  gpdma_17xx_40xx.o [1]
+GPDMA_LUTPerBurst       0x00008fd8   0x18  Data  Gb  gpdma_17xx_40xx.o [1]
+GPDMA_LUTPerWid         0x00008ff0   0x18  Data  Gb  gpdma_17xx_40xx.o [1]
+GPIO_GetInputState      0x00007493   0x2e  Code  Gb  GPIO_Man.o [1]
+GPIO_GetOutputState     0x00007465   0x2e  Code  Gb  GPIO_Man.o [1]
+GPIO_InitIOTable        0x000073cd   0x50  Code  Gb  GPIO_Man.o [1]
+GPIO_MAN_BuffInit       0x000074c1   0x80  Code  Lc  GPIO_Man.o [1]
+GPIO_MAN_GetInputPinState
+                        0x00007541   0x44  Code  Gb  GPIO_Man.o [1]
+GPIO_MAN_GetOutputPinState
+                        0x00007585   0x44  Code  Gb  GPIO_Man.o [1]
+GPIO_MAN_SetOutputPinState
+                        0x000075c9   0x2e  Code  Gb  GPIO_Man.o [1]
+GPIO_MAN_UpdateInputIOState
+                        0x000075f7  0x112  Code  Lc  GPIO_Man.o [1]
+GPIO_MAN_UpdateOutputIOState
+                        0x00007709  0x112  Code  Lc  GPIO_Man.o [1]
+GPIO_MAN_UpdateProc     0x0000781b   0x1e  Code  Gb  GPIO_Man.o [1]
+GPIO_SetCtrlTable       0x000073a1   0x2c  Code  Gb  GPIO_Man.o [1]
+GPIO_SetOutputState     0x0000741d   0x30  Code  Gb  GPIO_Man.o [1]
+GPIO_ToggleOutputState  0x0000744d   0x18  Code  Gb  GPIO_Man.o [1]
+GetErrorCodeFun         0x00003003    0x6  Code  Gb  CMU_ExApi.o [1]
+GetTickCountFun         0x00003009    0x6  Code  Gb  CMU_ExApi.o [1]
+HAL_DelayInit           0x00007a9d    0xa  Code  Gb  HAL_Delay.o [1]
+HAL_GPIO_ConfigInput    0x00007859   0x14  Code  Gb  HAL_Gpio.o [1]
+HAL_GPIO_ConfigOutput   0x0000786d   0x14  Code  Gb  HAL_Gpio.o [1]
+HAL_GPIO_GetIOState     0x0000789b   0x14  Code  Gb  HAL_Gpio.o [1]
+HAL_GPIO_SetOutputState
+                        0x00007881   0x1a  Code  Gb  HAL_Gpio.o [1]
+HAL_IRQ_Init            0x00008645    0x8  Code  Gb  HAL_IRQHandler.o [1]
+HAL_IRQ_SetTrgCallback  0x0000864d   0x10  Code  Gb  HAL_IRQHandler.o [1]
+HAL_PWM_Init            0x00008609   0x16  Code  Gb  HAL_Pwm.o [1]
+HAL_PWM_OutputEnable    0x00008631   0x14  Code  Gb  HAL_Pwm.o [1]
+HAL_PWM_SetOutputPwmFrq
+                        0x0000861f   0x12  Code  Gb  HAL_Pwm.o [1]
+HAL_SysTick_GetCount    0x00007a89    0x8  Code  Gb  HAL_SysTick.o [1]
+HAL_SysTick_Init        0x00007a91    0xc  Code  Gb  HAL_SysTick.o [1]
+HAL_SystemReset         0x00008ee5    0x8  Code  Gb  HAL_SysCtrl.o [1]
+HAL_TIM_ClearInputCountITStatus
+                        0x000085f5   0x14  Code  Gb  HAL_PwmCount.o [1]
+HAL_TIM_EnableInputCountIRQ
+                        0x000085c7   0x1a  Code  Gb  HAL_PwmCount.o [1]
+HAL_TIM_GetInputCountITStatus
+                        0x000085e1   0x14  Code  Gb  HAL_PwmCount.o [1]
+HAL_TIM_InputCountEnable
+                        0x0000859b   0x14  Code  Gb  HAL_PwmCount.o [1]
+HAL_TIM_InputCountInit  0x00008585   0x16  Code  Gb  HAL_PwmCount.o [1]
+HAL_TIM_SetMaxInputCount
+                        0x000085af   0x18  Code  Gb  HAL_PwmCount.o [1]
+HAL_UART_Close          0x00008bbf   0x12  Code  Gb  HAL_Uart.o [1]
+HAL_UART_Init           0x00008b99   0x14  Code  Gb  HAL_Uart.o [1]
+HAL_UART_Open           0x00008bad   0x12  Code  Gb  HAL_Uart.o [1]
+HAL_UART_RecvBuff       0x00008be9   0x16  Code  Gb  HAL_Uart.o [1]
+HAL_UART_RecvHandler    0x00008bff    0xe  Code  Gb  HAL_Uart.o [1]
+HAL_UART_SendBuff       0x00008bd1   0x18  Code  Gb  HAL_Uart.o [1]
+HEAP$$Base              0x10002958          --   Gb  - Linker created -
+HEAP$$Limit             0x10003b58          --   Gb  - Linker created -
+HW_GPIO_ConfigInput     0x00007a07   0x24  Code  Gb  HW_Gpio.o [1]
+HW_GPIO_ConfigOutput    0x00007a2b   0x24  Code  Gb  HW_Gpio.o [1]
+HW_GPIO_GetIOState      0x00007a6b   0x16  Code  Gb  HW_Gpio.o [1]
+HW_GPIO_SetOutputState  0x00007a4f   0x1c  Code  Gb  HW_Gpio.o [1]
+HW_IRQ_Init             0x000066f3  0x1aa  Code  Gb  HW_IRQHandler.o [1]
+HW_IRQ_NullEntry        0x000066f1    0x2  Code  Gb  HW_IRQHandler.o [1]
+HW_IRQ_SetTrgCallback   0x0000689d   0x96  Code  Gb  HW_IRQHandler.o [1]
+HW_SysTick_GetCount     0x00007b49    0x6  Code  Gb  HW_SysTick.o [1]
+HW_SysTick_Init         0x00007b4f   0x2a  Code  Gb  HW_SysTick.o [1]
+HW_SysTick_SetTickTime  0x00007b33    0x6  Code  Gb  HW_SysTick.o [1]
+HW_SysTick_Update       0x00007b39   0x10  Code  Gb  HW_SysTick.o [1]
+HW_SystemReset          0x00008da5    0x8  Code  Gb  HW_SysCtrl.o [1]
+HW_TIM_ClearInputITStatus
+                        0x000089ff   0x18  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_DelayInit        0x00007baf   0x28  Code  Gb  HW_TimeDelay.o [1]
+HW_TIM_EnableInputIRQ   0x000089b1   0x36  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_GetInputITStatus
+                        0x000089e7   0x18  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_GetPeripheralClock
+                        0x00007d47   0x44  Code  Lc  HW_TimeOutput.o [1]
+HW_TIM_InputCountConfig
+                        0x00008947   0x3e  Code  Lc  HW_TimeInput.o [1]
+HW_TIM_InputEnable      0x0000891f   0x28  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_InputInit        0x000088ef   0x30  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_OutputConfig     0x00007cb3   0x94  Code  Lc  HW_TimeOutput.o [1]
+HW_TIM_OutputEnable     0x00007e5f   0x28  Code  Gb  HW_TimeOutput.o [1]
+HW_TIM_OutputInit       0x00007d8b   0x40  Code  Gb  HW_TimeOutput.o [1]
+HW_TIM_PortConfig       0x00008899   0x56  Code  Lc  HW_TimeInput.o [1]
+HW_TIM_PortConfig       0x00007c5d   0x56  Code  Lc  HW_TimeOutput.o [1]
+HW_TIM_SetMaxInputCount
+                        0x00008985   0x2c  Code  Gb  HW_TimeInput.o [1]
+HW_TIM_SetOutputPwmDutyRatio
+                        0x00007dcb   0x6c  Code  Gb  HW_TimeOutput.o [1]
+HW_TIM_SetOutputPwmFrq  0x00007e37   0x28  Code  Gb  HW_TimeOutput.o [1]
+HW_UART0_DMATC_IRQHandler
+                        0x00006405   0x1e  Code  Lc  HW_Uart.o [1]
+HW_UART0_RX_IRQHandler  0x000063d5    0xc  Code  Lc  HW_Uart.o [1]
+HW_UART1_DMATC_IRQHandler
+                        0x00006425   0x1e  Code  Lc  HW_Uart.o [1]
+HW_UART1_RX_IRQHandler  0x000063e1    0xc  Code  Lc  HW_Uart.o [1]
+HW_UART2_DMATC_IRQHandler
+                        0x00006445   0x1e  Code  Lc  HW_Uart.o [1]
+HW_UART2_RX_IRQHandler  0x000063ed    0xc  Code  Lc  HW_Uart.o [1]
+HW_UART3_DMATC_IRQHandler
+                        0x00006465   0x1e  Code  Lc  HW_Uart.o [1]
+HW_UART3_RX_IRQHandler  0x000063f9    0xc  Code  Lc  HW_Uart.o [1]
+HW_UART_DmaSend         0x0000632f   0x24  Code  Lc  HW_Uart.o [1]
+HW_UART_DmaSendBuff     0x00006375   0x5e  Code  Gb  HW_Uart.o [1]
+HW_UART_DmaTxInit       0x00006123   0x86  Code  Lc  HW_Uart.o [1]
+HW_UART_Enable          0x0000622b   0x44  Code  Gb  HW_Uart.o [1]
+HW_UART_Init            0x000061a9   0x82  Code  Gb  HW_Uart.o [1]
+HW_UART_RecvBuff        0x0000626f   0x24  Code  Gb  HW_Uart.o [1]
+HW_UART_RecvHandler     0x00006293   0x32  Code  Gb  HW_Uart.o [1]
+HW_UART_RxItInit        0x00006091   0x92  Code  Lc  HW_Uart.o [1]
+HW_UART_SendHeadNodeBuff
+                        0x00006353   0x22  Code  Lc  HW_Uart.o [1]
+I2C0_IRQHandler         0x000069a7    0xa  Code  Gb  HW_IRQHandler.o [1]
+I2C1_IRQHandler         0x000069b1    0xa  Code  Gb  HW_IRQHandler.o [1]
+I2C2_IRQHandler         0x000069bb    0xa  Code  Gb  HW_IRQHandler.o [1]
+I2S_IRQHandler          0x00006af5    0xa  Code  Gb  HW_IRQHandler.o [1]
+INQ_AddMotorPeriodData  0x00002701   0xc0  Code  Gb  CMU_PeriodDataMana.o [1]
+INQ_SendADDAPeriodDataProc
+                        0x0000285f   0xdc  Code  Gb  CMU_PeriodDataMana.o [1]
+INQ_SendAxisPeriodDataProc
+                        0x000027c1   0x9e  Code  Gb  CMU_PeriodDataMana.o [1]
+INQ_SendCrdPeriodDataProc
+                        0x00002371  0x390  Code  Gb  CMU_PeriodDataMana.o [1]
+INQ_SendIoPeriodDataProc
+                        0x0000293b   0x82  Code  Gb  CMU_PeriodDataMana.o [1]
+INQ_SendSysPeriodDataProc
+                        0x00002307   0x6a  Code  Gb  CMU_PeriodDataMana.o [1]
+IRQ_Init                0x00008ebd    0x8  Code  Gb  IRQ_Man.o [1]
+Io_CmdProcess           0x00001ad1   0x74  Code  Gb  CMU_CmdProcess.o [1]
+Io_NomalGetCmdProcess   0x00001a07   0xca  Code  Gb  CMU_CmdProcess.o [1]
+Io_NomalSetCmdProcess   0x000018eb  0x11c  Code  Gb  CMU_CmdProcess.o [1]
+LineCmdTranslate        0x000006bf   0x3c  Code  Gb  CMU_CmdProcess.o [1]
+List_FreeHead           0x000062d7   0x28  Code  Lc  HW_Uart.o [1]
+List_GetHead            0x000062ff   0x30  Code  Lc  HW_Uart.o [1]
+List_Init               0x000062c5    0x4  Code  Lc  HW_Uart.o [1]
+List_SinkTail           0x000062c9    0xe  Code  Lc  HW_Uart.o [1]
+MCPWM_IRQHandler        0x00006b09    0xa  Code  Gb  HW_IRQHandler.o [1]
+MotorCtrlParmFun        0x00002e95    0x6  Code  Gb  CMU_ExApi.o [1]
+MotorGetCtrlParmFun     0x00002ead    0x4  Code  Gb  CMU_ExApi.o [1]
+MotorGetPitchCmpParmFun
+                        0x00002eb1    0x4  Code  Gb  CMU_ExApi.o [1]
+MotorPitchCmpParmFun    0x00002e9b    0x6  Code  Gb  CMU_ExApi.o [1]
+MotorPosCtrlMotionFun   0x00002ea1    0x6  Code  Gb  CMU_ExApi.o [1]
+MotorSpeedCtrlMotionFun
+                        0x00002ea7    0x6  Code  Gb  CMU_ExApi.o [1]
+Motor_CmdProcess        0x00001877   0x74  Code  Gb  CMU_CmdProcess.o [1]
+Motor_NomalGetCmdProcess
+                        0x00001759  0x11e  Code  Gb  CMU_CmdProcess.o [1]
+Motor_NomalSetCmdProcess
+                        0x00001433  0x326  Code  Gb  CMU_CmdProcess.o [1]
+Motor_SetCtrlParmEx     0x00001339   0xfa  Code  Gb  CMU_CmdProcess.o [1]
+NVIC_DisableIRQ         0x00008815   0x14  Code  Lc  HW_TimeInput.o [1]
+NVIC_DisableIRQ         0x00005f87   0x16  Code  Lc  HW_Uart.o [1]
+NVIC_EnableIRQ          0x00008801   0x14  Code  Lc  HW_TimeInput.o [1]
+NVIC_EnableIRQ          0x00005f71   0x16  Code  Lc  HW_Uart.o [1]
+NVIC_SetPriority        0x00007add   0x26  Code  Lc  HW_SysTick.o [1]
+NVIC_SetPriority        0x00005f9d   0x2a  Code  Lc  HW_Uart.o [1]
+NVIC_SystemReset        0x00008d45   0x1a  Code  Lc  HW_SysCtrl.o [1]
+OscRateIn               0x0000909c    0x4  Data  Gb  HW_SysCtrl.o [1]
+PLL0_IRQHandler         0x000069e3    0xa  Code  Gb  HW_IRQHandler.o [1]
+PLL1_IRQHandler         0x00006b1d    0xc  Code  Gb  HW_IRQHandler.o [1]
+PWM1_IRQHandler         0x0000699d    0xa  Code  Gb  HW_IRQHandler.o [1]
+PWM_Count0_IRQHandler   0x0000833d   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count1_IRQHandler   0x00008369   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count2_IRQHandler   0x00008395   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count3_IRQHandler   0x000083c1   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count4_IRQHandler   0x000083ed   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count5_IRQHandler   0x00008419   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count6_IRQHandler   0x00008445   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_Count7_IRQHandler   0x00008471   0x2c  Code  Lc  PWM_MotorCtrl.o [1]
+PWM_MotorPulseInit      0x0000849d   0x66  Code  Gb  PWM_MotorCtrl.o [1]
+PWM_SendPulse           0x00008503   0x38  Code  Gb  PWM_MotorCtrl.o [1]
+PWM_SendPulseLimitMs    0x0000853b   0x38  Code  Gb  PWM_MotorCtrl.o [1]
+ProgArcC                0x00002edf    0xa  Code  Gb  CMU_ExApi.o [1]
+ProgArcPT               0x00002ef3    0xa  Code  Gb  CMU_ExApi.o [1]
+ProgArcR                0x00002ee9    0xa  Code  Gb  CMU_ExApi.o [1]
+ProgIOCode              0x00002ec1    0xa  Code  Gb  CMU_ExApi.o [1]
+ProgLine                0x00002ed5    0xa  Code  Gb  CMU_ExApi.o [1]
+ProgRapid               0x00002ecb    0xa  Code  Gb  CMU_ExApi.o [1]
+QEI_IRQHandler          0x00006b13    0xa  Code  Gb  HW_IRQHandler.o [1]
+RIT_IRQHandler          0x00006aff    0xa  Code  Gb  HW_IRQHandler.o [1]
+RTCOscRateIn            0x000090a0    0x4  Data  Gb  HW_SysCtrl.o [1]
+RTC_IRQHandler          0x000069ed    0xa  Code  Gb  HW_IRQHandler.o [1]
+RapidCmdTranslate       0x00000691   0x2e  Code  Gb  CMU_CmdProcess.o [1]
+Reg_CmdProcess          0x00001c55   0xba  Code  Gb  CMU_CmdProcess.o [1]
+Region$$Table$$Base     0x00008f40          --   Gb  - Linker created -
+Region$$Table$$Limit    0x00008f64          --   Gb  - Linker created -
+RingBuffer_GetCount     0x00006585    0x8  Code  Lc  ring_buffer.o [1]
+RingBuffer_Init         0x000065b9   0x18  Code  Gb  ring_buffer.o [1]
+RingBuffer_Insert       0x000065d1   0x3a  Code  Gb  ring_buffer.o [1]
+RingBuffer_IsEmpty      0x000065a7   0x12  Code  Lc  ring_buffer.o [1]
+RingBuffer_IsFull       0x0000658d   0x1a  Code  Lc  ring_buffer.o [1]
+RingBuffer_PopMult      0x0000660b   0xb2  Code  Gb  ring_buffer.o [1]
+SPI_IRQHandler          0x000069c5    0xa  Code  Gb  HW_IRQHandler.o [1]
+SSP0_IRQHandler         0x000069cf    0xa  Code  Gb  HW_IRQHandler.o [1]
+SSP1_IRQHandler         0x000069d9    0xa  Code  Gb  HW_IRQHandler.o [1]
+SYS_GetGCPVersion       0x00008dd3   0x26  Code  Gb  SYS_Ctrl.o [1]
+SYS_GetSLCVersion       0x00008dad   0x26  Code  Gb  SYS_Ctrl.o [1]
+SYS_GetTickCount        0x00008e01    0xc  Code  Gb  SYS_Ctrl.o [1]
+SYS_Init                0x00008e8d   0x20  Code  Gb  SYS_Init.o [1]
+SYS_InitCMU             0x00008b11   0x18  Code  Gb  SYS_CmuConfig.o [1]
+SYS_InitCmuBuff         0x00008a31   0x10  Code  Lc  SYS_CmuConfig.o [1]
+SYS_InitCmuFunTable     0x00008a79   0x60  Code  Lc  SYS_CmuConfig.o [1]
+SYS_InitCmuUartInterface
+                        0x00008a41   0x38  Code  Lc  SYS_CmuConfig.o [1]
+SYS_MainTaskHandler     0x00008ead   0x10  Code  Gb  SYS_Init.o [1]
+SysGetCtrlParmFun       0x00002e67    0x4  Code  Gb  CMU_ExApi.o [1]
+SysGetDevStateFun       0x00002e61    0x6  Code  Gb  CMU_ExApi.o [1]
+SysGetStateFun          0x00002e6b    0x4  Code  Gb  CMU_ExApi.o [1]
+SysTick_Config          0x00007b03   0x30  Code  Lc  HW_SysTick.o [1]
+SysTick_Handler         0x00006933   0x10  Code  Gb  HW_IRQHandler.o [1]
+SysTime_CheckExpiredState
+                        0x00007935   0x32  Code  Gb  SysTimer.o [1]
+SysTime_GetTickCount    0x000078df    0x8  Code  Gb  SysTimer.o [1]
+SysTime_GetTimeDiffMs   0x000078b1    0xc  Code  Lc  SysTimer.o [1]
+SysTime_Init            0x000078bd   0x22  Code  Gb  SysTimer.o [1]
+SysTime_SimpleDelay     0x000078e7   0x18  Code  Gb  SysTimer.o [1]
+SysTime_Start           0x00007905   0x18  Code  Gb  SysTimer.o [1]
+SysTime_StartOneShot    0x0000791d   0x18  Code  Gb  SysTimer.o [1]
+Sys_CmdProcess          0x0000061d   0x74  Code  Gb  CMU_CmdProcess.o [1]
+Sys_GetNomalCmdProcess  0x00000465  0x1b8  Code  Gb  CMU_CmdProcess.o [1]
+Sys_SetNomalCmdProcess  0x00000301  0x164  Code  Gb  CMU_CmdProcess.o [1]
+SystemCoreClock         0x10002104    0x4  Data  Gb  chip_17xx_40xx.o [1]
+SystemCoreClockUpdate   0x00007be5    0xc  Code  Gb  chip_17xx_40xx.o [1]
+SystemInit              0x00009009   0x18  Code  Gb  sysinit.o [1]
+TIM                     0x00009020   0x10  Data  Lc  HW_TimeInput.o [1]
+TIM                     0x00009030   0x10  Data  Lc  HW_TimeOutput.o [1]
+TIMER0_IRQHandler       0x0000694d    0xa  Code  Gb  HW_IRQHandler.o [1]
+TIMER1_IRQHandler       0x00006957    0xa  Code  Gb  HW_IRQHandler.o [1]
+TIMER2_IRQHandler       0x00006961    0xa  Code  Gb  HW_IRQHandler.o [1]
+TIMER3_IRQHandler       0x0000696b    0xa  Code  Gb  HW_IRQHandler.o [1]
+TIM_IRQn                0x000090a4    0x4  Data  Lc  HW_TimeInput.o [1]
+UART0_IRQHandler        0x00006975    0xa  Code  Gb  HW_IRQHandler.o [1]
+UART1_IRQHandler        0x0000697f    0xa  Code  Gb  HW_IRQHandler.o [1]
+UART2_IRQHandler        0x00006989    0xa  Code  Gb  HW_IRQHandler.o [1]
+UART3_IRQHandler        0x00006993    0xa  Code  Gb  HW_IRQHandler.o [1]
+UART_Close              0x00008b4d   0x10  Code  Gb  UART.o [1]
+UART_IO_Init            0x00005fdf   0xb2  Code  Lc  HW_Uart.o [1]
+UART_Init               0x00008b29   0x14  Code  Gb  UART.o [1]
+UART_Open               0x00008b3d   0x10  Code  Gb  UART.o [1]
+UART_RecvBuff           0x00008b75   0x16  Code  Gb  UART.o [1]
+UART_RecvHandler        0x00008b8b    0xe  Code  Gb  UART.o [1]
+UART_SendBuff           0x00008b5d   0x18  Code  Gb  UART.o [1]
+USART                   0x00009040   0x10  Data  Lc  HW_Uart.o [1]
+USART_IRQn              0x000090a8    0x4  Data  Lc  HW_Uart.o [1]
+USBActivity_IRQHandler  0x00006b29    0xc  Code  Gb  HW_IRQHandler.o [1]
+USB_IRQHandler          0x00006aa7    0xa  Code  Gb  HW_IRQHandler.o [1]
+WDT_IRQHandler          0x00006943    0xa  Code  Gb  HW_IRQHandler.o [1]
+__Vectors               0x00000000          --   Gb  iar_startup_LPC17xx.o [1]
+__Vectors_End           0x000000cc         Data  Gb  iar_startup_LPC17xx.o [1]
+__Vectors_Size {Abs}    0x000000cc          --   Gb  iar_startup_LPC17xx.o [1]
+__aeabi_cdcmple         0x00004551         Code  Gb  DblCmpLe.o [5]
+__aeabi_d2iz            0x000082e5         Code  Gb  DblToI32.o [5]
+__aeabi_d2uiz           0x00008311         Code  Gb  DblToI32.o [5]
+__aeabi_ddiv            0x0000808d         Code  Gb  DblDiv.o [5]
+__aeabi_dmul            0x0000865d         Code  Gb  DblMul.o [5]
+__aeabi_dsub            0x000043b5         Code  Gb  DblSub.o [5]
+__aeabi_f2d             0x0000803d         Code  Gb  FltToDbl.o [5]
+__aeabi_fmul            0x00007f65         Code  Gb  FltMul.o [5]
+__aeabi_memclr4         0x00007969         Code  Gb  ABImemclr4.o [6]
+__aeabi_memset          0x00002a9d         Code  Gb  ABImemset.o [6]
+__aeabi_ui2d            0x00004535         Code  Gb  I32ToDbl.o [5]
+__aeabi_ui2f            0x00007f45         Code  Gb  I32ToFlt.o [5]
+__cmain                 0x00008f85         Code  Gb  cmain.o [6]
+__data_GetMemChunk      0x00005f31   0x2c  Code  Gb  xgetmemchunk.o [4]
+__exit                  0x00005f5d   0x14  Code  Gb  exit.o [7]
+__iar_Memset            0x00002a9d         Code  Gb  ABImemset.o [6]
+__iar_Memset4_word      0x00007aa9         Code  Gb  ABImemset48.o [6]
+__iar_Memset8_word      0x00007aa9         Code  Gb  ABImemset48.o [6]
+__iar_Memset_word       0x00002aa5         Code  Gb  ABImemset.o [6]
+__iar_copy_init3        0x00008eed   0x2c  Code  Gb  copy_init3.o [6]
+__iar_d2uiz             0x0000831d         Code  Gb  DblToI32.o [5]
+__iar_dadd              0x00004901         Code  Gb  DblAdd.o [5]
+__iar_data_init3        0x00008f19   0x28  Code  Gb  data_init.o [6]
+__iar_dlfree            0x00005a0f  0x510  Code  Gb  dlmalloc.o [4]
+__iar_dlmalloc          0x00005759  0x2aa  Code  Gb  dlmalloc.o [4]
+__iar_dsub              0x000043c9         Code  Gb  DblSub.o [5]
+__iar_dsubStart         0x000043db         Code  Gb  DblSub.o [5]
+__iar_program_start     0x00009079         Code  Gb  cstartup_M.o [6]
+__iar_ui2d              0x00004539         Code  Gb  I32ToDbl.o [5]
+__iar_ui2f              0x00007f49         Code  Gb  I32ToFlt.o [5]
+__iar_unaligned___aeabi_memcpy
+                        0x00002a25         Code  Gb  ABImemcpy_unaligned.o [6]
+__iar_unaligned___aeabi_memcpy4
+                        0x00002a45         Code  Gb  ABImemcpy_unaligned.o [6]
+__iar_unaligned___aeabi_memcpy8
+                        0x00002a45         Code  Gb  ABImemcpy_unaligned.o [6]
+__iar_unaligned_memcmp  0x000049d5         Code  Gb  memcmp_unaligned.o [6]
+__iar_zero_init3        0x00008e4d   0x40  Code  Gb  zero_init3.o [6]
+__vector_table          0x00000000         Data  Gb  iar_startup_LPC17xx.o [1]
+__vector_table_0x1c     0x0000001c         Data  Gb  iar_startup_LPC17xx.o [1]
+_call_main              0x00008f91         Code  Gb  cmain.o [6]
+_exit                   0x00008fcd         Code  Gb  cexit.o [6]
+_gm_                    0x10001618  0x1d8  Data  Lc  dlmalloc.o [4]
+_main                   0x00008f9b         Code  Gb  cmain.o [6]
+abort                   0x00005f29    0x6  Code  Gb  abort.o [4]
+bCanInterfaceValidFlags
+                        0x10002143    0x1  Data  Lc  CMU_CanInterface.o [1]
+bEnetInterfaceValidFlags
+                        0x10002146    0x1  Data  Lc  CMU_EnetInterface.o [1]
+bUartInterfaceValidFlags
+                        0x1000214c    0x1  Data  Lc  CMU_UartInterface.o [1]
+bUsEnableFlag           0x10002150    0x1  Data  Lc  SysTimer.o [1]
+boolFun_u32             0x00002efd    0x6  Code  Gb  CMU_ExApi.o [1]
+configDMAMux            0x00006b55   0x3e  Code  Lc  gpdma_17xx_40xx.o [1]
+exit                    0x00008fb3    0x4  Code  Gb  exit.o [4]
+g_DB1768_IOTable        0x100000a4   0x10  Data  Gb  DB1768_IOTable.o [1]
+g_GpioCtrlTable         0x100020c8   0x10  Data  Gb  GPIO_Man.o [1]
+g_HeadNodePtr0          0x10002128    0x4  Data  Lc  HW_Uart.o [1]
+g_HeadNodePtr1          0x1000212c    0x4  Data  Lc  HW_Uart.o [1]
+g_HeadNodePtr2          0x10002130    0x4  Data  Lc  HW_Uart.o [1]
+g_HeadNodePtr3          0x10002134    0x4  Data  Lc  HW_Uart.o [1]
+g_IRQInterface          0x100017f0  0x1ac  Data  Lc  HW_IRQHandler.o [1]
+i32Fun                  0x00002f37    0x4  Code  Gb  CMU_ExApi.o [1]
+i32Fun_32               0x00002f41    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32              0x00002f3b    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_32           0x00002f47    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_32_p32       0x00002f6d    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_32_pcut      0x00002f67    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_p32          0x00002f4d    0x6  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_u32_pu8_u32  0x00002f53    0xa  Code  Gb  CMU_ExApi.o [1]
+i32Fun_u32_u32_pu8_u32_u8
+                        0x00002f5d    0xa  Code  Gb  CMU_ExApi.o [1]
+init_mparams            0x00004a53   0x32  Code  Lc  dlmalloc.o [4]
+init_top                0x00004a85   0x34  Code  Lc  dlmalloc.o [4]
+m_CanInterface          0x10001f7c   0x14  Data  Lc  CMU_CanInterface.o [1]
+m_CmuBuff               0x100000f0  0xf00  Data  Lc  SYS_CmuConfig.o [1]
+m_EnetInterface         0x10002090   0x14  Data  Lc  CMU_EnetInterface.o [1]
+m_EnetRecvPack          0x10001b9c   0x88  Data  Lc  CMU_EnetInterface.o [1]
+m_IOUpdateTimer         0x100000d4   0x10  Data  Lc  GPIO_Man.o [1]
+m_InputIOTable          0x10000080   0x14  Data  Lc  DB1768_IOTable.o [1]
+m_LedCtrlTimer          0x100000b4   0x10  Data  Lc  DB_HwCtrl.o [1]
+m_OutputIOTable         0x10000094   0x10  Data  Lc  DB1768_IOTable.o [1]
+m_RcvCtrlData           0x10001f90   0x30  Data  Gb  CMU_RcvDataProcess.o [1]
+m_ResetTimer            0x100020b8   0x10  Data  Lc  CoreCtrl.o [1]
+m_RxRing                0x10001f2c   0x50  Data  Lc  HW_Uart.o [1]
+m_ScanTimer             0x100000c4   0x10  Data  Lc  DB_HwCtrl.o [1]
+m_SendCtrlData          0x10002060   0x18  Data  Gb  CMU_SendDataProcess.o [1]
+m_TimePinMux            0x00008f64   0x20  Data  Lc  HW_TimeInput.o [1]
+m_TimePinMux            0x00008e0c   0x40  Data  Lc  HW_TimeOutput.o [1]
+m_UartInterface         0x100020a4   0x14  Data  Lc  CMU_UartInterface.o [1]
+m_UartRecvPack          0x10001c24   0x88  Data  Lc  CMU_UartInterface.o [1]
+m_bALInitFlag           0x10002142    0x1  Data  Lc  AbstractionLayer.o [1]
+m_bGetUnpackStep        0x1000214e    0x1  Data  Lc  CMU_Unpack.o [1]
+m_bTickCountSwitch      0x10002147    0x1  Data  Lc  CMU_PeriodDataMana.o [1]
+m_nDataLen              0x10002140    0x2  Data  Lc  CMU_Unpack.o [1]
+m_nReadPos              0x1000213c    0x2  Data  Lc  CMU_Unpack.o [1]
+m_nWritePos             0x1000213e    0x2  Data  Lc  CMU_Unpack.o [1]
+m_pHead                 0x100000e4    0x4  Data  Lc  CMU_Unpack.o [1]
+m_pRcvBuf               0x10002110    0x4  Data  Gb  CMU_RcvDataProcess.o [1]
+m_pRcvBuf               0x10001eac   0x80  Data  Lc  CMU_Unpack.o [1]
+m_pSendBuf              0x10002114    0x4  Data  Gb  CMU_SendDataProcess.o [1]
+m_sExternalFunTable     0x10000ff0  0x228  Data  Gb  CMU_ExApi.o [1]
+m_sInqRecordBuf         0x10001218  0x200  Data  Lc  CMU_PeriodDataMana.o [1]
+m_sPackData             0x100020e4    0xc  Data  Gb  CMU_RcvDataProcess.o [1]
+m_sRcvTimeOutCtrlData   0x100020d8    0xc  Data  Gb  CMU_RcvDataProcess.o [1]
+m_uCanNode              0x10002144    0x1  Data  Lc  CMU_CanInterface.o [1]
+m_uComSetDelayCycles    0x1000214a    0x1  Data  Lc  CMU_PubFun.o [1]
+m_uDmaFreeChannel       0x10002124    0x4  Data  Lc  HW_Uart.o [1]
+m_uDmaUartTxMuxCode     0x000090ac    0x4  Data  Lc  HW_Uart.o [1]
+m_uInputChangeCount     0x1000199c  0x100  Data  Lc  GPIO_Man.o [1]
+m_uOutputChangeCount    0x10001a9c  0x100  Data  Lc  GPIO_Man.o [1]
+m_uPwmCountNode         0x100020f8    0x8  Data  Lc  PWM_MotorCtrl.o [1]
+m_uRecvBuff             0x10001d2c   0x80  Data  Lc  CMU_EnetInterface.o [1]
+m_uRecvBuff             0x10001e2c   0x80  Data  Lc  CMU_UartInterface.o [1]
+m_uRecvPackValidFlag    0x10002145    0x1  Data  Lc  CMU_EnetInterface.o [1]
+m_uRecvPackValidFlag    0x1000214b    0x1  Data  Lc  CMU_UartInterface.o [1]
+m_uRxBuff               0x10001418  0x200  Data  Lc  HW_Uart.o [1]
+m_uSendBuff             0x10001cac   0x80  Data  Lc  CMU_EnetInterface.o [1]
+m_uSendBuff             0x10001dac   0x80  Data  Lc  CMU_UartInterface.o [1]
+m_uUartInitFlags        0x1000214f    0x1  Data  Lc  HW_Uart.o [1]
+m_uUartNode             0x1000214d    0x1  Data  Lc  CMU_UartInterface.o [1]
+m_ucCurRecordIndex      0x10002149    0x1  Data  Lc  CMU_PeriodDataMana.o [1]
+m_ucRecordCount         0x10002148    0x1  Data  Lc  CMU_PeriodDataMana.o [1]
+m_ulCmuMemBase          0x10002108    0x4  Data  Lc  CMU_PubFun.o [1]
+m_ulCmuMemRestLen       0x1000210c    0x4  Data  Lc  CMU_PubFun.o [1]
+m_ulComType             0x10002100    0x4  Data  Lc  AbstractionLayer.o [1]
+m_ulInputStateGroup     0x10001fc0   0x20  Data  Lc  GPIO_Man.o [1]
+m_ulInputToggleGroup    0x10002000   0x20  Data  Lc  GPIO_Man.o [1]
+m_ulOutputStateGroup    0x10001fe0   0x20  Data  Lc  GPIO_Man.o [1]
+m_ulOutputToggleGroup   0x10002020   0x20  Data  Lc  GPIO_Man.o [1]
+m_ulPwmCountChannel     0x10002040   0x20  Data  Lc  PWM_MotorCtrl.o [1]
+m_ulSysTickCount        0x1000211c    0x4  Data  Lc  HW_SysTick.o [1]
+m_ulSysTickTime         0x100000ec    0x4  Data  Lc  HW_SysTick.o [1]
+main                    0x00008f9f   0x14  Code  Gb  Main.o [1]
+makeCtrlWord            0x00006b93   0xe0  Code  Gb  gpdma_17xx_40xx.o [1]
+mparams                 0x10002078   0x18  Data  Lc  dlmalloc.o [4]
+pf_CmuRecvBuff          0x100000e8    0x4  Data  Lc  CMU_Unpack.o [1]
+pf_PwmCountIrqHandler   0x10000060   0x20  Data  Lc  PWM_MotorCtrl.o [1]
+prepend_alloc           0x00004ab9  0x36c  Code  Lc  dlmalloc.o [4]
+s_RitClockRate          0x10002120    0x4  Data  Lc  HW_TimeDelay.o [1]
+segment_holding         0x00004a39   0x1a  Code  Lc  dlmalloc.o [4]
+setupChannel            0x00006c73   0x88  Code  Gb  gpdma_17xx_40xx.o [1]
+sys_alloc               0x00004e25  0x386  Code  Lc  dlmalloc.o [4]
+tmalloc_large           0x000051b9  0x390  Code  Lc  dlmalloc.o [4]
+tmalloc_small           0x00005549  0x210  Code  Lc  dlmalloc.o [4]
+u32Fun_32               0x00002f79    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_32            0x00002f7f    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_32_32_32      0x00002f8b    0xa  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_32_pu32_pu32  0x00002fed    0xa  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_32_u32        0x00002f85    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_f32           0x00002fab    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_p8_32         0x00002fa5    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_u32           0x00002f95    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_32_u32_pu8_u32   0x00002f9b    0xa  Code  Gb  CMU_ExApi.o [1]
+u32Fun_p8_u32           0x00002e5b    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_pdevconf_u32     0x00002f09    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_psysctrlparm     0x00002f0f    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_pversion         0x00002f1b    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u16              0x00002f73    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32              0x00002f03    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_32_32        0x00002fd5    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_p8_u32       0x00002f15    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pbusrsmsdata
+                        0x00002f27    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pdevinfo     0x00002f31    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pu32         0x00002fdb    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pu32_pu32    0x00002fe7    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pu32_u32     0x00002fe1    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pu8          0x00002fb7    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pu8_u32_u8   0x00002ff7    0xa  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_pversion     0x00002f21    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_u16          0x00002fc3    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_u16_pu8      0x00002fbd    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_u32          0x00002fc9    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_u32_u32      0x00002fcf    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_u32_u8           0x00002fb1    0x6  Code  Gb  CMU_ExApi.o [1]
+u32Fun_void             0x00002f2d    0x4  Code  Gb  CMU_ExApi.o [1]
+voidFun_u32_bool        0x00003001    0x2  Code  Gb  CMU_ExApi.o [1]
+voidFun_void            0x00002e59    0x2  Code  Gb  CMU_ExApi.o [1]
+
+
+[1] = E:\GitHub\GCP-MulitMCUs\Project\GCP-LPC17XX\Release\Obj
+[2] = command line
+[3] = IPO-LIB-17xx.a
+[4] = dl7M_tln.a
+[5] = m7M_tl.a
+[6] = rt7M_tl.a
+[7] = shb_l.a
+
+  36 212 bytes of readonly  code memory
+     540 bytes of readonly  data memory
+  15 185 bytes of readwrite data memory
+
+Errors: none
+Warnings: none

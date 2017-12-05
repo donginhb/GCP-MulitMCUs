@@ -20,8 +20,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef MST_DATA_STRUCT_DEFINE_H
 #define MST_DATA_STRUCT_DEFINE_H
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
 
 
 #pragma pack(push)

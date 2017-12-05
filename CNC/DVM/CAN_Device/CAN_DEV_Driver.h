@@ -1,14 +1,14 @@
 #ifndef _CAN_DEV_DRIVER_H_
 #define _CAN_DEV_DRIVER_H_
 
-#include "..\\..\\CMU\\UIN_GlobalDataDef.h"
-#include "..\\..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\..\\DataStructDef\\DEV_DataStructDef.h"
-#include "..\\..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\..\\DataStructDef\\IO_DataStructDef.h"
-#include "..\\..\\DataStructDef\\IPO_DataStructDefPub.h"
+#include "../../CMU/UIN_GlobalDataDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/IO_DataStructDef.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-#include "..\\..\\..\\Version\\VER_DataStructDef.h"
+#include "../../../Version/VER_DataStructDef.h"
 
 
 //CAN总线驱动输出接口--------------------------------------------------------------------------------

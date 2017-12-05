@@ -51,31 +51,31 @@
 /* Write data to EEPROM */
 uint8_t Chip_EEPROM_Write(uint32_t dstAdd, uint8_t *ptr, uint32_t byteswrt)
 {
-	uint32_t command[5], result[5];
+    uint32_t command[5], result[5];
 
-	command[0] = IAP_EEPROM_WRITE;
-	command[1] = dstAdd;
-	command[2] = (uint32_t) ptr;
-	command[3] = byteswrt;
-	command[4] = SystemCoreClock / 1000;
-	iap_entry(command, result);
+    command[0] = IAP_EEPROM_WRITE;
+    command[1] = dstAdd;
+    command[2] = (uint32_t) ptr;
+    command[3] = byteswrt;
+    command[4] = SystemCoreClock / 1000;
+    iap_entry(command, result);
 
-	return result[0];
+    return result[0];
 }
 
 /* Read data from EEPROM */
 uint8_t Chip_EEPROM_Read(uint32_t srcAdd, uint8_t *ptr, uint32_t bytesrd)
 {
-	uint32_t command[5], result[5];
+    uint32_t command[5], result[5];
 
-	command[0] = IAP_EEPROM_READ;
-	command[1] = srcAdd;
-	command[2] = (uint32_t) ptr;
-	command[3] = bytesrd;
-	command[4] = SystemCoreClock / 1000;
-	iap_entry(command, result);
+    command[0] = IAP_EEPROM_READ;
+    command[1] = srcAdd;
+    command[2] = (uint32_t) ptr;
+    command[3] = bytesrd;
+    command[4] = SystemCoreClock / 1000;
+    iap_entry(command, result);
 
-	return result[0];
+    return result[0];
 }
 
 

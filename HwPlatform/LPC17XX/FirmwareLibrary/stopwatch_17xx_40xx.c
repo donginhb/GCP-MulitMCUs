@@ -56,55 +56,55 @@ static uint32_t ticksPerUs;
 /* Initialize stopwatch */
 void StopWatch_Init(void)
 {
-	/* Use timer 1. Set prescaler to divide by 8, should give ticks at 3.75 MHz.
-	   That gives a useable stopwatch measurement range of about 19 minutes
-	   (if system clock is running at 120 MHz). */
-	const uint32_t prescaleDivisor = 8;
-	Chip_TIMER_Init(LPC_TIMER1);
-	Chip_TIMER_PrescaleSet(LPC_TIMER1, prescaleDivisor - 1);
-	Chip_TIMER_Enable(LPC_TIMER1);
+    /* Use timer 1. Set prescaler to divide by 8, should give ticks at 3.75 MHz.
+       That gives a useable stopwatch measurement range of about 19 minutes
+       (if system clock is running at 120 MHz). */
+    const uint32_t prescaleDivisor = 8;
+    Chip_TIMER_Init(LPC_TIMER1);
+    Chip_TIMER_PrescaleSet(LPC_TIMER1, prescaleDivisor - 1);
+    Chip_TIMER_Enable(LPC_TIMER1);
 
-	/* Pre-compute tick rate. Note that peripheral clock supplied to the
-	   timer includes a fixed divide by 4. */
-	ticksPerSecond = Chip_Clock_GetSystemClockRate() / prescaleDivisor / 4;
-	ticksPerMs = ticksPerSecond / 1000;
-	ticksPerUs = ticksPerSecond / 1000000;
+    /* Pre-compute tick rate. Note that peripheral clock supplied to the
+       timer includes a fixed divide by 4. */
+    ticksPerSecond = Chip_Clock_GetSystemClockRate() / prescaleDivisor / 4;
+    ticksPerMs = ticksPerSecond / 1000;
+    ticksPerUs = ticksPerSecond / 1000000;
 }
 
 /* Start a stopwatch */
 uint32_t StopWatch_Start(void)
 {
-	/* Return the current timer count. */
-	return Chip_TIMER_ReadCount(LPC_TIMER1);
+    /* Return the current timer count. */
+    return Chip_TIMER_ReadCount(LPC_TIMER1);
 }
 
 /* Returns number of ticks per second of the stopwatch timer */
 uint32_t StopWatch_TicksPerSecond(void)
 {
-	return ticksPerSecond;
+    return ticksPerSecond;
 }
 
 /* Converts from stopwatch ticks to mS. */
 uint32_t StopWatch_TicksToMs(uint32_t ticks)
 {
-	return ticks / ticksPerMs;
+    return ticks / ticksPerMs;
 }
 
 /* Converts from stopwatch ticks to uS. */
 uint32_t StopWatch_TicksToUs(uint32_t ticks)
 {
-	return ticks / ticksPerUs;
+    return ticks / ticksPerUs;
 }
 
 /* Converts from mS to stopwatch ticks. */
 uint32_t StopWatch_MsToTicks(uint32_t mS)
 {
-	return mS * ticksPerMs;
+    return mS * ticksPerMs;
 }
 
 /* Converts from uS to stopwatch ticks. */
 uint32_t StopWatch_UsToTicks(uint32_t uS)
 {
-	return uS * ticksPerUs;
+    return uS * ticksPerUs;
 }
 

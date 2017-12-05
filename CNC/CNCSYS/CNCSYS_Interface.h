@@ -25,18 +25,17 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 */
 
 
-#ifndef CNCSYS_INTERFACE_H
-#define CNCSYS_INTERFACE_H
+#ifndef __CNCSYS_INTERFACE_H
+#define __CNCSYS_INTERFACE_H
 
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\DEV_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
 
-
-#include "..\\..\\Version\\VER_DataStructDef.h"
+#include "Version/Version.h"
 
 
 typedef struct _CNCSYS_InterFace {
@@ -191,16 +190,99 @@ extern "C" {
     Bit32 SPM_GetAxisType(Bit32 nCh, Bit32 iAxisNo);
     
     
+    
 void SYS_InitStateData();
 
 
 void CNCSYS_IPOInSysTick(void);
 
 
+
+
+
+
+
+    
+/*****************************************************************************
+ * CNC系统状态相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  系统状态数据初始化
+  * @param  None
+  * @retval None
+  */
+void CNCSYS_InitStateData(void);
+
+
+/**
+  * @brief  系统状态数据读取地址获取
+  * @param  None
+  * @retval 系统状态数据读取地址(指针)
+  */
+const SYS_STATE_DATA* CNCSYS_GetStateReadAddr(void);
+
+
+/**
+  * @brief  系统报警状态位设置
+  * @param  ulAlarmBit 系统报警状态位
+  * @retval None
+  */
+void CNCSYS_SetAlarmBit(uBit32 ulAlarmBit);
+
+
+/**
+  * @brief  系统报警状态位清除
+  * @param  ulAlarmBit 系统报警状态位
+  * @retval None
+  */
+void CNCSYS_ClrAlarmBit(uBit32 ulAlarmBit);
+
+
+/**
+  * @brief  系统报警状态位获取
+  * @param  ulAlarmBit 系统报警状态位
+  * @retval 1-存在报警 0-没有报警
+  */
+Bit32 CNCSYS_GetAlarmBit(uBit32 ulAlarmBit);
+
+
+/**
+  * @brief  系统报警状态位获取
+  * @param  ulAlarmBit 系统报警状态位
+  * @retval 1-存在报警 0-没有报警
+  */
+uBit32 CNCSYS_GetAlarmStatus(void);
+
+
+/**
+  * @brief  系统状态位获取
+  * @param  Node
+  * @retval 系统运行状态位
+  */
+uBit32 CNCSYS_GetSysStatus(void);
+
+
+/**
+  * @brief  系统状态位设置
+  * @param  ulStatusBit 系统运行状态位
+  * @retval Node
+  */
+void CNCSYS_SetStatusBit(uBit32 ulStatusBit);
+
+
+/**
+  * @brief  系统状态位清除
+  * @param  ulStatusBit 系统运行状态位
+  * @retval Node
+  */
+void CNCSYS_ClrStatusBit(uBit32 ulStatusBit);
+
+
+
+
 #ifdef __cplusplus
 }
 #endif
 
-
-
-#endif
+#endif /* __CNCSYS_INTERFACE_H */

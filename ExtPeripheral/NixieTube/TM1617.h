@@ -14,15 +14,15 @@ extern "C"
  ****************************************************************************/
 
 /**
-  * @brief  TM1617控制引脚编号设置
+  * @brief  TM1617 接口初始化
   * @param  pf_SetDIO 数据引脚控制接口
   * @param  pf_SetCLK 时钟引脚控制接口
   * @param  pf_SetSTB 片选引脚控制接口
-  * @retval None
+  * @retval 0-成功  非0-失败
   */
-void TM1617_SetCtrlPin(void (*pf_SetDIO)(bool bState), 
-                       void (*pf_SetCLK)(bool bState), 
-                       void (*pf_SetSTB)(bool bState));
+uBit32 TM1617_InitInterface(void (*pf_SetDIO)(bool bState), 
+                            void (*pf_SetCLK)(bool bState), 
+                            void (*pf_SetSTB)(bool bState));
 
 
 /**

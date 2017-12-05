@@ -48,23 +48,23 @@ extern "C" {
  * @brief SD/MMC card Interface (SDC) register block structure
  */
 typedef struct {
-	__IO uint32_t POWER;		/*!< Power Control register */
-	__IO uint32_t CLOCK;		/*!< Clock control regsiter */
-	__IO uint32_t ARGUMENT;		/*!< Command argument register */
-	__IO uint32_t COMMAND;		/*!< Command register */
-	__I  uint32_t RESPCMD;		/*!< Command response register */
-	__I  uint32_t RESPONSE[4];	/*!< Response registers */
-	__IO uint32_t DATATIMER;	/*!< Data timer register */
-	__IO uint32_t DATALENGTH;	/*!< Data length register */
-	__IO uint32_t DATACTRL;		/*!< Data control register */
-	__I  uint32_t DATACNT;		/*!< Data count register */
-	__I  uint32_t STATUS;		/*!< Status register */
-	__O  uint32_t CLEAR;		/*!< Clear register */
-	__IO uint32_t MASK0;		/*!< Mask 0 register */
-	uint32_t RESERVED0[2];
-	__I  uint32_t FIFOCNT;		/*!< FIFO count register */
-	uint32_t RESERVED1[13];
-	__IO uint32_t FIFO[16];		/*!< FIFO registers */
+    __IO uint32_t POWER;        /*!< Power Control register */
+    __IO uint32_t CLOCK;        /*!< Clock control regsiter */
+    __IO uint32_t ARGUMENT;        /*!< Command argument register */
+    __IO uint32_t COMMAND;        /*!< Command register */
+    __I  uint32_t RESPCMD;        /*!< Command response register */
+    __I  uint32_t RESPONSE[4];    /*!< Response registers */
+    __IO uint32_t DATATIMER;    /*!< Data timer register */
+    __IO uint32_t DATALENGTH;    /*!< Data length register */
+    __IO uint32_t DATACTRL;        /*!< Data control register */
+    __I  uint32_t DATACNT;        /*!< Data count register */
+    __I  uint32_t STATUS;        /*!< Status register */
+    __O  uint32_t CLEAR;        /*!< Clear register */
+    __IO uint32_t MASK0;        /*!< Mask 0 register */
+    uint32_t RESERVED0[2];
+    __I  uint32_t FIFOCNT;        /*!< FIFO count register */
+    uint32_t RESERVED1[13];
+    __IO uint32_t FIFO[16];        /*!< FIFO registers */
 } LPC_SDC_T;
 
 /**
@@ -205,12 +205,12 @@ typedef struct {
 #define SDC_STATUS_CMDERR    (SDC_STATUS_CMDCRCFAIL | SDC_STATUS_CMDTIMEOUT | SDC_STATUS_STARTBITERR)
 /** Data Error Status */
 #define SDC_STATUS_DATAERR    (SDC_STATUS_DATACRCFAIL | SDC_STATUS_DATATIMEOUT | SDC_STATUS_TXUNDERRUN \
-							   | SDC_STATUS_RXOVERRUN | SDC_STATUS_STARTBITERR)
+                               | SDC_STATUS_RXOVERRUN | SDC_STATUS_STARTBITERR)
 /** FIFO Status*/
 #define SDC_STATUS_FIFO    (SDC_STATUS_TXFIFOHALFEMPTY | SDC_STATUS_RXFIFOHALFFULL \
-							| SDC_STATUS_TXFIFOFULL  | SDC_STATUS_RXFIFOFULL \
-							| SDC_STATUS_TXFIFOEMPTY | SDC_STATUS_RXFIFOEMPTY \
-							| SDC_STATUS_DATABLOCKEND)
+                            | SDC_STATUS_TXFIFOFULL  | SDC_STATUS_RXFIFOFULL \
+                            | SDC_STATUS_TXFIFOEMPTY | SDC_STATUS_RXFIFOEMPTY \
+                            | SDC_STATUS_DATABLOCKEND)
 
 /** Data Transfer Status*/
 #define SDC_STATUS_DATA    (SDC_STATUS_DATAEND )
@@ -294,11 +294,11 @@ typedef struct {
 #define SDC_MASK0_CMDERR    (SDC_MASK0_CMDCRCFAIL | SDC_MASK0_CMDTIMEOUT | SDC_MASK0_STARTBITERR)
 /** Data Transmit Error interrupt mask */
 #define SDC_MASK0_TXDATAERR    (SDC_MASK0_DATACRCFAIL | SDC_MASK0_DATATIMEOUT | SDC_MASK0_TXUNDERRUN | \
-								SDC_MASK0_STARTBITERR)
+                                SDC_MASK0_STARTBITERR)
 
 /** Data Receive Error interrupt mask */
 #define SDC_MASK0_RXDATAERR    (SDC_MASK0_DATACRCFAIL | SDC_MASK0_DATATIMEOUT | SDC_MASK0_RXOVERRUN | \
-								SDC_MASK0_STARTBITERR)
+                                SDC_MASK0_STARTBITERR)
 /** TX FIFO interrupt mask*/
 #define SDC_MASK0_TXFIFO    (SDC_MASK0_TXFIFOHALFEMPTY | SDC_MASK0_DATABLOCKEND )
 /** RX FIFO interrupt mask*/
@@ -319,113 +319,113 @@ typedef struct {
  * @brief SDC Card bus clock rate definitions
  */
 /* Card bus clock in Card Identification Mode */
-#define SDC_IDENT_CLOCK_RATE         (400000)	/* 400KHz */
+#define SDC_IDENT_CLOCK_RATE         (400000)    /* 400KHz */
 /* Card bus clock in Data Transfer Mode */
-#define SDC_TRAN_CLOCK_RATE        (20000000)	/* 20MHz */
+#define SDC_TRAN_CLOCK_RATE        (20000000)    /* 20MHz */
 
 /**
  * @brief SDC Power Control Options
  */
 typedef enum SDC_PWR_CTRL {
-	SDC_POWER_OFF = 0,		/*!< Power-off */
-	SDC_POWER_UP = 2,		/*!< Power-up */
-	SDC_POWER_ON = 3,		/*!< Power-on */
+    SDC_POWER_OFF = 0,        /*!< Power-off */
+    SDC_POWER_UP = 2,        /*!< Power-up */
+    SDC_POWER_ON = 3,        /*!< Power-on */
 } SDC_PWR_CTRL_T;
 
 /**
  * @brief SDC Clock Control Options
  */
 typedef enum SDC_CLOCK_CTRL {
-	SDC_CLOCK_ENABLE = 8,			/*!< Enable SD Card Bus Clock */
-	SDC_CLOCK_POWER_SAVE = 9,		/*!< Disable SD_CLK output when bus is idle */
-	SDC_CLOCK_DIVIDER_BYPASS = 10,	/*!< Enable bypass of clock divide logic */
-	SDC_CLOCK_WIDEBUS_MODE = 11,	/*!< Enable wide bus mode (SD_DAT[3:0] is used instead of SD_DAT[0]) */
+    SDC_CLOCK_ENABLE = 8,            /*!< Enable SD Card Bus Clock */
+    SDC_CLOCK_POWER_SAVE = 9,        /*!< Disable SD_CLK output when bus is idle */
+    SDC_CLOCK_DIVIDER_BYPASS = 10,    /*!< Enable bypass of clock divide logic */
+    SDC_CLOCK_WIDEBUS_MODE = 11,    /*!< Enable wide bus mode (SD_DAT[3:0] is used instead of SD_DAT[0]) */
 } SDC_CLOCK_CTRL_T;
 
 /**
  * @brief SDC Response type
  */
 typedef enum SDC_RESPONSE {
-	SDC_NO_RESPONSE = SDC_COMMAND_NO_RSP,		/*!< No response */
-	SDC_SHORT_RESPONSE = SDC_COMMAND_SHORT_RSP,	/*!< Short response */
-	SDC_LONG_RESPONSE = SDC_COMMAND_LONG_RSP,	/*!< Long response */
+    SDC_NO_RESPONSE = SDC_COMMAND_NO_RSP,        /*!< No response */
+    SDC_SHORT_RESPONSE = SDC_COMMAND_SHORT_RSP,    /*!< Short response */
+    SDC_LONG_RESPONSE = SDC_COMMAND_LONG_RSP,    /*!< Long response */
 } SDC_RESPONSE_T;
 
 /**
  * @brief SDC Data Transfer Direction definitions
  */
 typedef enum SDC_TRANSFER_DIR {
-	SDC_TRANSFER_DIR_FROMCARD = SDC_DATACTRL_DIR_FROMCARD,	/*!< Transfer from card */
-	SDC_TRANSFER_DIR_TOCARD = SDC_DATACTRL_DIR_TOCARD,		/*!< Transfer to card */
+    SDC_TRANSFER_DIR_FROMCARD = SDC_DATACTRL_DIR_FROMCARD,    /*!< Transfer from card */
+    SDC_TRANSFER_DIR_TOCARD = SDC_DATACTRL_DIR_TOCARD,        /*!< Transfer to card */
 } SDC_TRANSFER_DIR_T;
 
 /**
  * @brief SDC Data Transfer Mode definitions
  */
 typedef enum SDC_TRANSFER_MODE {
-	SDC_TRANSFER_MODE_STREAM = SDC_DATACTRL_XFER_MODE_STREAM,	/*!< Stream transfer mode */
-	SDC_TRANSFER_MODE_BLOCK = SDC_DATACTRL_XFER_MODE_BLOCK,		/*!< Block transfer mode */
+    SDC_TRANSFER_MODE_STREAM = SDC_DATACTRL_XFER_MODE_STREAM,    /*!< Stream transfer mode */
+    SDC_TRANSFER_MODE_BLOCK = SDC_DATACTRL_XFER_MODE_BLOCK,        /*!< Block transfer mode */
 } SDC_TRANSFER_MODE_T;
 
 /**
  * @brief SDC Data Block size definitions (in bytes)
  */
 typedef enum SDC_BLOCK_SIZE {
-	SDC_BLOCK_SIZE_1 = 0,		/*!< Block size - 1 byte */
-	SDC_BLOCK_SIZE_2,			/*!< Block size - 2 bytes */
-	SDC_BLOCK_SIZE_4,			/*!< Block size - 4 bytes */
-	SDC_BLOCK_SIZE_8,			/*!< Block size - 8 bytes */
-	SDC_BLOCK_SIZE_16,			/*!< Block size - 16 bytes */
-	SDC_BLOCK_SIZE_32,			/*!< Block size - 32 bytes */
-	SDC_BLOCK_SIZE_64,			/*!< Block size - 64 bytes */
-	SDC_BLOCK_SIZE_128,			/*!< Block size - 128 bytes */
-	SDC_BLOCK_SIZE_256,			/*!< Block size - 256 bytes */
-	SDC_BLOCK_SIZE_512,			/*!< Block size - 512 bytes */
-	SDC_BLOCK_SIZE_1024,		/*!< Block size - 1024 bytes */
-	SDC_BLOCK_SIZE_2048,		/*!< Block size - 2048 bytes */
+    SDC_BLOCK_SIZE_1 = 0,        /*!< Block size - 1 byte */
+    SDC_BLOCK_SIZE_2,            /*!< Block size - 2 bytes */
+    SDC_BLOCK_SIZE_4,            /*!< Block size - 4 bytes */
+    SDC_BLOCK_SIZE_8,            /*!< Block size - 8 bytes */
+    SDC_BLOCK_SIZE_16,            /*!< Block size - 16 bytes */
+    SDC_BLOCK_SIZE_32,            /*!< Block size - 32 bytes */
+    SDC_BLOCK_SIZE_64,            /*!< Block size - 64 bytes */
+    SDC_BLOCK_SIZE_128,            /*!< Block size - 128 bytes */
+    SDC_BLOCK_SIZE_256,            /*!< Block size - 256 bytes */
+    SDC_BLOCK_SIZE_512,            /*!< Block size - 512 bytes */
+    SDC_BLOCK_SIZE_1024,        /*!< Block size - 1024 bytes */
+    SDC_BLOCK_SIZE_2048,        /*!< Block size - 2048 bytes */
 } SDC_BLOCK_SIZE_T;
 
 /**
  * @brief SDC Return code definitions
  */
 typedef enum CHIP_SDC_RET_CODE {
-	SDC_RET_OK = 0,
-	SDC_RET_CMD_FAILED = -1,
-	SDC_RET_BAD_PARAMETERS = -2,
-	SDC_RET_BUS_NOT_IDLE = -3,
-	SDC_RET_TIMEOUT = -4,
-	SDC_RET_ERR_STATE = -5,
-	SDC_RET_NOT_READY = -6,
-	SDC_RET_FAILED = -7,
+    SDC_RET_OK = 0,
+    SDC_RET_CMD_FAILED = -1,
+    SDC_RET_BAD_PARAMETERS = -2,
+    SDC_RET_BUS_NOT_IDLE = -3,
+    SDC_RET_TIMEOUT = -4,
+    SDC_RET_ERR_STATE = -5,
+    SDC_RET_NOT_READY = -6,
+    SDC_RET_FAILED = -7,
 } CHIP_SDC_RET_CODE_T;
 
 /**
  * @brief SDC Command Response structure
  */
 typedef struct {
-	uint8_t CmdIndex;						/*!< Command Index of the command response received */
-	uint32_t Data[SDC_CARDSTATUS_BYTENUM];	/* Card Status which can be stored in 1 or 4 bytes */
+    uint8_t CmdIndex;                        /*!< Command Index of the command response received */
+    uint32_t Data[SDC_CARDSTATUS_BYTENUM];    /* Card Status which can be stored in 1 or 4 bytes */
 } SDC_RESP_T;
 
 /**
  * @brief SDC Data Transfer Setup structure
  */
 typedef struct {
-	uint16_t BlockNum;						/*!< The number of block which will be transfered */
-	SDC_BLOCK_SIZE_T BlockSize;		/*!< Data Block Length */
-	SDC_TRANSFER_DIR_T Dir;			/*!< Direction */
-	SDC_TRANSFER_MODE_T  Mode;		/*!< Mode */
-	bool     DMAUsed;						/*!< true: DMA used */
-	uint32_t Timeout;						/*!< Data Transfer timeout periods (in Card Bus Clock)*/
+    uint16_t BlockNum;                        /*!< The number of block which will be transfered */
+    SDC_BLOCK_SIZE_T BlockSize;        /*!< Data Block Length */
+    SDC_TRANSFER_DIR_T Dir;            /*!< Direction */
+    SDC_TRANSFER_MODE_T  Mode;        /*!< Mode */
+    bool     DMAUsed;                        /*!< true: DMA used */
+    uint32_t Timeout;                        /*!< Data Transfer timeout periods (in Card Bus Clock)*/
 } SDC_DATA_TRANSFER_T;
 
 /**
- * @brief	Set the power state of SDC peripheral
- * @param	pSDC	: Pointer to SDC register block
- * @param	pwrMode	: Power mode
- * @param	flag	: Output control flag
- * @return	Nothing
- * @note	When the external power supply is switched on, the software first enters the power-up
+ * @brief    Set the power state of SDC peripheral
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    pwrMode    : Power mode
+ * @param    flag    : Output control flag
+ * @return    Nothing
+ * @note    When the external power supply is switched on, the software first enters the power-up
  *  state, and waits until the supply output is stable before moving to the power-on state.
  *  During the power-up state, SD_PWR is set HIGH. The card bus outlets are disabled
  *  during both states.
@@ -434,139 +434,139 @@ typedef struct {
 void Chip_SDC_PowerControl(LPC_SDC_T *pSDC, SDC_PWR_CTRL_T pwrMode, uint32_t flag);
 
 /**
- * @brief	Set clock divider value for SDC peripheral
- * @param	pSDC	: Pointer to SDC register block
- * @param	div		: clock divider
- * @return	Nothing
- * @note	While the SD card interface is in identification mode, the SD_CLK frequency must be less
+ * @brief    Set clock divider value for SDC peripheral
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    div        : clock divider
+ * @return    Nothing
+ * @note    While the SD card interface is in identification mode, the SD_CLK frequency must be less
  *  than 400 kHz. The clock frequency can be changed to the maximum card bus frequency
  *  when relative card addresses are assigned to all cards.
- *	SD_CLK frequency = MCLK / [2x(ClkDiv+1)].
+ *    SD_CLK frequency = MCLK / [2x(ClkDiv+1)].
  */
 void Chip_SDC_SetClockDiv(LPC_SDC_T *pSDC, uint8_t div);
 
 /**
- * @brief	Set or Reset clock control of SDC peripheral
- * @param	pSDC		: Pointer to SDC register block
- * @param	ctrlType	: Clock Control type
- * @param	NewState	: New State to set
- * @return	Nothing
+ * @brief    Set or Reset clock control of SDC peripheral
+ * @param    pSDC        : Pointer to SDC register block
+ * @param    ctrlType    : Clock Control type
+ * @param    NewState    : New State to set
+ * @return    Nothing
  */
 void Chip_SDC_ClockControl(LPC_SDC_T *pSDC, SDC_CLOCK_CTRL_T ctrlType,
-						   FunctionalState NewState);
+                           FunctionalState NewState);
 
 /**
- * @brief	Set the clock frequency for SDC peripheral
- * @param	pSDC	: Pointer to SDC peripheral base address
- * @param	freq	: Expected clock frequency
- * @return	None
+ * @brief    Set the clock frequency for SDC peripheral
+ * @param    pSDC    : Pointer to SDC peripheral base address
+ * @param    freq    : Expected clock frequency
+ * @return    None
  */
 void Chip_SDC_SetClock(LPC_SDC_T *pSDC, uint32_t freq);
 
 /**
- * @brief	Set SDC Command Information
- * @param	pSDC	: Pointer to SDC register block
- * @param	Cmd	    : Command value
+ * @brief    Set SDC Command Information
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    Cmd        : Command value
  * @param   Arg     : Argument for the command
- * @return	Nothing
+ * @return    Nothing
  */
 void Chip_SDC_SetCommand(LPC_SDC_T *pSDC, uint32_t Cmd, uint32_t Arg);
 
 /**
- * @brief	Reset SDC Command Information
- * @param	pSDC	: Pointer to SDC register block
- * @return	Nothing
+ * @brief    Reset SDC Command Information
+ * @param    pSDC    : Pointer to SDC register block
+ * @return    Nothing
  */
 void Chip_SDC_ResetCommand(LPC_SDC_T *pSDC);
 
 /**
- * @brief	Get SDC Response
- * @param	pSDC	: Pointer to SDC register block
- * @param	pResp	: Pointer to buffer storing response data
- * @return	Nothing
+ * @brief    Get SDC Response
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    pResp    : Pointer to buffer storing response data
+ * @return    Nothing
  */
 void Chip_SDC_GetResp(LPC_SDC_T *pSDC, SDC_RESP_T *pResp);
 
 /**
- * @brief	Set SDC Data Timeout Period
- * @param	pSDC	: Pointer to SDC register block
- * @param	timeout	: Data timeout value in card bus clock periods
- * @return	Nothing
+ * @brief    Set SDC Data Timeout Period
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    timeout    : Data timeout value in card bus clock periods
+ * @return    Nothing
  */
 STATIC INLINE void Chip_SDC_SetDataTimer(LPC_SDC_T *pSDC, uint32_t timeout)
 {
-	pSDC->DATATIMER = timeout;
+    pSDC->DATATIMER = timeout;
 }
 
 /**
- * @brief	Set SDC Data Transfer Information
- * @param	pSDC		: Pointer to SDC register block
- * @param	pTransfer	: Pointer to Data Transfer structure
- * @return	Nothing
+ * @brief    Set SDC Data Transfer Information
+ * @param    pSDC        : Pointer to SDC register block
+ * @param    pTransfer    : Pointer to Data Transfer structure
+ * @return    Nothing
  */
 void Chip_SDC_SetDataTransfer(LPC_SDC_T *pSDC, SDC_DATA_TRANSFER_T *pTransfer);
 
 /**
- * @brief	Write Data to FIFO
- * @param	pSDC		: Pointer to SDC register block
- * @param	pSrc		: Pointer to data buffer
- * @param	bFirstHalf	: true (write to the first half of FIFO) false (write to the second half of FIFO)
- * @return	Nothing
+ * @brief    Write Data to FIFO
+ * @param    pSDC        : Pointer to SDC register block
+ * @param    pSrc        : Pointer to data buffer
+ * @param    bFirstHalf    : true (write to the first half of FIFO) false (write to the second half of FIFO)
+ * @return    Nothing
  */
 void Chip_SDC_WriteFIFO(LPC_SDC_T *pSDC, uint32_t *pSrc, bool bFirstHalf);
 
 /**
- * @brief	Write Data to FIFO
- * @param	pSDC	: Pointer to SDC register block
- * @param	pDst	: The buffer hold the data read
- * @param	bFirstHalf : true (read the first half of FIFO) false (read the second half of FIFO)
- * @return	Nothing
+ * @brief    Write Data to FIFO
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    pDst    : The buffer hold the data read
+ * @param    bFirstHalf : true (read the first half of FIFO) false (read the second half of FIFO)
+ * @return    Nothing
  */
 void Chip_SDC_ReadFIFO(LPC_SDC_T *pSDC, uint32_t *pDst, bool bFirstHalf);
 
 /**
- * @brief	Get status of SDC Peripheral
- * @param	pSDC	: Pointer to SDC register block
- * @return	Status (Or-ed bit value of SDC_STATUS_*)
+ * @brief    Get status of SDC Peripheral
+ * @param    pSDC    : Pointer to SDC register block
+ * @return    Status (Or-ed bit value of SDC_STATUS_*)
  */
 STATIC INLINE uint32_t Chip_SDC_GetStatus(LPC_SDC_T *pSDC)
 {
-	return pSDC->STATUS;
+    return pSDC->STATUS;
 }
 
 /**
- * @brief	Clear status of SDC Peripheral
- * @param	pSDC	: Pointer to SDC register block
- * @param	flag	: Status flag(s) to be cleared (Or-ed bit value of SDC_CLEAR_*)
- * @return	None
+ * @brief    Clear status of SDC Peripheral
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    flag    : Status flag(s) to be cleared (Or-ed bit value of SDC_CLEAR_*)
+ * @return    None
  */
 STATIC INLINE void Chip_SDC_ClearStatus(LPC_SDC_T *pSDC, uint32_t flag)
 {
-	pSDC->CLEAR = flag;
+    pSDC->CLEAR = flag;
 }
 
 /**
- * @brief	Set interrupt mask for SDC Peripheral
- * @param	pSDC	: Pointer to SDC register block
- * @param	mask	: Interrupt mask (Or-ed bit value of SDC_MASK0_*)
- * @return	None
+ * @brief    Set interrupt mask for SDC Peripheral
+ * @param    pSDC    : Pointer to SDC register block
+ * @param    mask    : Interrupt mask (Or-ed bit value of SDC_MASK0_*)
+ * @return    None
  */
 STATIC INLINE void Chip_SDC_SetIntMask(LPC_SDC_T *pSDC, uint32_t mask)
 {
-	pSDC->MASK0 = mask;
+    pSDC->MASK0 = mask;
 }
 
 /**
- * @brief	Initialize the SDC card controller
- * @param	pSDC	: Pointer to SDC register block
- * @return	None
+ * @brief    Initialize the SDC card controller
+ * @param    pSDC    : Pointer to SDC register block
+ * @return    None
  */
 void Chip_SDC_Init(LPC_SDC_T *pSDC);
 
 /**
- * @brief	Deinitialise SDC peripheral
- * @param	pSDC	: Pointer to SDC peripheral base address
- * @return	None
+ * @brief    Deinitialise SDC peripheral
+ * @param    pSDC    : Pointer to SDC peripheral base address
+ * @return    None
  */
 void Chip_SDC_DeInit(LPC_SDC_T *pSDC);
 

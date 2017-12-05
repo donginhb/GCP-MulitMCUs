@@ -3,11 +3,11 @@
 
 #include "CAN_DEV_DataStructDef.h"
 #include "CAN_COM_DataStructDef.h"
-#include "..\\DEV_DriveStructDef.h"
-#include "..\\..\\DataStructDef\\SYS_DataStructDef.h"
+#include "../DEV_DriveStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
 
-//#include "..\\..\\CMU\\UIN_GlobalDataDef.h"
-#include "..\\..\\..\\SysPeripheral\\CAN\\CanDataStructDef.h"
+//#include "../../CMU/UIN_GlobalDataDef.h"
+#include "../../../SysPeripheral/CAN/CanDataStructDef.h"
 
 
 //-------------------CAN总线驱动数据结构定义---------------------------------------------

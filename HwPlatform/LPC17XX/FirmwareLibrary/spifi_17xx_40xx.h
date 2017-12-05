@@ -49,21 +49,21 @@ extern "C" {
 #define SPIFI_ROM_PTR                         (0x1FFF1954)
 
 /**
- * @brief	Initialize the SPIFI
- * @return	None
+ * @brief    Initialize the SPIFI
+ * @return    None
  */
 STATIC INLINE void Chip_SPIFI_Init(void)
 {
-	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_SPIFI);
+    Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_SPIFI);
 }
 
 /**
- * @brief	Shutdown the SPIFI
- * @return	None
+ * @brief    Shutdown the SPIFI
+ * @return    None
  */
 STATIC INLINE void Chip_SPIFI_DeInit(void)
 {
-	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_SPIFI);
+    Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_SPIFI);
 }
 
 #endif /* defined(CHIP_LPC40XX) */

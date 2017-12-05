@@ -1,5 +1,5 @@
 /*
- * @brief	LPC17xx/40xx System and Control driver
+ * @brief    LPC17xx/40xx System and Control driver
  *
  * @note
  * Copyright(C) NXP Semiconductors, 2014
@@ -44,27 +44,27 @@
  ****************************************************************************/
 /* Returns and clears the current sleep mode entry flags */
 uint32_t Chip_SYSCTL_GetClrSleepFlags(uint32_t flags) {
-	uint32_t savedFlags = LPC_SYSCTL->PCON;
+    uint32_t savedFlags = LPC_SYSCTL->PCON;
 
-	LPC_SYSCTL->PCON = flags;
+    LPC_SYSCTL->PCON = flags;
 
-	return savedFlags & (SYSCTL_PD_SMFLAG | SYSCTL_PD_DSFLAG |
-						 SYSCTL_PD_PDFLAG | SYSCTL_PD_DPDFLAG);
+    return savedFlags & (SYSCTL_PD_SMFLAG | SYSCTL_PD_DSFLAG |
+                         SYSCTL_PD_PDFLAG | SYSCTL_PD_DPDFLAG);
 }
 
 #if !defined(CHIP_LPC175X_6X)
 /* Resets a peripheral */
 void Chip_SYSCTL_PeriphReset(CHIP_SYSCTL_RESET_T periph)
 {
-	uint32_t bitIndex, regIndex = (uint32_t) periph;
+    uint32_t bitIndex, regIndex = (uint32_t) periph;
 
-	/* Get register array index and clock index into the register */
-	bitIndex = (regIndex % 32);
-	regIndex = regIndex / 32;
+    /* Get register array index and clock index into the register */
+    bitIndex = (regIndex % 32);
+    regIndex = regIndex / 32;
 
-	/* Reset peripheral */
-	LPC_SYSCTL->RSTCON[regIndex] = (1 << bitIndex);
-	LPC_SYSCTL->RSTCON[regIndex] &= ~(1 << bitIndex);
+    /* Reset peripheral */
+    LPC_SYSCTL->RSTCON[regIndex] = (1 << bitIndex);
+    LPC_SYSCTL->RSTCON[regIndex] &= ~(1 << bitIndex);
 }
 
 #endif /*!defined(CHIP_LPC175X_6X)*/

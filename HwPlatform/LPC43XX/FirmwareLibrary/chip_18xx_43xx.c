@@ -36,11 +36,11 @@
  ****************************************************************************/
 /* USB PLL pre-initialized setup values for 480MHz output rate */
 static const CGU_USBAUDIO_PLL_SETUP_T usbPLLSetup = {
-	0x0000601D,	/* Default control with main osc input, PLL disabled */
-	0x06167FFA,	/* M-divider value for 480MHz output from 12MHz input */
-	0x00000000,	/* N-divider value */
-	0x00000000,	/* Not applicable for USB PLL */
-	480000000   /* PLL output frequency */
+    0x0000601D,    /* Default control with main osc input, PLL disabled */
+    0x06167FFA,    /* M-divider value for 480MHz output from 12MHz input */
+    0x00000000,    /* N-divider value */
+    0x00000000,    /* Not applicable for USB PLL */
+    480000000   /* PLL output frequency */
 };
 
 /*****************************************************************************
@@ -55,18 +55,18 @@ uint32_t SystemCoreClock;
 
 static void Chip_USB_PllSetup(void)
 {
-	/* No need to setup anything if PLL is already setup for the frequency */
-	if (Chip_Clock_GetClockInputHz(CLKIN_USBPLL) == usbPLLSetup.freq)
-		return ;
+    /* No need to setup anything if PLL is already setup for the frequency */
+    if (Chip_Clock_GetClockInputHz(CLKIN_USBPLL) == usbPLLSetup.freq)
+        return ;
 
-	/* Setup default USB PLL state for a 480MHz output and attach */
-	Chip_Clock_SetupPLL(CLKIN_CRYSTAL, CGU_USB_PLL, &usbPLLSetup);
+    /* Setup default USB PLL state for a 480MHz output and attach */
+    Chip_Clock_SetupPLL(CLKIN_CRYSTAL, CGU_USB_PLL, &usbPLLSetup);
 
-	/* enable USB PLL */
-	Chip_Clock_EnablePLL(CGU_USB_PLL);
+    /* enable USB PLL */
+    Chip_Clock_EnablePLL(CGU_USB_PLL);
 
-	/* Wait for PLL lock */
-	while (!(Chip_Clock_GetPLLStatus(CGU_USB_PLL) & CGU_PLL_LOCKED)) {}
+    /* Wait for PLL lock */
+    while (!(Chip_Clock_GetPLLStatus(CGU_USB_PLL) & CGU_PLL_LOCKED)) {}
 }
 
 /*****************************************************************************
@@ -75,36 +75,36 @@ static void Chip_USB_PllSetup(void)
 
 void Chip_USB0_Init(void)
 {
-	/* Set up USB PLL */
-	Chip_USB_PllSetup();
+    /* Set up USB PLL */
+    Chip_USB_PllSetup();
 
-	/* Setup USB0 base clock as clock out from USB PLL */
-	Chip_Clock_SetBaseClock( CLK_BASE_USB0, CLKIN_USBPLL, true, true);
+    /* Setup USB0 base clock as clock out from USB PLL */
+    Chip_Clock_SetBaseClock( CLK_BASE_USB0, CLKIN_USBPLL, true, true);
 
-	/* enable USB main clock */
-	Chip_Clock_EnableBaseClock(CLK_BASE_USB0);
-	Chip_Clock_EnableOpts(CLK_MX_USB0, true, true, 1);
-	/* enable USB0 phy */
-	Chip_CREG_EnableUSB0Phy();
+    /* enable USB main clock */
+    Chip_Clock_EnableBaseClock(CLK_BASE_USB0);
+    Chip_Clock_EnableOpts(CLK_MX_USB0, true, true, 1);
+    /* enable USB0 phy */
+    Chip_CREG_EnableUSB0Phy();
 }
 
 void Chip_USB1_Init(void)
 {
-	/* Setup and enable the PLL */
-	Chip_USB_PllSetup();
+    /* Setup and enable the PLL */
+    Chip_USB_PllSetup();
 
-	/* USB1 needs a 60MHz clock. To get it, a divider of 4 and then 2 are
-	   chained to make a divide by 8 function. Connect the output of
-	   divider D to the USB1 base clock. */
-	Chip_Clock_SetDivider(CLK_IDIV_A, CLKIN_USBPLL, 4);
-	Chip_Clock_SetDivider(CLK_IDIV_D, CLKIN_IDIVA, 2);
-	Chip_Clock_SetBaseClock(CLK_BASE_USB1, CLKIN_IDIVD, true, true);
+    /* USB1 needs a 60MHz clock. To get it, a divider of 4 and then 2 are
+       chained to make a divide by 8 function. Connect the output of
+       divider D to the USB1 base clock. */
+    Chip_Clock_SetDivider(CLK_IDIV_A, CLKIN_USBPLL, 4);
+    Chip_Clock_SetDivider(CLK_IDIV_D, CLKIN_IDIVA, 2);
+    Chip_Clock_SetBaseClock(CLK_BASE_USB1, CLKIN_IDIVD, true, true);
 
-	/* enable USB main clock */
-	Chip_Clock_EnableBaseClock(CLK_BASE_USB1);
-	Chip_Clock_EnableOpts(CLK_MX_USB1, true, true, 1);
-	/* enable USB1_DP and USB1_DN on chip FS phy.*/
-	LPC_SCU->SFSUSB = 0x12;
+    /* enable USB main clock */
+    Chip_Clock_EnableBaseClock(CLK_BASE_USB1);
+    Chip_Clock_EnableOpts(CLK_MX_USB1, true, true, 1);
+    /* enable USB1_DP and USB1_DN on chip FS phy.*/
+    LPC_SCU->SFSUSB = 0x12;
 }
 
 
@@ -112,8 +112,8 @@ void Chip_USB1_Init(void)
    a clock rate change */
 void SystemCoreClockUpdate(void)
 {
-	/* CPU core speed */
-	SystemCoreClock = Chip_Clock_GetRate(CLK_MX_MXCORE);
+    /* CPU core speed */
+    SystemCoreClock = Chip_Clock_GetRate(CLK_MX_MXCORE);
 }
 
 

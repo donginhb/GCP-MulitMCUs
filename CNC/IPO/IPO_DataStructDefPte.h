@@ -4,11 +4,12 @@
 #define IPO_DATA_STRUCT_DEF_PTE_H
 
 
-#include "..\\..\\DataStructDef\\DataType.h"
-#include "..\\..\\DataStructDef\\IPO_DataStructDefPub.h"
-#include "..\\..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\..\\..\\Version\\VER_DataStructDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/IPO_DataStructDefPub.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+
+#include "Version/Version.h"
 
 
 #pragma pack(push)

@@ -44,17 +44,17 @@ extern "C" {
 /**
  * @brief FLASH Memory Controller Unit register block structure
  */
-typedef struct {		/*!< FMC Structure */
-	__I  uint32_t  RESERVED1[8];
-	__IO uint32_t  FMSSTART;
-	__IO uint32_t  FMSSTOP;
-	__I  uint32_t  RESERVED2;
-	__I  uint32_t  FMSW[4];
-	__I  uint32_t  RESERVED3[1001];
-	__I  uint32_t  FMSTAT;
-	__I  uint32_t  RESERVED5;
-	__O  uint32_t  FMSTATCLR;
-	__I  uint32_t  RESERVED4[5];
+typedef struct {        /*!< FMC Structure */
+    __I  uint32_t  RESERVED1[8];
+    __IO uint32_t  FMSSTART;
+    __IO uint32_t  FMSSTOP;
+    __I  uint32_t  RESERVED2;
+    __I  uint32_t  FMSW[4];
+    __I  uint32_t  RESERVED3[1001];
+    __I  uint32_t  FMSTAT;
+    __I  uint32_t  RESERVED5;
+    __O  uint32_t  FMSTATCLR;
+    __I  uint32_t  RESERVED4[5];
 } LPC_FMC_T;
 
 /* Flash signature start and busy status bit */
@@ -64,83 +64,83 @@ typedef struct {		/*!< FMC Structure */
 #define FMC_FLASHSIG_STAT       (1 << 2)
 
 /**
- * @brief	Gets the base address of given bank
- * @param	0 - Bank 0; 1 - Bank 1
- * @return	Base address corresponding to given bank
+ * @brief    Gets the base address of given bank
+ * @param    0 - Bank 0; 1 - Bank 1
+ * @return    Base address corresponding to given bank
  */
 __STATIC_INLINE LPC_FMC_T * Chip_FMC_BaseAddr(uint8_t bank)
 {
-	if (!bank) {
-		return LPC_FMCA;
-	} else {
-		return LPC_FMCB;
-	}
+    if (!bank) {
+        return LPC_FMCA;
+    } else {
+        return LPC_FMCB;
+    }
 }
 
 /**
- * @brief	Start computation of a signature for a FLASH memory range
- * @param	bank	: FLASH bank, A = 0, B = 1
- * @param	start	: Starting FLASH address for computation, must be aligned on 16 byte boundary
- * @param	stop	: Ending FLASH address for computation, must be aligned on 16 byte boundary
- * @return	Nothing
- * @note	Only bits 20..4 are used for the FLASH signature computation.
- *			Use the Chip_FMC_IsSignatureBusy() function to determine when the
- *			signature computation operation is complete and use the
- *			Chip_FMC_GetSignature() function to get the computed signature.
+ * @brief    Start computation of a signature for a FLASH memory range
+ * @param    bank    : FLASH bank, A = 0, B = 1
+ * @param    start    : Starting FLASH address for computation, must be aligned on 16 byte boundary
+ * @param    stop    : Ending FLASH address for computation, must be aligned on 16 byte boundary
+ * @return    Nothing
+ * @note    Only bits 20..4 are used for the FLASH signature computation.
+ *            Use the Chip_FMC_IsSignatureBusy() function to determine when the
+ *            signature computation operation is complete and use the
+ *            Chip_FMC_GetSignature() function to get the computed signature.
  */
 STATIC INLINE void Chip_FMC_ComputeSignature(uint8_t bank, uint32_t start, uint32_t stop)
 {
-	LPC_FMC_T *LPC_FMC = Chip_FMC_BaseAddr(bank);
-	LPC_FMC->FMSSTART = (start >> 4);
-	LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
-	LPC_FMC->FMSSTOP = (stop >> 4) | FMC_FLASHSIG_BUSY;
+    LPC_FMC_T *LPC_FMC = Chip_FMC_BaseAddr(bank);
+    LPC_FMC->FMSSTART = (start >> 4);
+    LPC_FMC->FMSTATCLR = FMC_FLASHSIG_STAT;
+    LPC_FMC->FMSSTOP = (stop >> 4) | FMC_FLASHSIG_BUSY;
 }
 
 /**
- * @brief	Start computation of a signature for a FLASH memory address and block count
- * @param	bank	: FLASH bank, A = 0, B = 1
- * @param	start	: Starting FLASH address for computation, must be aligned on 16 byte boundary
- * @param	blocks	: Number of 16 byte blocks used for computation
- * @return	Nothing
- * @note	Only bits 20..4 are used for the FLASH signature computation.
- *			Use the Chip_FMC_IsSignatureBusy() function to determine when the
- *			signature computation operation is complete and the
- *			Chip_FMC_GetSignature() function to get the computed signature.
+ * @brief    Start computation of a signature for a FLASH memory address and block count
+ * @param    bank    : FLASH bank, A = 0, B = 1
+ * @param    start    : Starting FLASH address for computation, must be aligned on 16 byte boundary
+ * @param    blocks    : Number of 16 byte blocks used for computation
+ * @return    Nothing
+ * @note    Only bits 20..4 are used for the FLASH signature computation.
+ *            Use the Chip_FMC_IsSignatureBusy() function to determine when the
+ *            signature computation operation is complete and the
+ *            Chip_FMC_GetSignature() function to get the computed signature.
  */
 STATIC INLINE void Chip_FMC_ComputeSignatureBlocks(uint8_t bank, uint32_t start, uint32_t blocks)
 {
-	Chip_FMC_ComputeSignature(bank, start, (start + (blocks * 16)));
+    Chip_FMC_ComputeSignature(bank, start, (start + (blocks * 16)));
 }
 
 /**
- * @brief	Clear signature generation completion flag
- * @param	bank	: FLASH bank, A = 0, B = 1
- * @return	Nothing
+ * @brief    Clear signature generation completion flag
+ * @param    bank    : FLASH bank, A = 0, B = 1
+ * @return    Nothing
  */
 STATIC INLINE void Chip_FMC_ClearSignatureBusy(uint8_t bank)
 {
-	Chip_FMC_BaseAddr(bank)->FMSTATCLR = FMC_FLASHSIG_STAT;
+    Chip_FMC_BaseAddr(bank)->FMSTATCLR = FMC_FLASHSIG_STAT;
 }
 
 /**
- * @brief	Check for signature generation completion
- * @param	bank	: FLASH bank, A = 0, B = 1
- * @return	true if the signature computation is running, false if finished
+ * @brief    Check for signature generation completion
+ * @param    bank    : FLASH bank, A = 0, B = 1
+ * @return    true if the signature computation is running, false if finished
  */
 STATIC INLINE bool Chip_FMC_IsSignatureBusy(uint8_t bank)
 {
-	return (bool) ((Chip_FMC_BaseAddr(bank)->FMSTAT & FMC_FLASHSIG_STAT) == 0);
+    return (bool) ((Chip_FMC_BaseAddr(bank)->FMSTAT & FMC_FLASHSIG_STAT) == 0);
 }
 
 /**
- * @brief	Returns the generated FLASH signature value
- * @param	bank	: FLASH bank, A = 0, B = 1
- * @param	index	: Signature index to get - use 0 to FMSW0, 1 to FMSW1, etc.
- * @return	the generated FLASH signature value
+ * @brief    Returns the generated FLASH signature value
+ * @param    bank    : FLASH bank, A = 0, B = 1
+ * @param    index    : Signature index to get - use 0 to FMSW0, 1 to FMSW1, etc.
+ * @return    the generated FLASH signature value
  */
 STATIC INLINE uint32_t Chip_FMC_GetSignature(uint8_t bank, int index)
 {
-	return Chip_FMC_BaseAddr(bank)->FMSW[index];
+    return Chip_FMC_BaseAddr(bank)->FMSW[index];
 }
 
 /**

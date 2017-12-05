@@ -48,36 +48,36 @@
 /* Sets I/O Control pin mux */
 void Chip_IOCON_PinMuxSet(LPC_IOCON_T *pIOCON, uint8_t port, uint8_t pin, uint32_t modefunc)
 {
-	Chip_IOCON_PinMux(pIOCON, port, pin, 
-					  /* mode is in bits 3:2 */
-					  modefunc >> 2, 
-					  /* func is in bits 1:0 */
-					  modefunc & 3 );
+    Chip_IOCON_PinMux(pIOCON, port, pin, 
+                      /* mode is in bits 3:2 */
+                      modefunc >> 2, 
+                      /* func is in bits 1:0 */
+                      modefunc & 3 );
 }
 
 /* Setup pin modes and function */
 void Chip_IOCON_PinMux(LPC_IOCON_T *pIOCON, uint8_t port, uint8_t pin, uint32_t mode, uint8_t func)
 {
-	uint8_t reg, bitPos;
-	uint32_t temp;
+    uint8_t reg, bitPos;
+    uint32_t temp;
 
-	bitPos =  IOCON_BIT_INDEX(pin);
-	reg = IOCON_REG_INDEX(port,pin);
-	
-	temp = pIOCON->PINSEL[reg] & ~(0x03UL << bitPos);
-	pIOCON->PINSEL[reg] = temp | (func << bitPos);
+    bitPos =  IOCON_BIT_INDEX(pin);
+    reg = IOCON_REG_INDEX(port,pin);
+    
+    temp = pIOCON->PINSEL[reg] & ~(0x03UL << bitPos);
+    pIOCON->PINSEL[reg] = temp | (func << bitPos);
 
-	temp = pIOCON->PINMODE[reg] & ~(0x03UL << bitPos);
-	pIOCON->PINMODE[reg] = temp | (mode << bitPos);
+    temp = pIOCON->PINMODE[reg] & ~(0x03UL << bitPos);
+    pIOCON->PINMODE[reg] = temp | (mode << bitPos);
 }
 #endif /* defined(CHIP_LPC175X_6X) */
 
 /* Set all I/O Control pin muxing */
 void Chip_IOCON_SetPinMuxing(LPC_IOCON_T *pIOCON, const PINMUX_GRP_T* pinArray, uint32_t arrayLength)
 {
-	uint32_t ix;
+    uint32_t ix;
 
-	for (ix = 0; ix < arrayLength; ix++ ) {
-		Chip_IOCON_PinMuxSet(pIOCON, pinArray[ix].pingrp, pinArray[ix].pinnum, pinArray[ix].modefunc);
-	}
+    for (ix = 0; ix < arrayLength; ix++ ) {
+        Chip_IOCON_PinMuxSet(pIOCON, pinArray[ix].pingrp, pinArray[ix].pinnum, pinArray[ix].modefunc);
+    }
 }

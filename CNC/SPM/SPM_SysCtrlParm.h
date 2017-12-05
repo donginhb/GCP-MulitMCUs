@@ -20,10 +20,10 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 #ifndef SYS_CTRL_PARM_H
 #define SYS_CTRL_PARM_H
 
-#include "..\\DataStructDef\\AXIS_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\DEV_DataStructDef.h"
+#include "CNC/DataStructDef/AXIS_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
 
 
 

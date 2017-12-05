@@ -4,7 +4,7 @@
 #include "DataType/DataType.h"
 
 #pragma pack(push)
-#pragma pack(8)	
+#pragma pack(8)    
 
 
 /*****************************************************************************

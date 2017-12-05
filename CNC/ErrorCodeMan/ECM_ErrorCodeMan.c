@@ -21,7 +21,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 #include "ECM_ErrorCodeMan.h"
 #include "ECM_DataStructDef.h"
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 static ERROR_CODE_MAN_DATA    m_ErrorCodeManData;

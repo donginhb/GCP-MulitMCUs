@@ -26,8 +26,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
 #include "CAN_DEV_DataStructDef.h"
 
-#include "..\\..\\..\\SysPeripheral\\CAN\\CanDataStructDef.h"
-#include "..\\DEV_DriveStructDef.h"
+#include "../../../SysPeripheral/CAN/CanDataStructDef.h"
+#include "../DEV_DriveStructDef.h"
 
 //CAN总线驱动输出接口--------------------------
 void CAN_DEV_GetBusDriver(BUS_DEVICE_DRIVE *pDeviceDrive);

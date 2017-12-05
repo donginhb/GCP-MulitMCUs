@@ -20,7 +20,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef ECM_DATA_STRUCT_DEF_H
 #define ECM_DATA_STRUCT_DEF_H
 
-#include "..\\DataStructDef\\DataType.h"
+#include "CNC/DataStructDef/DataType.h"
 
 
 //错误码缓冲区个数宏定义

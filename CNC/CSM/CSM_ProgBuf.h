@@ -21,7 +21,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define CSM_PROG_BUF_H
 
 
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
 
 
 //----------------------------------------------------------------------------------------------

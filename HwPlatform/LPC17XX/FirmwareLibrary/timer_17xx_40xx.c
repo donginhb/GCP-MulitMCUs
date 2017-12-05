@@ -46,22 +46,22 @@
 /* Returns clock for the peripheral block */
 STATIC CHIP_SYSCTL_CLOCK_T Chip_Timer_GetClockIndex(LPC_TIMER_T *pTMR)
 {
-	CHIP_SYSCTL_CLOCK_T clkTMR;
+    CHIP_SYSCTL_CLOCK_T clkTMR;
 
-	if (pTMR == LPC_TIMER1) {
-		clkTMR = SYSCTL_CLOCK_TIMER1;
-	}
-	else if (pTMR == LPC_TIMER2) {
-		clkTMR = SYSCTL_CLOCK_TIMER2;
-	}
-	else if (pTMR == LPC_TIMER3) {
-		clkTMR = SYSCTL_CLOCK_TIMER3;
-	}
-	else {
-		clkTMR = SYSCTL_CLOCK_TIMER0;
-	}
+    if (pTMR == LPC_TIMER1) {
+        clkTMR = SYSCTL_CLOCK_TIMER1;
+    }
+    else if (pTMR == LPC_TIMER2) {
+        clkTMR = SYSCTL_CLOCK_TIMER2;
+    }
+    else if (pTMR == LPC_TIMER3) {
+        clkTMR = SYSCTL_CLOCK_TIMER3;
+    }
+    else {
+        clkTMR = SYSCTL_CLOCK_TIMER0;
+    }
 
-	return clkTMR;
+    return clkTMR;
 }
 
 /*****************************************************************************
@@ -71,46 +71,46 @@ STATIC CHIP_SYSCTL_CLOCK_T Chip_Timer_GetClockIndex(LPC_TIMER_T *pTMR)
 /* Initialize a timer */
 void Chip_TIMER_Init(LPC_TIMER_T *pTMR)
 {
-	Chip_Clock_EnablePeriphClock(Chip_Timer_GetClockIndex(pTMR));
+    Chip_Clock_EnablePeriphClock(Chip_Timer_GetClockIndex(pTMR));
 }
 
-/*	Shutdown a timer */
+/*    Shutdown a timer */
 void Chip_TIMER_DeInit(LPC_TIMER_T *pTMR)
 {
-	Chip_Clock_DisablePeriphClock(Chip_Timer_GetClockIndex(pTMR));
+    Chip_Clock_DisablePeriphClock(Chip_Timer_GetClockIndex(pTMR));
 }
 
 /* Resets the timer terminal and prescale counts to 0 */
 void Chip_TIMER_Reset(LPC_TIMER_T *pTMR)
 {
-	uint32_t reg;
+    uint32_t reg;
 
-	/* Disable timer, set terminal count to non-0 */
-	reg = pTMR->TCR;
-	pTMR->TCR = 0;
-	pTMR->TC = 1;
+    /* Disable timer, set terminal count to non-0 */
+    reg = pTMR->TCR;
+    pTMR->TCR = 0;
+    pTMR->TC = 1;
 
-	/* Reset timer counter */
-	pTMR->TCR = TIMER_RESET;
+    /* Reset timer counter */
+    pTMR->TCR = TIMER_RESET;
 
-	/* Wait for terminal count to clear */
-	while (pTMR->TC != 0) {}
+    /* Wait for terminal count to clear */
+    while (pTMR->TC != 0) {}
 
-	/* Restore timer state */
-	pTMR->TCR = reg;
+    /* Restore timer state */
+    pTMR->TCR = reg;
 }
 
 /* Sets external match control (MATn.matchnum) pin control */
 void Chip_TIMER_ExtMatchControlSet(LPC_TIMER_T *pTMR, int8_t initial_state,
-								   TIMER_PIN_MATCH_STATE_T matchState, int8_t matchnum)
+                                   TIMER_PIN_MATCH_STATE_T matchState, int8_t matchnum)
 {
-	uint32_t mask, reg;
+    uint32_t mask, reg;
 
-	/* Clear bits corresponding to selected match register */
-	mask = (1 << matchnum) | (0x03 << (4 + (matchnum * 2)));
-	reg = pTMR->EMR &= ~mask;
+    /* Clear bits corresponding to selected match register */
+    mask = (1 << matchnum) | (0x03 << (4 + (matchnum * 2)));
+    reg = pTMR->EMR &= ~mask;
 
-	/* Set new configuration for selected match register */
-	pTMR->EMR = reg | (((uint32_t) initial_state) << matchnum) |
-				(((uint32_t) matchState) << (4 + (matchnum * 2)));
+    /* Set new configuration for selected match register */
+    pTMR->EMR = reg | (((uint32_t) initial_state) << matchnum) |
+                (((uint32_t) matchState) << (4 + (matchnum * 2)));
 }

@@ -42,22 +42,22 @@ extern "C" {
  */
 
 #if defined(CHIP_LPC177X_8X) || defined(CHIP_LPC40XX)
-#define RTC_EV_SUPPORT      1				/* Event Monitor/Recorder support */
+#define RTC_EV_SUPPORT      1                /* Event Monitor/Recorder support */
 #endif
 
 /**
  * @brief RTC time type option
  */
 typedef enum {
-	RTC_TIMETYPE_SECOND,		/*!< Second */
-	RTC_TIMETYPE_MINUTE,		/*!< Month */
-	RTC_TIMETYPE_HOUR,			/*!< Hour */
-	RTC_TIMETYPE_DAYOFMONTH,	/*!< Day of month */
-	RTC_TIMETYPE_DAYOFWEEK,		/*!< Day of week */
-	RTC_TIMETYPE_DAYOFYEAR,		/*!< Day of year */
-	RTC_TIMETYPE_MONTH,			/*!< Month */
-	RTC_TIMETYPE_YEAR,			/*!< Year */
-	RTC_TIMETYPE_LAST
+    RTC_TIMETYPE_SECOND,        /*!< Second */
+    RTC_TIMETYPE_MINUTE,        /*!< Month */
+    RTC_TIMETYPE_HOUR,            /*!< Hour */
+    RTC_TIMETYPE_DAYOFMONTH,    /*!< Day of month */
+    RTC_TIMETYPE_DAYOFWEEK,        /*!< Day of week */
+    RTC_TIMETYPE_DAYOFYEAR,        /*!< Day of year */
+    RTC_TIMETYPE_MONTH,            /*!< Month */
+    RTC_TIMETYPE_YEAR,            /*!< Year */
+    RTC_TIMETYPE_LAST
 } RTC_TIMEINDEX_T;
 
 #if RTC_EV_SUPPORT
@@ -65,37 +65,37 @@ typedef enum {
  * @brief Event Channel Identifier definitions
  */
 typedef enum {
-	RTC_EV_CHANNEL_1 = 0,
-	RTC_EV_CHANNEL_2,
-	RTC_EV_CHANNEL_3,
-	RTC_EV_CHANNEL_NUM,
+    RTC_EV_CHANNEL_1 = 0,
+    RTC_EV_CHANNEL_2,
+    RTC_EV_CHANNEL_3,
+    RTC_EV_CHANNEL_NUM,
 } RTC_EV_CHANNEL_T;
 #endif /*RTC_EV_SUPPORT*/
 
 /**
  * @brief Real Time Clock register block structure
  */
-typedef struct {							/*!< RTC Structure          */
-	__IO uint32_t  ILR;						/*!< Interrupt Location Register */
-	__I  uint32_t  RESERVED0;
-	__IO uint32_t  CCR;						/*!< Clock Control Register */
-	__IO uint32_t  CIIR;					/*!< Counter Increment Interrupt Register */
-	__IO uint32_t  AMR;						/*!< Alarm Mask Register    */
-	__I  uint32_t  CTIME[3];				/*!< Consolidated Time Register 0,1,2 */
-	__IO uint32_t  TIME[RTC_TIMETYPE_LAST];	/*!< Timer field registers */
-	__IO uint32_t  CALIBRATION;				/*!< Calibration Value Register */
-	__IO uint32_t GPREG[5];					/*!< General Purpose Storage Registers */
-	__IO uint32_t RTC_AUXEN;				/*!< RTC Auxiliary Enable register */
-	__IO uint32_t RTC_AUX;					/*!< RTC Auxiliary control register*/
-	__IO uint32_t  ALRM[RTC_TIMETYPE_LAST];	/*!< Alarm field registers */
+typedef struct {                            /*!< RTC Structure          */
+    __IO uint32_t  ILR;                        /*!< Interrupt Location Register */
+    __I  uint32_t  RESERVED0;
+    __IO uint32_t  CCR;                        /*!< Clock Control Register */
+    __IO uint32_t  CIIR;                    /*!< Counter Increment Interrupt Register */
+    __IO uint32_t  AMR;                        /*!< Alarm Mask Register    */
+    __I  uint32_t  CTIME[3];                /*!< Consolidated Time Register 0,1,2 */
+    __IO uint32_t  TIME[RTC_TIMETYPE_LAST];    /*!< Timer field registers */
+    __IO uint32_t  CALIBRATION;                /*!< Calibration Value Register */
+    __IO uint32_t GPREG[5];                    /*!< General Purpose Storage Registers */
+    __IO uint32_t RTC_AUXEN;                /*!< RTC Auxiliary Enable register */
+    __IO uint32_t RTC_AUX;                    /*!< RTC Auxiliary control register*/
+    __IO uint32_t  ALRM[RTC_TIMETYPE_LAST];    /*!< Alarm field registers */
 #if RTC_EV_SUPPORT
-	__IO uint32_t ERSTATUS;					/*!< Event Monitor/Recorder Status register*/
-	__IO uint32_t ERCONTROL;				/*!< Event Monitor/Recorder Control register*/
-	__I  uint32_t ERCOUNTERS;				/*!< Event Monitor/Recorder Counters register*/
-	__I  uint32_t RESERVED2;
-	__I  uint32_t ERFIRSTSTAMP[RTC_EV_CHANNEL_NUM];			/*!<Event Monitor/Recorder First Stamp registers*/
-	__I  uint32_t RESERVED3;
-	__I  uint32_t ERLASTSTAMP[RTC_EV_CHANNEL_NUM];			/*!<Event Monitor/Recorder Last Stamp registers*/
+    __IO uint32_t ERSTATUS;                    /*!< Event Monitor/Recorder Status register*/
+    __IO uint32_t ERCONTROL;                /*!< Event Monitor/Recorder Control register*/
+    __I  uint32_t ERCOUNTERS;                /*!< Event Monitor/Recorder Counters register*/
+    __I  uint32_t RESERVED2;
+    __I  uint32_t ERFIRSTSTAMP[RTC_EV_CHANNEL_NUM];            /*!<Event Monitor/Recorder First Stamp registers*/
+    __I  uint32_t RESERVED3;
+    __I  uint32_t ERLASTSTAMP[RTC_EV_CHANNEL_NUM];            /*!<Event Monitor/Recorder Last Stamp registers*/
 #endif /*RTC_EV_SUPPORT*/
 } LPC_RTC_T;
 
@@ -103,7 +103,7 @@ typedef struct {							/*!< RTC Structure          */
  * @brief Register File register block structure
  */
 typedef struct {
-	__IO uint32_t REGFILE[5];	/*!< General purpose storage register */
+    __IO uint32_t REGFILE[5];    /*!< General purpose storage register */
 } LPC_REGFILE_T;
 
 /*
@@ -206,16 +206,16 @@ typedef struct {
 /** YEAR register mask */
 #define RTC_YEAR_MASK           (0x00000FFF)
 
-#define RTC_SECOND_MAX      59	/*!< Maximum value of second */
-#define RTC_MINUTE_MAX      59	/*!< Maximum value of minute*/
-#define RTC_HOUR_MAX        23	/*!< Maximum value of hour*/
-#define RTC_MONTH_MIN       1	/*!< Minimum value of month*/
-#define RTC_MONTH_MAX       12	/*!< Maximum value of month*/
-#define RTC_DAYOFMONTH_MIN  1	/*!< Minimum value of day of month*/
-#define RTC_DAYOFMONTH_MAX  31	/*!< Maximum value of day of month*/
-#define RTC_DAYOFWEEK_MAX   6	/*!< Maximum value of day of week*/
-#define RTC_DAYOFYEAR_MIN   1	/*!< Minimum value of day of year*/
-#define RTC_DAYOFYEAR_MAX   366	/*!< Maximum value of day of year*/
+#define RTC_SECOND_MAX      59    /*!< Maximum value of second */
+#define RTC_MINUTE_MAX      59    /*!< Maximum value of minute*/
+#define RTC_HOUR_MAX        23    /*!< Maximum value of hour*/
+#define RTC_MONTH_MIN       1    /*!< Minimum value of month*/
+#define RTC_MONTH_MAX       12    /*!< Maximum value of month*/
+#define RTC_DAYOFMONTH_MIN  1    /*!< Minimum value of day of month*/
+#define RTC_DAYOFMONTH_MAX  31    /*!< Maximum value of day of month*/
+#define RTC_DAYOFWEEK_MAX   6    /*!< Maximum value of day of week*/
+#define RTC_DAYOFYEAR_MIN   1    /*!< Minimum value of day of year*/
+#define RTC_DAYOFYEAR_MAX   366    /*!< Maximum value of day of year*/
 #define RTC_YEAR_MAX        4095/*!< Maximum value of year*/
 
 /*
@@ -242,8 +242,8 @@ typedef struct {
 /** Enables automatically clearing the RTC general purpose registers when an event occurs*/
 #define RTC_ERCTRL_GPCLEAR_EN       ((uint32_t) (1 << 1))
 /** Select polarity for a channel event on the input pin.*/
-#define RTC_ERCTRL_POL_NEGATIVE     (0)		/* Event as positive edge */
-#define RTC_ERCTRL_POL_POSITIVE     ((uint32_t) (1 << 2))	/* Event as negative edge */
+#define RTC_ERCTRL_POL_NEGATIVE     (0)        /* Event as positive edge */
+#define RTC_ERCTRL_POL_POSITIVE     ((uint32_t) (1 << 2))    /* Event as negative edge */
 /** Enable event input.*/
 #define RTC_ERCTRL_INPUT_EN         ((uint32_t) (1 << 3))
 /** Configure a specific channel */
@@ -262,7 +262,7 @@ typedef struct {
  * @brief Event Monitor/Recorder Status register
  */
 /** Event Flag for a specific channel */
-#define RTC_ERSTATUS_CHANNEL_EV(ch)               ((uint32_t) (1 << ch))		/* At least 1 event has occurred on a specific channel */
+#define RTC_ERSTATUS_CHANNEL_EV(ch)               ((uint32_t) (1 << ch))        /* At least 1 event has occurred on a specific channel */
 /** General purpose registers have been asynchronous cleared. */
 #define RTC_ERSTATUS_GPCLEARED            ((uint32_t) (1 << 3))
 /** An interrupt/wakeup request is pending.*/
@@ -286,21 +286,21 @@ typedef struct {
  * @brief Event Monitor/Recorder Mode definition
  */
 typedef enum IP_RTC_EV_MODE {
-	RTC_EV_MODE_DISABLE = 0,		/*!< Event Monitor/Recoder is disabled */
-	RTC_EV_MODE_ENABLE_16HZ =  1,	/*!< Event Monitor/Recoder is enabled and use 16Hz sample clock for event input */
-	RTC_EV_MODE_ENABLE_64HZ = 2,	/*!< Event Monitor/Recoder is enabled and use 64Hz sample clock for event input */
-	RTC_EV_MODE_ENABLE_1KHZ = 3,	/*!< Event Monitor/Recoder is enabled and use 1kHz sample clock for event input */
-	RTC_EV_MODE_LAST,
+    RTC_EV_MODE_DISABLE = 0,        /*!< Event Monitor/Recoder is disabled */
+    RTC_EV_MODE_ENABLE_16HZ =  1,    /*!< Event Monitor/Recoder is enabled and use 16Hz sample clock for event input */
+    RTC_EV_MODE_ENABLE_64HZ = 2,    /*!< Event Monitor/Recoder is enabled and use 64Hz sample clock for event input */
+    RTC_EV_MODE_ENABLE_1KHZ = 3,    /*!< Event Monitor/Recoder is enabled and use 1kHz sample clock for event input */
+    RTC_EV_MODE_LAST,
 } RTC_EV_MODE_T;
 
 /**
  * @brief Event Monitor/Recorder Timestamp structure
  */
 typedef struct {
-	uint8_t     sec;		/*!<   Second */
-	uint8_t     min;		/*!<   Minute */
-	uint8_t     hour;		/*!<   Hour */
-	uint16_t    dayofyear;	/*!<   Day of year */
+    uint8_t     sec;        /*!<   Second */
+    uint8_t     min;        /*!<   Minute */
+    uint8_t     hour;        /*!<   Hour */
+    uint16_t    dayofyear;    /*!<   Day of year */
 } RTC_EV_TIMESTAMP_T;
 
 #endif /*RTC_EV_SUPPORT*/
@@ -311,327 +311,327 @@ typedef struct {
 
 /** @brief RTC interrupt source */
 typedef enum {
-	RTC_INT_COUNTER_INCREASE = RTC_IRL_RTCCIF,	/*!<  Counter Increment Interrupt */
-	RTC_INT_ALARM = RTC_IRL_RTCALF				/*!< The alarm interrupt */
+    RTC_INT_COUNTER_INCREASE = RTC_IRL_RTCCIF,    /*!<  Counter Increment Interrupt */
+    RTC_INT_ALARM = RTC_IRL_RTCALF                /*!< The alarm interrupt */
 } RTC_INT_OPT_T;
 
 typedef struct {
-	uint32_t time[RTC_TIMETYPE_LAST];
+    uint32_t time[RTC_TIMETYPE_LAST];
 } RTC_TIME_T;
 
 /**
- * @brief	Reset clock tick counter in the RTC peripheral
- * @param	pRTC	: RTC peripheral selected
- * @return	None
+ * @brief    Reset clock tick counter in the RTC peripheral
+ * @param    pRTC    : RTC peripheral selected
+ * @return    None
  */
 void Chip_RTC_ResetClockTickCounter(LPC_RTC_T *pRTC);
 
 /**
- * @brief	Start/Stop RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	NewState	: New State of this function, should be:
- *							- ENABLE	:The time counters are enabled
- *							- DISABLE	:The time counters are disabled
- * @return	None
+ * @brief    Start/Stop RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    NewState    : New State of this function, should be:
+ *                            - ENABLE    :The time counters are enabled
+ *                            - DISABLE    :The time counters are disabled
+ * @return    None
  */
 void Chip_RTC_Enable(LPC_RTC_T *pRTC, FunctionalState NewState);
 
 /**
- * @brief	Enable/Disable Counter increment interrupt for a time type in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	cntrMask	: Or'ed bit values for time types (RTC_AMR_CIIR_IM*)
- * @param	NewState	: ENABLE or DISABLE
- * @return	None
+ * @brief    Enable/Disable Counter increment interrupt for a time type in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    cntrMask    : Or'ed bit values for time types (RTC_AMR_CIIR_IM*)
+ * @param    NewState    : ENABLE or DISABLE
+ * @return    None
  */
 void Chip_RTC_CntIncrIntConfig(LPC_RTC_T *pRTC, uint32_t cntrMask, FunctionalState NewState);
 
 /**
- * @brief	Enable/Disable Alarm interrupt for a time type in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	alarmMask	: Or'ed bit values for ALARM types (RTC_AMR_CIIR_IM*)
- * @param	NewState	: ENABLE or DISABLE
- * @return	None
+ * @brief    Enable/Disable Alarm interrupt for a time type in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    alarmMask    : Or'ed bit values for ALARM types (RTC_AMR_CIIR_IM*)
+ * @param    NewState    : ENABLE or DISABLE
+ * @return    None
  */
 void Chip_RTC_AlarmIntConfig(LPC_RTC_T *pRTC, uint32_t alarmMask, FunctionalState NewState);
 
 /**
- * @brief	Set current time value for a time type in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	Timetype	: time field index type to set
- * @param	TimeValue	: Value to palce in time field
- * @return	None
+ * @brief    Set current time value for a time type in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    Timetype    : time field index type to set
+ * @param    TimeValue    : Value to palce in time field
+ * @return    None
  */
 STATIC INLINE void Chip_RTC_SetTime(LPC_RTC_T *pRTC, RTC_TIMEINDEX_T Timetype, uint32_t TimeValue)
 {
-	pRTC->TIME[Timetype] = TimeValue;
+    pRTC->TIME[Timetype] = TimeValue;
 }
 
 /**
- * @brief	Get current time value for a type time type
- * @param	pRTC		: RTC peripheral selected
- * @param	Timetype	: Time field index type to get
- * @return	Value of time field according to specified time type
+ * @brief    Get current time value for a type time type
+ * @param    pRTC        : RTC peripheral selected
+ * @param    Timetype    : Time field index type to get
+ * @return    Value of time field according to specified time type
  */
 STATIC INLINE uint32_t Chip_RTC_GetTime(LPC_RTC_T *pRTC, RTC_TIMEINDEX_T Timetype)
 {
-	return pRTC->TIME[Timetype];
+    return pRTC->TIME[Timetype];
 }
 
 /**
- * @brief	Set full time in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	pFullTime	: Pointer to full time data
- * @return	None
+ * @brief    Set full time in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    pFullTime    : Pointer to full time data
+ * @return    None
  */
 void Chip_RTC_SetFullTime(LPC_RTC_T *pRTC, RTC_TIME_T *pFullTime);
 
 /**
- * @brief	Get full time from the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	pFullTime	: Pointer to full time record to fill
- * @return	None
+ * @brief    Get full time from the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    pFullTime    : Pointer to full time record to fill
+ * @return    None
  */
 void Chip_RTC_GetFullTime(LPC_RTC_T *pRTC, RTC_TIME_T *pFullTime);
 
 /**
- * @brief	Set alarm time value for a time type
- * @param	pRTC		: RTC peripheral selected
- * @param	Timetype	: Time index field to set
- * @param	ALValue		: Alarm time value to set
- * @return	None
+ * @brief    Set alarm time value for a time type
+ * @param    pRTC        : RTC peripheral selected
+ * @param    Timetype    : Time index field to set
+ * @param    ALValue        : Alarm time value to set
+ * @return    None
  */
 STATIC INLINE void Chip_RTC_SetAlarmTime(LPC_RTC_T *pRTC, RTC_TIMEINDEX_T Timetype, uint32_t ALValue)
 {
-	pRTC->ALRM[Timetype] = ALValue;
+    pRTC->ALRM[Timetype] = ALValue;
 }
 
 /**
- * @brief	Get alarm time value for a time type
- * @param	pRTC		: RTC peripheral selected
- * @param	Timetype	: Time index field to get
- * @return	Value of Alarm time according to specified time type
+ * @brief    Get alarm time value for a time type
+ * @param    pRTC        : RTC peripheral selected
+ * @param    Timetype    : Time index field to get
+ * @return    Value of Alarm time according to specified time type
  */
 STATIC INLINE uint32_t Chip_RTC_GetAlarmTime(LPC_RTC_T *pRTC, RTC_TIMEINDEX_T Timetype)
 {
-	return pRTC->ALRM[Timetype];
+    return pRTC->ALRM[Timetype];
 }
 
 /**
- * @brief	Set full alarm time in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	pFullTime	: Pointer to full time record to set alarm
- * @return	None
+ * @brief    Set full alarm time in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    pFullTime    : Pointer to full time record to set alarm
+ * @return    None
  */
 void Chip_RTC_SetFullAlarmTime(LPC_RTC_T *pRTC, RTC_TIME_T *pFullTime);
 
 /**
- * @brief	Get full alarm time in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	pFullTime	: Pointer to full time record to fill
- * @return	None
+ * @brief    Get full alarm time in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    pFullTime    : Pointer to full time record to fill
+ * @return    None
  */
 void Chip_RTC_GetFullAlarmTime(LPC_RTC_T *pRTC, RTC_TIME_T *pFullTime);
 
 /**
- * @brief	Write value to General purpose registers
- * @param	pRegFile	: RegFile peripheral selected
- * @param	index		: General purpose register index
- * @param	value		: Value to write
- * @return	None
- * @note	These General purpose registers can be used to store important
+ * @brief    Write value to General purpose registers
+ * @param    pRegFile    : RegFile peripheral selected
+ * @param    index        : General purpose register index
+ * @param    value        : Value to write
+ * @return    None
+ * @note    These General purpose registers can be used to store important
  * information when the main power supply is off. The value in these
  * registers is not affected by chip reset. These registers are
  * powered in the RTC power domain.
  */
 STATIC INLINE void Chip_REGFILE_Write(LPC_REGFILE_T *pRegFile, uint8_t index, uint32_t value)
 {
-	pRegFile->REGFILE[index] = value;
+    pRegFile->REGFILE[index] = value;
 }
 
 /**
- * @brief	Read value from General purpose registers
- * @param	pRegFile	: RegFile peripheral selected
- * @param	index		: General purpose register index
- * @return	Read Value
- * @note	These General purpose registers can be used to store important
+ * @brief    Read value from General purpose registers
+ * @param    pRegFile    : RegFile peripheral selected
+ * @param    index        : General purpose register index
+ * @return    Read Value
+ * @note    These General purpose registers can be used to store important
  * information when the main power supply is off. The value in these
  * registers is not affected by chip reset. These registers are
  * powered in the RTC power domain.
  */
 STATIC INLINE uint32_t Chip_REGFILE_Read(LPC_REGFILE_T *pRegFile, uint8_t index)
 {
-	return pRegFile->REGFILE[index];
+    return pRegFile->REGFILE[index];
 }
 
 /**
- * @brief	Enable/Disable calibration counter in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	NewState	: New State of this function, should be:
- *							- ENABLE	:The calibration counter is enabled and counting
- *							- DISABLE	:The calibration counter is disabled and reset to zero
- * @return	None
+ * @brief    Enable/Disable calibration counter in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    NewState    : New State of this function, should be:
+ *                            - ENABLE    :The calibration counter is enabled and counting
+ *                            - DISABLE    :The calibration counter is disabled and reset to zero
+ * @return    None
  */
 void Chip_RTC_CalibCounterCmd(LPC_RTC_T *pRTC, FunctionalState NewState);
 
 /**
- * @brief	Configures Calibration in the RTC peripheral
- * @param	pRTC		: RTC peripheral selected
- * @param	CalibValue	: Calibration value, should be in range from 0 to 131,072
- * @param	CalibDir	: Calibration Direction, should be:
- *							- RTC_CALIB_DIR_FORWARD		:Forward calibration
- *							- RTC_CALIB_DIR_BACKWARD	:Backward calibration
- * @return	None
+ * @brief    Configures Calibration in the RTC peripheral
+ * @param    pRTC        : RTC peripheral selected
+ * @param    CalibValue    : Calibration value, should be in range from 0 to 131,072
+ * @param    CalibDir    : Calibration Direction, should be:
+ *                            - RTC_CALIB_DIR_FORWARD        :Forward calibration
+ *                            - RTC_CALIB_DIR_BACKWARD    :Backward calibration
+ * @return    None
  */
 STATIC INLINE void Chip_RTC_CalibConfig(LPC_RTC_T *pRTC, uint32_t CalibValue, uint8_t CalibDir)
 {
-	pRTC->CALIBRATION = ((CalibValue - 1) & RTC_CALIBRATION_CALVAL_MASK)
-						| ((CalibDir == RTC_CALIB_DIR_BACKWARD) ? RTC_CALIBRATION_LIBDIR : 0);
+    pRTC->CALIBRATION = ((CalibValue - 1) & RTC_CALIBRATION_CALVAL_MASK)
+                        | ((CalibDir == RTC_CALIB_DIR_BACKWARD) ? RTC_CALIBRATION_LIBDIR : 0);
 }
 
 /**
- * @brief	Clear specified Location interrupt pending in the RTC peripheral
- * @param	pRTC	: RTC peripheral selected
- * @param	IntType	: Interrupt location type, should be:
- *						- RTC_INT_COUNTER_INCREASE	:Clear Counter Increment Interrupt pending.
- *						- RTC_INT_ALARM				:Clear alarm interrupt pending
- * @return	None
+ * @brief    Clear specified Location interrupt pending in the RTC peripheral
+ * @param    pRTC    : RTC peripheral selected
+ * @param    IntType    : Interrupt location type, should be:
+ *                        - RTC_INT_COUNTER_INCREASE    :Clear Counter Increment Interrupt pending.
+ *                        - RTC_INT_ALARM                :Clear alarm interrupt pending
+ * @return    None
  */
 STATIC INLINE void Chip_RTC_ClearIntPending(LPC_RTC_T *pRTC, uint32_t IntType)
 {
-	pRTC->ILR = IntType;
+    pRTC->ILR = IntType;
 }
 
 /**
- * @brief	Check whether if specified location interrupt in the RTC peripheral is set or not
- * @param	pRTC	: RTC peripheral selected
- * @param	IntType	: Interrupt location type, should be:
- *						- RTC_INT_COUNTER_INCREASE: Counter Increment Interrupt block generated an interrupt.
- *						- RTC_INT_ALARM: Alarm generated an interrupt.
- * @return	New state of specified Location interrupt in RTC peripheral, SET OR RESET
+ * @brief    Check whether if specified location interrupt in the RTC peripheral is set or not
+ * @param    pRTC    : RTC peripheral selected
+ * @param    IntType    : Interrupt location type, should be:
+ *                        - RTC_INT_COUNTER_INCREASE: Counter Increment Interrupt block generated an interrupt.
+ *                        - RTC_INT_ALARM: Alarm generated an interrupt.
+ * @return    New state of specified Location interrupt in RTC peripheral, SET OR RESET
  */
 STATIC INLINE IntStatus Chip_RTC_GetIntPending(LPC_RTC_T *pRTC, uint32_t IntType)
 {
-	return (pRTC->ILR & IntType) ? SET : RESET;
+    return (pRTC->ILR & IntType) ? SET : RESET;
 }
 
 #if RTC_EV_SUPPORT
 
 /**
- * @brief	Configure a specific event channel
- * @param	pRTC	: RTC peripheral selected
- * @param	ch		: Channel number
- * @param	flag	: Configuration flag
- * @return	None
- * @note	flag is or-ed bit value of RTC_ERCTRL_INTWAKE_EN,RTC_ERCTRL_GPCLEAR_EN,
+ * @brief    Configure a specific event channel
+ * @param    pRTC    : RTC peripheral selected
+ * @param    ch        : Channel number
+ * @param    flag    : Configuration flag
+ * @return    None
+ * @note    flag is or-ed bit value of RTC_ERCTRL_INTWAKE_EN,RTC_ERCTRL_GPCLEAR_EN,
  *       RTC_ERCTRL_POL_POSITIVE and RTC_ERCTRL_INPUT_EN.
  */
 STATIC INLINE void Chip_RTC_EV_Config(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch, uint32_t flag)
 {
-	uint32_t temp;
+    uint32_t temp;
 
-	temp = pRTC->ERCONTROL & (~(RTC_ERCTRL_CHANNEL_CONFIG_BITMASK(ch))) & RTC_ERCTRL_BITMASK;
-	pRTC->ERCONTROL = temp | (RTC_ERCTRL_CHANNEL_CONFIG(ch, flag) & RTC_ERCTRL_BITMASK);
+    temp = pRTC->ERCONTROL & (~(RTC_ERCTRL_CHANNEL_CONFIG_BITMASK(ch))) & RTC_ERCTRL_BITMASK;
+    pRTC->ERCONTROL = temp | (RTC_ERCTRL_CHANNEL_CONFIG(ch, flag) & RTC_ERCTRL_BITMASK);
 }
 
 /**
- * @brief	Enable/Disable and select clock frequency for Event Monitor/Recorder
- * @param	pRTC	: RTC peripheral selected
- * @param	mode	: selected mode
- * @return	None
+ * @brief    Enable/Disable and select clock frequency for Event Monitor/Recorder
+ * @param    pRTC    : RTC peripheral selected
+ * @param    mode    : selected mode
+ * @return    None
  */
 STATIC INLINE void Chip_RTC_EV_SetMode(LPC_RTC_T *pRTC, RTC_EV_MODE_T mode)
 {
-	uint32_t temp;
+    uint32_t temp;
 
-	temp = pRTC->ERCONTROL & (~RTC_ERCTRL_MODE_MASK) & RTC_ERCTRL_BITMASK;
-	pRTC->ERCONTROL = temp | RTC_ERCTRL_MODE(mode);
+    temp = pRTC->ERCONTROL & (~RTC_ERCTRL_MODE_MASK) & RTC_ERCTRL_BITMASK;
+    pRTC->ERCONTROL = temp | RTC_ERCTRL_MODE(mode);
 }
 
 /**
- * @brief	Get Event Monitor/Recorder Status
- * @param	pRTC	: RTC peripheral selected
- * @return	Or-ed bit value of RTC_ERSTATUS_GPCLEARED and RTC_ERSTATUS_WAKEUP
+ * @brief    Get Event Monitor/Recorder Status
+ * @param    pRTC    : RTC peripheral selected
+ * @return    Or-ed bit value of RTC_ERSTATUS_GPCLEARED and RTC_ERSTATUS_WAKEUP
  */
 STATIC INLINE uint8_t Chip_RTC_EV_GetStatus(LPC_RTC_T *pRTC)
 {
-	return pRTC->ERSTATUS & (RTC_ERSTATUS_GPCLEARED | RTC_ERSTATUS_WAKEUP);
+    return pRTC->ERSTATUS & (RTC_ERSTATUS_GPCLEARED | RTC_ERSTATUS_WAKEUP);
 }
 
 /**
- * @brief	Clear Event Monitor/Recorder Status
- * @param	pRTC	: RTC peripheral selected
- * @param	flag	: Or-ed bit value of RTC_ERSTATUS_GPCLEARED and RTC_ERSTATUS_WAKEUP
- * @return	Nothing
+ * @brief    Clear Event Monitor/Recorder Status
+ * @param    pRTC    : RTC peripheral selected
+ * @param    flag    : Or-ed bit value of RTC_ERSTATUS_GPCLEARED and RTC_ERSTATUS_WAKEUP
+ * @return    Nothing
  */
 STATIC INLINE void Chip_RTC_EV_ClearStatus(LPC_RTC_T *pRTC, uint32_t flag)
 {
-	pRTC->ERSTATUS = flag & (RTC_ERSTATUS_GPCLEARED | RTC_ERSTATUS_WAKEUP);
+    pRTC->ERSTATUS = flag & (RTC_ERSTATUS_GPCLEARED | RTC_ERSTATUS_WAKEUP);
 }
 
 /**
- * @brief	Get status of a specific event channel
- * @param	pRTC	: RTC peripheral selected
- * @param	ch		: Channel number
- * @return	SET (At least 1 event occurred on the channel), RESET: no event occured.
+ * @brief    Get status of a specific event channel
+ * @param    pRTC    : RTC peripheral selected
+ * @param    ch        : Channel number
+ * @return    SET (At least 1 event occurred on the channel), RESET: no event occured.
  */
 STATIC INLINE FlagStatus Chip_RTC_EV_GetChannelStatus(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch)
 {
-	return (pRTC->ERSTATUS & RTC_ERSTATUS_CHANNEL_EV(ch)) ? SET : RESET;
+    return (pRTC->ERSTATUS & RTC_ERSTATUS_CHANNEL_EV(ch)) ? SET : RESET;
 }
 
 /**
- * @brief	Clear status of a specific event channel
- * @param	pRTC	: RTC peripheral selected
- * @param	ch		: Channel number
- * @return	Nothing.
+ * @brief    Clear status of a specific event channel
+ * @param    pRTC    : RTC peripheral selected
+ * @param    ch        : Channel number
+ * @return    Nothing.
  */
 STATIC INLINE void Chip_RTC_EV_ClearChannelStatus(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch)
 {
-	pRTC->ERSTATUS = RTC_ERSTATUS_CHANNEL_EV(ch);
+    pRTC->ERSTATUS = RTC_ERSTATUS_CHANNEL_EV(ch);
 }
 
 /**
- * @brief	Get counter value of a specific event channel
- * @param	pRTC	: RTC peripheral selected
- * @param	ch		: Channel number
- * @return	counter value
+ * @brief    Get counter value of a specific event channel
+ * @param    pRTC    : RTC peripheral selected
+ * @param    ch        : Channel number
+ * @return    counter value
  */
 STATIC INLINE uint8_t Chip_RTC_EV_GetCounter(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch)
 {
-	return RTC_ER_COUNTER(ch, pRTC->ERCOUNTERS);
+    return RTC_ER_COUNTER(ch, pRTC->ERCOUNTERS);
 }
 
 /**
- * @brief	Get first time stamp of a specific event channel
- * @param	pRTC		: RTC peripheral selected
- * @param	ch			: Channel number
- * @param	pTimeStamp	: pointer to Timestamp buffer
- * @return	Nothing.
+ * @brief    Get first time stamp of a specific event channel
+ * @param    pRTC        : RTC peripheral selected
+ * @param    ch            : Channel number
+ * @param    pTimeStamp    : pointer to Timestamp buffer
+ * @return    Nothing.
  */
 void Chip_RTC_EV_GetFirstTimeStamp(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch, RTC_EV_TIMESTAMP_T *pTimeStamp);
 
 /**
- * @brief	Get last time stamp of a specific event channel
- * @param	pRTC		: RTC peripheral selected
- * @param	ch			: Channel number
- * @param	pTimeStamp	: pointer to Timestamp buffer
- * @return	Nothing.
+ * @brief    Get last time stamp of a specific event channel
+ * @param    pRTC        : RTC peripheral selected
+ * @param    ch            : Channel number
+ * @param    pTimeStamp    : pointer to Timestamp buffer
+ * @return    Nothing.
  */
 void Chip_RTC_EV_GetLastTimeStamp(LPC_RTC_T *pRTC, RTC_EV_CHANNEL_T ch, RTC_EV_TIMESTAMP_T *pTimeStamp);
 
 #endif /*RTC_EV_SUPPORT*/
 
 /**
- * @brief	Initialize the RTC peripheral
- * @param	pRTC	: RTC peripheral selected
- * @return	None
+ * @brief    Initialize the RTC peripheral
+ * @param    pRTC    : RTC peripheral selected
+ * @return    None
  */
 void Chip_RTC_Init(LPC_RTC_T *pRTC);
 
 /**
- * @brief	De-initialize the RTC peripheral
- * @param	pRTC	: RTC peripheral selected
- * @return	None
+ * @brief    De-initialize the RTC peripheral
+ * @param    pRTC    : RTC peripheral selected
+ * @return    None
  */
 void Chip_RTC_DeInit(LPC_RTC_T *pRTC);
 

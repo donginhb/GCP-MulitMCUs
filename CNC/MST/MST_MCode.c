@@ -23,9 +23,9 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "MST_MCode.h"
 #include "MST_Interface.h"
 
-#include "..\\DataStructDef\\MST_DataStructDef.h"
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
+#include "CNC/DataStructDef/MST_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
 
 //
 extern MST_INTERFACE    m_MSTInterface;

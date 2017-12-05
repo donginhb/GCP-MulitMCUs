@@ -50,21 +50,21 @@
 /* Set to sleep mode */
 void Chip_PMC_Sleep(void)
 {
-	/* Sleep Mode*/
-	__WFI();
+    /* Sleep Mode*/
+    __WFI();
 }
 
 /* Set power state */
 void Chip_PMC_Set_PwrState(CHIP_PMC_PWR_STATE_T PwrState)
 {
 
-	/* Set Deep sleep mode bit in System Control register of M4 core */
-	SCB->SCR = 0x4;
+    /* Set Deep sleep mode bit in System Control register of M4 core */
+    SCB->SCR = 0x4;
 
-	/* Set power state in PMC */
-	LPC_PMC->PD0_SLEEP0_MODE = (uint32_t) PwrState;
+    /* Set power state in PMC */
+    LPC_PMC->PD0_SLEEP0_MODE = (uint32_t) PwrState;
 
-	__WFI();
+    __WFI();
 }
 
 

@@ -24,11 +24,11 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CSM_UserBuf.h"
 #include "CSM_ParmMan.h"
 
-#include "..\\DataStructDef\\SYS_DataStructDef.h"
-#include "..\\DataStructDef\\CRD_DataStructDef.h"
-#include "..\\DataStructDef\\IPR_DataStructDef.h"
-#include "..\\DataStructDef\\ERR_DataStructDef.h"
-#include "..\\ErrorCodeDef\\CSM_ErrorCodeDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/IPR_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/ErrorCodeDef/CSM_ErrorCodeDef.h"
 
 //
 extern CSM_INTERFACE    m_CSMInterface;

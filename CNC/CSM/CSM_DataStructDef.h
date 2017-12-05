@@ -20,8 +20,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #ifndef CSM_DATA_STRUCT_DEFINE_H
 #define CSM_DATA_STRUCT_DEFINE_H
 
-#include "..\\DataStructDef\\DataType.h"
-#include "..\\DataStructDef\\SYS_ConfigDef.h"
+#include "CNC/DataStructDef/DataType.h"
+#include "CNC/DataStructDef/SYS_ConfigDef.h"
 
 #pragma pack(push)
 #pragma pack(8)        

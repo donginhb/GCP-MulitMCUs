@@ -42,20 +42,20 @@ extern "C" {
  */
 
 /**
- * @brief	Write data to EEPROM
- * @param	dstAdd		: EEPROM address to be written to
- * @param	ptr			: Pointer to buffer to write from
- * @param	byteswrt	: Number of bytes to write to EEPROM
- * @return	An IAP response definition from iap.h
+ * @brief    Write data to EEPROM
+ * @param    dstAdd        : EEPROM address to be written to
+ * @param    ptr            : Pointer to buffer to write from
+ * @param    byteswrt    : Number of bytes to write to EEPROM
+ * @return    An IAP response definition from iap.h
  */
 uint8_t Chip_EEPROM_Write(uint32_t dstAdd, uint8_t *ptr, uint32_t byteswrt);
 
 /**
- * @brief	Read data from EEPROM
- * @param	srcAdd	: EEPROM address to be read from
- * @param	ptr		: Pointer to buffer to read to
- * @param	bytesrd	: Number of bytes to read from EEPROM
- * @return	An IAP response definition from iap.h
+ * @brief    Read data from EEPROM
+ * @param    srcAdd    : EEPROM address to be read from
+ * @param    ptr        : Pointer to buffer to read to
+ * @param    bytesrd    : Number of bytes to read from EEPROM
+ * @return    An IAP response definition from iap.h
  */
 uint8_t Chip_EEPROM_Read(uint32_t srcAdd, uint8_t *ptr, uint32_t bytesrd);
 

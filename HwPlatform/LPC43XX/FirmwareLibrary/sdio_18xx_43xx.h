@@ -41,24 +41,24 @@ extern "C" {
  * @{
  */
 
-/** @brief	SDIO Driver events */
+/** @brief    SDIO Driver events */
 enum SDIO_EVENT
 {
-	SDIO_START_COMMAND,  /**! SDIO driver is about to start a command transfer */
-	SDIO_START_DATA,     /**! SDIO driver is about to start a data transfer */
-	SDIO_WAIT_DELAY,     /**! SDIO driver needs to wait for given milli seconds */
-	SDIO_WAIT_COMMAND,   /**! SDIO driver is waiting for a command to complete */
-	SDIO_WAIT_DATA,      /**! SDIO driver is waiting for data transfer to complete */
+    SDIO_START_COMMAND,  /**! SDIO driver is about to start a command transfer */
+    SDIO_START_DATA,     /**! SDIO driver is about to start a data transfer */
+    SDIO_WAIT_DELAY,     /**! SDIO driver needs to wait for given milli seconds */
+    SDIO_WAIT_COMMAND,   /**! SDIO driver is waiting for a command to complete */
+    SDIO_WAIT_DATA,      /**! SDIO driver is waiting for data transfer to complete */
 
-	SDIO_CARD_DETECT,    /**! SDIO driver has detected a card */
-	SDIO_CMD_ERR,        /**! Error in command transfer */
-	SDIO_CMD_DONE,       /**! Command transfer successful */
-	SDIO_DATA_ERR,       /**! Data transfer error */
-	SDIO_DATA_DONE,      /**! Data transfer successful */
-	SDIO_CARD_INT,       /**! SDIO Card interrupt (from a function) */
+    SDIO_CARD_DETECT,    /**! SDIO driver has detected a card */
+    SDIO_CMD_ERR,        /**! Error in command transfer */
+    SDIO_CMD_DONE,       /**! Command transfer successful */
+    SDIO_DATA_ERR,       /**! Data transfer error */
+    SDIO_DATA_DONE,      /**! Data transfer successful */
+    SDIO_CARD_INT,       /**! SDIO Card interrupt (from a function) */
 };
 
-/** @brief	SDIO Command Responses */
+/** @brief    SDIO Command Responses */
 #define SDIO_CMD_RESP_R1     (1UL << 6)
 #define SDIO_CMD_RESP_R2     (3UL << 6)
 #define SDIO_CMD_RESP_R3     (1UL << 6)
@@ -66,11 +66,11 @@ enum SDIO_EVENT
 #define SDIO_CMD_RESP_R5     (1UL << 6)
 #define SDIO_CMD_RESP_R6     (1UL << 6)
 
-/** @brief	SDIO Command misc options */
+/** @brief    SDIO Command misc options */
 #define SDIO_CMD_CRC         (1UL << 8)  /**! Response must have a valid CRC */
 #define SDIO_CMD_DATA        (1UL << 9)  /**! Command is a data transfer command */
 
-/** @brief	List of commands */
+/** @brief    List of commands */
 #define CMD0            (0 | (1 << 15))
 #define CMD5            (5 | SDIO_CMD_RESP_R4)
 #define CMD3            (3 | SDIO_CMD_RESP_R6)
@@ -111,160 +111,160 @@ enum SDIO_EVENT
 #define SDIO_MODE_BUFFER      (1UL << 26)
 
 /* ---- SDIO Internal map ---- */
-#define SDIO_AREA_CIA			0			/* function 0 */
+#define SDIO_AREA_CIA            0            /* function 0 */
 
 /* ---- Card Capability(0x08) register ---- */
-#define SDIO_CCCR_LSC			0x40u		/* card is low-speed cards */
-#define SDIO_CCCR_4BLS			0x80u		/* 4-bit support for low-speed cards */
+#define SDIO_CCCR_LSC            0x40u        /* card is low-speed cards */
+#define SDIO_CCCR_4BLS            0x80u        /* 4-bit support for low-speed cards */
 
 #define SDIO_POWER_INIT  1
 
-#define SDIO_CLK_HISPEED            33000000UL    /* High-Speed Clock	*/
-#define SDIO_CLK_FULLSPEED          16000000UL    /* Full-Speed Clock	*/
-#define SDIO_CLK_LOWSPEED           400000        /* Low-Speed Clock	*/
+#define SDIO_CLK_HISPEED            33000000UL    /* High-Speed Clock    */
+#define SDIO_CLK_FULLSPEED          16000000UL    /* Full-Speed Clock    */
+#define SDIO_CLK_LOWSPEED           400000        /* Low-Speed Clock    */
 
 /**
- * @brief	Initialize the SDIO card
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	freq		: Initial frequency to use during the enumeration
- * @return	0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
+ * @brief    Initialize the SDIO card
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    freq        : Initial frequency to use during the enumeration
+ * @return    0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
  */
 int SDIO_Card_Init(LPC_SDMMC_T *pSDMMC, uint32_t freq);
 
 /**
- * @brief	Write 8-Bit register from SDIO register space
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	addr		: Address of the register to read
- * @param	data		: 8-bit data be written
- * @return	0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
+ * @brief    Write 8-Bit register from SDIO register space
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    addr        : Address of the register to read
+ * @param    data        : 8-bit data be written
+ * @return    0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
  * @note SDIO_Setup_Callback() function must be called to setup the call backs before
  * calling  this API.
  */
 int SDIO_Write_Direct(LPC_SDMMC_T *pSDMMC, uint32_t func, uint32_t addr, uint32_t data);
 
 /**
- * @brief	Write 8-Bit register from SDIO register space and read the register back
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	addr		: Address of the register to read
- * @param	data		: Pointer to memory where the 8-bit data be stored
- * @return	0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
- * @note	@a data must have the value to be written stored in it when the function is called
+ * @brief    Write 8-Bit register from SDIO register space and read the register back
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    addr        : Address of the register to read
+ * @param    data        : Pointer to memory where the 8-bit data be stored
+ * @return    0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
+ * @note    @a data must have the value to be written stored in it when the function is called
  */
 int SDIO_WriteRead_Direct(LPC_SDMMC_T *pSDMMC, uint32_t func, uint32_t addr, uint32_t *data);
 
 /**
- * @brief	Read an 8-Bit register from SDIO register space
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	addr		: Address of the register to read
- * @param	data		: Pointer to memory where the 8-bit data be stored
- * @return	0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
+ * @brief    Read an 8-Bit register from SDIO register space
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    addr        : Address of the register to read
+ * @param    data        : Pointer to memory where the 8-bit data be stored
+ * @return    0 on Success; > 0 on response error [like CRC error] < 0 on BUS error
  */
 int SDIO_Read_Direct(LPC_SDMMC_T *pSDMMC, uint32_t func, uint32_t addr, uint32_t *data);
 
 /**
- * @brief	Setup SDIO wait and wakeup callbacks
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	wake_evt	: Wakeup event call-back handler
- * @param	wait_evt	: Wait event call-back handler
- * @return	Nothing
- * @note	@a wake_evt and @a wait_evt should always be non-null function pointers
+ * @brief    Setup SDIO wait and wakeup callbacks
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    wake_evt    : Wakeup event call-back handler
+ * @param    wait_evt    : Wait event call-back handler
+ * @return    Nothing
+ * @note    @a wake_evt and @a wait_evt should always be non-null function pointers
  * This function must be called before calling SDIO_Card_Init() function
  */
 void SDIO_Setup_Callback(LPC_SDMMC_T *pSDMMC,
-	void (*wake_evt)(LPC_SDMMC_T *pSDMMC, uint32_t event, void *arg),
-	uint32_t (*wait_evt)(LPC_SDMMC_T *pSDMMC, uint32_t event, void *arg));
+    void (*wake_evt)(LPC_SDMMC_T *pSDMMC, uint32_t event, void *arg),
+    uint32_t (*wait_evt)(LPC_SDMMC_T *pSDMMC, uint32_t event, void *arg));
 
 /**
- * @brief	SDIO Event handler [Should be called from SDIO interrupt handler]
- * @param	pSDMMC		: SDMMC peripheral selected
- * @return	Nothing
+ * @brief    SDIO Event handler [Should be called from SDIO interrupt handler]
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @return    Nothing
  */
 void SDIO_Handler(LPC_SDMMC_T *pSDMMC);
 
 /**
- * @brief	Sends a command to the SDIO Card [Example CMD52]
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	cmd			: Command to be sent along with any flags
- * @param	arg			: Argument for the command
- * @return	0 on Success; Non-Zero on failure
+ * @brief    Sends a command to the SDIO Card [Example CMD52]
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    cmd            : Command to be sent along with any flags
+ * @param    arg            : Argument for the command
+ * @return    0 on Success; Non-Zero on failure
  */
 uint32_t SDIO_Send_Command(LPC_SDMMC_T *pSDMMC, uint32_t cmd, uint32_t arg);
 
 /**
- * @brief	Gets the block size of a given function
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @return	Block size of the given function
- * @sa		SDIO_Card_SetBlockSize()
- * @note	If the return value is 0 then bock size is not set using
+ * @brief    Gets the block size of a given function
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @return    Block size of the given function
+ * @sa        SDIO_Card_SetBlockSize()
+ * @note    If the return value is 0 then bock size is not set using
  * SDIO_Card_SetBlockSize(), or given @a func is not valid or the
  * card does not support block data transfers.
  */
 uint32_t SDIO_Card_GetBlockSize(LPC_SDMMC_T *pSDMMC, uint32_t func);
 
 /**
- * @brief	Sets the block size of a given function
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	blkSize		: Block size to set
- * @return	0 on success; Non-Zero on failure
- * @sa		SDIO_Card_GetBlockSize()
- * @note	After setting block size using this API, if
+ * @brief    Sets the block size of a given function
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    blkSize        : Block size to set
+ * @return    0 on success; Non-Zero on failure
+ * @sa        SDIO_Card_GetBlockSize()
+ * @note    After setting block size using this API, if
  * SDIO_Card_GetBlockSize() returns 0 for a valid function then the card
  * does not support block transfers.
  */
 int SDIO_Card_SetBlockSize(LPC_SDMMC_T *pSDMMC, uint32_t func, uint32_t blkSize);
 
 /**
- * @brief	Writes stream or block of data to the SDIO card [Using CMD53]
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	dest_addr	: Address where the data to be written (inside @a func register space)
- * @param	src_addr	: Buffer from which data to be taken
- * @param	size		: Number of Bytes/Blocks to be transfered [Must be in the range 1 to 512]
- * @param	flags		: Or-ed value of #SDIO_MODE_BLOCK, #SDIO_MODE_BUFFER
- * @return	0 on success; Non-Zero on failure
- * @note	When #SDIO_MODE_BLOCK is set in @a flags the size is number of blocks, so
+ * @brief    Writes stream or block of data to the SDIO card [Using CMD53]
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    dest_addr    : Address where the data to be written (inside @a func register space)
+ * @param    src_addr    : Buffer from which data to be taken
+ * @param    size        : Number of Bytes/Blocks to be transfered [Must be in the range 1 to 512]
+ * @param    flags        : Or-ed value of #SDIO_MODE_BLOCK, #SDIO_MODE_BUFFER
+ * @return    0 on success; Non-Zero on failure
+ * @note    When #SDIO_MODE_BLOCK is set in @a flags the size is number of blocks, so
  * the number of bytes transferd will be @a size * "block size" [See SDIO_Card_GetBlockSize() and
  * SDIO_Card_SetBlockSize() for more information]
  */
 int SDIO_Card_WriteData(LPC_SDMMC_T *pSDMMC, uint32_t func,
-	uint32_t dest_addr, const uint8_t *src_addr,
-	uint32_t size, uint32_t flags);
+    uint32_t dest_addr, const uint8_t *src_addr,
+    uint32_t size, uint32_t flags);
 
 /**
- * @brief	Reads stream or block of data from the SDIO card [Using CMD53]
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @param	dest_addr	: memory where the data to be read into
- * @param	src_addr	: Register address from which data to be read  (inside @a func register space)
- * @param	size		: Number of Bytes/Blocks to be transfered [Must be in the range 1 to 512]
- * @param	flags		: Or-ed value of #SDIO_MODE_BLOCK, #SDIO_MODE_BUFFER
- * @return	0 on success; Non-Zero on failure
- * @note	When #SDIO_MODE_BLOCK is set in @a flags the size is number of blocks, so
+ * @brief    Reads stream or block of data from the SDIO card [Using CMD53]
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @param    dest_addr    : memory where the data to be read into
+ * @param    src_addr    : Register address from which data to be read  (inside @a func register space)
+ * @param    size        : Number of Bytes/Blocks to be transfered [Must be in the range 1 to 512]
+ * @param    flags        : Or-ed value of #SDIO_MODE_BLOCK, #SDIO_MODE_BUFFER
+ * @return    0 on success; Non-Zero on failure
+ * @note    When #SDIO_MODE_BLOCK is set in @a flags the size is number of blocks, so
  * the number of bytes transferd will be @a size * "block size" [See SDIO_Card_GetBlockSize() and
  * SDIO_Card_SetBlockSize() for more information]
  */
 int SDIO_Card_ReadData(LPC_SDMMC_T *pSDMMC, uint32_t func,
-	uint8_t *dest_addr, uint32_t src_addr,
-	uint32_t size, uint32_t flags);
+    uint8_t *dest_addr, uint32_t src_addr,
+    uint32_t size, uint32_t flags);
 
 /**
- * @brief	Disable SDIO interrupt for a given function
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @return	0 - on success; Non zero on failure
+ * @brief    Disable SDIO interrupt for a given function
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @return    0 - on success; Non zero on failure
  */
 int SDIO_Card_DisableInt(LPC_SDMMC_T *pSDMMC, uint32_t func);
 
 /**
- * @brief	Enable SDIO interrupt for a given function
- * @param	pSDMMC		: SDMMC peripheral selected
- * @param	func		: function number [0 to 7] [0 = CIA function]
- * @return	0 - on success; Non zero on failure
+ * @brief    Enable SDIO interrupt for a given function
+ * @param    pSDMMC        : SDMMC peripheral selected
+ * @param    func        : function number [0 to 7] [0 = CIA function]
+ * @return    0 - on success; Non zero on failure
  */
 int SDIO_Card_EnableInt(LPC_SDMMC_T *pSDMMC, uint32_t func);
 
