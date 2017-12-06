@@ -22,6 +22,19 @@
 #include "CMU/CMU_Interface.h"
 #include "CMU/CMU_DataStructDef.h"
 
+#if SYS_USING_CNC
+
+#include "CNC/CNCSYS/CNCSYS_Interface.h"
+#include "CNC/CSM/CSM_Interface.h"
+#include "CNC/DVM/DEV_Interface.h"
+#include "CNC/ErrorCodeMan/ECM_ErrorCodeMan.h"
+#include "CNC/IPO/IPO_Interface.h"
+#include "CNC/MemoryAddr/CNC_AddrDef.h"
+#include "CNC/MST/MST_Interface.h"
+#include "CNC/SPM/SPM_SysCtrlParm.h"
+#include "CNC/SPM/SPM_ParmCheck.h"
+#endif
+
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 #include "SysPeripheral/IRQ/IRQ_Man.h"
@@ -89,14 +102,16 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_GPIO_GetInputPinState = GPIO_MAN_GetInputPinState;
     
     
-#if 0
 #if SYS_USING_CNC
     
+#if 0
     CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSLC;
     CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateIPO;
     CMUFunTable.pf_SYS_PreUpdateDevProc = SYS_PreUpdateDevProc;    
     CMUFunTable.pf_SYS_PostUpdateDevProc = SYS_PostUpdateDevProc;  
     CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;  
+#endif
+    
     CMUFunTable.pf_SYS_GetStateReadAddr = CNCSYS_GetStateReadAddr;
     
     //--------------------------------------------参数管理模块------------------------------------------------
@@ -143,6 +158,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_IO_SetOutPutPWMMode = IO_SetOutPutPWMMode;            
     CMUFunTable.pf_IO_SetOutPutPWMDuty = IO_SetOutPutPWMDuty;                
     CMUFunTable.pf_IO_SetOutPutPWMFreq = IO_SetOutPutPWMFreq;
+    
+#if 0
     CMUFunTable.pf_GPIO_SetHSpdOutputState = GPIO_SetHSpdOutputState;    
     CMUFunTable.pf_GPIO_GetHSpdOutputStatus = GPIO_GetHSpdOutputStatus;    
     CMUFunTable.pf_GPIO_GetHSpdInputStatus = GPIO_GetHSpdInputStatus;    
@@ -150,7 +167,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_MDAC_GetHSpdDaData = MDAC_GetHSpdDaData;    
     CMUFunTable.pf_QEI_GetHSpdQeiPos =  HQEI_GetHSpdQeiPos;    
     CMUFunTable.pf_QEI_GetHSpdQeiSpeed =  HQEI_GetHSpdQeiSpeed;        
-
+#endif
+    
     CMUFunTable.pf_ADDA_SetDAStatus = ADDA_SetDAStatus;
 
     //--------------------------------------------通道管理模块------------------------------------------------
@@ -216,15 +234,14 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_CSM_ProgArcPT = CSM_ProgArcPT;
 
     //--------------------------------------------寄存器模块------------------------------------------------
-
+#if 0
     CMUFunTable.pf_UREG_SetRegData = UREG_SetRegData;
     CMUFunTable.pf_UREG_GetRegData = UREG_GetRegData;
-
+#endif
     //--------------------------------------------错误管理模块------------------------------------------------
 
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
     
-#endif
 #endif
     
     CMU_SetExternFun(CMUFunTable);

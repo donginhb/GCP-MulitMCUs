@@ -34,6 +34,7 @@ static GPIO_DATA m_InputIOTable[] =
     {1,  17},   
     {1,  16},   
     {1,  15},   
+    
     //通用INPUT
     {1,   0},
     {1,   1},
@@ -51,16 +52,20 @@ static GPIO_DATA m_OutputIOTable[] =
 {
     //LED指示灯 RUN1
     {0,  15},
+    
     //EEPROM 
     {0,  28},
     {0,  27},
+    
     //步进电机方向角
     {2,   13},               //DIR
+    
     //OE_使能信号
     {0,  24},
     {1,  27},
     {1,  26},
     {0,  25},
+    
     //电机行控制信号
     {2,   6},          
     {2,   7},
@@ -72,6 +77,7 @@ static GPIO_DATA m_OutputIOTable[] =
     {0,  19},
     {0,  20},
     {0,  21},
+    
     //电机行控制信号
     {0,  22},
     {2,  10},
@@ -83,6 +89,7 @@ static GPIO_DATA m_OutputIOTable[] =
     {1,  21},
     {1,  19},
     {1,  18},
+    
     //通用OUTPUT
     {2,   5},
     {2,   4},
@@ -91,8 +98,6 @@ static GPIO_DATA m_OutputIOTable[] =
     {2,   1},
     {2,   0},
     {0,   9},
-
-
 
 };
 
