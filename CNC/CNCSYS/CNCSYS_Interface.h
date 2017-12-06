@@ -25,8 +25,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 */
 
 
-#ifndef __CNCSYS_INTERFACE_H
-#define __CNCSYS_INTERFACE_H
+#ifndef __CNC_SYS_INTERFACE_H
+#define __CNC_SYS_INTERFACE_H
 
 
 #include "CNC/DataStructDef/DataType.h"
@@ -43,7 +43,6 @@ typedef struct _CNCSYS_InterFace {
     uBit32 (*pf_CNCSYS_UpdateIPOTimeCycle)(uBit32 ulTimeCycleUs);
 
    // void （*pf_CAN_ExportInterface)(CAN_INTERFACE *pCanInterface);
-
     
 }CNCSYS_INTERFACE;
 
@@ -55,151 +54,23 @@ typedef struct _CNCSYS_InterFace {
 extern "C" {
 #endif
   
-  
-  int CNCSYS_InitInterface(CNCSYS_INTERFACE* pCNCSYSInterface);
+#if 0  //2017.12.05 Duhanfeng 暂时屏蔽
+int CNCSYS_InitInterface(CNCSYS_INTERFACE* pCNCSYSInterface);
+#endif
 
   
-  
-  
-  uBit32  CNCSYS_MainCtrl();
-
-  
-  
-    /*
-    函 数 名：int SYS_Init()
-    功    能：系统初始化
-    参    数：无
-    返 回 值：无
-    调用位置：系统上电时调用
-    注意事项：无
-    */
-    int CNCSYS_Init();  
-    
-    
-    /*
-    函 数 名：void SYS_IPOInTime0();
-    功    能：插补器插补中断服务函数
-    参    数：无
-    返 回 值：无
-    调用位置：定时中断中调用
-    注意事项：无
-    */
-    void SYS_IPOInTime0();
-
-  
-    /*
-    函 数 名：void SYS_MainCtrl()
-    功    能：系统模块主线程
-    参    数：无
-    返 回 值：无
-    调用位置：大循环中调用
-    注意事项：无
-    */
-    void SYS_MainCtrl();
+uBit32  CNCSYS_MainCtrl();
 
     
-    //系统复位
-    //uBit32 SYS_Reset();
-    
-    /*
-    函 数 名：void SYS_SetSysTickCount()
-    功    能：更新系统tick
-    参    数：无
-    返 回 值：无
-    调用位置：大循环中调用
-    注意事项：无
-    */
-    void SYS_SetSysTickCount(void);
-    
-    /*
-    函 数 名：void SYS_SetSysTickTimeCylce(uBit32 ulTimeCycle)
-    功    能：设置系统tick时钟周期
-    参    数：ulTimeCycle--时钟周期，单位us
-    返 回 值：无
-    调用位置：更新插补周期成功后调用
-    注意事项：无
-    */
-    void SYS_SetSysTickTimeCylce(uBit32 ulTimeCycle);
-    
-    /*
-    函 数 名：double64 SYS_GetSysTickCount(void);
-    功    能：获取系统tick,单位ms
-    参    数：无
-    返 回 值：当前系统tick值
-    调用位置：大循环中调用
-    注意事项：无
-    */
-    double64 SYS_GetSysTickCount(void);
-
-
-    /*
-    函 数 名：const SYS_STATE_DATA* SYS_GetStateReadAddr()
-    功    能：获取系统状态数据起始地址
-    参    数：无
-    返 回 值：无
-    调用位置：大循环中调用
-    注意事项：无
-    */
-    const SYS_STATE_DATA* SYS_GetStateReadAddr();
-    
-    //获取系统报警状态
-    uBit32 SYS_GetAlarmStatus(); 
-    //获取系统报警位状态
-    Bit32 SYS_GetAlarmBit(uBit32 ulAlarmBit);
-    //设置系统报警位
-    void SYS_SetAlarmBit(uBit32 ulAlarmBit);
-    //清除系统报警位
-    void SYS_ClrAlarmBit(uBit32 ulAlarmBit);
-    //获取系统运行状态字
-    uBit32 SYS_GetSysStatus();    
-    //设置系统运行状态位
-      void SYS_SetStatusBit(uBit32 ulStatusBit);
-    //清除系统运行状态位
-    void SYS_ClrStatusBit(uBit32 ulStatusBit);
-        
-
-    //检测系统是否正在复位，正在复位返回1，否则返回0
-    //Bit32 SYS_CheckResetState();
-    
-
-    
-        /*
-    函 数 名：Bit32 SPM_GetAxisMapTable(Bit32 nCh, Bit32 iAxisNo)
-    功    能：获取通道逻辑轴号的物理轴号
-    参    数：    nCh        --通道序号，从0开始
-                iAxisNo    --轴序号，从0开始
-    返 回 值：物理轴号，-1：错误
-    调用位置：
-    注意事项：
-    */
-    Bit32 SPM_GetAxisMapTable(Bit32 nCh, Bit32 iAxisNo);
-
-    /*
-    函 数 名：Bit32 SPM_GetAxisType(Bit32 nCh, Bit32 iAxisNo)
-    功    能：获取轴的类型
-    参    数：    nCh        --通道序号，从0开始
-                iAxisNo    --轴序号，从0开始
-    返 回 值：轴类型
-                #define AXIS_TYPE_NULL            (0)            //未安装
-                #define AXIS_TYPE_LINE            (1)            //直线轴
-                #define AXIS_TYPE_ROTATE        (2)            //旋转轴(角度值任意)
-                #define AXIS_TYPE_ROTATE_360    (3)            //旋转轴(角度值为0-360)
-    调用位置：
-    注意事项：
-    */
-    Bit32 SPM_GetAxisType(Bit32 nCh, Bit32 iAxisNo);
-    
-    
-    
-void SYS_InitStateData();
+/**
+  * @brief  CNC初始化
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+int CNCSYS_Init(void);
 
 
 void CNCSYS_IPOInSysTick(void);
-
-
-
-
-
 
 
     
@@ -280,9 +151,8 @@ void CNCSYS_ClrStatusBit(uBit32 ulStatusBit);
 
 
 
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __CNCSYS_INTERFACE_H */
+#endif /* __CNC_SYS_INTERFACE_H */

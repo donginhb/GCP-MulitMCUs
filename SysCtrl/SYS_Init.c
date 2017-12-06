@@ -17,12 +17,8 @@
 /***********************************<INCLUDES>**********************************/
 #include "SYS_Init.h"
 #include "SYS_Ctrl.h"
-#include "SYS_Config.h"
-#include "SYS_CmuConfig.h"
-
+#include "SysConfig.h"
 #include "DataType/DataType.h"
-#include "CMU/CMU_Interface.h"
-#include "CMU/CMU_DataStructDef.h"
 
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
@@ -31,10 +27,22 @@
 
 #include <stdlib.h>
 
+#if SYS_USING_CMU
+#include "SYS_CmuConfig.h"
+#include "CMU/CMU_Interface.h"
+#include "CMU/CMU_DataStructDef.h"
+#endif
+
+#if SYS_USING_CNC
+#include "SYS_CncConfig.h"
+#include "CNC/CNCSYS/CNCSYS_Interface.h"
+#endif
+
 
 /*****************************************************************************
  * 系统初始化相关接口
  ****************************************************************************/
+
 
 /**
   * @brief  系统初始化
@@ -55,6 +63,11 @@ uBit32 SYS_Init(void)
     //初始化CMU
 #if SYS_USING_CMU    
     SYS_InitCMU();
+#endif
+    
+    //初始化CNC
+#if SYS_USING_CNC
+    SYS_InitCNC();
 #endif
     
     return 0;
@@ -83,5 +96,10 @@ void SYS_MainTaskHandler(void)
     CMU_MainProc();
 #endif
     
+    //CNC管理
+#if SYS_USING_CNC
+    CNCSYS_MainCtrl();
+#endif
+        
 }
 

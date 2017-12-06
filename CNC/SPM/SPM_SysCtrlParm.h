@@ -217,6 +217,36 @@ extern "C" {
     注意事项：
     */    
     uBit32 SPM_SetConfig(DEVICE_CONFIG *pDevConf, uBit32 ulDevCount);  
+    
+    /*
+    函 数 名：Bit32 SPM_GetAxisMapTable(Bit32 nCh, Bit32 iAxisNo)
+    功    能：获取通道逻辑轴号的物理轴号
+    参    数：    nCh        --通道序号，从0开始
+                iAxisNo    --轴序号，从0开始
+    返 回 值：物理轴号，-1：错误
+    调用位置：
+    注意事项：
+    */
+    Bit32 SPM_GetAxisMapTable(Bit32 nCh, Bit32 iAxisNo);
+
+    /*
+    函 数 名：Bit32 SPM_GetAxisType(Bit32 nCh, Bit32 iAxisNo)
+    功    能：获取轴的类型
+    参    数：    nCh        --通道序号，从0开始
+                iAxisNo    --轴序号，从0开始
+    返 回 值：轴类型
+                #define AXIS_TYPE_NULL            (0)            //未安装
+                #define AXIS_TYPE_LINE            (1)            //直线轴
+                #define AXIS_TYPE_ROTATE          (2)            //旋转轴(角度值任意)
+                #define AXIS_TYPE_ROTATE_360      (3)            //旋转轴(角度值为0-360)
+    调用位置：
+    注意事项：
+    */
+    Bit32 SPM_GetAxisType(Bit32 nCh, Bit32 iAxisNo);
+    
+    
+    
+    
 #ifdef __cplusplus
 }
 #endif

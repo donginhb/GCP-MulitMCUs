@@ -31,7 +31,7 @@
 
 static uBit8  m_uPwmCountNode[MAX_PWM_NODE] = {0};          //输出PWM对应的PWM计数模块
 static uBit32 m_ulPwmCountChannel[MAX_PWM_NODE] = {0};      //输出PWM对应的PWM计数通道
-
+static bool   m_bPwmRunningFlag[MAX_PWM_NODE] = {0};
 
 /*****************************************************************************
  * 中断回调函数接口
@@ -53,6 +53,9 @@ static void PWM_Count0_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(0, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[0] = false;
     }
     
 }
@@ -73,6 +76,9 @@ static void PWM_Count1_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(1, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[1] = false;
     }
     
 }
@@ -93,11 +99,14 @@ static void PWM_Count2_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(2, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[2] = false;
     }
     
 }
 
-
+extern void AXIS_CountCallBack(void);
 /**
   * @brief  PWM通道3计数中断处理
   * @param  None
@@ -113,6 +122,12 @@ static void PWM_Count3_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(3, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[3] = false;
+        
+        //执行相应的回调
+        AXIS_CountCallBack();
     }
     
 }
@@ -133,6 +148,9 @@ static void PWM_Count4_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(4, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[4] = false;
     }
     
 }
@@ -153,6 +171,9 @@ static void PWM_Count5_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(5, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[5] = false;
     }
     
 }
@@ -173,6 +194,9 @@ static void PWM_Count6_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(6, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[6] = false;
     }
     
 }
@@ -193,6 +217,9 @@ static void PWM_Count7_IRQHandler(void)
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(7, false);
+        
+        //清标志位
+        m_bPwmRunningFlag[7] = false;
     }
     
 }
@@ -220,7 +247,6 @@ static void (*pf_PwmCountIrqHandler[MAX_PWM_NODE])(void) =
 /*****************************************************************************
  * PWM输入相关控制接口
  ****************************************************************************/
-
 
 /**
   * @brief  电机脉冲PWM初始化
@@ -264,7 +290,7 @@ uBit32 PWM_MotorPulseInit(uBit8 uPwmOutputNode, uBit32 ulOutChNum,
   * @brief  电机脉冲PWM初始化
   * @param  uPwmOutputNode PWM节点
   * @param  ulPulseCount 脉冲数量
-  * @retval 0-成功 非0-失败
+  * @retval Node
   */
 void PWM_SendPulse(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
 {
@@ -282,15 +308,17 @@ void PWM_SendPulse(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
     //开启PWM
     HAL_PWM_OutputEnable(uPwmOutputNode, true);
     
+    //置运行标志位
+    m_bPwmRunningFlag[uPwmOutputNode] = true;
+    
 }
-
 
 
 /**
   * @brief  在1MS内产生指定数量的脉冲
   * @param  uPwmOutputNode PWM节点
   * @param  ulPulseCount 脉冲数量
-  * @retval 0-成功 非0-失败
+  * @retval Node
   */
 void PWM_SendPulseLimitMs(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
 {
@@ -305,3 +333,26 @@ void PWM_SendPulseLimitMs(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
     
 }
 
+
+/**
+  * @brief  电机脉冲PWM初始化
+  * @param  uPwmOutputNode PWM节点
+  * @retval 当前记录到的脉冲数
+  */
+uBit32 PWM_GetCount(uBit8 uPwmOutputNode)
+{
+    
+    return HAL_TIM_GetInputCount(m_uPwmCountNode[uPwmOutputNode]);
+}
+
+
+/**
+  * @brief  电机脉冲PWM初始化
+  * @param  uPwmOutputNode PWM节点
+  * @retval true-运行中 false-停止运行
+  */
+bool PWM_GetRunningState(uBit8 uPwmOutputNode)
+{
+    
+    return m_bPwmRunningFlag[uPwmOutputNode];
+}

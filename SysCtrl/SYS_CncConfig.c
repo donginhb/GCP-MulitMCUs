@@ -17,7 +17,9 @@
 /***********************************<INCLUDES>**********************************/
 #include "SYS_CncConfig.h"
 #include "DataType/DataType.h"
-      
+#include "CNC/CNCSYS/CNCSYS_Interface.h"
+
+#include "SysPeripheral/IRQ/IRQ_Man.h"
 
 /*****************************************************************************
  * 私有成员定义及实现
@@ -30,13 +32,15 @@
 
 
 /**
-  * @brief   
+  * @brief  CNC初始化
   * @param  None
-  * @retval None
+  * @retval 0-成功 非0-失败
   */
-void DO_Function(void)
+uBit32 SYS_InitCNC(void)
 {
+    CNCSYS_Init();
     
-    
+    IRQ_SetTrgCallback(CNCSYS_IPOInSysTick, IRQ_TRG_SYSTICK_OS);
       
+    return 0;
 }

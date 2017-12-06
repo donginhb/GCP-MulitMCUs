@@ -8,7 +8,13 @@ extern "C"
 {
 #endif
 
-
+/**
+  * @brief  CNC初始化
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_InitCNC(void);
+    
 #ifdef __cplusplus
 }
 #endif

@@ -2,6 +2,7 @@
 #define  __IRQ_MAN_H
 
 #include "DataType/DataType.h"
+#include "HAL/HAL_IRQHandler.h"
 
 #ifdef __cplusplus
 extern "C"

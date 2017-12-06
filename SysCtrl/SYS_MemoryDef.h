@@ -35,11 +35,11 @@
 #if defined(LPC17XX)
 
 //LPC1759/8/6/4 LPC176X
-#define AHB_SRAM0_ADDR          (0x2007C000)    //AHB SRAM0 地址
+#define AHB_SRAM0_ADDR          (0x2007C000U)   //AHB SRAM0 地址
 #define AHB_SRAM0_SIZE          (16*1024)       //AHB SRAM0 大小
 
 //LPC1759/8 LPC1769/8/7/6/5
-#define AHB_SRAM1_ADDR          (0x20080000)    //AHB SRAM1 地址
+#define AHB_SRAM1_ADDR          (0x20080000U)   //AHB SRAM1 地址
 #define AHB_SRAM1_SIZE          (16*1024)       //AHB SRAM1 大小
 
 

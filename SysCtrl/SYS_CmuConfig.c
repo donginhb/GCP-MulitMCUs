@@ -17,7 +17,7 @@
 /***********************************<INCLUDES>**********************************/
 #include "SYS_CmuConfig.h"
 #include "SYS_Ctrl.h"
-#include "SYS_Config.h"
+#include "SysConfig.h"
 #include "DataType/DataType.h"
 #include "CMU/CMU_Interface.h"
 #include "CMU/CMU_DataStructDef.h"
@@ -89,7 +89,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_GPIO_GetInputPinState = GPIO_MAN_GetInputPinState;
     
     
-    
+#if 0
 #if SYS_USING_CNC
     
     CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSLC;
@@ -97,7 +97,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_SYS_PreUpdateDevProc = SYS_PreUpdateDevProc;    
     CMUFunTable.pf_SYS_PostUpdateDevProc = SYS_PostUpdateDevProc;  
     CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;  
-    CMUFunTable.pf_SYS_GetStateReadAddr = SYS_GetStateReadAddr;
+    CMUFunTable.pf_SYS_GetStateReadAddr = CNCSYS_GetStateReadAddr;
     
     //--------------------------------------------参数管理模块------------------------------------------------
     CMUFunTable.pf_SPM_SetSysCtrlParm = SPM_SetSysCtrlParm;
@@ -225,6 +225,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
     
 #endif
+#endif
     
     CMU_SetExternFun(CMUFunTable);
     
@@ -233,7 +234,7 @@ static uBit32 SYS_InitCmuFunTable(void)
 
 
 /**
-  * @brief  系统初始化
+  * @brief  CMU初始化
   * @param  None
   * @retval 0-成功 非0-失败
   */

@@ -1,5 +1,5 @@
-#ifndef  __DB_HW_CFG_H
-#define  __DB_HW_CFG_H
+#ifndef  __VM_HW_CFG_H
+#define  __VM_HW_CFG_H
 
 #include "DataType/DataType.h"
 
@@ -16,7 +16,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void DB_HwInit(void);
+void VM_HwInit(void);
 
 
 /*****************************************************************************
@@ -28,7 +28,7 @@ void DB_HwInit(void);
   * @param  None
   * @retval None
   */
-void DB_MainWorkLedShow(void);
+void VM_MainWorkLedShow(void);
 
 
 /*****************************************************************************
@@ -40,7 +40,7 @@ void DB_MainWorkLedShow(void);
   * @param  None
   * @retval None
   */
-void DB_KeyProc(void);
+void VM_KeyProc(void);
 
 
 
@@ -53,7 +53,7 @@ void DB_KeyProc(void);
   * @param  None
   * @retval None
   */
-void DB_SensorSampleProc(void);
+void VM_SensorSampleProc(void);
 
 
 #ifdef __cplusplus
@@ -61,4 +61,4 @@ void DB_SensorSampleProc(void);
 #endif
 
 
-#endif /* __DB_HW_CFG_H */
+#endif /* __VM_HW_CFG_H */

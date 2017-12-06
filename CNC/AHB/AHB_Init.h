@@ -16,9 +16,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 修改日期：2015年10月16日
 */
 
-//
-#ifndef AHB_INIT_H
-#define AHB_INIT_H
+#ifndef __AHB_INIT_H
+#define __AHB_INIT_H
 
 
 #include "AHB_DataStructDef.h"
@@ -26,21 +25,20 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 extern AHB_DATA_STRUCT* g_pAHBDataStruct;
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
-
-    uBit32 AHB_Init();
-
-
-
+/**
+  * @brief  AHB CNC系统配置参数初始化
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 AHB_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif
+#endif /* __AHB_INIT_H */

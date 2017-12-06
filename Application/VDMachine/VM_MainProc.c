@@ -16,13 +16,11 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "DB_MainProc.h"
-#include "DB_HwCtrl.h"
-#include "DB_HardwareDef.h"
-#include "DB_ComMan.h"
-
+#include "VM_MainProc.h"
+#include "VM_HwCtrl.h"
+#include "VM_HardwareDef.h"
+#include "VM_MotorCtrl.h"
 #include "DataType/DataType.h"
-
 
 
 /**
@@ -30,13 +28,13 @@
   * @param  None
   * @retval None
   */
-void DB_Init(void)
+void VM_Init(void)
 {
-    //硬件初始化
-    DB_HwInit();
+    //初始化硬件
+    VM_HwInit();
     
-    
-    
+    //初始化坐标轴映射
+    VM_SetConfig();
     
 }
 
@@ -46,18 +44,12 @@ void DB_Init(void)
   * @param  None
   * @retval None
   */
-void DB_MainProc(void)
+void VM_MainProc(void)
 {
     //LED显示
-    DB_MainWorkLedShow();
+    VM_MainWorkLedShow();
     
-    //通信处理
-    //DB_ComHandler();
-    
-    //按键处理
-    DB_KeyProc();
-    
-    //传感器采样处理
-    //DB_SensorSampleProc();
+    //升降电机测试
+    VM_MoveLiftMotorTest();
     
 }

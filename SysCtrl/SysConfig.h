@@ -7,7 +7,7 @@
 #define SYS_USING_CNC           (0)     //CNC模块使能开关
 #elif defined(LPC17XX)
 #define SYS_USING_CMU           (1)     //CMU模块使能开关
-#define SYS_USING_CNC           (0)     //CNC模块使能开关
+#define SYS_USING_CNC           (1)     //CNC模块使能开关
 #elif defined(STM32F10X)
 #define SYS_USING_CMU           (0)     //CMU模块使能开关
 #define SYS_USING_CNC           (0)     //CNC模块使能开关
@@ -49,6 +49,47 @@
 
 
 #endif //SYS_USING_CMU
+
+
+/*****************************************************************************
+ * CNC相关配置
+ ****************************************************************************/
+
+#if SYS_USING_CNC
+
+#include "SYS_MemoryDef.h"
+
+
+#if defined(LPC17XX)
+
+//CNC 缓冲区地址定义
+#define CNC_SRAM_BUFF_ADDR      ((unsigned long int)AHB_SRAM0_ADDR)
+#define CNC_SRAM_BUFF_LEN       (AHB_SRAM0_SIZE)
+
+//外部SRAM使能
+#define CNC_USING_EXT_SRAM      (0)
+
+#elif defined(LPC43XX)
+
+//CNC 缓冲区地址定义
+#define CNC_SRAM_BUFF_ADDR      (0)
+#define CNC_SRAM_BUFF_LEN       (0)
+     
+//外部SRAM使能
+#define CNC_USING_EXT_SRAM      (0)
+
+#elif defined(STM32F10X)
+
+#define CNC_SRAM_BUFF_ADDR      (0)
+
+#endif
+
+
+
+
+#endif //SYS_USING_CNC
+
+
 
 
 

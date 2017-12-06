@@ -31,7 +31,6 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CNC/ErrorCodeMan/ECM_ErrorCodeMan.h"
 #include "CNC/DataStructDef/IPO_DataStructDefPub.h"
 
-//#include "../GPIO/GPIOCtrl.h"
 
 #define DEV_INVALID_BUS_INDEX        (0XFF)
 

@@ -43,6 +43,22 @@ void PWM_SendPulse(uBit8 uPwmOutputNode, uBit32 ulPulseCount);
 void PWM_SendPulseLimitMs(uBit8 uPwmOutputNode, uBit32 ulPulseCount);
 
 
+/**
+  * @brief  电机脉冲PWM初始化
+  * @param  uPwmOutputNode PWM节点
+  * @retval 当前记录到的脉冲数
+  */
+uBit32 PWM_GetCount(uBit8 uPwmOutputNode);
+
+
+/**
+  * @brief  电机脉冲PWM初始化
+  * @param  uPwmOutputNode PWM节点
+  * @retval true-运行中 false-停止运行
+  */
+bool PWM_GetRunningState(uBit8 uPwmOutputNode);
+
+
 #ifdef __cplusplus
 }
 #endif

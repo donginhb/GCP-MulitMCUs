@@ -1,5 +1,5 @@
-#ifndef __DB_MAIN_PROC_H
-#define __DB_MAIN_PROC_H
+#ifndef __VM_MAIN_PROC_H
+#define __VM_MAIN_PROC_H
 
 #include "DataType/DataType.h"
 
@@ -12,7 +12,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void DB_Init(void);
+void VM_Init(void);
 
 
 /**
@@ -20,11 +20,11 @@ void DB_Init(void);
   * @param  None
   * @retval None
   */
-void DB_MainProc(void);
+void VM_MainProc(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif /* __DB_MAIN_PROC_H */
+#endif /* __VM_MAIN_PROC_H */

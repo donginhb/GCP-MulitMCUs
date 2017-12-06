@@ -19,7 +19,7 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 #include <string.h>
 #include "SPM_ParmCheck.h"
 #include "SPM_SysCtrlParm.h"
-//#include "../AHB/AHB_Init.h"
+#include "CNC/AHB/AHB_Init.h"
 #include "CNC/DataStructDef/AXIS_DataStructDef.h"
 #include "CNC/DataStructDef/SYS_DataStructDef.h"
 #include "CNC/DataStructDef/CRD_DataStructDef.h"
@@ -124,22 +124,19 @@ const AXIS_PITCH_CMP_PARM* SPM_GetAxisPitchCmpParmAddr()
 void SPM_InitSysCtrlParm()
 {
     int i, j, k;   
-
-    //
-#if 0   //杜寒枫 2017.12.05
+    
     m_SPM_pSysCtrlParm = &(g_pAHBDataStruct->SysCtrlParm);
     m_SPM_pCrdAxisMapTable = g_pAHBDataStruct->CrdAxisMapTable;
     m_SPM_pCrdParm = g_pAHBDataStruct->CrdParm;
     m_SPM_pAxisParm = g_pAHBDataStruct->AxisParm;
-#endif
     
 #if ENABLE_AXIS_PITCH_CMP_PARM > 0    
     m_SPM_pAxisPitchCmpParm = g_pAHBDataStruct->AxisPitchCmpParm;
 #endif
-
+    
     //坐标系映射表
     memset(m_SPM_pCrdAxisMapTable, 0, sizeof(CRDSYS_AXIS_MAP_TABLE) * CRDSYS_MAX_COUNT);
-
+    
     for (i = 0; i < CRDSYS_MAX_COUNT; i++)
     {
         for (j = 0; j < CRDSYS_AXIS_MAX_COUNT; j++)
@@ -150,19 +147,20 @@ void SPM_InitSysCtrlParm()
             }
         }
     }
-
-
+    
+#if 0   //2017.12.05 duhanfeng 暂时屏蔽 
     //从FLASH加载系统控制参数
     if (!SPM_LoadParm())
-    { //加载成功
+    { 
+        //加载成功
         return;
     }
     else
     { //加载失败
-        SYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_PARM_FAIL);
+        CNCSYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_PARM_FAIL);
     }
-
-
+#endif
+    
     //系统控制参数初始化
     memset(m_SPM_pSysCtrlParm, 0, sizeof(SYS_CTRL_PARM));
     m_SPM_pSysCtrlParm->nCrdSysCount = CRDSYS_MAX_COUNT;    
@@ -171,7 +169,7 @@ void SPM_InitSysCtrlParm()
     
     //轴参数初始化
     memset(m_SPM_pAxisParm, 0, sizeof(AXIS_PARM) * AXIS_MAX_COUNT);
-
+    
     for (i = 0; i < AXIS_MAX_COUNT; i++)
     {
         m_SPM_pAxisParm[i].AxisScaleParm.nType = 1;
@@ -180,8 +178,8 @@ void SPM_InitSysCtrlParm()
         m_SPM_pAxisParm[i].AxisScaleParm.lInternalPulseScale = 1;         
         m_SPM_pAxisParm[i].AxisScaleParm.lQEIPulseScale = 1;            
         m_SPM_pAxisParm[i].AxisScaleParm.lCycleQeiPulseCount = 10000;            
-
-
+        
+        
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogSpeed = 200;    
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogAcc = 5.0;        
         m_SPM_pAxisParm[i].AxisMoveParm.dJogJerk = 0.1;        
@@ -210,30 +208,30 @@ void SPM_InitSysCtrlParm()
         m_SPM_pAxisParm[i].AxisSignalConfig.SvArriveEnable = 1;
         m_SPM_pAxisParm[i].AxisSignalConfig.SvReadyEnable = 1;
     }
-
+    
     //坐标系参数初始化
     memset(m_SPM_pCrdParm, 0, sizeof(CRDSYS_PARM) * CRDSYS_MAX_COUNT);
-
+    
     for(i = 0; i < CRDSYS_MAX_COUNT; i++)
     {
         m_SPM_pCrdParm[i].nCrdSysSet = CRDSYS_SET_ENABLE;        
         m_SPM_pCrdParm[i].nLookaheadLen = 1000;            
-
+        
         m_SPM_pCrdParm[i].dLineAxisCornerPreci = 20;        
         m_SPM_pCrdParm[i].dRotAxisCornerPreci = 20;        
         m_SPM_pCrdParm[i].dCircleErrorLim = 20;        
         m_SPM_pCrdParm[i].ulMinConstantVelTime = 0;    
-
+        
         m_SPM_pCrdParm[i].dTimebaseSlewRate = 0.1;        
         m_SPM_pCrdParm[i].dFeedHoldSlewRate = 0.1;        
         m_SPM_pCrdParm[i].dStopSlewRate = 0.2;            
-
+        
         m_SPM_pCrdParm[i].dProgMaxFeedSpeed = 200;        
         m_SPM_pCrdParm[i].dProgMaxAcc = 5.0;            
         m_SPM_pCrdParm[i].dProgMaxJerk = 0.1;            
         m_SPM_pCrdParm[i].dMaxCornerAcc = 10.0;    
         
-         m_SPM_pCrdParm[i].lSpindleQeiSense = 100;    
+        m_SPM_pCrdParm[i].lSpindleQeiSense = 100;    
     }  
 }
 
@@ -250,59 +248,58 @@ uBit32 SPM_SetSysCtrlParm(SYS_CTRL_PARM* pSysCtrlParm)
     uBit16 nLastTimeCycle;
     uBit16 nLastCrdSysCount;
     uBit32 ulErrorCode;
-
+    
     SYS_CTRL_PARM SysCtrlParmBackup;
-
+    
     //检测通道是否空闲
     if (!CSM_CheckSysFree())
     {
         ulErrorCode = ECM_GenerateErrorCode(SYS_SOFT_MODULE_SPM, ERR_CRD_NO_INVALID, SPM_ERR_CRDSYS_NOT_FREE, 
-            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
+                                            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
         return ulErrorCode;
-    }    
-
-
+    }
+    
     //检测插补器是否空闲
     if (!IPO_CheckSysFree())
     {
         ulErrorCode = ECM_GenerateErrorCode(SYS_SOFT_MODULE_SPM, ERR_CRD_NO_INVALID, SPM_ERR_IPO_NOT_FREE, 
-            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
+                                            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
         return ulErrorCode;
     }
-
+    
     //系统控制参数检查
     if(SPM_CheckSysCtrlParm(pSysCtrlParm)==0)
     {
         ulErrorCode = ECM_GenerateErrorCode(SYS_SOFT_MODULE_SPM, ERR_CRD_NO_INVALID, SPM_ERR_PARM_ERROR, 
-            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
+                                            SPM_CMD_SET_SYS_CTRL_PARM, ERR_DEVICE_NO_INVALID, ERR_LEVEL_NORMAL);
         return ulErrorCode;
     }
-
+    
     nLastTimeCycle = m_SPM_pSysCtrlParm->nTimeCycle;
     nLastCrdSysCount = m_SPM_pSysCtrlParm->nCrdSysCount;
-
+    
     //根据插补周期重新配置系统中断
-    if(pSysCtrlParm->nTimeCycle != nLastTimeCycle || SYS_GetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL))
+    if(pSysCtrlParm->nTimeCycle != nLastTimeCycle || CNCSYS_GetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL))
     {
         ulErrorCode = DEV_SendSysCtrlParm(pSysCtrlParm);
         if (ulErrorCode != 0)
         {
-            SYS_SetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
+            CNCSYS_SetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
             return ulErrorCode;
         }
     }
-
+    
     //----------------------------更新参数到AHB全局数据区-------------------------------------
     //设置系统控制参数更新状态位（关插补器）
-    SYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
-
+    CNCSYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+    
     //保存系统配置参数
     SysCtrlParmBackup = *m_SPM_pSysCtrlParm;
     *m_SPM_pSysCtrlParm = *pSysCtrlParm;
-
-
+    
+    
     //-----------------------通知M4更新插补中断周期（重新配置TIME0）-------------------------
-    if(pSysCtrlParm->nTimeCycle != nLastTimeCycle || SYS_GetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL))
+    if(pSysCtrlParm->nTimeCycle != nLastTimeCycle || CNCSYS_GetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL))
     {
         /////////////////////////////////////////////////////////////////
         //laomao  2016-05-13 注释掉，无论是否启动安川总线中断，都需要通知M4更新插补中断
@@ -310,26 +307,28 @@ uBit32 SPM_SetSysCtrlParm(SYS_CTRL_PARM* pSysCtrlParm)
         /////////////////////////////////////////////////////////////////
         {//未启动安川总线中断作为插补中断
             ulErrorCode = IPO_UpdateSycCtrlParm();
-
+            
             if (ulErrorCode != 0)
             {
-                SYS_SetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
-
+                CNCSYS_SetAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
+                
                 *m_SPM_pSysCtrlParm = SysCtrlParmBackup;
-
+                
                 //清除系统控制参数更新状态位(开插补中断)
-                SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
-
+                CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+                
                 return ulErrorCode;
             }
-
+            
+#if 0 //2017.11.05 Duhanfeng 暂时屏蔽
             SYS_SetSysTickTimeCylce(pSysCtrlParm->nTimeCycle);
+#endif
         }
     }
     
-
+    
     //-------------------------------------------------------------------------------------------
-
+    
     if (nLastCrdSysCount != m_SPM_pSysCtrlParm->nCrdSysCount)
     {
         //重新初始化插补缓冲区
@@ -337,24 +336,24 @@ uBit32 SPM_SetSysCtrlParm(SYS_CTRL_PARM* pSysCtrlParm)
         
         //重新初始化程序缓冲区
         CSM_InitProgBuf();
-
+        
         //重新初始化用户自定义数据缓冲区
         CSM_InitUserBuf();
     }
-
+    
     //清除系统控制参数更新状态位(开插补中断)
-    SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
-
+    CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+    
     //清除加载参数失败报警
-    SYS_ClrAlarmBit(SYS_ALARM_LOAD_SYS_PARM_FAIL);
+    CNCSYS_ClrAlarmBit(SYS_ALARM_LOAD_SYS_PARM_FAIL);
     
     /////////////////////////////////
     //laomao  2016-05-13 添加
-    SYS_ClrAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
+    CNCSYS_ClrAlarmBit(SYS_ALARM_UPDATE_SYSCTRL_PARM_FAIL);
     /////////////////////////////////
-
+    
     return 0;
-  
+    
 }
 
 /*
@@ -549,7 +548,7 @@ uBit32 SPM_SetCrdSysAxisMapTable(CRDSYS_AXIS_MAP_TABLE* pCrdAxisMapTable, Bit32 
     }
 
     //设置更新系统参数状态位（关插补中断）
-    SYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+    CNCSYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
 
     //
     memcpy(m_SPM_pCrdAxisMapTable, pCrdAxisMapTable, sizeof(CRDSYS_AXIS_MAP_TABLE) * iCrdSysCount);
@@ -572,7 +571,7 @@ uBit32 SPM_SetCrdSysAxisMapTable(CRDSYS_AXIS_MAP_TABLE* pCrdAxisMapTable, Bit32 
     ulErrorCode = IPO_UpdateCrdSysAxisMapTable();
     if (ulErrorCode != 0)
     {
-        SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+        CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
         return ulErrorCode;
     }
 
@@ -580,15 +579,15 @@ uBit32 SPM_SetCrdSysAxisMapTable(CRDSYS_AXIS_MAP_TABLE* pCrdAxisMapTable, Bit32 
     ulErrorCode = CSM_UpdateCrdSysAxisMapTable();
     if (ulErrorCode != 0)
     {
-        SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+        CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
         return ulErrorCode;
     }
 
     //
-    SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+    CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
 
     //
-    SYS_ClrAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
+    CNCSYS_ClrAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
 
 
     return 0;   
@@ -1961,6 +1960,7 @@ uBit32 SPM_LoadParm()
     return 0;
 }
 
+
 //检查两个设备信息是否对应同一个设备，是同一设备返回1，否则返回0
 int SPM_ChckDevMatch(DEVICE_INFO* pCurDevInfo, DEVICE_INFO* pLastDevInfo)
 {
@@ -2058,7 +2058,7 @@ uBit32 SPM_LoadConfig()
         }
     }
 
-    SYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
+    CNCSYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
     //坐标系映射表
     memset(m_SPM_pCrdAxisMapTable, 0, sizeof(CRDSYS_AXIS_MAP_TABLE) * CRDSYS_MAX_COUNT);
 
@@ -2114,13 +2114,13 @@ uBit32 SPM_SetConfig(DEVICE_CONFIG *pDevConf, uBit32 ulDevCount)
         //更新轴映射表
 
         //设置更新系统参数状态位（关插补中断）
-        SYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+        CNCSYS_SetStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
 
         //通知插补器更新坐标系映射表
         ulErrorCode = IPO_UpdateCrdSysAxisMapTable();
         if (ulErrorCode != 0)
         {
-            SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+            CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
             return ulErrorCode;
         }
 
@@ -2128,12 +2128,12 @@ uBit32 SPM_SetConfig(DEVICE_CONFIG *pDevConf, uBit32 ulDevCount)
         ulErrorCode = CSM_UpdateCrdSysAxisMapTable();
         if (ulErrorCode != 0)
         {
-            SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+            CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
             return ulErrorCode;
         }
 
-        SYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
-        SYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
+        CNCSYS_ClrStatusBit(SYS_STATUS_UPDATE_SYS_CTRL_PARM);
+        CNCSYS_SetAlarmBit(SYS_ALARM_LOAD_SYS_CONFIG_FAIL);
     }
 
     return 0;

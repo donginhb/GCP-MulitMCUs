@@ -2,7 +2,7 @@
 #define  __SYS_CMU_CONFIG_H
 
 #include "../DataType/DataType.h"
-#include "SYS_Config.h"
+#include "SysConfig.h"
 
 #ifdef __cplusplus
 extern "C"

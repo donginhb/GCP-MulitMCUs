@@ -28,7 +28,8 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #include "CNC/DataStructDef/MST_DataStructDef.h"
 
 //
-typedef struct _MST_InterFace {
+typedef struct _MST_InterFace 
+{
     //通道管理模块操作接口函数
     uBit32 (*pf_CSM_ProgStop)(uBit16 nCrdSysMask);
 

@@ -470,28 +470,9 @@ typedef struct _IPO_M0_M4_DATA_TRANS {
 
 
 
-//
-
-
-
-
-
-
-
 
 
 #pragma pack(pop)
-
-
-
-/*
-函 数 名：
-功    能：
-参    数：
-返 回 值：
-调用位置：
-注意事项：
-*/
 
 
 
