@@ -88,7 +88,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMU_SetExternFun(CMUFunTable);
     
     //--------------------------------------------系统管理模块------------------------------------------------
-   
+    
     //系统控制接口
     CMUFunTable.pf_SYS_GetSysTickCount = SYS_GetTickCount;
     CMUFunTable.pf_SYS_GetSLCVersion = SYS_GetSLCVersion;
@@ -101,15 +101,15 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_GPIO_GetOutputPinState = GPIO_MAN_GetOutputPinState;
     CMUFunTable.pf_GPIO_GetInputPinState = GPIO_MAN_GetInputPinState;
     
-    
 #if SYS_USING_CNC
     
 #if 0
+    //升级相关接口
     CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSLC;
     CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateIPO;
-    CMUFunTable.pf_SYS_PreUpdateDevProc = SYS_PreUpdateDevProc;    
-    CMUFunTable.pf_SYS_PostUpdateDevProc = SYS_PostUpdateDevProc;  
-    CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;  
+    CMUFunTable.pf_SYS_PreUpdateDevProc = SYS_PreUpdateDevProc;
+    CMUFunTable.pf_SYS_PostUpdateDevProc = SYS_PostUpdateDevProc;
+    CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;
 #endif
     
     CMUFunTable.pf_SYS_GetStateReadAddr = CNCSYS_GetStateReadAddr;
@@ -121,7 +121,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_SPM_SetAxisParm = SPM_SetAxisParm;        
     CMUFunTable.pf_SPM_SetAxisPitchCmpParm = SPM_SetAxisPitchCmpParm;    
     CMUFunTable.pf_SPM_SetLookaheadEnable = SPM_SetLookaheadEnable;
-
+    
     CMUFunTable.pf_SPM_GetSysCtrlParmAddr = SPM_GetSysCtrlParmAddr;
     CMUFunTable.pf_SPM_GetCrdSysAxisMapTableAddr = SPM_GetCrdSysAxisMapTableAddr;
     CMUFunTable.pf_SPM_GetCrdSysParmAddr = SPM_GetCrdSysParmAddr;
@@ -130,9 +130,9 @@ static uBit32 SYS_InitCmuFunTable(void)
     
     CMUFunTable.pf_SPM_SaveParm = SPM_SaveConfAndParm;
     CMUFunTable.pf_SPM_SaveConfig = SPM_SaveConfAndParm;
-
+    
     //--------------------------------------------设备管理模块------------------------------------------------
-
+    
     CMUFunTable.pf_DEV_BlinkLED = DEV_BlinkLED;
     CMUFunTable.pf_DEV_SetConfig = SPM_SetConfig; 
     CMUFunTable.pf_DEV_GetVersion = DEV_GetVersion;
@@ -145,7 +145,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_DEV_SendUpdateAppData = DEV_SendUpdateAppData;
     CMUFunTable.pf_DEV_SendUpdateBootData = DEV_SendUpdateBootData;
     CMUFunTable.pf_DEV_CheckLastCmdExeState = DEV_CheckLastCmdExeState;
-
+    
     CMUFunTable.pf_PAX_Home = PAX_Home;                                            
     CMUFunTable.pf_PAX_SetCmdPos = PAX_SetCmdPos;                
     CMUFunTable.pf_PAX_SetQeiPos = PAX_SetQeiPos;
@@ -160,6 +160,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_IO_SetOutPutPWMFreq = IO_SetOutPutPWMFreq;
     
 #if 0
+    //IO控制相关接口
     CMUFunTable.pf_GPIO_SetHSpdOutputState = GPIO_SetHSpdOutputState;    
     CMUFunTable.pf_GPIO_GetHSpdOutputStatus = GPIO_GetHSpdOutputStatus;    
     CMUFunTable.pf_GPIO_GetHSpdInputStatus = GPIO_GetHSpdInputStatus;    
@@ -170,15 +171,15 @@ static uBit32 SYS_InitCmuFunTable(void)
 #endif
     
     CMUFunTable.pf_ADDA_SetDAStatus = ADDA_SetDAStatus;
-
+    
     //--------------------------------------------通道管理模块------------------------------------------------
-
+    
     CMUFunTable.pf_LAX_Home = LAX_Home;                        
     CMUFunTable.pf_LAX_SetCmdPos = LAX_SetCmdPos;        
     CMUFunTable.pf_LAX_SetQeiPos = LAX_SetQeiPos;        
     CMUFunTable.pf_LAX_Enable = LAX_Enable;
     CMUFunTable.pf_LAX_CheckLastCmdExeState = LAX_CheckLastCmdExeState;
-
+    
     CMUFunTable.pf_CSM_GetVersion = CSM_GetVersion;
     CMUFunTable.pf_CSM_Reset = CSM_Reset;
     CMUFunTable.pf_CSM_SetCtrlMode = CSM_SetCtrlMode;
@@ -190,15 +191,15 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_CSM_ProgStop = CSM_ProgStop;
     CMUFunTable.pf_CSM_ProgCancel = CSM_ProgCancel;
     CMUFunTable.pf_CSM_ProgSegmentEndStop = CSM_ProgSegmentEndStop;
-
+    
     CMUFunTable.pf_CSN_SetRapidOverride = CSM_SetRapidOverride;
     CMUFunTable.pf_CSM_SetFeedOverride = CSM_SetFeedOverride;
     CMUFunTable.pf_CSM_SetSpindleOverride = CSM_SetSpindleOverride;
     CMUFunTable.pf_CSM_SpindleRun = CSM_SpindleRun;
     CMUFunTable.pf_CSM_SpindleStop = CSM_SpindleStop;
-
+    
     CMUFunTable.pf_CSM_GetCrdSysStateReadAddr = CSM_GetCrdSysStateReadAddr;
-
+    
     CMUFunTable.pf_CSM_SetMotorPosCtrlMotion = CSM_SetMotorPosCtrlMotion;
     CMUFunTable.pf_CSM_SetMotorSpeedCtrlMotion = CSM_SetMotorSpeedCtrlMotion;                    
     CMUFunTable.pf_CSM_SetMotorJogStop = CSM_SetMotorJogStop;    
@@ -207,20 +208,19 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_CSM_SetAxisSpeedCtrlMotion = CSM_SetAxisSpeedCtrlMotion;        
     CMUFunTable.pf_CSM_SetAxisJogStop = CSM_SetAxisJogStop;        
     CMUFunTable.pf_CSM_AxisJogEStop = CSM_AxisJogEStop;        
-
-
+    
     CMUFunTable.pf_CSM_SetProgBufMode = CSM_SetProgBufMode;
     CMUFunTable.pf_CSM_ClearProgData = CSM_ClearProgData;
     CMUFunTable.pf_CSM_AddProgDataToBuf = CSM_AddProgDataToBuf;    
     CMUFunTable.pf_CSM_GetProgBufStateReadAddr = CSM_GetProgBufStateReadAddr;
     CMUFunTable.pf_CSM_UploadProgData = CSM_UploadProgData;
-
+    
     CMUFunTable.pf_CSM_SetUserBufMode = CSM_SetUserBufMode;                                        
     CMUFunTable.pf_CSM_ClearUserData = CSM_ClearUserData;                
     CMUFunTable.pf_CSM_AddUserDataToBuf = CSM_AddUserDataToBuf;
     CMUFunTable.pf_CSM_GetUserBufStateReadAddr = CSM_GetUserBufStateReadAddr;
     CMUFunTable.pf_CSM_UploadUserData = CSM_UploadUserData;
-
+    
     CMUFunTable.pf_CSM_ProgDwell = CSM_ProgDwell;
     CMUFunTable.pf_CSM_ProgMCode = CSM_ProgMCode;
     CMUFunTable.pf_CSM_ProgSCode = CSM_ProgSCode;
@@ -232,14 +232,14 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_CSM_ProgArcC = CSM_ProgArcC;
     CMUFunTable.pf_CSM_ProgArcR = CSM_ProgArcR;
     CMUFunTable.pf_CSM_ProgArcPT = CSM_ProgArcPT;
-
+    
     //--------------------------------------------寄存器模块------------------------------------------------
 #if 0
     CMUFunTable.pf_UREG_SetRegData = UREG_SetRegData;
     CMUFunTable.pf_UREG_GetRegData = UREG_GetRegData;
 #endif
     //--------------------------------------------错误管理模块------------------------------------------------
-
+    
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
     
 #endif

@@ -30,8 +30,8 @@ extern unsigned short int CRC16(unsigned char *Pushdata,unsigned long int length
 /*****************************************************************************
  * RS485相关私有函数
  ****************************************************************************/
-#define RS485_DIR_TX                        (true)         //使能发送功能的DIR电平
-#define RS485_DIR_RX                        (false)          //使能接收功能的DIR电平
+#define RS485_DIR_TX                        (true)          //使能发送功能的DIR电平
+#define RS485_DIR_RX                        (false)         //使能接收功能的DIR电平
 
 static void (*pf_ModBus_RS485_SetDir)(bool bState) = NULL;  //485方向控制脚
 
@@ -177,14 +177,14 @@ void ModBus_Send(MODBUS_DATA *pModBusData)
     uSendBuff[5] = pModBusData->uRegCount & 0xFF;   //读取寄存器数低8位
 
     nCrcValue = CRC16(uSendBuff, 6);                //获取CRC
-    uSendBuff[7] = nCrcValue & 0xFF;                //CRC低8位
     uSendBuff[6] = nCrcValue >> 8;                  //CRC高8位
+    uSendBuff[7] = nCrcValue & 0xFF;                //CRC低8位
     
     //发送数据
     RS485_SetDir(RS485_DIR_TX);                     //配置RS485方向:发送
     UART_SendBuff(m_uUartNode, uSendBuff, 8);       //非阻塞性发送
     
-    pModBusData->ulWordStatus = MODBUS_STATUS_SEND;   //设置当前工作状态:正在发送
+    pModBusData->ulWordStatus = MODBUS_STATUS_SEND; //设置当前工作状态:正在发送
     
 
 }
@@ -202,9 +202,9 @@ uBit32 ModBus_RecvHandler(MODBUS_DATA *pModBusData)
     {
         if (UART_GetTransStatus(m_uUartNode))   //假如数据发送完成(非阻塞)
         {
-            RS485_SetDir(RS485_DIR_RX);                     //设置数据接收方向:接收
+            RS485_SetDir(RS485_DIR_RX);                         //设置数据接收方向:接收
             pModBusData->ulTimeTick = SysTime_GetTickCount();   //获取当前系统滴答值
-            pModBusData->ulWordStatus = MODBUS_STATUS_RECV; //设置当前工作状态:正在接收
+            pModBusData->ulWordStatus = MODBUS_STATUS_RECV;     //设置当前工作状态:正在接收
         }
     }
     

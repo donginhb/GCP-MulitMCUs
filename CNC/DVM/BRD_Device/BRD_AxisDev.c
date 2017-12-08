@@ -21,8 +21,8 @@ void BRD_AxisInit(void)
     m_brd_AxisParm.AxisScaleParm.lCycleQeiPulseCount = 10000;            
 
     m_brd_AxisParm.AxisMoveParm.dMaxJogSpeed = 1000;    
-    m_brd_AxisParm.AxisMoveParm.dMaxJogAcc = 5.0;        
-    m_brd_AxisParm.AxisMoveParm.dJogJerk = 0.1;        
+    m_brd_AxisParm.AxisMoveParm.dMaxJogAcc = 0.05;        
+    m_brd_AxisParm.AxisMoveParm.dJogJerk = 0.01;        
     m_brd_AxisParm.AxisMoveParm.dMaxFeedSpeed = 1000;    
     m_brd_AxisParm.AxisMoveParm.dMaxFeedAcc = 5;    
     m_brd_AxisParm.AxisMoveParm.dFeedJerk = 0.1;        

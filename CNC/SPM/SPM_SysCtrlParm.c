@@ -179,10 +179,15 @@ void SPM_InitSysCtrlParm()
         m_SPM_pAxisParm[i].AxisScaleParm.lQEIPulseScale = 1;            
         m_SPM_pAxisParm[i].AxisScaleParm.lCycleQeiPulseCount = 10000;            
         
-        
+#if 0
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogSpeed = 200;    
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogAcc = 5.0;        
         m_SPM_pAxisParm[i].AxisMoveParm.dJogJerk = 0.1;        
+#else 
+        m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogSpeed = 200;    
+        m_SPM_pAxisParm[i].AxisMoveParm.dMaxJogAcc = 0.1;        
+        m_SPM_pAxisParm[i].AxisMoveParm.dJogJerk = 0.1;   
+#endif
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxFeedSpeed = 200;    
         m_SPM_pAxisParm[i].AxisMoveParm.dMaxFeedAcc = 5.0;    
         m_SPM_pAxisParm[i].AxisMoveParm.dFeedJerk = 0.1;        

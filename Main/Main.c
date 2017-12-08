@@ -30,6 +30,7 @@ int main(void)
 {
     SYS_Init(); //系统初始化
     
+#if !defined(BOOTLOADER)
 #if defined(LPC17XX)
     VM_Init();
 #elif defined(LPC43XX)
@@ -37,9 +38,11 @@ int main(void)
 #elif defined(STM32F10X)
     WFC_Init();
 #endif
+#endif 
     
     while(1)
     {
+#if !defined(BOOTLOADER)
 #if defined(LPC17XX)
         VM_MainProc();
 #elif defined(LPC43XX)
@@ -47,6 +50,8 @@ int main(void)
 #elif defined(STM32F10X)
         WFC_MainProc();
 #endif
+#endif 
+        
         SYS_MainTaskHandler();
     }
     

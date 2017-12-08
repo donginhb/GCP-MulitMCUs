@@ -11,6 +11,8 @@
   * 设置重试机制,如果FLASH执行失败,重试一定次数.
   * 具体数值由宏FLASH_OPERA_RETRY_NUM 所定义
   * 
+  * 重要: 根据数据手册,每从RAM到FALSH写入512个字节的数据,占用时间为1MS
+  * 
   ******************************************************************************
   */
   
@@ -22,8 +24,8 @@
  * FLASH参数定义(不同芯片里面的不一样)
  ****************************************************************************/
 
-#define FLASH_MAX_ADDR          (0X0000FFFF)    //Flash 最大地址(LPC1752)
-#define FLASH_SECTOR_NUM        (15)            //总共15个扇区
+//#define FLASH_MAX_ADDR          (0X0000FFFF)    //Flash 最大地址(LPC1752)
+//#define FLASH_SECTOR_NUM        (15)            //总共15个扇区
 
 //定义BANK_A和BANK_B的地址范围(LPC43xx)    
 #define FLASH_BANK_A_START                  (0x1A000000)
@@ -46,6 +48,7 @@ typedef enum
     SIZE_8K  = (SIZE_1K*8)  ,
     SIZE_32K = (SIZE_1K*32) ,
     SIZE_64K = (SIZE_1K*64) ,
+    
 }FLASH_SIZE_T;
 
 typedef struct 

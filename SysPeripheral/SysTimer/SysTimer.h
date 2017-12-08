@@ -50,16 +50,17 @@ uBit32 SysTime_GetTickCount(void);
 
 /**
   * @brief  简单的延时函数
-  * @param  ulDelay 延时参数,无标准单位
+  * @param  ulDelay 延时参数,无标准单位,入参范围[1-0xFFFFFFFF]
   * @retval None
-  * @note   在100MHz的系统中测试,入参100,延时大概是10us
+  * @note   在96MHz的系统中测试,入参10,大概延时1us.误差小于+5%;
+  *         在204MHz的系统中测试,入参10,大概延时1us.误差小于+5%;
   */
 void SysTime_SimpleDelay(uBit32 ulDelay);
 
 
 /**
   * @brief  微秒级延时
-  * @param  ulUsDelay 微秒数,入参范围[1-0xFFFF]
+  * @param  ulUsDelay 微秒数,入参范围[1-0xFFFFFFFF](若使用硬件定时器,需考虑实际定时器位数)
   * @retval None
   */
 void SysTime_DelayUs(uBit32 ulUsDelay);

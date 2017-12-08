@@ -50,6 +50,16 @@
 
 #else 
 
+//CNC 缓冲区地址定义
+#ifndef CNC_SRAM_BUFF_ADDR
+#define CNC_SRAM_BUFF_ADDR      (0U)
+#endif
+
+#ifndef CNC_SRAM_BUFF_LEN
+#define CNC_SRAM_BUFF_LEN      (0U)
+#endif
+
+
 //内部SRAM地址缓冲区基地址
 #define CNC_START_ADDR                      (CNC_SRAM_BUFF_ADDR)                //CNC起始地址
 #define CNC_TOTAL_LEN                       (CNC_SRAM_BUFF_LEN)                 //CNC缓冲区总共长度

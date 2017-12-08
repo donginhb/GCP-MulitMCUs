@@ -37,6 +37,10 @@
 #include "SYS_CncConfig.h"
 #include "CNC/CNCSYS/CNCSYS_Interface.h"
 #endif
+      
+#if SYS_USING_BOOT
+#include "SysUpdate/Bootloader.h"
+#endif
 
 
 /*****************************************************************************

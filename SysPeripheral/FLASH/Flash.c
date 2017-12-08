@@ -1,27 +1,31 @@
 /**
   ******************************************************************************
-  * @file    HAL_Flash.c
+  * @file    Flash.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2017.08.22
-  * @brief   Flash drivers
+  * @date    2017.12.07
+  * @brief   Flash
   ******************************************************************************
   * @attention
   * 
-  * 设置重试机制,如果FLASH执行失败,重试一定次数.
-  * 具体数值由宏FLASH_OPERA_RETRY_NUM 所定义
+  * 
+  * 
   * 
   ******************************************************************************
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "HAL_Flash.h"
+#include "Flash.h"
 #include "DataType/DataType.h"
-#include "HwDrivers/HW_Flash.h"
+#include "HAL/HAL_Flash.h"
+
+/*****************************************************************************
+ * 私有成员定义及实现
+ ****************************************************************************/
 
 
 /*****************************************************************************
- * FALSH相关控制接口
+ * FLASH相关控制接口
  ****************************************************************************/
 
 /**
@@ -29,10 +33,10 @@
   * @param  None
   * @retval 最小写入的字节
   */
-uBit32 HAL_FLASH_GetMinWriteByte(void)
+uBit32 FLASH_GetMinWriteByte(void)
 {
     
-    return HW_FLASH_GetMinWriteByte();
+    return HAL_FLASH_GetMinWriteByte();
 }
 
 
@@ -41,10 +45,10 @@ uBit32 HAL_FLASH_GetMinWriteByte(void)
   * @param  ulFlashAddr Flash地址
   * @retval 扇区号,0xFF表示无效结果
   */
-uBit32 HAL_FLASH_GetSector(uBit32 ulFlashAddr)
+uBit32 FLASH_GetSector(uBit32 ulFlashAddr)
 {
     
-    return HW_FLASH_GetSector(ulFlashAddr);
+    return HAL_FLASH_GetSector(ulFlashAddr);
 }
 
 
@@ -56,15 +60,10 @@ uBit32 HAL_FLASH_GetSector(uBit32 ulFlashAddr)
   * @retval 0-成功 非0-失败
   * @note   当擦除一个扇区时,开始扇区等于结束扇区
   */
-uBit32 HAL_FLASH_Erase(uBit32 ulFlashBank, uBit32 ulStartSector, uBit32 ulEndSector)
+uBit32 FLASH_Erase(uBit32 ulFlashBank, uBit32 ulStartSector, uBit32 ulEndSector)
 {
-    uBit32 ulRet = 0;
     
-#if defined(LPC17XX)
-    ulRet = HW_FLASH_Erase(ulStartSector, ulEndSector);
-#endif
-    
-    return ulRet;
+    return HAL_FLASH_Erase(ulFlashBank, ulStartSector, ulEndSector);
 }
 
 
@@ -78,10 +77,10 @@ uBit32 HAL_FLASH_Erase(uBit32 ulFlashBank, uBit32 ulStartSector, uBit32 ulEndSec
   *         LPC17xx最小操作单位是256Byte,LPC43xx最小操作单位是512Byte;
   *         必须对整扇区擦除之后才能执行写操作
   */
-uBit32 HAL_FLASH_Write(uBit32 ulFlashAddr, void *pWriteBuff, uBit32 ulByteSize)
+uBit32 FLASH_Write(uBit32 ulFlashAddr, void *pWriteBuff, uBit32 ulByteSize)
 {
     
-    return HW_FLASH_Write(ulFlashAddr, pWriteBuff, ulByteSize);
+    return HAL_FLASH_Write(ulFlashAddr, pWriteBuff, ulByteSize);
 }
 
 
@@ -92,10 +91,10 @@ uBit32 HAL_FLASH_Write(uBit32 ulFlashAddr, void *pWriteBuff, uBit32 ulByteSize)
   * @param  ulByteSize 字节数
   * @retval 实际读取到的字节数
   */
-uBit32 HAL_FLASH_Read(uBit32 ulFlashAddr, void *pRecvBuff, uBit32 ulByteSize)
+uBit32 FLASH_Read(uBit32 ulFlashAddr, void *pRecvBuff, uBit32 ulByteSize)
 {
     
-    return HW_FLASH_Read(ulFlashAddr, pRecvBuff, ulByteSize);
+    return HAL_FLASH_Read(ulFlashAddr, pRecvBuff, ulByteSize);
 }
 
 
@@ -106,8 +105,9 @@ uBit32 HAL_FLASH_Read(uBit32 ulFlashAddr, void *pRecvBuff, uBit32 ulByteSize)
   * @param  ulCheckSize 校验位数
   * @retval 实际的校验值
   */
-uBit32 HAL_FLASH_GetCheckSum(uBit32 ulFlashAddr, uBit32 ulByteSize, uBit32 ulCheckSize)
+uBit32 FLASH_GetCheckSum(uBit32 ulFlashAddr, uBit32 ulByteSize, uBit32 ulCheckSize)
 {
     
-    return HW_FLASH_GetCheckSum(ulFlashAddr, ulByteSize, ulCheckSize);
+    return HAL_FLASH_GetCheckSum(ulFlashAddr, ulByteSize, ulCheckSize);
 }
+

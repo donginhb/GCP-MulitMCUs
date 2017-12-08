@@ -159,7 +159,7 @@ uBit16 VM_MoveLiftMotor(float32 fPos, float32 fSpeed, uBit8 bCheckLimit)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define VM_MOTOR_TEST_PERIOD        (5000)                 //电机测试周期(单位: MS)
+#define VM_MOTOR_TEST_PERIOD        (8000)                 //电机测试周期(单位: MS)
 static SYS_TIME_DATA m_MotorCtrlTimer  = {1};               //电机控制定时器
 
 

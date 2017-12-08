@@ -39,6 +39,14 @@ typedef double double64;
 #endif /* !__cplusplus */
 
 
+#ifdef __CC_ARM
+#define INLINE  __inline
+#else
+#define INLINE inline
+#endif
+
+
+
 #define        ZERO    (1e-6)
 
 #ifndef PI

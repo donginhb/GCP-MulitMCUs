@@ -1,13 +1,13 @@
 #ifndef  __HAL_GPIO_H
 #define  __HAL_GPIO_H
 
+#include "HwDrivers/HW_Gpio.h"
 #include "DataType/DataType.h"
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+/*****************************************************************************
+ * GPIO相关控制接口
+ ****************************************************************************/
 
 /**
   * @brief  开漏IO配置
@@ -35,7 +35,7 @@ void HAL_GPIO_ConfigInput(uBit16 nPort, uBit16 nPin);
   */
 void HAL_GPIO_ConfigOutput(uBit16 nPort, uBit16 nPin);
 
-    
+
 /**
   * @brief  输出IO状态设置
   * @param  nPort IO端口号
@@ -55,6 +55,10 @@ void HAL_GPIO_SetOutputState(uBit16 nPort, uBit16 nPin, bool bState);
 bool HAL_GPIO_GetIOState(uBit16 nPort, uBit16 nPin);
     
     
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef __cplusplus
 }
 #endif

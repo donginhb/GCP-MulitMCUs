@@ -31,7 +31,6 @@
 #define MODBUS_STATUS_OPERA_FAIL            (4)         //操作失败
 
 
-
 //ModBus数据结构定义
 typedef struct 
 {

@@ -105,7 +105,7 @@ void SysTime_SimpleDelay(uBit32 ulDelay)
 
 /**
   * @brief  微秒级延时
-  * @param  ulUsDelay 微秒数,入参范围[1-0xFFFFFFFF](若使用硬件定时器,需考虑定时器位数)
+  * @param  ulUsDelay 微秒数,入参范围[1-0xFFFFFFFF](若使用硬件定时器,需考虑实际定时器位数)
   * @retval None
   */
 void SysTime_DelayUs(uBit32 ulUsDelay)

@@ -1,7 +1,7 @@
 #ifndef __SYS_CONFIG_H
 #define __SYS_CONFIG_H
 
-
+#ifndef BOOTLOADER
 #if defined(LPC43XX)
 #define SYS_USING_CMU           (1)     //CMU模块使能开关
 #define SYS_USING_CNC           (0)     //CNC模块使能开关
@@ -12,6 +12,12 @@
 #define SYS_USING_CMU           (0)     //CMU模块使能开关
 #define SYS_USING_CNC           (0)     //CNC模块使能开关
 #endif
+#endif
+
+#ifdef BOOTLOADER
+#define SYS_USING_BOOT          (1)
+#endif
+
 
 #ifndef SYS_USING_CMU
 #define SYS_USING_CMU           (0)
@@ -19,6 +25,10 @@
 
 #ifndef SYS_USING_CNC
 #define SYS_USING_CNC           (0)
+#endif
+
+#ifndef SYS_USING_BOOT
+#define SYS_USING_BOOT          (0)
 #endif
 
 
