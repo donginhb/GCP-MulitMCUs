@@ -19,9 +19,11 @@
 #include "WFC_MainProc.h"
 #include "WFC_HwCtrl.h"
 #include "WFC_HardwareDef.h"
-#include "WFC_ComMan.h"
-
+#include "WFC_WifiCom.h"
+#include "WFC_WifiClock.h"
 #include "DataType/DataType.h"
+#include "SysPeripheral/SysTimer/SysTimer.h"
+
 
 
 
@@ -32,8 +34,19 @@
   */
 void WFC_Init(void)
 {
+    //上电延时
+    //SysTime_DelayMs(2000);
+    
     //硬件初始化
     WFC_HwInit();
+    
+    //获取天气信息
+    WFC_UpdateWeather();
+    
+    //获取北京时间
+    WFC_UpdateClock();
+    
+    WFC_GetBaseClock();
     
 }
 
@@ -48,13 +61,6 @@ void WFC_MainProc(void)
     //LED显示
     WFC_MainWorkLedShow();
     
-    //通信处理
-    //WFC_ComHandler();
-    
-    //按键处理
-    //WFC_KeyProc();
-    
-    //传感器采样处理
-    //WFC_SensorSampleProc();
+    WFC_UnpackTest();
     
 }

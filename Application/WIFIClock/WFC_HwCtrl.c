@@ -18,7 +18,8 @@
 /***********************************<INCLUDES>**********************************/
 #include "WFC_HwCtrl.h"
 #include "WFC_HardwareDef.h"
-      
+#include "WFC_WifiCom.h"      
+
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include "SysPeripheral/KEY/KEY.h"
@@ -79,48 +80,24 @@ static void WFC_IOConfig(void)
   */
 void WFC_HwInit(void)
 {
+    uBit32 ulRet = 0;
+    
     //初始化IO
     WFC_IOConfig();
     
     //初始化串口
     UART_Init(WFC_UART_NODE, 115200);
     
-    
-#if 0
-    //初始化按键
-    uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY2};
-    KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
-    
-    //初始化蜂鸣器
-    //GPIO_SetOutputState(OUTPUT_IO_BEEP, false);
-    
-    //初始化EEPROM
-    //EEPROM_Init(OUTPUT_IO_SDA, OUTPUT_IO_SCL);
-    
-    //初始化DS18B20
-    //TEMP_InitInterface(OUTPUT_IO_DS18B20_BUS, SysTime_DelayUs);
-#endif
-    
     //初始化ESP8266
-    UART_Init(1, 115200);
-    ESP82XX_InitInterface(1, UART_BlockSendBuff, UART_RecvBuff);
+    ulRet = WFC_InitWifi(1);
     
-    if (ESP82XX_CheckDeviceConnect())
+    switch (ulRet)
     {
-        UART_SendStr(WFC_UART_NODE, "Init Esp8266 fail!\r\n");
-    }
-    else
-    {
-        UART_SendStr(WFC_UART_NODE, "Init Esp8266 success!\r\n");
-    }
-    
-    if (ESP82XX_SetWifiMode(ESP82XX_WIFI_STA_MODE))
-    {
-        UART_SendStr(WFC_UART_NODE, "Set Esp8266 station mode fail!\r\n");
-    }
-    else
-    {
-        UART_SendStr(WFC_UART_NODE, "Set Esp8266 station mode success!\r\n");
+    case WFC_WIFI_ERR_SUCCESS: UART_SendStr(WFC_UART_NODE, "ESP82XX: Success!\r\n"); break;
+    case WFC_WIFI_ERR_COM    : UART_SendStr(WFC_UART_NODE, "ESP82XX: Comunication Err!\r\n"); break;
+    case WFC_WIFI_ERR_SET    : UART_SendStr(WFC_UART_NODE, "ESP82XX: Set Config Err!\r\n"); break;
+    case WFC_WIFI_RER_CONNET : UART_SendStr(WFC_UART_NODE, "ESP82XX: WIFI Connect Err!\r\n"); break;
+    default:break;
     }
     
 }

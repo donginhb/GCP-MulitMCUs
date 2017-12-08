@@ -19,15 +19,16 @@
 #include "DataType/DataType.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include <string.h>
+#include <stdio.h>
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
 
 //系统控制
-#define ESP82XX_AT_ECHO_OFF                 "ATE0\r\n"          //关闭回显
-#define ESP82XX_AT_ECHO_ON                  "ATE1\r\n"          //打开回显
-#define ESP82XX_AT_TEST                     "AT\r\n"            //测试是否启动
+#define ESP82XX_AT_ECHO_OFF                     "ATE0\r\n"              //关闭回显
+#define ESP82XX_AT_ECHO_ON                      "ATE1\r\n"              //打开回显
+#define ESP82XX_AT_TEST                         "AT\r\n"                //测试是否启动
 
 //WIFI模式设置
 #define ESP82XX_AT_SET_CUR_WIFI_STA_MODE        "AT+CWMODE_CUR=1\r\n"   //设置为客户机(Station)模式
@@ -45,11 +46,11 @@
 //网络状态查询
 #define ESP82XX_AT_GET_ENET_STATUS              "AT+CIPSTATUS\r\n"      //查询网络状态
 
-//TCP连接设置
-#define ESP82XX_AT_SET_TCP_CONNECT              "AT+CIPSTART=\"TCP\","  //连接TCP服务器连接
+//网络连接设置
+#define ESP82XX_AT_SET_ENET_CONNECT             "AT+CIPSTART="          //连接TCP服务器连接
 
 //网络数据长度设置
-#define ESP82XX_AT_SET_TCP_PACK_LEN             "AT+CIPSENDEX=113"      //设置TCP数据包长度
+#define ESP82XX_AT_SET_TCP_PACK_LEN             "AT+CIPSENDEX="         //设置TCP数据包长度
 
 
 /*****************************************************************************
@@ -274,9 +275,9 @@ uBit32 ESP82XX_CheckDeviceConnect(void)
 /**
   * @brief  ESP82XX WIFI模式设置
   * @param  ulWifiMode wifi 模式
-  *   @arg ESP82XX_WIFI_STA_MODE    客户机(Station)模式
-  *   @arg ESP82XX_WIFI_AP_MODE     AP模式
-  *   @arg ESP82XX_WIFI_STA_AP_MODE Station+AP模式
+  *   @arg ESP82XX_WIFI_MODE_STA    客户机(Station)模式
+  *   @arg ESP82XX_WIFI_MODE_AP     AP模式
+  *   @arg ESP82XX_WIFI_MODE_STA_AP Station+AP模式
   * @retval 0-成功  非0-失败
   */
 uBit32 ESP82XX_SetWifiMode(uBit32 ulWifiMode)
@@ -287,9 +288,9 @@ uBit32 ESP82XX_SetWifiMode(uBit32 ulWifiMode)
     
     switch (ulWifiMode)
     {
-    case ESP82XX_WIFI_STA_MODE   : pCmd = ESP82XX_AT_SET_CUR_WIFI_STA_MODE   ; break;
-    case ESP82XX_WIFI_AP_MODE    : pCmd = ESP82XX_AT_SET_CUR_WIFI_AP_MODE    ; break;
-    case ESP82XX_WIFI_STA_AP_MODE: pCmd = ESP82XX_AT_SET_CUR_WIFI_STA_AP_MODE; break;
+    case ESP82XX_WIFI_MODE_STA   : pCmd = ESP82XX_AT_SET_CUR_WIFI_STA_MODE   ; break;
+    case ESP82XX_WIFI_MODE_AP    : pCmd = ESP82XX_AT_SET_CUR_WIFI_AP_MODE    ; break;
+    case ESP82XX_WIFI_MODE_STA_AP: pCmd = ESP82XX_AT_SET_CUR_WIFI_STA_AP_MODE; break;
     default: break;
     }
     
@@ -316,6 +317,265 @@ uBit32 ESP82XX_SetWifiMode(uBit32 ulWifiMode)
     }
     
     return 1;
+}
+
+
+/**
+  * @brief  ESP82XX WIFI连接
+  * @param  pSSID WIFI名称
+  * @param  pPassWord WIFI 密码
+  * @retval 0-成功  非0-失败
+  */
+uBit32 ESP82XX_ConnectWiFi(char *pSSID, char *pPassWord)
+{
+    SYS_TIME_DATA RecvTimer = {0};
+    uBit8 uSendBuff[128] = {0};
+    uBit32 ulRecvCmdLen = 0;
+    
+    uBit32 ulWriteIndex = strlen(ESP82XX_AT_SET_CUR_WIFI_CONNECT);
+    uBit32 ulSsidLen  = strlen(pSSID);
+    uBit32 ulPassWord = strlen(pPassWord);
+    
+    //数据长度校验
+    if ((ulSsidLen + ulPassWord + ulWriteIndex) >= 128)
+    {
+        return 1;
+    }
+    
+    //数据拼装
+    sprintf((char *)uSendBuff, "AT+CWJAP_CUR=\"%s\",\"%s\"\r\n", pSSID, pPassWord);
+    
+    //清空之前接收到的数据
+    ESP82XX_ClearRecvBuff();
+    
+    //发送数据
+    ESP82XX_SendBuff(m_uUartNode, uSendBuff, strlen((char const *)uSendBuff));
+    
+    //等待数据接收
+    SysTime_Start(&RecvTimer, 10000);
+    
+    while (!SysTime_CheckExpiredState(&RecvTimer))
+    {
+        if (ESP82XX_GetReturnCmd(m_uRecvCmd, &ulRecvCmdLen) == 0)
+        {
+            SysTime_Start(&RecvTimer, 10000);
+            
+            if (memcmp(m_uRecvCmd, "OK", strlen("OK")) == 0)
+            {
+                return 0;
+            }
+        }
+    }
+    
+    return 1;
+}
+
+
+/**
+  * @brief  ESP82XX 获取网络状态
+  * @param  pEnetStatus 网络状态
+  *   @arg      SP82XX_ENET_STATUS_ERR              无效查询
+  *   @arg      SP82XX_ENET_STATUS_CONNECT_AP       已连接AP
+  *   @arg      SP82XX_ENET_STATUS_CONNECT_TCP_UDP  已建立TCP/UDP连接
+  *   @arg      SP82XX_ENET_STATUS_DISCONNECT_ENET  断开网络连接
+  *   @arg      SP82XX_ENET_STATUS_DISCONNECT_AP    未连接AO
+  * @retval 0-成功  非0-失败
+  */
+uBit32 ESP82XX_GetEnetStatus(uBit32 *pEnetStatus)
+{
+    SYS_TIME_DATA RecvTimer = {0};
+    uBit8 *pCmd = ESP82XX_AT_GET_ENET_STATUS;
+    uBit32 ulRecvCmdLen = 0;
+    uBit32 ulEnetStatus = 0;
+    
+    //清空之前接收到的数据
+    ESP82XX_ClearRecvBuff();
+    
+    //发送数据
+    ESP82XX_SendBuff(m_uUartNode, pCmd, strlen((char const *)pCmd));
+    
+    //等待数据接收
+    SysTime_Start(&RecvTimer, 500);
+    
+    while (!SysTime_CheckExpiredState(&RecvTimer))
+    {
+        if (ESP82XX_GetReturnCmd(m_uRecvCmd, &ulRecvCmdLen) == 0)
+        {
+            SysTime_Start(&RecvTimer, 500);
+            
+            if (memcmp(m_uRecvCmd, "STATUS:", strlen("STATUS:")) == 0)
+            {
+                switch (m_uRecvCmd[strlen("STATUS:")])
+                {
+                case '2': ulEnetStatus = ESP82XX_ENET_STATUS_CONNECT_AP     ; break;
+                case '3': ulEnetStatus = ESP82XX_ENET_STATUS_CONNECT_TCP_UDP; break;
+                case '4': ulEnetStatus = ESP82XX_ENET_STATUS_DISCONNECT_ENET; break;
+                case '5': ulEnetStatus = ESP82XX_ENET_STATUS_DISCONNECT_AP  ; break;
+                default:  ulEnetStatus = ESP82XX_ENET_STATUS_ERR            ; break;
+                }
+            }
+            
+            if (memcmp(m_uRecvCmd, "OK", strlen("OK")) == 0)
+            {
+                //只有收到"OK",才将数据出参
+                *pEnetStatus = ulEnetStatus;
+                return 0;
+            }
+        }
+    }
+    
+    return 1;
+}
+
+
+/**
+  * @brief  ESP82XX 网络连接
+  * @param  pType   连接类型
+  *   @arg      "TCP" TCP方式连接
+  *   @arg      "UDP" UDP方式连接
+  * @param  pDstIP  目标IP/域名
+  * @param  ulPort  目标端口
+  * @retval 0-成功  非0-失败
+  */
+uBit32 ESP82XX_ConnectEnet(uBit8 *pType, uBit8 *pDstIP, uBit32 ulPort)
+{
+    SYS_TIME_DATA RecvTimer = {0};
+    uBit8 uSendBuff[128] = {0};
+    uBit32 ulRecvCmdLen = 0;
+    uBit32 ulCmdLen = strlen(ESP82XX_AT_SET_ENET_CONNECT);
+    uBit32 ulTypeLen = strlen((char const *)pType);
+    uBit32 ulDstIPLen  = strlen((char const *)pDstIP);
+    
+    //数据长度校验
+    if ((ulCmdLen + ulTypeLen + ulDstIPLen) >= 100)
+    {
+        return 1;
+    }
+    
+    //数据拼装
+    sprintf((char *)uSendBuff, "AT+CIPSTART=\"%s\",\"%s\",%d\r\n", pType, pDstIP, ulPort);
+    
+    //清空之前接收到的数据
+    ESP82XX_ClearRecvBuff();
+    
+    //发送数据
+    ESP82XX_SendBuff(m_uUartNode, uSendBuff, strlen((char const *)uSendBuff));
+    
+    //等待数据接收
+    SysTime_Start(&RecvTimer, 500);
+    
+    while (!SysTime_CheckExpiredState(&RecvTimer))
+    {
+        if (ESP82XX_GetReturnCmd(m_uRecvCmd, &ulRecvCmdLen) == 0)
+        {
+            SysTime_Start(&RecvTimer, 500);
+            
+            if (memcmp(m_uRecvCmd, "OK", strlen("OK")) == 0)
+            {
+                return 0;
+            }
+        }
+    }
+    
+    return 1;
+}
+
+
+/**
+  * @brief  ESP82XX 网络数据包长度设置
+  * @param  ulPackLen  包长度
+  * @retval 0-成功  非0-失败
+  */
+uBit32 ESP82XX_SetSendPackLen(uBit32 ulPackLen)
+{
+    SYS_TIME_DATA RecvTimer = {0};
+    uBit8 uSendBuff[128] = {0};
+    uBit32 ulRecvCmdLen = 0;
+    
+    //数据拼装
+    sprintf((char *)uSendBuff, "AT+CIPSENDEX=%d\r\n", ulPackLen);
+    
+    //清空之前接收到的数据
+    ESP82XX_ClearRecvBuff();
+    
+    //发送数据
+    ESP82XX_SendBuff(m_uUartNode, uSendBuff, strlen((char const *)uSendBuff));
+    
+    //等待数据接收
+    SysTime_Start(&RecvTimer, 500);
+    
+    while (!SysTime_CheckExpiredState(&RecvTimer))
+    {
+        if (ESP82XX_GetReturnCmd(m_uRecvCmd, &ulRecvCmdLen) == 0)
+        {
+            SysTime_Start(&RecvTimer, 500);
+            
+            if (memcmp(m_uRecvCmd, "OK", strlen("OK")) == 0)
+            {
+                return 0;
+            }
+        }
+    }
+    
+    return 1;
+}
+
+
+/**
+  * @brief  ESP82XX 网络数据包发送
+  * @param  pSendBuff  要发送的数据
+  * @retval 0-成功  非0-失败
+  */
+uBit32 ESP82XX_SendEnetPack(uBit8 *pSendBuff)
+{
+    uBit32 ulPackLen = strlen((char const *)pSendBuff);
+    
+    //设置数据长度
+    if (ESP82XX_SetSendPackLen(ulPackLen))
+    {
+        return 1;
+    }
+    
+    //清空之前接收到的数据
+    ESP82XX_ClearRecvBuff();
+    
+    //发送数据
+    ESP82XX_SendBuff(m_uUartNode, pSendBuff, ulPackLen);
+    
+    return 0;
+}
+
+
+/**
+  * @brief  ESP82XX 网络数据包接收
+  * @param  pRBuff 要接收的缓冲区
+  * @param  ulSize 要接收的数据长度
+  * @param  ulOverTime 超时时间
+  * @retval uBit32 实际上接收到的数据长度
+  */
+uBit32 ESP82XX_RecvEnetPack(uBit8 *pRBuff, uBit32 ulSize, uBit32 ulOverTime)
+{
+    SYS_TIME_DATA RecvTimer = {0};
+    uBit32 ulRecvCount = 0;
+    uBit32 ulRecvIndex = 0;
+    
+    SysTime_Start(&RecvTimer, ulOverTime);
+    
+    do 
+    {
+        ulRecvCount = ESP82XX_RecvBuff(m_uUartNode, &pRBuff[ulRecvIndex], ulSize - ulRecvIndex);
+        
+        //若有接收到数据,则刷新计时
+        if (ulRecvCount)
+        {
+            ulRecvIndex += ulRecvCount;
+            SysTime_Start(&RecvTimer, ulOverTime);
+        }
+        
+    }while (!SysTime_CheckExpiredState(&RecvTimer));
+    
+    
+    return ulRecvIndex;
 }
 
 
