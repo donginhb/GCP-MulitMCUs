@@ -14,16 +14,14 @@
   * 
   * 2. 当缓冲区满之后,将其写入FLASH之中;
   * 
-  * 3. 重复[1-2],直到数据数据全部写入FLASH;
+  * 3. 重复[1-2],直到数据数据全部写入FLASH;(需兼容最后一包数据但缓冲区未满的情况)
   * 
   * 扩展思路:
   * 
   * 1. 在升级之前,需要知道bin文件的长度和文件校验和;通过文件长度计算FLASH的结束
   *    扇区,擦除起始扇区到结束扇区之间的所有FLASH;
   * 
-  * 2. 在每次接收到新数据后,将数据存储
-  * 
-  * 
+  * 2. 升级之后,需要将整个FLASH的数据读取出来,并进行校验,以确定烧录是否成功;
   * 
   * 
   * 
@@ -57,7 +55,6 @@ static uBit8  m_uUpdateDataBuff[UPDATE_DATA_BUFF_SIZE] = {0};   //升级数据�
 static uBit32 m_ulBuffIndex = 0;                                //缓存区位置索引
 static uBit32 m_ulBaseFlashAddr = 0;                            //FLASH基地址
 static uBit32 m_ulFlashIndex = 0;                               //当前FLASH烧录位置索引(相对于基地址)
-
 
 
 /**
@@ -95,13 +92,13 @@ static uBit32 BOOT_SetBinFileParm(uBit16 nBinFileCheckSum, uBit32 ulBinFileLen)
 {
     if (ulBinFileLen == 0)
     {
-        return 1;
+        return BOOT_ERR_FILE_INFO;
     }
     
     m_nBinFileCheckSum = nBinFileCheckSum;  //文件校验和
     m_ulBinFileLen = ulBinFileLen;          //文件长度
     
-    return 0;
+    return BOOT_ERR_SUCCESS;
 }
 
 
@@ -132,10 +129,15 @@ static uBit32 BOOT_SetBaseFlashAddr(uBit32 ulFlashBank)
             m_ulBaseFlashAddr = FLASH_SUB_APP_START_ADDR;
             break;
         }
-    default: break;
+    default: 
+        {
+            m_ulFlashBank = ulFlashBank;
+            m_ulBaseFlashAddr = FLASH_APP_START_ADDR;
+            return BOOT_ERR_FLASH_ADDR;
+        }
     }
     
-    return 0;
+    return BOOT_ERR_SUCCESS;
 }
 
 
@@ -157,13 +159,18 @@ static uBit32 BOOT_EraseAppFlash(void)
     //校验数据
     if ((ulStartSector == 0xFF) || (ulEndSector == 0xFF))
     {
-        return 1;
+        return BOOT_ERR_FLASH_ADDR;
     }
     
     //擦除扇区(只擦除用上的部分)
     ulRet = FLASH_Erase(m_ulFlashBank, ulStartSector, ulEndSector);
     
-    return ulRet;
+    if (ulRet)
+    {
+        return BOOT_ERR_FLASH_OPS;
+    }
+    
+    return BOOT_ERR_SUCCESS;
 }
 
 
@@ -181,7 +188,7 @@ static uBit32 BOOT_EraseAppFlash(void)
   */
 uBit32 BOOT_InitFlash(uBit32 ulFlashBank, uBit16 nBinFileCheckSum, uBit32 ulBinFileLen)
 {
-    uBit32 ulRet = 1;
+    uBit32 ulRet = BOOT_ERR_SUCCESS;
     
     do 
     {
@@ -189,15 +196,14 @@ uBit32 BOOT_InitFlash(uBit32 ulFlashBank, uBit16 nBinFileCheckSum, uBit32 ulBinF
         BOOT_InitData();
         
         //设置BIN 文件参数
-        if (BOOT_SetBinFileParm(nBinFileCheckSum, ulBinFileLen)) break;
+        if (ulRet = BOOT_SetBinFileParm(nBinFileCheckSum, ulBinFileLen)) break;
         
         //设置基地址
-        if (BOOT_SetBaseFlashAddr(ulFlashBank)) break;
+        if (ulRet = BOOT_SetBaseFlashAddr(ulFlashBank)) break;
         
         //擦除应用程序区FLASH
-        if (BOOT_EraseAppFlash()) break;
+        if (ulRet = BOOT_EraseAppFlash()) break;
         
-        ulRet = 0;
     }while (0);
     
     return ulRet;
@@ -214,13 +220,13 @@ uBit32 BOOT_WriteBuffToFlah(void)
     //校验缓冲区长度
     if (m_ulBuffIndex == 0)
     {
-        return 1;
+        return BOOT_ERR_PACK_SIZE;
     }
     
     //若缓冲区满,将数据写入FLASH之中
     if (FLASH_Write(m_ulBaseFlashAddr + m_ulFlashIndex, m_uUpdateDataBuff, UPDATE_DATA_BUFF_SIZE))
     {
-        return 1;   //(写入失败)
+        return BOOT_ERR_FLASH_OPS;   //(写入失败)
     }
     
     //写入成功,则进行数据更新
@@ -229,9 +235,8 @@ uBit32 BOOT_WriteBuffToFlah(void)
     m_ulFlashIndex += UPDATE_DATA_BUFF_SIZE;                //更新Flash地址索引
     memset(m_uUpdateDataBuff, 0, UPDATE_DATA_BUFF_SIZE);    //清空Buff
     
-    return 0;
+    return BOOT_ERR_SUCCESS;
 }
-
 
 
 /**
@@ -245,16 +250,16 @@ uBit32 BOOT_WriteBuffToFlah(void)
   */
 uBit32 BOOT_StoreUpdateDataToBuff(uBit8 *pBuff, uBit32 ulSize, uBit32 ulFinshFlg)
 {
-    //校验数据长度(一次写入的长度,必须是2的幂)
-    if (ulSize & (ulSize-1))
+    //校验数据长度(除非是最后一包数据,否则一次写入的长度必须是2的幂)
+    if ((ulSize & (ulSize-1)) && (!ulFinshFlg))
     {
-        return 1;
+        return BOOT_ERR_PACK_SIZE;
     }
     
     //判断是否会溢出
     if ((m_ulBuffIndex + ulSize) > UPDATE_DATA_BUFF_SIZE)
     {
-        return 1;
+        return BOOT_ERR_PACK_SIZE;
     }
     
     //复制数据到缓冲区
@@ -273,7 +278,7 @@ uBit32 BOOT_StoreUpdateDataToBuff(uBit8 *pBuff, uBit32 ulSize, uBit32 ulFinshFlg
         return BOOT_WriteBuffToFlah();
     }
     
-    return 0;
+    return BOOT_ERR_SUCCESS;
 }
 
 
@@ -289,7 +294,7 @@ uBit32 BOOT_CheckFlashLoaderFinsh(void)
     //若实际烧录的文件长度跟Bin文件信息中的不一致,报错
     if (m_ulCurFileLen != m_ulBinFileLen)
     {
-        return 1;
+        return BOOT_ERR_DATA_CHECK;
     }
     
     //校验整个FLASH
@@ -297,9 +302,9 @@ uBit32 BOOT_CheckFlashLoaderFinsh(void)
 
     if (nCurFileCheckSum != m_nBinFileCheckSum)
     {
-        return 1;
+        return BOOT_ERR_DATA_CHECK;
     }
     
-    return 0;
+    return BOOT_ERR_SUCCESS;
 }
 

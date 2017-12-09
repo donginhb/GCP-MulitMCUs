@@ -70,3 +70,38 @@ void HW_SystemReset(void)
     
 }
 
+
+/**
+  * @brief  程序跳转
+  * @param  None
+  * @retval None
+  * @note   此函数应用于Bootloader对APP的跳转,APP地址写死为0x70000000
+  */
+void HW_JumToApp(void)
+{
+    //关闭总中断	
+    __disable_irq();
+    
+    asm("nop");
+    
+    //堆栈指针入口地址,该部分随着bootloader空间改变而改变
+    asm("MOVW R0,#0X7000");
+    asm("MOVT R0,#0X0000");
+    
+    //中断向量表的相对于基地址的偏移
+    asm("MOVW R1,#0XED08");
+    asm("MOVT R1,#0XE000");
+    asm("STR R0, [R1]");
+    
+    //堆栈指针
+    asm("LDR SP,[R0]");
+    
+    //应用程序入口地址,该部分随着bootloader控件改变而改变
+    asm("MOVW R0,#0X7004");
+    asm("MOVT R0,#0X0000");
+    
+    //跳转到应用程序入口处
+    asm("LDR LR,[R0]");
+    asm("BX LR");
+    
+}

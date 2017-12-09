@@ -28,6 +28,8 @@
 #include "SysPeripheral/PWM/PWM_MotorCtrl.h"
 #include "MotorCtrl/MotorCtrl.h"
 
+#include "ExtPeripheral/NixieTube/NixieTube.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -152,6 +154,9 @@ void VM_HwInit(void)
     //初始化轴
     AXIS_Init(0, 3, 1, 0, 0, OUTPUT_IO_MOTOR_DIR);
     
+    //初始化数码管
+    NixieTube_SetCtrlPinNO(OUTPUT_IO_NIXIE_TUBE_DIO, OUTPUT_IO_NIXIE_TUBE_CLK, OUTPUT_IO_NIXIE_TUBE_STB);
+    NixieTube_DisNumber(10);
 }
 
 

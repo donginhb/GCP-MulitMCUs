@@ -35,6 +35,13 @@
   * 系统版本: GC10_0_5_D
   * 修改时间: 2017.12.06
   * 修改描述: 1.成功移植入LPC17XX平台的CNC模块,并实现基本的运动控制功能;
+  * 
+  * 系统版本: GC10_0_6_D
+  * 修改时间: 2017.12.09
+  * 修改描述: 1.完善LPC17XX FLASH操作的接口;
+  *           2.编写Bootloader,兼容单双核及Bootloader本身的烧录;
+  *           3.一级目录下添加文件夹"Algorithm",主要用于常规的算法;
+  *           4.在Algorithm路径下添加CRC库及JSON库;
   *  
   ******************************************************************************
   */
@@ -48,7 +55,7 @@
 //APP版本定义
 #define GCP_VER_STR                     "GC10XXXD"      //项目版本
 #define GCP_VER_NO0                     (0)             //大版本号
-#define GCP_VER_NO1                     (5)             //小版本号
+#define GCP_VER_NO1                     (6)             //小版本号
 #define GCP_VER_PART                    (0)             //组件号(预留)
 #define GCP_VER_FLAG                    'D'             //版本标示
 

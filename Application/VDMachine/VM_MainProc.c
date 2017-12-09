@@ -21,7 +21,7 @@
 #include "VM_HardwareDef.h"
 #include "VM_MotorCtrl.h"
 #include "DataType/DataType.h"
-
+#include "SysCtrl/SysConfig.h"
 
 /**
   * @brief  格子柜相关资源初始化
@@ -34,7 +34,9 @@ void VM_Init(void)
     VM_HwInit();
     
     //初始化坐标轴映射
+#if SYS_USING_CNC
     VM_SetConfig();
+#endif
     
 }
 
@@ -50,6 +52,8 @@ void VM_MainProc(void)
     VM_MainWorkLedShow();
     
     //升降电机测试
+#if SYS_USING_CNC
     VM_MoveLiftMotorTest();
+#endif
     
 }

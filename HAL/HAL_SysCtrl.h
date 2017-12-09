@@ -19,6 +19,13 @@ extern "C" {
 void HAL_SystemReset(void);
 
 
+/**
+  * @brief  程序跳转
+  * @param  None
+  * @retval None
+  * @note   此函数应用于Bootloader对APP的跳转
+  */
+void HAL_JumToApp(void);
 
 
 #ifdef __cplusplus

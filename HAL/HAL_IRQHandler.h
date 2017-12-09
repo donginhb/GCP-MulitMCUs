@@ -105,6 +105,33 @@ typedef enum
     
 }IRQ_TRIGGER_SOURCE;
 
+#elif defined(LPC43XX)
+
+
+typedef enum
+{
+    //系统滴答
+    IRQ_TRG_SYSTICK_UPDATE = 0,
+    IRQ_TRG_SYSTICK_OS,
+    
+    //串口
+    IRQ_TRG_UART0,
+    IRQ_TRG_UART1,
+    IRQ_TRG_UART2,
+    IRQ_TRG_UART3,
+
+    //DMA通道
+    IRQ_TRG_DMA_CH1,
+    IRQ_TRG_DMA_CH2,
+    IRQ_TRG_DMA_CH3,
+    IRQ_TRG_DMA_CH4,
+    IRQ_TRG_DMA_CH5,
+    IRQ_TRG_DMA_CH6,
+    IRQ_TRG_DMA_CH7,
+    IRQ_TRG_DMA_CH8,
+    
+}IRQ_TRIGGER_SOURCE;
+
 
 #elif defined(STM32F10X)
 

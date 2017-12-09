@@ -1,20 +1,20 @@
-#ifndef  __CLOCK_H
-#define  __CLOCK_H
+#ifndef  __RTC_H
+#define  __RTC_H
 
 #include "DataType/DataType.h"
 
 
 typedef struct
 {
-    uBit8   sec;
-    uBit8   min;
-    uBit8   hour;
-    uBit8   week;
-    uBit8   day;
-    uBit8   month;
+    uBit32  sec;
+    uBit32  min;
+    uBit32  hour;
+    uBit32  week;
+    uBit32  day;
+    uBit32  month;
     uBit32  year;
 
-}CLOCK_TYPE;
+}RTC_TIME;
 
 
 #ifdef __cplusplus
@@ -29,19 +29,19 @@ extern "C"
 
 
 //当前时间设置(从1970到现在的秒数)
-void CLOCK_SetCurClock(uBit32 ulSec);
+void RTC_SetCurClock(uBit32 ulSec);
 
 
 //系统时间更新
-void CLOCK_Update(void);
+void RTC_Update(void);
 
 
 //系统时钟地址获取
-CLOCK_TYPE *CLOCK_GetSysClockAddr(void);
+RTC_TIME *RTC_GetTimeAddr(void);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __CLOCK_H */
+#endif /* __RTC_H */

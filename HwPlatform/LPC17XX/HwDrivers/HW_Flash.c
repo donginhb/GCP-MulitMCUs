@@ -66,7 +66,7 @@ typedef struct
 //FLASH内部FLASH布局
 static const FlashLayout m_FlashLayout[] =
 {
-    { LPC17XX_FLASH_SMALL_CAPACITY_SECTOR,    SIZE_8K },
+    { LPC17XX_FLASH_SMALL_CAPACITY_SECTOR,    SIZE_4K },
     { LPC17XX_FLASH_BIG_CAPACITY_SECTOR ,     SIZE_32K}
   
 };

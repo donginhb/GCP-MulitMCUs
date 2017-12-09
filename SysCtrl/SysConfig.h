@@ -6,8 +6,8 @@
 #define SYS_USING_CMU           (1)     //CMU模块使能开关
 #define SYS_USING_CNC           (0)     //CNC模块使能开关
 #elif defined(LPC17XX)
-#define SYS_USING_CMU           (1)     //CMU模块使能开关
-#define SYS_USING_CNC           (1)     //CNC模块使能开关
+#define SYS_USING_CMU           (0)     //CMU模块使能开关
+#define SYS_USING_CNC           (0)     //CNC模块使能开关
 #elif defined(STM32F10X)
 #define SYS_USING_CMU           (0)     //CMU模块使能开关
 #define SYS_USING_CNC           (0)     //CNC模块使能开关

@@ -78,3 +78,20 @@ void CoreCtrl_ResetHandler(void)
     }
     
 }
+
+
+/*****************************************************************************
+ * 系统程序跳转相关接口函数
+ ****************************************************************************/
+
+/**
+  * @brief  程序跳转
+  * @param  None
+  * @retval None
+  * @note   此函数应用于Bootloader对APP的跳转
+  */
+void CoreCtrl_JumToApp(void)
+{
+    HAL_JumToApp();
+    
+}

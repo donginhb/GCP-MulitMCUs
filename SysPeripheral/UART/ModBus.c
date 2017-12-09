@@ -17,6 +17,7 @@
 #include "ModBus.h"
 #include "UART.h"
 
+#include "Algorithm/CRC/CRC.h"
 #include "DataType/DataType.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 
@@ -25,7 +26,8 @@
 #include <stdbool.h>
 
 
-extern unsigned short int CRC16(unsigned char *Pushdata,unsigned long int length);
+
+extern unsigned short int CRC16_GetValue(unsigned char *Pushdata,unsigned long int length);
 
 /*****************************************************************************
  * RS485相关私有函数
@@ -108,7 +110,7 @@ static Bit8 ModBus_CheckRecvData(MODBUS_DATA *pModBusData)
         }
         //判断CRC是否正确
         nCrcValue = (m_uModBusRecvBuff[ulDataCount+3] << 8) | m_uModBusRecvBuff[ulDataCount+4];
-        if (nCrcValue != CRC16(m_uModBusRecvBuff, ulDataCount+3))
+        if (nCrcValue != CRC16_GetValue(m_uModBusRecvBuff, ulDataCount+3))
         {
             cRetCode = MODBUS_ERR_CMU;  //无效数据
             break;
@@ -176,7 +178,7 @@ void ModBus_Send(MODBUS_DATA *pModBusData)
     uSendBuff[4] = pModBusData->uRegCount >> 8;     //读取寄存器数高8位
     uSendBuff[5] = pModBusData->uRegCount & 0xFF;   //读取寄存器数低8位
 
-    nCrcValue = CRC16(uSendBuff, 6);                //获取CRC
+    nCrcValue = CRC16_GetValue(uSendBuff, 6);                //获取CRC
     uSendBuff[6] = nCrcValue >> 8;                  //CRC高8位
     uSendBuff[7] = nCrcValue & 0xFF;                //CRC低8位
     

@@ -40,6 +40,7 @@
       
 #if SYS_USING_BOOT
 #include "SysUpdate/Bootloader.h"
+#include "SysUpdate/SysUpdate.h"
 #endif
 
 
@@ -63,6 +64,11 @@ uBit32 SYS_Init(void)
     
     //初始化系统时钟
     SysTime_Init(1, false, 0);
+    
+    //初始化Bootloader
+#if SYS_USING_BOOT
+    SYS_UPDATE_Init();
+#endif
     
     //初始化CMU
 #if SYS_USING_CMU    

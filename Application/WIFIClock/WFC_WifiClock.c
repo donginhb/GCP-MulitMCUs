@@ -20,8 +20,8 @@
 #include "DataType/DataType.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
+#include "SysPeripheral/RTC/RTC.h"
 #include "Algorithm/Json/cJSON.h"
-#include "Algorithm/Clock/Clock.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
