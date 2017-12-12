@@ -172,7 +172,7 @@ void VM_MoveLiftMotorTest(void)
     {
         SysTime_StartOneShot(&m_MotorCtrlTimer, VM_MOTOR_TEST_PERIOD); //设置下一次执行的时间
         
-        VM_MoveLiftMotor(fPos, 1000, 0);
+        //VM_MoveLiftMotor(fPos, 1000, 0);
         
         fPos = -fPos;
     }

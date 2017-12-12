@@ -2,7 +2,7 @@
 #include "string.h"
 #include "CMU_ErrorMana.h"
 
-#include "../../CNC/DataStructDef/ERR_DataStructDef.h"
+#include "CNC/DataStructDef/ERR_DataStructDef.h"
 
  /*
 函数名称：uBit32 CMU_CreateError(uBit32 ulCodeNo, uBit32 ulID);

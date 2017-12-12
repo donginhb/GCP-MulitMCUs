@@ -28,8 +28,12 @@ extern "C"
  ****************************************************************************/
 
 
-//当前时间设置(从1970到现在的秒数)
-void RTC_SetCurClock(uBit32 ulSec);
+/**
+  * @brief  当前时间设置(从1970到现在的秒数)
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 RTC_SetCurClock(uBit32 ulSec, uBit8 uGmtIndex);
 
 
 //系统时间更新

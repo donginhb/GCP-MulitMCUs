@@ -1,19 +1,19 @@
 /*
 Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 
-文件名称：UIN_GlobalDataDef.h 
+文件名称:UIN_GlobalDataDef.h 
 
-摘    要：通信模块内部和外部接口通用数据结构和宏定义
+摘    要:通信模块内部和外部接口通用数据结构和宏定义
 
-运行环境：Windows Xp / WINCE / LPC43xx / LPC1751
+运行环境:Windows Xp / WINCE / LPC43xx / LPC1751
 
-修改描述：1、
+修改描述:1、
 
-当前版本：3.0
+当前版本:3.0
 
-修改作者：Alan 
+修改作者:Alan 
 
-修改日期：2015年8月28日
+修改日期:2015年8月28日
 //-----------------------------------------------------------------------------------------------
 */
 #ifndef _UIN_GLOBAL_DATA_DEF_
@@ -27,22 +27,22 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 typedef struct uin_rs_ms_data
 {
     //发送性能检测
-    unsigned long ulSendBlockCount;        //发送的数据块总数(成功或失败次数)
-    unsigned long ulBlockSendSucCount;    //数据块发送成功次数
-    unsigned long ulSendFailCount;        //发送数据失败次数
+    unsigned long ulSendBlockCount;         //发送的数据块总数(成功或失败次数)
+    unsigned long ulBlockSendSucCount;      //数据块发送成功次数
+    unsigned long ulSendFailCount;          //发送数据失败次数
     
     //接收性能检测
-    unsigned long ulRcvBlockCount;        //接收到完整数据块的总数(完整、非完整)
-    unsigned long ulBlockRcvSucCount;    //
-    unsigned long ulLastTimeOutID;        //最后一次接收超时指令ID(重试后依然超时记录)
-    unsigned long ulRcvTimeOutCount;    //接收回应包超时次数
+    unsigned long ulRcvBlockCount;          //接收到完整数据块的总数(完整、非完整)
+    unsigned long ulBlockRcvSucCount;       //
+    unsigned long ulLastTimeOutID;          //最后一次接收超时指令ID(重试后依然超时记录)
+    unsigned long ulRcvTimeOutCount;        //接收回应包超时次数
     
     //时间监测
-    unsigned long ulSentBlockTime;        //发送数据块最长时间(ms)
-    unsigned long ulGetResponceTime;    //等待回应包最长耗时(ms)
+    unsigned long ulSentBlockTime;          //发送数据块最长时间(ms)
+    unsigned long ulGetResponceTime;        //等待回应包最长耗时(ms)
     
     //其他特殊监视
-    unsigned long ulIOSetCmdCount;        //IO输出指令执行次数(成功发送)
+    unsigned long ulIOSetCmdCount;          //IO输出指令执行次数(成功发送)
     unsigned long ulRev[4];
 }UIN_RS_MS_DATA;
 
@@ -51,26 +51,26 @@ typedef struct uin_rs_ms_data
 typedef struct cmu_rs_ms_data
 {
     //发送性能检测
-    unsigned long ulSendBlockCount;        //发送的数据块总数(成功或失败次数)
-    unsigned long ulBlockSendSucCount;    //数据块发送成功次数
-    unsigned long ulSendFailCount;        //发送数据失败次数
+    unsigned long ulSendBlockCount;         //发送的数据块总数(成功或失败次数)
+    unsigned long ulBlockSendSucCount;      //数据块发送成功次数
+    unsigned long ulSendFailCount;          //发送数据失败次数
     
     //接收性能检测
-    unsigned long ulRcvBlockCount;        //接收到完整数据块的总数(完整、非完整)
-    unsigned long ulBlockRcvSucCount;    //
+    unsigned long ulRcvBlockCount;          //接收到完整数据块的总数(完整、非完整)
+    unsigned long ulBlockRcvSucCount;       //
     
     //其他监测
-    unsigned long ulOutputSetCount;        //IO输出指令执行次数
+    unsigned long ulOutputSetCount;         //IO输出指令执行次数
     unsigned long ulRev[4];
 }CMU_RS_MS_DATA;
 
 //CAN总线传输监控数据
 typedef struct can_rs_ms_data
 {
-    unsigned short nSendPulseFailTimes;    //发送脉冲回应包失败次数
-    unsigned short nSendRetryFailTimes;    //发送重发失败次数
-    unsigned short nRcvPulseFailTimes;    //接收脉冲回应包失败次数
-    unsigned short nIOSetTimes;            //IO操作次数
+    unsigned short nSendPulseFailTimes;     //发送脉冲回应包失败次数
+    unsigned short nSendRetryFailTimes;     //发送重发失败次数
+    unsigned short nRcvPulseFailTimes;      //接收脉冲回应包失败次数
+    unsigned short nIOSetTimes;             //IO操作次数
     unsigned short nRev[4];
 }CAN_RS_MS_DATA;
 
@@ -95,7 +95,6 @@ typedef struct ctrl_rs_ms_data
 }CTRL_RS_MS_DATA;
 
 
-
 //参数数据类型
 #define PARM_DATA_TYPE_F                            (1)//float型
 #define PARM_DATA_TYPE_I                            (2)//int型
@@ -117,22 +116,32 @@ typedef struct _ParmData
 //--------------------------控制参数单项定义---------------------------------
 //坐标系控制参数类型定义
 #define CRD_PARM_COUNT                              (7)
-#define CRD_PARM_LOOKAHEADLEN                       (1)//前瞻段数，取值范围：大于等于0
-#define CRD_PARM_MINCONSTANTVELTIME                 (2)//最小匀速段时间，单位：豪秒，取值范围：大于等于0
-#define CRD_PARM_LINEAXISCORNERPRECI                (3)//直线轴拐角误差，单位：用户计数单位，取值范围：大于等于0
-#define CRD_PARM_ROTAXISCORNERPRECI                 (4)//旋转轴拐角误差，单位：0.001度，取值范围：大于等于0
-#define CRD_PARM_CIRCLEERRORLIM                     (5)//圆弧误差限制，单位：用户计数单位，取值范围：大于等于
-#define CRD_PARM_PROGMAXFEEDSPD                     (6)//程序最大进给速度，单位：用户计数单位/毫秒，取值范围：大于0
-#define CRD_PARM_PROGMAXACC                         (7)//程序最大加速度，单位：用户计数单位/平方毫秒，取值范围：大于0
+#define CRD_PARM_LOOKAHEADLEN                       (1)//前瞻段数,取值范围:大于等于0
+#define CRD_PARM_MINCONSTANTVELTIME                 (2)//最小匀速段时间,单位:豪秒,取值范围:大于等于0
+#define CRD_PARM_LINEAXISCORNERPRECI                (3)//直线轴拐角误差,单位:用户计数单位,取值范围:大于等于0
+#define CRD_PARM_ROTAXISCORNERPRECI                 (4)//旋转轴拐角误差,单位:0.001度,取值范围:大于等于0
+#define CRD_PARM_CIRCLEERRORLIM                     (5)//圆弧误差限制,单位:用户计数单位,取值范围:大于等于
+#define CRD_PARM_PROGMAXFEEDSPD                     (6)//程序最大进给速度,单位:用户计数单位/毫秒,取值范围:大于0
+#define CRD_PARM_PROGMAXACC                         (7)//程序最大加速度,单位:用户计数单位/平方毫秒,取值范围:大于0
 
 //电机控制参数类型定义                
 #define MOTOR_PARM_COUNT                            (6)
-#define MOTOR_PARM_MAXJOGSPD                        (1)//最大手动速度，单位：用户计数单位/毫秒，取值范围：大于0
-#define MOTOR_PARM_MAXJOGACC                        (2)//最大手动加速度，单位：用户计数单位/平方毫秒，取值范围：大于0
-#define MOTOR_PARM_MAXFEEDSPD                       (3)//最大加工速度，单位：用户计数单位/毫秒，取值范围：大于0
-#define MOTOR_PARM_MAXFEEDACC                       (4)//最大加工加速度，单位：用户计数单位/平方毫秒，取值范围：大于0
-#define MOTOR_PARM_RAPIDSPD                         (5)//快移速度，单位：用户计数单位/毫秒，取值范围：大于0
-#define MOTOR_PARM_RAPIDACC                         (6)//快移加速度，单位：用户计数单位/平方毫秒，取值范围：大于0
+#define MOTOR_PARM_MAXJOGSPD                        (1)//最大手动速度,单位:用户计数单位/毫秒,取值范围:大于0
+#define MOTOR_PARM_MAXJOGACC                        (2)//最大手动加速度,单位:用户计数单位/平方毫秒,取值范围:大于0
+#define MOTOR_PARM_MAXFEEDSPD                       (3)//最大加工速度,单位:用户计数单位/毫秒,取值范围:大于0
+#define MOTOR_PARM_MAXFEEDACC                       (4)//最大加工加速度,单位:用户计数单位/平方毫秒,取值范围:大于0
+#define MOTOR_PARM_RAPIDSPD                         (5)//快移速度,单位:用户计数单位/毫秒,取值范围:大于0
+#define MOTOR_PARM_RAPIDACC                         (6)//快移加速度,单位:用户计数单位/平方毫秒,取值范围:大于0
+
+//基本轴参数定义(暴露给上层的控制接口)
+#define AXIS_BASE_PARM_EX_COUNT                     (7)
+#define AXIS_BASE_PARM_MAX_JOG_SPD                  (1)//最大速度
+#define AXIS_BASE_PARM_MAX_JOG_ACC                  (2)//最大加速度
+#define AXIS_BASE_PARM_JOG_JERK                     (3)//加加速度(捷度)
+#define AXIS_BASE_PARM_GEAR_RATIO_POS_SCALE         (4)//轴脉冲当量分子
+#define AXIS_BASE_PARM_GEAR_RATIO_PLUS_SCALE        (5)//轴脉冲当量分母
+#define AXIS_BASE_PARM_SOFT_POS_LIM_P               (6)//正软限位
+#define AXIS_BASE_PARM_SOFT_POS_LIM_N               (7)//负软限位
 
 
 //定义通信方式---------------------------------------------------------------------

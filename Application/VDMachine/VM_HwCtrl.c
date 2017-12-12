@@ -129,10 +129,10 @@ static void VM_IOConfig(void)
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT27, false);
     
     //使能IO
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE1_N, false);
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE2_N, false);
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE3_N, false);
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE4_N, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE1_N, true);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE2_N, true);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE3_N, true);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OE4_N, true);
     
 }
 
@@ -154,9 +154,6 @@ void VM_HwInit(void)
     //初始化轴
     AXIS_Init(0, 3, 1, 0, 0, OUTPUT_IO_MOTOR_DIR);
     
-    //初始化数码管
-    NixieTube_SetCtrlPinNO(OUTPUT_IO_NIXIE_TUBE_DIO, OUTPUT_IO_NIXIE_TUBE_CLK, OUTPUT_IO_NIXIE_TUBE_STB);
-    NixieTube_DisNumber(10);
 }
 
 
@@ -178,6 +175,40 @@ void VM_MainWorkLedShow(void)
         SysTime_StartOneShot(&m_LedCtrlTimer, VM_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
+        
+#if 0
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT1);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT2);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT3);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT4);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT5);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT6);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT7);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT8);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT9);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT10);
+        
+        
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT11);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT12);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT13);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT14);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT15);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT16);
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT17);   //P1.22
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT18);   //P1.21
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT19);   //P1.19
+        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT20);   //P1.18
+        
+        
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT21);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT22);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT23);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT24);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT25);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT26);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT27);
+#endif
     }
 
 }

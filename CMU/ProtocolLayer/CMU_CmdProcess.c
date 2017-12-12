@@ -4,21 +4,18 @@
 #include "CMU_SendDataProcess.h"
 #include "CMU_PeriodDataMana.h"
 
-#include "../../CNC/DVM/DEV_COM_CmdDef.h"
+#include "CNC/DVM/DEV_COM_CmdDef.h"
 
-#include "../../CNC/DataStructDef/SYS_DataStructDef.h"
-#include "../../CNC/DataStructDef/CRD_DataStructDef.h"
-#include "../../CNC/DataStructDef/DEV_DataStructDef.h"
-//#include "../../CNC/DataStructDef/VER_DataStructDef.h"
-#include "../../CNC/DataStructDef/IO_DataStructDef.h"
+#include "CNC/DataStructDef/SYS_DataStructDef.h"
+#include "CNC/DataStructDef/CRD_DataStructDef.h"
+#include "CNC/DataStructDef/DEV_DataStructDef.h"
+#include "CNC/DataStructDef/IO_DataStructDef.h"
 
 #include "../CMU_ErrorCodeDef.h"
 
 
 #include "../UIN_GlobalDataDef.h"
 #include "../AbstractionLayer/AbstractionLayer.h"
-
-
 
 //#define DISABLE_IPR_INTERFACE //解释器接口暂时注释掉Alan???
 
@@ -45,7 +42,6 @@ uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 
-
 uBit32 Adda_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 uBit32 Adda_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
@@ -54,23 +50,23 @@ uBit32 Reg_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 uBit32 Servo_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 
  /*
-函数名称：uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：系统常规设置指令处理线程，处理的指令包括
-            #define SYS_SETCMD_COM_STYLE                        (1)//通信类型
-            #define SYS_SETCMD_BLINK_DEV_LED                    (2)//测试板卡
-            #define SYS_SETCMD_DEVICE_CONF                        (3)//设置硬件配置
-            #define SYS_SETCMD_CTRL_PARM                        (4)//设置系统控制参数
-            #define SYS_SETCMD_UPDATE_SLC                        (7)//SLC升级数据
-            #define SYS_SETCMD_UPDATE_IPO                        (8)//IPO升级数据
-            #define SYS_SETCMD_UPDATE_DEV                        (9)//设备升级数据
-            #define SYS_SETCMD_UPDATE_SLCIPO_BOOT                (10)//SLCIPObootloader升级数据
-            #define SYS_SETCMD_UPDATE_DEV_BOOT                    (11)//设备bootloader升级数据
-参    数：pRcvCtrlData--接收控制数据区
+功    能:系统常规设置指令处理线程,处理的指令包括
+            #define SYS_SETCMD_COM_STYLE                    (1) //通信类型
+            #define SYS_SETCMD_BLINK_DEV_LED                (2) //测试板卡
+            #define SYS_SETCMD_DEVICE_CONF                  (3) //设置硬件配置
+            #define SYS_SETCMD_CTRL_PARM                    (4) //设置系统控制参数
+            #define SYS_SETCMD_UPDATE_SLC                   (7) //SLC升级数据
+            #define SYS_SETCMD_UPDATE_IPO                   (8) //IPO升级数据
+            #define SYS_SETCMD_UPDATE_DEV                   (9) //设备升级数据
+            #define SYS_SETCMD_UPDATE_SLCIPO_BOOT           (10)//SLCIPObootloader升级数据
+            #define SYS_SETCMD_UPDATE_DEV_BOOT              (11)//设备bootloader升级数据
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：系统指令处理线程调用
+注意事项:系统指令处理线程调用
 */ 
 uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -81,19 +77,19 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
-    case SYS_SETCMD_UPDATE_SLC:                        //SLC升级数据
+    case SYS_SETCMD_UPDATE_SLC:                         //SLC升级数据
         ulRet = m_sExternalFunTable.pf_SYS_UpdateSLC((Bit8*)pRcvCtrlData->pRevBuf, 
             pRcvCtrlData->ulRevLen);
         break;
-    case SYS_SETCMD_UPDATE_IPO:                        //IPO升级数据
+    case SYS_SETCMD_UPDATE_IPO:                         //IPO升级数据
         ulRet = m_sExternalFunTable.pf_SYS_UpdateIPO((Bit8*)pRcvCtrlData->pRevBuf, 
             pRcvCtrlData->ulRevLen);
         break;
-    case SYS_SETCMD_COM_STYLE:                        //通信类型
+    case SYS_SETCMD_COM_STYLE:                          //通信类型
         {
             break;
 #if 0
-            /*暂时未启用，防止不当操作使系统不可用*/
+            /*暂时未启用,防止不当操作使系统不可用*/
             ulComType = *(uBit16*)pRcvCtrlData->pRevBuf;
 
             if (ulComType==COM_AL_GetComType())
@@ -185,9 +181,9 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：系统常规获取指令处理线程，如果获取成功则配置回包，指令包括
+功    能:系统常规获取指令处理线程,如果获取成功则配置回包,指令包括
         #define SYS_GETCMD_SLC_VER                            (1)//获取SLC版本
         #define SYS_GETCMD_IPO_VER                            (2)//获取IPO版本
         #define SYS_GETCMD_DEVICE_VER                        (3)//获取AXIS\IO\ADDA版本
@@ -195,11 +191,11 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         #define SYS_GETCMD_DEVICE_COUNT                        (5)//获取设备总数
         #define SYS_GETCMD_DEVICE_INFO                        (6)//获取硬件配置
         #define SYS_GETCMD_CTRL_PARM                        (7)//获取系统控制数据
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：系统指令处理线程调用
+注意事项:系统指令处理线程调用
 */ 
 uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -342,19 +338,19 @@ uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Sys_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Sys_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：系统常规获取指令处理线程，如果设置指令执行完成并成功则回包，指令类型包括
+功    能:系统常规获取指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
             #define SETCMD_TYPE_NOMAL    (0)                        //常规设置指令
             #define SETCMD_TYPE_INQ        (1)                        //周期查询设置指令
             #define GETCMD_TYPE_NOMAL    (0)                        //常规获取指令
             #define GETCMD_TYPE_INQ        (1)                        //周期新数据获取指令
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 Sys_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -399,7 +395,7 @@ uBit32 Sys_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 //坐标系指令处理接口----------------------------------------------------------
 uBit32 RapidCmdTranslate(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
-    //uBit32 ulMask;                            //运动段屏蔽字bit0-绝对编程标志，bit1-顺时针标志
+    //uBit32 ulMask;                            //运动段屏蔽字bit0-绝对编程标志,bit1-顺时针标志
     BooLean bAbsFlag;
 
     //memcpy(&ulMask, pRcvCtrlData->pRevBuf, sizeof(uBit32));    //保存运动段屏蔽位
@@ -414,7 +410,7 @@ uBit32 RapidCmdTranslate(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 uBit32 LineCmdTranslate(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
-    //uBit32 ulMask;                            //运动段屏蔽字bit0-绝对编程标志，bit1-顺时针标志
+    //uBit32 ulMask;                            //运动段屏蔽字bit0-绝对编程标志,bit1-顺时针标志
     BooLean bAbsFlag;
 
     //memcpy(&ulMask, pRcvCtrlData->pRevBuf, sizeof(uBit32));    //保存运动段屏蔽位
@@ -491,37 +487,37 @@ uBit32 Crd_SetCrdCtrlParmEx(uBit32 ulCrdNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
     //控制参数检查
     switch(ulParmType)
     {
-    case CRD_PARM_LOOKAHEADLEN                ://(uBit16)前瞻段数，取值范围：大于等于0
+    case CRD_PARM_LOOKAHEADLEN                ://(uBit16)前瞻段数,取值范围:大于等于0
         {
             memcpy(&sCrdCtrlParm.nLookaheadLen, &pRcvCtrlData->pRevBuf[4], sizeof(uBit16));
             break;
         }
-    case CRD_PARM_MINCONSTANTVELTIME    ://(uBit32)最小匀速段时间，单位：豪秒，取值范围：大于等于0
+    case CRD_PARM_MINCONSTANTVELTIME    ://(uBit32)最小匀速段时间,单位:豪秒,取值范围:大于等于0
         {
              memcpy(&sCrdCtrlParm.ulMinConstantVelTime, &pRcvCtrlData->pRevBuf[4], sizeof(uBit32));
             break;           
         }
-    case CRD_PARM_LINEAXISCORNERPRECI    ://(float32)直线轴拐角误差，单位：计数，取值范围：大于等于0
+    case CRD_PARM_LINEAXISCORNERPRECI    ://(float32)直线轴拐角误差,单位:计数,取值范围:大于等于0
         {
                memcpy(&sCrdCtrlParm.dLineAxisCornerPreci, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case CRD_PARM_ROTAXISCORNERPRECI    ://(float32)旋转轴拐角误差，单位：0.001度，取值范围：大于等于0
+    case CRD_PARM_ROTAXISCORNERPRECI    ://(float32)旋转轴拐角误差,单位:0.001度,取值范围:大于等于0
         {
                memcpy(&sCrdCtrlParm.dRotAxisCornerPreci, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case CRD_PARM_CIRCLEERRORLIM            ://(float32)圆弧误差限制，单位：0.001计数，取值范围：大于等于
+    case CRD_PARM_CIRCLEERRORLIM            ://(float32)圆弧误差限制,单位:0.001计数,取值范围:大于等于
         {
             memcpy(&sCrdCtrlParm.dCircleErrorLim, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case CRD_PARM_PROGMAXFEEDSPD            ://(float32)程序最大进给速度，单位：0.001计数/毫秒，取值范围：大于0
+    case CRD_PARM_PROGMAXFEEDSPD            ://(float32)程序最大进给速度,单位:0.001计数/毫秒,取值范围:大于0
         {
             memcpy(&sCrdCtrlParm.dProgMaxFeedSpeed, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case CRD_PARM_PROGMAXACC                ://(float32)程序最大加速度，单位：0.001计算/平方毫秒，取值范围：大于0
+    case CRD_PARM_PROGMAXACC                ://(float32)程序最大加速度,单位:0.001计算/平方毫秒,取值范围:大于0
         {
             memcpy(&sCrdCtrlParm.dProgMaxAcc, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
@@ -536,61 +532,60 @@ uBit32 Crd_SetCrdCtrlParmEx(uBit32 ulCrdNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：坐标系常规设置指令处理线程，指令包括
-                #define CRD_SETCMD_AXISMAP                        (1)//设置轴映射表
+功    能:坐标系常规设置指令处理线程,指令包括
+                #define CRD_SETCMD_AXISMAP                      (1)//设置轴映射表 
                 #define CRD_SETCMD_CTRL_PARM                    (2)//设置坐标系控制参数
-                #define CRD_SETCMD_RAPID_OVERRIDE                (3)//设置坐标系快移修调
+                #define CRD_SETCMD_RAPID_OVERRIDE               (3)//设置坐标系快移修调
                 #define CRD_SETCMD_FEED_OVERRIDE                (4)//设置坐标系进给修调
-                #define CRD_SETCMD_SPINDLE_OVERRIDE                (5)//设置坐标系主轴修调
+                #define CRD_SETCMD_SPINDLE_OVERRIDE             (5)//设置坐标系主轴修调
                 #define CRD_SETCMD_VERIFY_ENABLE                (6)//校验运行使能控制
                 #define CRD_SETCMD_CTRL_MODE                    (7)//设置坐标系工作模式
                 #define CRD_SETCMD_ESTOP                        (8)//设置指定的坐标系急停
                 #define CRD_SETCMD_RESET                        (9)//坐标系复位
-                #define CRD_SETCMD_SPINDLE_RUN                    (10)//启动主轴
-                #define CRD_SETCMD_SPINDLE_STOP                    (11)//停止主轴
+                #define CRD_SETCMD_SPINDLE_RUN                  (10)//启动主轴
+                #define CRD_SETCMD_SPINDLE_STOP                 (11)//停止主轴
                 #define CRD_SETCMD_PROG_MODE                    (12)//设置程序缓冲区工作模式
-                #define CRD_SETCMD_CLEAR_PROG_BUF                (13)//清除坐标系程序缓冲区
-                #define CRD_SETCMD_SINGLE_SEG_MODE                (14)//设置系统单段方式
+                #define CRD_SETCMD_CLEAR_PROG_BUF               (13)//清除坐标系程序缓冲区
+                #define CRD_SETCMD_SINGLE_SEG_MODE              (14)//设置系统单段方式
                 #define CRD_SETCMD_LOOKAHEAD                    (15)//前瞻控制控制
-                #define CRD_SETCMD_PROG_RUN                        (16)//运行坐标系程序
+                #define CRD_SETCMD_PROG_RUN                     (16)//运行坐标系程序
                 #define CRD_SETCMD_PROG_HOLD                    (17)//暂停坐标系程序
                 #define CRD_SETCMD_PROG_STOP                    (18)//暂停坐标系程序
-                #define CRD_SETCMD_PROG_CANCEL                    (19)
-                #define CRD_SETCMD_SEGEDN_STOP                    (20)//段结束停止坐标系程序
-                #define CRD_SETCMD_USERDATABUF_MODE                (21)//设置用户缓冲区工作模式
+                #define CRD_SETCMD_PROG_CANCEL                  (19)
+                #define CRD_SETCMD_SEGEDN_STOP                  (20)//段结束停止坐标系程序
+                #define CRD_SETCMD_USERDATABUF_MODE             (21)//设置用户缓冲区工作模式
                 #define CRD_SETCMD_CLEAR_USERDATABUF            (22)//清除用户自定义数据区
                 #define CRD_SETCMD_LOAD_USERDATA                (23)//下载用户数据
-                #define CRD_SETCMD_LOAD_GCODE                    (24)//下载G代码数据
-                #define CRD_SETCMD_RELOAD_GCODE                    (25)//重新装载G代码
+                #define CRD_SETCMD_LOAD_GCODE                   (24)//下载G代码数据
+                #define CRD_SETCMD_RELOAD_GCODE                 (25)//重新装载G代码
                 #define CRD_SETCMD_TOOL_DATA                    (26)//设置刀库数据
-                #define CRD_SETCMD_IPR_SELECT                    (27)//必须下载完G代码后才能调用
-                #define CRD_SETCMD_IPR_SET_OFFSET                (28)//设置程序偏移
+                #define CRD_SETCMD_IPR_SELECT                   (27)//必须下载完G代码后才能调用
+                #define CRD_SETCMD_IPR_SET_OFFSET               (28)//设置程序偏移
                 #define CRD_SETCMD_IPR_RDN_START                (29)//任意行启动
-                #define CRD_SETCMD_IPR_SET_PROG_POS                (30) //设置当前编程位置（工件坐标系值）
+                #define CRD_SETCMD_IPR_SET_PROG_POS             (30) //设置当前编程位置（工件坐标系值）
                 #define CRD_SETCMD_IPR_SET_COORD                (31) //重新设置坐标零点
-                #define CRD_SETCMD_IPR_SET_VAR                    (32) //设置变量值
-                #define CRD_SETCMD_CTRL_PARM_EX                    (33)//设置坐标系控制参数单项数据
-
-                #define CRD_PROG_CMD_BASE                        (50)                            //运动指令起始
-                #define CRD_PROG_CMD_COUNT                        (11)                            //运动指令总数
-                #define CRD_SETCMD_PROG_DWELL                    (CRD_PROG_CMD_BASE)//设置坐标系程序延时
-                #define CRD_SETCMD_M_CODE                        (CRD_PROG_CMD_BASE+1)//设置坐标系M代码
-                #define CRD_SETCMD_S_CODE                        (CRD_PROG_CMD_BASE+2)//设置坐标系S代码
-                #define CRD_SETCMD_T_CODE                        (CRD_PROG_CMD_BASE+3)//设置坐标系T代码
-                #define CRD_SETCMD_B_CODE                        (CRD_PROG_CMD_BASE+4)//设置坐标系B代码
-                #define CRD_SETCMD_IO_CODE                        (CRD_PROG_CMD_BASE+5)//
+                #define CRD_SETCMD_IPR_SET_VAR                  (32) //设置变量值
+                #define CRD_SETCMD_CTRL_PARM_EX                 (33)//设置坐标系控制参数单项数据
+                #define CRD_PROG_CMD_BASE                       (50)                 //运动指令起始
+                #define CRD_PROG_CMD_COUNT                      (11)                 //运动指令总数
+                #define CRD_SETCMD_PROG_DWELL                   (CRD_PROG_CMD_BASE)  //设置坐标系程序延时
+                #define CRD_SETCMD_M_CODE                       (CRD_PROG_CMD_BASE+1)//设置坐标系M代码
+                #define CRD_SETCMD_S_CODE                       (CRD_PROG_CMD_BASE+2)//设置坐标系S代码
+                #define CRD_SETCMD_T_CODE                       (CRD_PROG_CMD_BASE+3)//设置坐标系T代码
+                #define CRD_SETCMD_B_CODE                       (CRD_PROG_CMD_BASE+4)//设置坐标系B代码
+                #define CRD_SETCMD_IO_CODE                      (CRD_PROG_CMD_BASE+5)//
                 #define CRD_SETCMD_RAPID                        (CRD_PROG_CMD_BASE+6)//单个轴或者多个轴同时执行快速移动
-                #define CRD_SETCMD_LINE                            (CRD_PROG_CMD_BASE+7)//多轴直线插补运动
-                #define CRD_SETCMD_ARC_C                        (CRD_PROG_CMD_BASE+8)//圆弧插补圆心，终点模式
-                #define CRD_SETCMD_ARC_R                        (CRD_PROG_CMD_BASE+9)//圆弧插补半径，终点模式
-                #define CRD_SETCMD_ARC_PT                        (CRD_PROG_CMD_BASE+10)//圆弧插补中间点、终点模式
-参    数：pRcvCtrlData--接收控制数据区
+                #define CRD_SETCMD_LINE                         (CRD_PROG_CMD_BASE+7)//多轴直线插补运动
+                #define CRD_SETCMD_ARC_C                        (CRD_PROG_CMD_BASE+8)//圆弧插补圆心,终点模式
+                #define CRD_SETCMD_ARC_R                        (CRD_PROG_CMD_BASE+9)//圆弧插补半径,终点模式
+                #define CRD_SETCMD_ARC_PT                       (CRD_PROG_CMD_BASE+10)//圆弧插补中间点、终点模式
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：坐标系指令处理线程调用
+注意事项:坐标系指令处理线程调用
 */ 
 
 uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
@@ -609,7 +604,7 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     if (pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex>=CRD_PROG_CMD_BASE && 
         pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex<CRD_PROG_CMD_BASE+CRD_PROG_CMD_COUNT)
     {
-        if (m_sExternalFunTable.pf_IPR_GetPpiEnable())//解释器使能
+        if (m_sExternalFunTable.pf_IPR_GetPpiEnable())  //解释器使能
         {
             ulRet = m_sExternalFunTable.pf_IPR_SetPpiEnable(0);
 
@@ -619,67 +614,67 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
         switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
         {
-        case CRD_SETCMD_PROG_DWELL:                    //设置坐标系程序延时
+        case CRD_SETCMD_PROG_DWELL:                     //设置坐标系程序延时
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgDwell(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     *(uBit32*)pRcvCtrlData->pRevBuf);
             }
             break;
-        case CRD_SETCMD_M_CODE:                        //设置坐标系M代码
+        case CRD_SETCMD_M_CODE:                         //设置坐标系M代码
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgMCode(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     *(uBit16*)pRcvCtrlData->pRevBuf);
             }
             break;
-        case CRD_SETCMD_S_CODE:                        //设置坐标系S代码
+        case CRD_SETCMD_S_CODE:                         //设置坐标系S代码
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgSCode(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     *(uBit32*)pRcvCtrlData->pRevBuf);
             }
             break;
-        case CRD_SETCMD_T_CODE:                        //设置坐标系T代码
+        case CRD_SETCMD_T_CODE:                         //设置坐标系T代码
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgSCode(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     *pRcvCtrlData->pRevBuf);
             }
             break;
-        case CRD_SETCMD_B_CODE:                        //设置坐标系B代码
+        case CRD_SETCMD_B_CODE:                         //设置坐标系B代码
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgBCode(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     *pRcvCtrlData->pRevBuf);
             }
             break;
-        case CRD_SETCMD_IO_CODE:                    //
+        case CRD_SETCMD_IO_CODE:
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgIOCode(pRcvCtrlData->ulRevID.ulComDataID.ulCrdNo,
                     pRcvCtrlData->ulRevID.ulComDataID.ulDevNo,
-                    *(uBit32*)pRcvCtrlData->pRevBuf,                        //IO状态掩码    
-                    *(uBit32*)pRcvCtrlData->pRevBuf+sizeof(uBit32),    //IO状态位状态值
-                    *(uBit32*)pRcvCtrlData->pRevBuf+2*sizeof(uBit32)//表示延时时间，即执行IO状态设置后，延迟指定时间，再反转IO状态
+                    *(uBit32*)pRcvCtrlData->pRevBuf,                //IO状态掩码    
+                    *(uBit32*)pRcvCtrlData->pRevBuf+sizeof(uBit32), //IO状态位状态值
+                    *(uBit32*)pRcvCtrlData->pRevBuf+2*sizeof(uBit32)//表示延时时间,即执行IO状态设置后,延迟指定时间,再反转IO状态
                     );
             }
             break;
-        case CRD_SETCMD_RAPID:                        //单个轴或者多个轴同时执行快速移动
+        case CRD_SETCMD_RAPID:                          //单个轴或者多个轴同时执行快速移动
             {
                 ulRet = RapidCmdTranslate(pRcvCtrlData);
             }
             break;
-        case CRD_SETCMD_LINE:                        //多轴直线插补运动
+        case CRD_SETCMD_LINE:                           //多轴直线插补运动
             {
                 ulRet = LineCmdTranslate(pRcvCtrlData);
             }
             break;
-        case CRD_SETCMD_ARC_C:                        //圆弧插补中心点，结点模式
+        case CRD_SETCMD_ARC_C:                          //圆弧插补中心点,结点模式
             {
                 ulRet = ArcCCmdTranslate(pRcvCtrlData);
             }
             break;
-        case CRD_SETCMD_ARC_R:                        //圆弧插补半径，终点模式
+        case CRD_SETCMD_ARC_R:                          //圆弧插补半径,终点模式
             {
                 ulRet = ArcRCmdTranslate(pRcvCtrlData);
             }
             break;
-        case CRD_SETCMD_ARC_PT:                        //圆弧插补中间点、终点模式
+        case CRD_SETCMD_ARC_PT:                         //圆弧插补中间点、终点模式
             {
                 ulRet = ArcPTCmdTranslate(pRcvCtrlData);
             }
@@ -695,7 +690,7 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
         switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
         {
-        case  CRD_SETCMD_AXISMAP:                    //设置轴映射表
+        case  CRD_SETCMD_AXISMAP:                       //设置轴映射表
             {
                 ulRet = m_sExternalFunTable.pf_SPM_SetCrdSysAxisMapTable((CRDSYS_AXIS_MAP_TABLE*)pRcvCtrlData->pRevBuf,nCrdMask);
 #ifndef DISABLE_IPR_INTERFACE
@@ -705,84 +700,84 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
                 break;
             }
-        case CRD_SETCMD_CTRL_PARM:                    //设置坐标系控制参数
+        case CRD_SETCMD_CTRL_PARM:                      //设置坐标系控制参数
             {
                 ulRet = m_sExternalFunTable.pf_SPM_SetCrdParm(iCrdIndex, (CRDSYS_PARM*)pRcvCtrlData->pRevBuf);
                 break;
             }
-        case CRD_SETCMD_CTRL_PARM_EX:                //设置坐标系控制参数单项数据
+        case CRD_SETCMD_CTRL_PARM_EX:                   //设置坐标系控制参数单项数据
             {
                 ulRet =Crd_SetCrdCtrlParmEx(iCrdIndex, pRcvCtrlData);
                 break;
             }
-        case CRD_SETCMD_RAPID_OVERRIDE:                //设置坐标系快移修调
+        case CRD_SETCMD_RAPID_OVERRIDE:                 //设置坐标系快移修调
             {
                 ulRet = m_sExternalFunTable.pf_CSN_SetRapidOverride(iCrdIndex, *((float32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_FEED_OVERRIDE:                //设置坐标系进给修调
+        case CRD_SETCMD_FEED_OVERRIDE:                  //设置坐标系进给修调
             {
                 ulRet = m_sExternalFunTable.pf_CSM_SetFeedOverride(iCrdIndex, *((float32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_SPINDLE_OVERRIDE:            //设置坐标系主轴修调
+        case CRD_SETCMD_SPINDLE_OVERRIDE:               //设置坐标系主轴修调
             {
                 ulRet = m_sExternalFunTable.pf_CSM_SetSpindleOverride(iCrdIndex, *((float32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_VERIFY_ENABLE:                //校验运行使能控制
+        case CRD_SETCMD_VERIFY_ENABLE:                  //校验运行使能控制
             {
                 ulRet = m_sExternalFunTable.pf_CSM_EnableVerify(iCrdIndex, *((Bit32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_CTRL_MODE:                    //设置坐标系工作模式
+        case CRD_SETCMD_CTRL_MODE:                      //设置坐标系工作模式
             {
                 ulRet = m_sExternalFunTable.pf_CSM_SetCtrlMode(iCrdIndex, *((uBit32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_ESTOP:                        //设置指定的坐标系急停
+        case CRD_SETCMD_ESTOP:                          //设置指定的坐标系急停
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ProgEStop(nCrdMask);
                 break;
             }
-        case CRD_SETCMD_RESET:                        //坐标系复位
+        case CRD_SETCMD_RESET:                          //坐标系复位
             {
                 ulRet = m_sExternalFunTable.pf_CSM_Reset(iCrdIndex);
                 break;
             }
-        case CRD_SETCMD_SPINDLE_RUN:                //启动主轴
+        case CRD_SETCMD_SPINDLE_RUN:                    //启动主轴
             {
                 memcpy(&iDir, pRcvCtrlData->pRevBuf, sizeof(Bit32));
                 memcpy(&ulSpeed, pRcvCtrlData->pRevBuf+sizeof(uBit32), sizeof(uBit32));
                 ulRet = m_sExternalFunTable.pf_CSM_SpindleRun(iCrdIndex, iDir, ulSpeed);
                 break;
             }
-        case CRD_SETCMD_SPINDLE_STOP:                //停止主轴
+        case CRD_SETCMD_SPINDLE_STOP:                   //停止主轴
             {
                 ulRet = m_sExternalFunTable.pf_CSM_SpindleStop(iCrdIndex);
                 break;
             }
-        case CRD_SETCMD_PROG_MODE:                    //设置程序缓冲区工作模式
+        case CRD_SETCMD_PROG_MODE:                      //设置程序缓冲区工作模式
             {
                 ulRet = m_sExternalFunTable.pf_CSM_SetProgBufMode(iCrdIndex, *((Bit32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_CLEAR_PROG_BUF:                //清除坐标系程序缓冲区
+        case CRD_SETCMD_CLEAR_PROG_BUF:                 //清除坐标系程序缓冲区
             {
                 ulRet = m_sExternalFunTable.pf_CSM_ClearProgData(iCrdIndex, 2);//清除所有运动段数据
                 break;
             }
-        case CRD_SETCMD_SINGLE_SEG_MODE:            //设置系统单段方式
+        case CRD_SETCMD_SINGLE_SEG_MODE:                //设置系统单段方式
             {
                 ulRet = m_sExternalFunTable.pf_CSM_EnableSingleSegmentMode(iCrdIndex, *((Bit32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_LOOKAHEAD:                    //前瞻控制控制
+        case CRD_SETCMD_LOOKAHEAD:                      //前瞻控制控制
             {
                 ulRet = m_sExternalFunTable.pf_SPM_SetLookaheadEnable(iCrdIndex, *((Bit32*)pRcvCtrlData->pRevBuf));
                 break;
             }
-        case CRD_SETCMD_PROG_RUN:                    //运行坐标系程序
+        case CRD_SETCMD_PROG_RUN:                       //运行坐标系程序
             {
 #ifndef DISABLE_IPR_INTERFACE
                 if (m_sExternalFunTable.pf_IPR_GetPpiEnable())//解释器使能
@@ -1065,9 +1060,9 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Crd_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Crd_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：坐标系常规获取指令处理线程，如果获取成功则配置回包，指令包括
+功    能:坐标系常规获取指令处理线程,如果获取成功则配置回包,指令包括
         #define CRD_GETCMD_AXIS_MAP                (1)//获取坐标系映射表
         #define CRD_GETCMD_CTRL_PARM            (2)//获取坐标系控制数据
         #define CRD_GETCMD_TOOL_DATA            (3)//获取刀具数据
@@ -1079,11 +1074,11 @@ uBit32 Crd_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         #define CRD_GETCMD_IPR_CUR_LINENO        (9)//获取当前解释行号
         #define CRD_GETCMD_CRD_ZERO                (10)//获取坐标系零点
         #define CRD_GETCMD_BASE_TOOL            (11)//获取基本刀具号
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：坐标系指令处理线程调用
+注意事项:坐标系指令处理线程调用
 */ 
 uBit32 Crd_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1229,19 +1224,19 @@ uBit32 Crd_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Crd_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Crd_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：坐标系指令处理线程，如果设置指令执行完成并成功则回包，指令类型包括
+功    能:坐标系指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
             #define SETCMD_TYPE_NOMAL    (0)                        //常规设置指令
             #define SETCMD_TYPE_INQ        (1)                        //周期查询设置指令
             #define GETCMD_TYPE_NOMAL    (0)                        //常规获取指令
             #define GETCMD_TYPE_INQ        (1)                        //周期新数据获取指令
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 Crd_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1286,7 +1281,7 @@ uBit32 Crd_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 //------------------------------------------------------------------------------------
 
-
+//设置电机控制参数(扩展)
 uBit32 Motor_SetCtrlParmEx(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
     uBit32 ulParmType;
@@ -1301,32 +1296,32 @@ uBit32 Motor_SetCtrlParmEx(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
     //控制参数检查
     switch(ulParmType)
     {
-    case MOTOR_PARM_MAXJOGSPD:    //(float32)最大手动速度，单位：0.001计数/毫秒，取值范围：大于0
+    case MOTOR_PARM_MAXJOGSPD:    //(float32)最大手动速度,单位:0.001计数/毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxJogSpeed, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case MOTOR_PARM_MAXJOGACC:    //(float32)最大手动加速度，单位：0.001计数/平方毫秒，取值范围：大于0
+    case MOTOR_PARM_MAXJOGACC:    //(float32)最大手动加速度,单位:0.001计数/平方毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxJogAcc, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case MOTOR_PARM_MAXFEEDSPD:    //(float32)最大加工速度，单位：0.001计数/毫秒，取值范围：大于0
+    case MOTOR_PARM_MAXFEEDSPD:    //(float32)最大加工速度,单位:0.001计数/毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxFeedSpeed, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case MOTOR_PARM_MAXFEEDACC:    //(float32)最大加工加速度，单位：0.001计数/平方毫秒，取值范围：大于0
+    case MOTOR_PARM_MAXFEEDACC:    //(float32)最大加工加速度,单位:0.001计数/平方毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxFeedAcc, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case MOTOR_PARM_RAPIDSPD:        //(float32)快移速度，单位：0.001计数/毫秒，取值范围：大于0
+    case MOTOR_PARM_RAPIDSPD:        //(float32)快移速度,单位:0.001计数/毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dRapidSpeed, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
         }
-    case MOTOR_PARM_RAPIDACC:        //(float32)快移加速度，单位：0.001计数/平方毫秒，取值范围：大于0
+    case MOTOR_PARM_RAPIDACC:        //(float32)快移加速度,单位:0.001计数/平方毫秒,取值范围:大于0
         {
             memcpy(&sAxisCtrlParm.AxisMoveParm.dRapidAcc, &pRcvCtrlData->pRevBuf[4], sizeof(float32));
             break;
@@ -1341,36 +1336,105 @@ uBit32 Motor_SetCtrlParmEx(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
     return ulRet;
 }
 
+
+
+
+//设置轴基本控制参数
+uBit32 Motor_SetAxisBaseCtrlPram(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlData)
+{
+    uBit32 ulParmType;
+    uBit32 ulRet=CMU_ERR_SUCCESS;
+    const AXIS_PARM *pAxisCtrlParmAddr;
+    AXIS_PARM sAxisCtrlParm;
+
+    pAxisCtrlParmAddr = m_sExternalFunTable.pf_SPM_GetAxisParmAddr();
+    sAxisCtrlParm = pAxisCtrlParmAddr[ulAxisNo];
+    ulParmType =  *(uBit32*)pRcvCtrlData->pRevBuf;
+    
+    float fTempParm = (*(uBit32 *)(&pRcvCtrlData->pRevBuf[4]))/10000.0;
+    
+    
+    //控制参数检查
+    switch(ulParmType)
+    {
+    case AXIS_BASE_PARM_MAX_JOG_SPD:            //(float32)最大手动速度,单位:0.001计数/毫秒,取值范围:大于0
+        {
+            memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxJogSpeed, &fTempParm, sizeof(float32));
+            break;
+        }
+    case AXIS_BASE_PARM_MAX_JOG_ACC:            //(float32)最大手动加速度,单位:0.001计数/平方毫秒,取值范围:大于0
+        {
+            memcpy(&sAxisCtrlParm.AxisMoveParm.dMaxJogAcc, &fTempParm, sizeof(float32));
+            break;
+        }
+    case AXIS_BASE_PARM_JOG_JERK:               //(float32)手动捷度,单位:用户计数单位/立方毫秒,取值范围:大于0
+        {
+            memcpy(&sAxisCtrlParm.AxisMoveParm.dJogJerk, &fTempParm, sizeof(float32));
+            break;
+        }
+    case AXIS_BASE_PARM_GEAR_RATIO_POS_SCALE:   //(Bit32)轴脉冲当量分子,单位:用户计数单位,取值范围:大于0
+        {
+            memcpy(&sAxisCtrlParm.AxisScaleParm.lGearRatioPosScale, &pRcvCtrlData->pRevBuf[4], sizeof(Bit32));
+            break;
+        }
+    case AXIS_BASE_PARM_GEAR_RATIO_PLUS_SCALE:  //(Bit32)轴脉冲当量分母,单位:脉冲数,取值范围:大于0
+        {
+            memcpy(&sAxisCtrlParm.AxisScaleParm.lGearRatioPlusScale, &pRcvCtrlData->pRevBuf[4], sizeof(Bit32));
+            break;
+        }
+    case AXIS_BASE_PARM_SOFT_POS_LIM_P:         //(Bit32)正软限位,单位:用户计数单位,该值为0时,表示不检测正软限位
+        {
+            memcpy(&sAxisCtrlParm.AxisSafeParm.lSoftPosLimP, &pRcvCtrlData->pRevBuf[4], sizeof(Bit32));
+            break;
+        }
+    case AXIS_BASE_PARM_SOFT_POS_LIM_N:         //(Bit32)负软限位,单位:用户计数单位,该值为0时,表示不检测负软限位
+        {
+            memcpy(&sAxisCtrlParm.AxisSafeParm.lSoftPosLimN, &pRcvCtrlData->pRevBuf[4], sizeof(Bit32));
+            break;
+        }
+
+    default:
+        return CMU_ERR_DATA_WRONG;
+        break;
+    }
+
+    ulRet = m_sExternalFunTable.pf_SPM_SetAxisParm(ulAxisNo, &sAxisCtrlParm);   //设置电机控制参数
+    return ulRet;
+}
+
+
+
+
 //电机指令处理函数--------------------------------------------------------------------
  /*
-函数名称：uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：电机或轴常规设置指令处理线程，处理的指令包括
-            #define MOTOR_SETCMD_CTRL_PARM                    (1)//设置电机控制参数
-            #define MOTOR_SETCMD_PITCH_CMP_PARM            (2)//设置电机螺距补偿
-            #define MOTOR_SETCMD_POS_MOTION                (3)//设置位置控制运动数据
-            #define MOTOR_SETCMD_SPEED_MOTION                (4)//设置速度控制运动数据
-            #define MOTOR_SETCMD_HOME                            (5)//电机回零
-            #define MOTOR_SETCMD_STOP                            (6)//电机停止
-            #define MOTOR_SETCMD_ESTOP                            (7)//电机急停
-            #define MOTOR_SETCMD_CMD_POS                        (8)//设置电机当前位置
-            #define MOTOR_SETCMD_QEI_POS                        (9)//设置电机编码器当前位置
-            #define MOTOR_SETCMD_ENABLE                        (10)//设置伺服使能0-断使能1-加使能
+功    能:电机或轴常规设置指令处理线程,处理的指令包括
+            #define MOTOR_SETCMD_CTRL_PARM               (1) //设置电机控制参数
+            #define MOTOR_SETCMD_PITCH_CMP_PARM          (2) //设置电机螺距补偿
+            #define MOTOR_SETCMD_POS_MOTION              (3) //设置位置控制运动数据
+            #define MOTOR_SETCMD_SPEED_MOTION            (4) //设置速度控制运动数据
+            #define MOTOR_SETCMD_HOME                    (5) //电机回零
+            #define MOTOR_SETCMD_STOP                    (6) //电机停止
+            #define MOTOR_SETCMD_ESTOP                   (7) //电机急停
+            #define MOTOR_SETCMD_CMD_POS                 (8) //设置电机当前位置
+            #define MOTOR_SETCMD_QEI_POS                 (9) //设置电机编码器当前位置
+            #define MOTOR_SETCMD_ENABLE                  (10)//设置伺服使能0-断使能1-加使能
+                                                         
+            #define MOTOR_SETCMD_AXIS_POS_MOTION         (11)
+            #define MOTOR_SETCMD_AXIS_SPEED_MOTION       (12)
+            #define MOTOR_SETCMD_AXIS_HOME               (13)
+            #define MOTOR_SETCMD_AXIS_STOP               (14)
+            #define MOTOR_SETCMD_AXIS_ESTOP              (15)
+            #define MOTOR_SETCMD_AXIS_CMD_POS            (16)
+            #define MOTOR_SETCMD_AXIS_QEI_POS            (17)
+            #define MOTOR_SETCMD_AXIS_ENABLE             (18)
 
+参    数:pRcvCtrlData--接收控制数据区
 
-            #define MOTOR_SETCMD_AXIS_POS_MOTION            (11)
-            #define MOTOR_SETCMD_AXIS_SPEED_MOTION            (12)
-            #define MOTOR_SETCMD_AXIS_HOME                    (13)
-            #define MOTOR_SETCMD_AXIS_STOP                    (14)
-            #define MOTOR_SETCMD_AXIS_ESTOP                    (15)
-            #define MOTOR_SETCMD_AXIS_CMD_POS                (16)
-            #define MOTOR_SETCMD_AXIS_QEI_POS                (17)
-            #define MOTOR_SETCMD_AXIS_ENABLE                (18)
-参    数：pRcvCtrlData--接收控制数据区
-
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：电机指令处理线程调用
+注意事项:电机指令处理线程调用
 */ 
 uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1387,7 +1451,7 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             ulRet = m_sExternalFunTable.pf_SPM_SetAxisParm(ulMotorNo, (AXIS_PARM*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_CTRL_PARM_EX:                    //设置电机控制参数
+    case MOTOR_SETCMD_CTRL_PARM_EX:                 //设置电机控制参数
         {
             ulRet = Motor_SetCtrlParmEx(ulMotorNo, pRcvCtrlData);
             break;
@@ -1397,17 +1461,17 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             ulRet = m_sExternalFunTable.pf_SPM_SetAxisPitchCmpParm(ulMotorNo, (AXIS_PITCH_CMP_PARM*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_POS_MOTION:            //设置位置控制运动数据
+    case MOTOR_SETCMD_POS_MOTION:                   //设置位置控制运动数据
         {
             ulRet = m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion(ulMotorNo, (POSCTRL_MOTION_DATA*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_SPEED_MOTION:            //设置速度控制运动数据
+    case MOTOR_SETCMD_SPEED_MOTION:                 //设置速度控制运动数据
         {
             ulRet = m_sExternalFunTable.pf_CSM_SetMotorSpeedCtrlMotion(ulMotorNo, (SPEEDCTRL_MOTION_DATA*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_HOME:                        //电机回零
+    case MOTOR_SETCMD_HOME:                         //电机回零
         {
             ulRet = m_sExternalFunTable.pf_PAX_Home(ulMotorNo, *(BooLean*)pRcvCtrlData->pRevBuf, 0);
 #ifndef WIN32_VER
@@ -1435,7 +1499,7 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             break;
         }
     case MOTOR_SETCMD_CMD_POS:                    //设置电机当前指令位置
-        {//指令位置不下发，所有不等待
+        {//指令位置不下发,所有不等待
             ulRet = m_sExternalFunTable.pf_PAX_SetCmdPos(ulMotorNo, *(Bit32*)pRcvCtrlData->pRevBuf,  0);
             break;
         }
@@ -1480,22 +1544,22 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             ulRet = m_sExternalFunTable.pf_PAX_Reset(ulMotorNo);
             break;
         }
-    case MOTOR_SETCMD_SV_PARM:                        //电机复位
+    case MOTOR_SETCMD_SV_PARM:                      //电机复位
         {
             ulRet = m_sExternalFunTable.pf_PAX_SendSvParm(ulMotorNo, pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_AXIS_POS_MOTION:  //设置轴位置模式运动 
+    case MOTOR_SETCMD_AXIS_POS_MOTION:              //设置轴位置模式运动 
         {
             ulRet = m_sExternalFunTable.pf_CSM_SetAxisPosCtrlMotion(ulCrdIndex, ulAxisMask, (POSCTRL_MOTION_DATA*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_AXIS_SPEED_MOTION:
+    case MOTOR_SETCMD_AXIS_SPEED_MOTION:            //设置轴速度模式运动
         {
             ulRet = m_sExternalFunTable.pf_CSM_SetAxisSpeedCtrlMotion(ulCrdIndex, ulAxisMask, (SPEEDCTRL_MOTION_DATA*)pRcvCtrlData->pRevBuf);
             break;
         }
-    case MOTOR_SETCMD_AXIS_HOME:
+    case MOTOR_SETCMD_AXIS_HOME:                    //设置轴回零
         {
             ulRet = m_sExternalFunTable.pf_LAX_Home(ulCrdIndex, ulAxisIndex, *(Bit32*)pRcvCtrlData->pRevBuf, 0);
 #ifndef WIN32_VER
@@ -1524,7 +1588,7 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             break;
         }
     case MOTOR_SETCMD_AXIS_CMD_POS:    
-        {//指令位置不下发，所以不等待
+        {//指令位置不下发,所以不等待
             ulRet = m_sExternalFunTable.pf_LAX_SetCmdPos(ulCrdIndex, ulAxisIndex, *(Bit32*)pRcvCtrlData->pRevBuf, 0);
             break;
         }
@@ -1566,6 +1630,33 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 #endif
             break;
         }
+        
+    case MOTOR_SETCMD_BASE_CTRL_PARM:   //基本控制参数设置 2017.12.11 duhanfeng
+        {
+            ulRet = Motor_SetAxisBaseCtrlPram(ulMotorNo, pRcvCtrlData);
+            break;
+        }
+        
+    case MOTOR_SETCMD_POS_MOTION_EX:    //设置位置控制运动数据(扩展)
+        {
+            POSCTRL_MOTION_DATA PosMotionData = {0};
+            PosMotionData.dPos = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
+            PosMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / 10000.0;
+            
+            ulRet = m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion(ulMotorNo, &PosMotionData);
+            break;
+        }
+    case MOTOR_SETCMD_SPEED_MOTION_EX:  //设置速度控制运动数据(扩展)
+        {
+            SPEEDCTRL_MOTION_DATA SpeedMotionData = {0};
+            SpeedMotionData.dAcc   = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
+            SpeedMotionData.dDec   = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / 10000.0;
+            SpeedMotionData.dJerk  = (*(long int *)(&pRcvCtrlData->pRevBuf[8])) / 10000.0;
+            SpeedMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[12]))/ 10000.0;
+            ulRet = m_sExternalFunTable.pf_CSM_SetMotorSpeedCtrlMotion(ulMotorNo, &SpeedMotionData);
+            break;
+        }
+        
     default:break;
     }
 
@@ -1573,25 +1664,25 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
 
- /*
-函数名称：uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+/*
+函数名称:uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：电机或轴常规获取指令处理线程，如果获取成功则配置回包，指令包括
-                #define MOTOR_GETCMD_CTRL_PARM                        (1)//电机所有控制参数
+功    能:电机或轴常规获取指令处理线程,如果获取成功则配置回包,指令包括
+                #define MOTOR_GETCMD_CTRL_PARM                      (1)//电机所有控制参数
                 #define MOTOR_GETCMD_SIGNAL_PARM                    (2)//信号量控制参数
-                #define MOTOR_GETCMD_SAFE_PARM                        (3)//安全控制参数
-                #define MOTOR_GETCMD_HOME_PARM                        (4)//回零控制参数
-                #define MOTOR_GETCMD_SCALE_PARM                    (5)//比例控制参数
-                #define MOTOR_GETCMD_MOVE_PARM                        (6)//运动控制参数
-                #define MOTOR_GETCMD_BACKLASH_CMP_PARM        (7)//反向间隙补偿
-                #define MOTOR_GETCMD_PITCH_CMP_PARM                (8)//螺距补偿参数
-                #define MOTOR_GETCMD_SV_PARM                            (9)//获取伺服参数
-参    数：pRcvCtrlData--接收控制数据区
+                #define MOTOR_GETCMD_SAFE_PARM                      (3)//安全控制参数
+                #define MOTOR_GETCMD_HOME_PARM                      (4)//回零控制参数
+                #define MOTOR_GETCMD_SCALE_PARM                     (5)//比例控制参数
+                #define MOTOR_GETCMD_MOVE_PARM                      (6)//运动控制参数
+                #define MOTOR_GETCMD_BACKLASH_CMP_PARM              (7)//反向间隙补偿
+                #define MOTOR_GETCMD_PITCH_CMP_PARM                 (8)//螺距补偿参数
+                #define MOTOR_GETCMD_SV_PARM                        (9)//获取伺服参数
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：电机指令处理线程调用
-*/ 
+注意事项:电机指令处理线程调用
+*/
 uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
     uBit32  ulRet = CMU_ERR_INVALID_CMD;
@@ -1625,25 +1716,25 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     ulRet = CMU_ERR_SUCCESS;
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
-    case MOTOR_GETCMD_CTRL_PARM:                    //电机所有控制参数
+    case MOTOR_GETCMD_CTRL_PARM:                        //电机所有控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)pAxisParm, sizeof(AXIS_PARM));
             break;
-    case MOTOR_GETCMD_SIGNAL_PARM:                    //信号量控制参数
+    case MOTOR_GETCMD_SIGNAL_PARM:                      //信号量控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisSignalConfig, sizeof(AXIS_SIGNAL_CONFIG));
             break;
-    case MOTOR_GETCMD_SAFE_PARM:                    //安全控制参数
+    case MOTOR_GETCMD_SAFE_PARM:                        //安全控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisSafeParm, sizeof(AXIS_SAFE_PARM));
             break;
-    case MOTOR_GETCMD_HOME_PARM:                    //回零控制参数
+    case MOTOR_GETCMD_HOME_PARM:                        //回零控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisHomeParm, sizeof(AXIS_HOME_PARM));
             break;
-    case MOTOR_GETCMD_SCALE_PARM:                    //比例控制参数
+    case MOTOR_GETCMD_SCALE_PARM:                       //比例控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisScaleParm, sizeof(AXIS_SCALE_PARM));
             break;
-    case MOTOR_GETCMD_MOVE_PARM:                    //运动控制参数
+    case MOTOR_GETCMD_MOVE_PARM:                        //运动控制参数
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisMoveParm, sizeof(AXIS_MOVE_PARM));
             break;
-    case MOTOR_GETCMD_BACKLASH_CMP_PARM:        //反向间隙补偿
+    case MOTOR_GETCMD_BACKLASH_CMP_PARM:                //反向间隙补偿
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisCmpParm, sizeof(AXIS_BACK_LASH_CMP_PARM));
             break;
     default: ulRet = CMU_ERR_INVALID_CMD;
@@ -1653,19 +1744,19 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Motor_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Motor_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：电机或轴指令处理线程，如果设置指令执行完成并成功则回包，指令类型包括
-            #define SETCMD_TYPE_NOMAL    (0)                        //常规设置指令
-            #define SETCMD_TYPE_INQ        (1)                        //周期查询设置指令
-            #define GETCMD_TYPE_NOMAL    (0)                        //常规获取指令
-            #define GETCMD_TYPE_INQ        (1)                        //周期新数据获取指令
+功    能:电机或轴指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
+            #define SETCMD_TYPE_NOMAL       (0)         //常规设置指令
+            #define SETCMD_TYPE_INQ         (1)         //周期查询设置指令
+            #define GETCMD_TYPE_NOMAL       (0)         //常规获取指令
+            #define GETCMD_TYPE_INQ         (1)         //周期新数据获取指令
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 Motor_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1707,18 +1798,18 @@ uBit32 Motor_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：IO常规设置指令处理线程，处理的指令包括
-        #define IO_SETCMD_STATE                        (1)//设置IO板输出状态
-        #define IO_SETCMD_PWM_ENABLE                (2)//设置IO板PWM功能
-        #define IO_SETCMD_PWM_DUTY_RATIO            (3)//设置IO板IO口PWM占空比
-        #define IO_SETCMD_PWM_FRQ                    (4)//设置IO板IO口PWM频率
-参    数：pRcvCtrlData--接收控制数据区
+功    能:IO常规设置指令处理线程,处理的指令包括
+        #define IO_SETCMD_STATE                 (1)//设置IO板输出状态
+        #define IO_SETCMD_PWM_ENABLE            (2)//设置IO板PWM功能
+        #define IO_SETCMD_PWM_DUTY_RATIO        (3)//设置IO板IO口PWM占空比
+        #define IO_SETCMD_PWM_FRQ               (4)//设置IO板IO口PWM频率
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：
+注意事项:
 */ 
 uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1740,17 +1831,17 @@ uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             ulRet = m_sExternalFunTable.pf_IO_SetOutputStatus(ulIoNo, ulData, ulBitMask);
             break;
         }
-    case IO_SETCMD_PWM_ENABLE:                //设置IO板PWM功能，ulBitMask为IO引脚编号
+    case IO_SETCMD_PWM_ENABLE:                //设置IO板PWM功能,ulBitMask为IO引脚编号
         {
             ulRet = m_sExternalFunTable.pf_IO_SetOutPutPWMMode(ulIoNo, ulBitMask, ulData);
             break;
         }
-    case IO_SETCMD_PWM_DUTY_RATIO:            //设置IO板IO口PWM占空比，ulBitMask为IO引脚编号
+    case IO_SETCMD_PWM_DUTY_RATIO:            //设置IO板IO口PWM占空比,ulBitMask为IO引脚编号
         {
             ulRet = m_sExternalFunTable.pf_IO_SetOutPutPWMDuty(ulIoNo, ulBitMask, ulData);
             break;
         }
-    case IO_SETCMD_PWM_FRQ:            //设置IO板IO口PWM频率，ulBitMask为IO引脚编号
+    case IO_SETCMD_PWM_FRQ:            //设置IO板IO口PWM频率,ulBitMask为IO引脚编号
         {
             ulRet = m_sExternalFunTable.pf_IO_SetOutPutPWMFreq(ulIoNo, ulBitMask, ulData);
             break;
@@ -1781,16 +1872,16 @@ uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
+函数名称:uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 
-功    能：IO常规获取指令处理线程，如果获取成功则配置回包，指令包括
-                #define IO_GETCMD_HSPD_OUT_STATUS        (1)//获取高速IO输出口状态
-                #define IO_GETCMD_HSPD_IN_STATUS        (2)//获取高速IO输入口状态
-参    数：pRcvCtrlData--接收控制数据区
+功    能:IO常规获取指令处理线程,如果获取成功则配置回包,指令包括
+                #define IO_GETCMD_HSPD_OUT_STATUS   (1)//获取高速IO输出口状态
+                #define IO_GETCMD_HSPD_IN_STATUS    (2)//获取高速IO输入口状态
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：IO指令处理线程调用
+注意事项:IO指令处理线程调用
 */ 
 uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1847,19 +1938,19 @@ uBit32 Io_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：IO指令处理线程，如果设置指令执行完成并成功则回包，指令类型包括
-            #define SETCMD_TYPE_NOMAL    (0)                        //常规设置指令
-            #define SETCMD_TYPE_INQ        (1)                        //周期查询设置指令
-            #define GETCMD_TYPE_NOMAL    (0)                        //常规获取指令
-            #define GETCMD_TYPE_INQ        (1)                        //周期新数据获取指令
+功    能:IO指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
+            #define SETCMD_TYPE_NOMAL       (0)         //常规设置指令
+            #define SETCMD_TYPE_INQ         (1)         //周期查询设置指令
+            #define GETCMD_TYPE_NOMAL       (0)         //常规获取指令
+            #define GETCMD_TYPE_INQ         (1)         //周期新数据获取指令
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1902,16 +1993,16 @@ uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Adda_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Adda_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：ADDA常规设置指令处理线程，处理的指令包括
-            #define ADDA_SETCMD_DATA                (1)//设置DA板输出
-            #define ADDA_SETCMD_HDATA                (2)//设置高速DA输出
-参    数：pRcvCtrlData--接收控制数据区
+功    能:ADDA常规设置指令处理线程,处理的指令包括
+            #define ADDA_SETCMD_DATA     (1)            //设置DA板输出
+            #define ADDA_SETCMD_HDATA    (2)            //设置高速DA输出
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：ADDA指令处理线程调用
+注意事项:ADDA指令处理线程调用
 */ 
 uBit32 Adda_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1943,16 +2034,16 @@ uBit32 Adda_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：ADDA常规获取指令处理线程，如果获取成功则配置回包，指令包括
+功    能:ADDA常规获取指令处理线程,如果获取成功则配置回包,指令包括
             #define ADDA_GETCMD_HDATA                (1)//获取高速DA输出值
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：ADDA指令处理线程调用
+注意事项:ADDA指令处理线程调用
 */ 
 uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -1969,7 +2060,7 @@ uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         {
             ulRet = m_sExternalFunTable.pf_MDAC_GetHSpdDaData(pRcvCtrlData->ulRevID.ulADDADataID.ulChMask, (uBit32*)pSendBuf);
             
-            if (ulRet==0)
+            if (ulRet == 0)
             {
                 CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
             }else
@@ -1987,19 +2078,19 @@ uBit32 Adda_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称：uBit32 Adda_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Adda_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
-功    能：ADDA指令处理线程，如果设置指令执行完成并成功则回包，指令类型包括
-            #define SETCMD_TYPE_NOMAL    (0)                        //常规设置指令
-            #define SETCMD_TYPE_INQ        (1)                        //周期查询设置指令
-            #define GETCMD_TYPE_NOMAL    (0)                        //常规获取指令
-            #define GETCMD_TYPE_INQ        (1)                        //周期新数据获取指令
+功    能:ADDA指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
+            #define SETCMD_TYPE_NOMAL       (0)         //常规设置指令
+            #define SETCMD_TYPE_INQ         (1)         //周期查询设置指令
+            #define GETCMD_TYPE_NOMAL       (0)         //常规获取指令
+            #define GETCMD_TYPE_INQ         (1)         //周期新数据获取指令
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 Adda_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
@@ -2009,7 +2100,7 @@ uBit32 Adda_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     {
         switch(pRcvCtrlData->ulRevID.ulADDADataID.ulCmdType)
         {
-        case SETCMD_TYPE_NOMAL://常规设置指令，ulChMask表示DA通道编号
+        case SETCMD_TYPE_NOMAL://常规设置指令,ulChMask表示DA通道编号
             {
                 ulRet = Adda_NomalSetCmdProcess(pRcvCtrlData);
                 break;
@@ -2098,16 +2189,16 @@ uBit32 Servo_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
  /*
-函数名称：uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
+函数名称:uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 
-功    能：数据块处理线程，如果设置指令处理完成并成功则发生成功回包，如果获取指令成功则配置回包，
+功    能:数据块处理线程,如果设置指令处理完成并成功则发生成功回包,如果获取指令成功则配置回包,
           处理发送错误由上层处理报错
 
-参    数：pRcvCtrlData--接收控制数据区
+参    数:pRcvCtrlData--接收控制数据区
 
-返 回 值：0--成功
+返 回 值:0--成功
           非0--错误码
-注意事项：数据块接收完成后调用
+注意事项:数据块接收完成后调用
 */ 
 uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {

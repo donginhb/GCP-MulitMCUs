@@ -38,6 +38,8 @@ void VM_Init(void)
     VM_SetConfig();
 #endif
     
+    VM_MoveLiftMotor(0, 1000, 0);
+    
 }
 
 

@@ -66,6 +66,7 @@ uBit32 RTC_SetCurClock(uBit32 ulSec, uBit8 uGmtIndex)
     m_ulBaseClock = ulSec + ulBaseCloseIndex;       //获取当前时间(从1970到现在的秒数)
     m_ulBaseSysClock = SysTime_GetTickCount();      //获取滴答时间
     
+    return 0;
 }
 
 

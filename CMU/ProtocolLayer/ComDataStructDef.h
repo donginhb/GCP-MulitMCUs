@@ -43,10 +43,10 @@ typedef struct _hk_com_id{
     //ADDA常规设置指令列表
     //ADDA周期查询设置指令列表
 
-    uBit32 ulDevNo:                 8;//Bit11-Bit18 //设备编号(包括电机编号、IO板编号)、轴号、轴屏蔽字
-    uBit32 ulCrdNo:                 4;//Bit19-Bit22 //坐标系编号、屏蔽字
+    uBit32 ulDevNo:                 8;//Bit11-Bit18 设备编号(包括电机编号、IO板编号)、轴号、轴屏蔽字
+    uBit32 ulCrdNo:                 4;//Bit19-Bit22 坐标系编号、屏蔽字
 
-    uBit32 ulTransmitFrame:         2;    //Bit23-bit24 数据传输帧类别    
+    uBit32 ulTransmitFrame:         2;//Bit23-bit24 数据传输帧类别    
     //TRANSMIT_FIRST_FRAME  该文件开始传送（第一帧）
     //TRANSMIT_BEING_FRAME  该文件传送中
     //TRANSMIT_SELF_FRAME   独立发送帧
@@ -237,18 +237,24 @@ typedef union _COM_DATA_ID{
 #define MOTOR_SETCMD_CMD_POS                (8)     //设置电机当前位置
 #define MOTOR_SETCMD_QEI_POS                (9)     //设置电机编码器当前位置
 #define MOTOR_SETCMD_ENABLE                 (10)    //设置伺服使能0-断使能1-加使能
-#define MOTOR_SETCMD_CTRL_PARM_EX           (11)    //设置电机控制参数单项数据
+#define MOTOR_SETCMD_CTRL_PARM_EX           (11)    //设置电机控制参数单项数据()
 #define MOTOR_SETCMD_RESET                  (12)    //电机复位
 #define MOTOR_SETCMD_SV_PARM                (13)    //设置伺服参数
 
-#define MOTOR_SETCMD_AXIS_POS_MOTION        (20)
-#define MOTOR_SETCMD_AXIS_SPEED_MOTION      (21)
-#define MOTOR_SETCMD_AXIS_HOME              (22)
-#define MOTOR_SETCMD_AXIS_STOP              (23)
-#define MOTOR_SETCMD_AXIS_ESTOP             (24)
-#define MOTOR_SETCMD_AXIS_CMD_POS           (25)
-#define MOTOR_SETCMD_AXIS_QEI_POS           (26)
-#define MOTOR_SETCMD_AXIS_ENABLE            (27)
+#define MOTOR_SETCMD_AXIS_POS_MOTION        (20)    //设置轴位置模式运动
+#define MOTOR_SETCMD_AXIS_SPEED_MOTION      (21)    //设置轴速度模式运动
+#define MOTOR_SETCMD_AXIS_HOME              (22)    //设置轴回零
+#define MOTOR_SETCMD_AXIS_STOP              (23)    //设置轴停止
+#define MOTOR_SETCMD_AXIS_ESTOP             (24)    //设置轴急停
+#define MOTOR_SETCMD_AXIS_CMD_POS           (25)    //设置轴指令位置
+#define MOTOR_SETCMD_AXIS_QEI_POS           (26)    //设置轴编码器位置
+#define MOTOR_SETCMD_AXIS_ENABLE            (27)    //设置轴使能
+
+//常规电机运动控制参数设置 2017.12.11 新增 --- 杜寒枫
+//考虑到安卓端调用C结构不便,扩展相关接口,以兼容其他平台
+#define MOTOR_SETCMD_BASE_CTRL_PARM         (30)    //设置基本控制参数(暴露给上位机的接口)
+#define MOTOR_SETCMD_POS_MOTION_EX          (31)    //设置位置控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
+#define MOTOR_SETCMD_SPEED_MOTION_EX        (32)    //设置速度控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
 
 //轴(电机)常规获取指令
 #define MOTOR_GETCMD_CTRL_PARM              (1)     //电机所有控制参数
@@ -260,6 +266,7 @@ typedef union _COM_DATA_ID{
 #define MOTOR_GETCMD_BACKLASH_CMP_PARM      (7)     //反向间隙补偿
 #define MOTOR_GETCMD_PITCH_CMP_PARM         (8)     //螺距补偿参数
 #define MOTOR_GETCMD_SV_PARM                (9)     //获取伺服参数
+
 
 /**************************************************************************/
 
@@ -280,7 +287,7 @@ typedef union _COM_DATA_ID{
 
 //以编号的方式对IO进行控制 2017.12.01 新增 -- 杜寒枫
 #define IO_GETCMD_HSPD_OUT_IONO             (3)     //获取输出IO状态(编号方式控制)
-#define IO_GETCMD_HSPD_IN_IONO              (4)     //获取输出IO状态(编号方式控制)
+#define IO_GETCMD_HSPD_IN_IONO              (4)     //获取输入IO状态(编号方式控制)
 
 /******************************************************************************/
 
@@ -302,15 +309,14 @@ typedef union _COM_DATA_ID{
 
 /******************************************************************************/
 
-
 #define SCR_RECEIVE                         (0)     //人机界面接收帧
 #define SLC_RECEIVE                         (1)     //主控接收帧
 
 //数据传输帧类别------------------------------------------------
-#define TRANSMIT_FIRST_FRAME                (00)    //该文件开始传送（第一帧）
-#define TRANSMIT_BEING_FRAME                (01)    //该文件传送中
-#define TRANSMIT_SELF_FRAME                 (02)    //独立发送帧
-#define TRANSMIT_VERIFY_FRAME               (03)    //校验帧
+#define TRANSMIT_FIRST_FRAME                (0)     //该文件开始传送（第一帧）
+#define TRANSMIT_BEING_FRAME                (1)     //该文件传送中
+#define TRANSMIT_SELF_FRAME                 (2)     //独立发送帧
+#define TRANSMIT_VERIFY_FRAME               (3)     //校验帧
 
 
 #define BLOCK_INDEX_MAX                     (2)     //数据块传送支持的最大数据包索引序号
@@ -318,6 +324,9 @@ typedef union _COM_DATA_ID{
 //周期性数据标志(下位机控制，获取数据时有效)----------------------------------  
 #define NOMAL_DATA_FLAGS                    (0)     //表示是查询数据
 #define PERIOD_DATA_FLAGS                   (1)     //表示是周期数据，下位机主动发送
+
+
+
 /***********************************************ID格式定义结束**************************************************/
 
 //主机发送控制数据(必须等到全部数据发送完成才返回)
@@ -379,12 +388,12 @@ typedef union _COM_NOMAL_DATA
 {
     Bit8     cBuf8[COM_NOMAL_DATA_SIZE];
     uBit8    ucBuf8[COM_NOMAL_DATA_SIZE];
-    Bit16    Buf16[COM_NOMAL_DATA_SIZE / 2];        
-    uBit16   uBuf16[COM_NOMAL_DATA_SIZE / 2];        
-    Bit32    iBuf32[COM_NOMAL_DATA_SIZE / 4];        
-    uBit32   uBuf32[COM_NOMAL_DATA_SIZE / 4];        
-    float32  dBuf32[COM_NOMAL_DATA_SIZE / 4];        
-    double64 dBuf64[COM_NOMAL_DATA_SIZE / 8];        
+    Bit16    Buf16[COM_NOMAL_DATA_SIZE / 2]; 
+    uBit16   uBuf16[COM_NOMAL_DATA_SIZE / 2];
+    Bit32    iBuf32[COM_NOMAL_DATA_SIZE / 4];
+    uBit32   uBuf32[COM_NOMAL_DATA_SIZE / 4];
+    float32  dBuf32[COM_NOMAL_DATA_SIZE / 4];
+    double64 dBuf64[COM_NOMAL_DATA_SIZE / 8];
 }COM_NOMAL_DATA;
 
 
