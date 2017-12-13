@@ -53,6 +53,8 @@ void VM_MainProc(void)
     //LED显示
     VM_MainWorkLedShow();
     
+    VM_MotorLimitDetectHandler();
+    
     //升降电机测试
 #if SYS_USING_CNC
     VM_MoveLiftMotorTest();

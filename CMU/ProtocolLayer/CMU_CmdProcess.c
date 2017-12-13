@@ -2188,6 +2188,94 @@ uBit32 Servo_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
   return CMU_ERR_SUCCESS;
 }
 
+
+
+ /*
+函数名称:uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+
+功    能:IO常规设置指令处理线程,处理的指令包括
+        #define IO_SETCMD_STATE                 (1)//设置IO板输出状态
+        #define IO_SETCMD_PWM_ENABLE            (2)//设置IO板PWM功能
+        #define IO_SETCMD_PWM_DUTY_RATIO        (3)//设置IO板IO口PWM占空比
+        #define IO_SETCMD_PWM_FRQ               (4)//设置IO板IO口PWM频率
+参    数:pRcvCtrlData--接收控制数据区
+
+返 回 值:0--成功
+          非0--错误码
+注意事项:
+*/ 
+uBit32 Vm_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+{
+    uBit32 ulRow = 0;
+    uBit32 ulCol = 0;
+    uBit32 ulRet = CMU_ERR_INVALID_CMD;
+
+    memcpy(&ulRow, pRcvCtrlData->pRevBuf, sizeof(uBit32));
+    memcpy(&ulCol, pRcvCtrlData->pRevBuf+sizeof(uBit32),sizeof(uBit32));
+    
+    switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
+    {
+    case VM_SETCMD_AISLE_MOTOR:                //设置IO板PWM功能,ulBitMask为IO引脚编号
+        {
+            ulRet = m_sExternalFunTable.pf_VM_EnabletAisleMotor(ulRow, ulCol);
+            break;
+        }
+    default:break;
+    }
+
+    return ulRet;
+}
+
+
+ /*
+函数名称:uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+
+功    能:IO指令处理线程,如果设置指令执行完成并成功则回包,指令类型包括
+            #define SETCMD_TYPE_NOMAL       (0)         //常规设置指令
+            #define SETCMD_TYPE_INQ         (1)         //周期查询设置指令
+            #define GETCMD_TYPE_NOMAL       (0)         //常规获取指令
+            #define GETCMD_TYPE_INQ         (1)         //周期新数据获取指令
+
+参    数:pRcvCtrlData--接收控制数据区
+
+返 回 值:0--成功
+          非0--错误码
+注意事项:数据块接收完成后调用
+*/ 
+uBit32 Vm_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+{
+    uBit32 ulRet = CMU_ERR_INVALID_CMD;
+
+    if (pRcvCtrlData->ulRevID.ulComDataID.ulOperType==DATA_OPRE_TYPE_SET)//设置数据
+    {
+        switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdType)
+        {
+        case SETCMD_TYPE_NOMAL:    //常规设置指令
+            ulRet = Vm_NomalSetCmdProcess(pRcvCtrlData);
+            break;
+        default:break;
+        }
+
+        if (ulRet==CMU_ERR_SUCCESS)//
+        {
+            if(pRcvCtrlData->ulWaitResultCode==0) //无需等待处理结果
+                CMU_SendResponsePack(pRcvCtrlData->ulRevID.ulFrameID, CMU_ERR_SUCCESS);
+        }
+    }else//获取数据
+    {
+        switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdType)
+        {
+        case GETCMD_TYPE_NOMAL://获取常规数据
+            //ulRet = Io_NomalGetCmdProcess(pRcvCtrlData);
+            break;
+        default:break;
+        }
+    }
+
+    return ulRet;
+}
+
+
  /*
 函数名称:uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
 
@@ -2241,6 +2329,9 @@ uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         break;
     case DATA_TYPE_SERVO:
         ulRet = Servo_CmdProcess(pRcvCtrlData);
+        break;
+    case DATA_TYPE_CUSTOM:      //2017.12.13 duhanfeng  水果机接口 新增
+        ulRet = Vm_CmdProcess(pRcvCtrlData);
         break;
     default: break;
     }

@@ -31,29 +31,28 @@ void VM_HwInit(void);
 void VM_MainWorkLedShow(void);
 
 
+
 /*****************************************************************************
- * 按键处理线程接口
+ * 货道限位IO检测线程接口
  ****************************************************************************/
+     
+/**
+  * @brief  VM 启动货道电机
+  * @param  ulRow 行信号 [0-9]
+  * @param  ulCol 列信号 [0-9]
+  * @retval 0-成功 非0-失败
+  */
+uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol);
+     
 
 /**
-  * @brief  按键处理
+  * @brief  VM限位信号检测
   * @param  None
   * @retval None
   */
-void VM_KeyProc(void);
+void VM_MotorLimitDetectHandler(void);
 
 
-
-/*****************************************************************************
- * 传感器数据处理线程接口
- ****************************************************************************/
-
-/**
-  * @brief  按键处理
-  * @param  None
-  * @retval None
-  */
-void VM_SensorSampleProc(void);
 
 
 #ifdef __cplusplus

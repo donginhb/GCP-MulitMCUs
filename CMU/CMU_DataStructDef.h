@@ -290,6 +290,16 @@ typedef struct _cmu_external_fun_table
     //--------------------------------------------错误管理模块-----------------------------------------------
     //错误管理模块接口
     uBit32 (*pf_ECM_GetErrorCode)(uBit32 *pulErrorCode);
+    
+    
+    //--------------------------------------------自动售货机相关控制接口-----------------------------------------------
+    
+    uBit32 (*pf_VM_EnabletAisleMotor)(uBit32 ulRow, uBit32 ulCol);    //货道电机启动
+    
+    
+    
+    
+    
 }CMU_EXTERNAL_FUN_TEBLE;
 
 typedef struct _ipr_out_api

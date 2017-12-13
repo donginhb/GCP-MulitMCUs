@@ -51,6 +51,8 @@
 #if SYS_USING_CMU
 static uBit8 m_CmuBuff[SYS_CMU_BUFF_SIZE] = {0};    //CMU缓冲区定义
 
+extern uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol);;
+
 //CMU 通信缓冲区初始化
 static uBit32 SYS_InitCmuBuff(void)
 {
@@ -241,6 +243,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     //--------------------------------------------错误管理模块------------------------------------------------
     
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
+    
+    CMUFunTable.pf_VM_EnabletAisleMotor = VM_EnableAisleMotor;
     
 #endif
     

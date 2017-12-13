@@ -115,6 +115,7 @@ typedef union _COM_DATA_ID{
 #define DATA_TYPE_SERVO                     (5)     //伺服数据
 #define DATA_TYPE_REG                       (6)     //寄存器数据
 #define DATA_TYPE_CUSTOM                    (7)     //自定义指令       // AutoSale
+#define DATA_TYPE_VM                        (8)     //自动售货机指令接口
 
 //ulCmdType:Bit4 指令类型---------------------------------------------        
 #define SETCMD_TYPE_NOMAL                   (0)     //常规设置指令
@@ -304,6 +305,12 @@ typedef union _COM_DATA_ID{
 #define REG_SETCMD_DATA                     (1)     //设置寄存器数据
 //常规获取指令
 #define REG_GETCMD_DATA                     (1)     //获取寄存器数据
+
+/**************************水果机操作指令序号*******************************/
+//常规设置指令
+#define VM_SETCMD_AISLE_MOTOR               (1)     //设置货道电机出货
+
+
 /******************************************************************************/
 
 

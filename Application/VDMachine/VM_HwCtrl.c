@@ -176,41 +176,84 @@ void VM_MainWorkLedShow(void)
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
         
-#if 0
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT1);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT2);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT3);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT4);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT5);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT6);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT7);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT8);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT9);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_ROW_OUTPUT10);
-        
-        
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT11);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT12);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT13);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT14);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT15);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT16);
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT17);   //P1.22
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT18);   //P1.21
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT19);   //P1.19
-        GPIO_ToggleOutputState(OUTPUT_IO_MOTRO_COL_OUTPUT20);   //P1.18
-        
-        
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT21);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT22);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT23);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT24);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT25);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT26);
-        GPIO_ToggleOutputState(OUTPUT_IO_OUTPUT27);
-#endif
     }
 
 }
 
+
+/*****************************************************************************
+ * 货道限位IO检测线程接口
+ ****************************************************************************/
+
+#define VM_AISLE_MOTOR_DELAY_TIME          (100)       //LED翻转时间(MS)
+static SYS_TIME_DATA m_AisleCtrlTimer  = {0};     //LED控定时器
+
+static uBit32 m_vm_ulCurRow = 0xFF; //当前行
+static uBit32 m_vm_ulCurCol = 0xFF; //当前列
+
+static bool m_vm_bInLimitPosFlag = false;   //处于限位的状态
+
+     
+     
+/**
+  * @brief  VM 启动货道电机
+  * @param  ulRow 行信号 [0-9]
+  * @param  ulCol 列信号 [0-9]
+  * @retval 0-成功 非0-失败
+  */
+uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
+{
+    if ((ulRow >= 10) || (ulCol >= 10))
+    {
+        return 1;
+    }
+    
+    m_vm_ulCurRow = ulRow;
+    m_vm_ulCurCol = ulCol;
+    
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + m_vm_ulCurRow, 1);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + m_vm_ulCurCol, 1);
+    
+    SysTime_Start(&m_AisleCtrlTimer, VM_AISLE_MOTOR_DELAY_TIME);
+    
+    return 0;
+}
+     
+
+/**
+  * @brief  VM限位信号检测
+  * @param  None
+  * @retval None
+  */
+void VM_MotorLimitDetectHandler(void)
+{
+    if (SysTime_CheckExpiredState(&m_AisleCtrlTimer))
+    {
+        if ((m_vm_ulCurRow != 0xFF) && (m_vm_ulCurCol != 0xFF))
+        {
+            //假如当前在限位信号上,则等待转过限位信号
+            if (m_vm_bInLimitPosFlag == false)
+            {
+                if (GPIO_MAN_GetInputPinState(INPUT_IO_MOTRO_INDEX_INPUT1 + m_vm_ulCurRow) == 0)
+                {
+                    m_vm_bInLimitPosFlag = true;
+                }
+            }
+            if (m_vm_bInLimitPosFlag == true) 
+            {
+                if (GPIO_MAN_GetInputPinState(INPUT_IO_MOTRO_INDEX_INPUT1 + m_vm_ulCurRow) == 1)
+                {
+                    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + m_vm_ulCurRow, 0);
+                    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + m_vm_ulCurCol, 0);
+                    
+                    m_vm_ulCurRow = 0xFF;
+                    m_vm_ulCurCol = 0xFF;
+                    m_vm_bInLimitPosFlag = false;
+                }
+            }
+        }
+    }
+    
+}
 
