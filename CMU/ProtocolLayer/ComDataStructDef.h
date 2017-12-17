@@ -114,8 +114,8 @@ typedef union _COM_DATA_ID{
 #define DATA_TYPE_ADDA                      (4)     //ADDA数据
 #define DATA_TYPE_SERVO                     (5)     //伺服数据
 #define DATA_TYPE_REG                       (6)     //寄存器数据
-#define DATA_TYPE_CUSTOM                    (7)     //自定义指令       // AutoSale
-#define DATA_TYPE_VM                        (8)     //自动售货机指令接口
+#define DATA_TYPE_CUSTOM                    (7)     //自定义指令
+
 
 //ulCmdType:Bit4 指令类型---------------------------------------------        
 #define SETCMD_TYPE_NOMAL                   (0)     //常规设置指令
@@ -256,6 +256,7 @@ typedef union _COM_DATA_ID{
 #define MOTOR_SETCMD_BASE_CTRL_PARM         (30)    //设置基本控制参数(暴露给上位机的接口)
 #define MOTOR_SETCMD_POS_MOTION_EX          (31)    //设置位置控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
 #define MOTOR_SETCMD_SPEED_MOTION_EX        (32)    //设置速度控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
+#define MOTOR_SETCMD_PULSE_RATE             (33)    //设置脉冲当量
 
 //轴(电机)常规获取指令
 #define MOTOR_GETCMD_CTRL_PARM              (1)     //电机所有控制参数
@@ -267,6 +268,11 @@ typedef union _COM_DATA_ID{
 #define MOTOR_GETCMD_BACKLASH_CMP_PARM      (7)     //反向间隙补偿
 #define MOTOR_GETCMD_PITCH_CMP_PARM         (8)     //螺距补偿参数
 #define MOTOR_GETCMD_SV_PARM                (9)     //获取伺服参数
+
+//轴(电机)常规获取指令 2017.12.16 新增 --- 杜寒枫
+#define MOTOR_GETCMD_RUNNING_STATUS         (20)    //获取电机运行状态
+#define MOTOR_GETCMD_CMD_POS                (21)    //获取指令位置(放大因子:10000)
+
 
 
 /**************************************************************************/
@@ -310,6 +316,8 @@ typedef union _COM_DATA_ID{
 //常规设置指令
 #define VM_SETCMD_AISLE_MOTOR               (1)     //设置货道电机出货
 
+//常规查询指令
+#define VM_GETCMD_AISLE_MOTOR_STATUS        (1)     //查询货道电机运行状态
 
 /******************************************************************************/
 

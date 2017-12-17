@@ -219,7 +219,7 @@ typedef struct _SegmentMotionData {
 //位置控制运动模式数据结构体
 typedef    struct _PosCtrlMotionData {
     double64    dPos;                           //目标位置, 单位:用户计数单位
-    float32     dSpeed;                         //目标速度,  单位:用户计数单位/ms,取值大于0
+    float32     dSpeed;                         //目标速度, 单位:用户计数单位/ms,取值大于0
 }POSCTRL_MOTION_DATA;       
 
 

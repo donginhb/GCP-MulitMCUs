@@ -113,7 +113,7 @@ uBit32 CMU_AddInqRecord(COM_DATA_ID ulID, uBit32 ulCycle)
 uBit32 INQ_SendSysPeriodDataProc(COM_DATA_ID ulID)
 {
     uBit32 ulRet;
-    const SYS_STATE_DATA *pSysStateData;
+    const CNSYS_STATE_DATA *pSysStateData;
 
     //获取系统状态数据时都使用本地发送缓冲区
     CMU_ResetSendCtrlData(ulID.ulFrameID, NULL, 0);
@@ -123,7 +123,7 @@ uBit32 INQ_SendSysPeriodDataProc(COM_DATA_ID ulID)
     switch(ulID.ulComDataID.ulCmdIndex)
     {
         case SYS_CMD_INQ_ALL_STATE://系统全部状态
-                ulRet = CMU_AddToSendCtrlData((uBit8*)pSysStateData, sizeof(SYS_STATE_DATA));
+                ulRet = CMU_AddToSendCtrlData((uBit8*)pSysStateData, sizeof(CNSYS_STATE_DATA));
                 break;
         case SYS_CMD_INQ_CTRL_STATUS://系统控制字
                 ulRet = CMU_AddToSendCtrlData((uBit8*)&pSysStateData->ulSysCtrlStatus,sizeof(pSysStateData->ulSysCtrlStatus));

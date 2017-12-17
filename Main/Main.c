@@ -42,6 +42,10 @@ int main(void)
     
     while(1)
     {
+        //系统内部管理
+        SYS_MainTaskHandler();
+        
+        //业务逻辑管理
 #if !defined(BOOTLOADER)
 #if defined(LPC17XX)
         VM_MainProc();
@@ -50,9 +54,8 @@ int main(void)
 #elif defined(STM32F10X)
         WFC_MainProc();
 #endif
-#endif 
+#endif
         
-        SYS_MainTaskHandler();
     }
     
 } 

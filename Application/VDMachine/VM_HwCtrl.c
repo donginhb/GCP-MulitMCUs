@@ -17,6 +17,8 @@
    
 /***********************************<INCLUDES>**********************************/
 #include "VM_HwCtrl.h"
+#include "VM_StateMan.h"
+#include "VM_ErrorDef.h"
 #include "VM_HardwareDef.h"
       
 #include "DataType/DataType.h"
@@ -185,50 +187,96 @@ void VM_MainWorkLedShow(void)
  * 货道限位IO检测线程接口
  ****************************************************************************/
 
-#define VM_AISLE_MOTOR_DELAY_TIME          (100)       //LED翻转时间(MS)
-static SYS_TIME_DATA m_AisleCtrlTimer  = {0};     //LED控定时器
+//货道电机运行状态定义
+#define VM_AISLE_MOTOR_STATUS_IDLE       (0)            //货道电机空闲
+#define VM_AISLE_MOTOR_STATUS_RUNNING    (1)            //货道电机运行中
+#define VM_AISLE_MOTOR_STATUS_OVER       (2)            //超时
 
-static uBit32 m_vm_ulCurRow = 0xFF; //当前行
-static uBit32 m_vm_ulCurCol = 0xFF; //当前列
+//货道电机时间参数定义
+#define VM_AISLE_MOTOR_DELAY_TIME       (100)           //货道电机检测延时时间(MS)
+#define VM_AISLE_MOTOR_OVER_TIME        (5000)          //货道电机超时时间(MS)
+static SYS_TIME_DATA m_AisleDelayTimer = {0};           //货道电机检测延时定时器
+static SYS_TIME_DATA m_AisleOverTimer = {0};            //货道电机超时定时器
 
-static bool m_vm_bInLimitPosFlag = false;   //处于限位的状态
+static uBit32 m_vm_ulCurRow = 0xFF;                     //当前行
+static uBit32 m_vm_ulCurCol = 0xFF;                     //当前列
 
-     
+static bool m_vm_bInLimitPosFlag = false;               //限位状态标志
+static uBit32 m_vm_ulAisleMotorRunningStatus = 0;       //货道电机运行状态
+
      
 /**
-  * @brief  VM 启动货道电机
+  * @brief  货道电机启动
   * @param  ulRow 行信号 [0-9]
   * @param  ulCol 列信号 [0-9]
   * @retval 0-成功 非0-失败
   */
 uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
 {
-    if ((ulRow >= 10) || (ulCol >= 10))
+    //校验入参参数
+    if ((ulRow >= VM_AISLE_MAX_ROW) || (ulCol >= VM_AISLE_MAX_COL))
     {
+        //设置货道不存在报警
+        VM_SetAlarmBit(VM_ERR_CH_INVALID);
+        return 1;
+    }
+    
+    //判断电机是否在运行
+    if (m_vm_ulAisleMotorRunningStatus == VM_AISLE_MOTOR_STATUS_RUNNING)
+    {
+        //设置货道冲突报警
+        //在货道电机停止前,禁止启动新的货道电机
+        VM_SetAlarmBit(VM_ERR_CH_CONFLICT);
+        
         return 1;
     }
     
     m_vm_ulCurRow = ulRow;
     m_vm_ulCurCol = ulCol;
     
-    
+    //启动货道电机
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + m_vm_ulCurRow, 1);
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + m_vm_ulCurCol, 1);
     
-    SysTime_Start(&m_AisleCtrlTimer, VM_AISLE_MOTOR_DELAY_TIME);
+    //设置电机运行标志位
+    m_vm_ulAisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_RUNNING;
+    
+    //启动检测延时定时器
+    //货道电机的限位信号需要在货道电机启动之后才有效,否则可能会导致误判,所以需要
+    //增加一点延时时间,在此段时间之后,才对货道电机的限位信号进行检测
+    SysTime_Start(&m_AisleDelayTimer, VM_AISLE_MOTOR_DELAY_TIME);
+    
+    //启动超时定时器
+    SysTime_Start(&m_AisleOverTimer, VM_AISLE_MOTOR_OVER_TIME);
     
     return 0;
 }
      
 
 /**
-  * @brief  VM限位信号检测
+  * @brief  货道电机运行状态获取
+  * @param  None
+  * @retval 货道电机运行状态
+  *   @arg  VM_AISLE_MOTOR_STATUS_IDLE    货道电机空闲
+  *         VM_AISLE_MOTOR_STATUS_RUNNING 货道电机运行中
+  *         VM_AISLE_MOTOR_STATUS_OVER    超时
+  */
+uBit32 VM_GetAisleMotorRunningState(void)
+{
+    
+    return m_vm_ulAisleMotorRunningStatus;
+}
+
+
+/**
+  * @brief  货道电机管理
   * @param  None
   * @retval None
   */
-void VM_MotorLimitDetectHandler(void)
+void VM_AisleMotorHandler(void)
 {
-    if (SysTime_CheckExpiredState(&m_AisleCtrlTimer))
+    //检测延时时间到达判断
+    if (SysTime_CheckExpiredState(&m_AisleDelayTimer))
     {
         if ((m_vm_ulCurRow != 0xFF) && (m_vm_ulCurCol != 0xFF))
         {
@@ -242,17 +290,48 @@ void VM_MotorLimitDetectHandler(void)
             }
             if (m_vm_bInLimitPosFlag == true) 
             {
+                //检测限位信号
                 if (GPIO_MAN_GetInputPinState(INPUT_IO_MOTRO_INDEX_INPUT1 + m_vm_ulCurRow) == 1)
                 {
+                    //若到达限位信号,关闭货道电机输出
                     GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + m_vm_ulCurRow, 0);
                     GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + m_vm_ulCurCol, 0);
                     
+                    //初始化行列号
                     m_vm_ulCurRow = 0xFF;
                     m_vm_ulCurCol = 0xFF;
                     m_vm_bInLimitPosFlag = false;
+                    
+                    //关闭超时定时器
+                    SysTime_Cancel(&m_AisleDelayTimer);
+                    SysTime_Cancel(&m_AisleOverTimer);
+                    
+                    //设置货道电机状态
+                    m_vm_ulAisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_IDLE;
                 }
             }
         }
+    }
+    
+    //超时时间到达判断
+    if (SysTime_CheckExpiredState(&m_AisleOverTimer))
+    {
+        //关闭货道电机输出
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + m_vm_ulCurRow, 0);
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + m_vm_ulCurCol, 0);
+        m_vm_ulCurRow = 0xFF;
+        m_vm_ulCurCol = 0xFF;
+        m_vm_bInLimitPosFlag = false;
+        
+        //设置报警位
+        VM_SetAlarmBit(VM_ERR_CH_INVALID);
+        
+        //关闭超时定时器
+        SysTime_Cancel(&m_AisleDelayTimer);
+        SysTime_Cancel(&m_AisleOverTimer);
+        
+        //设置货道电机状态
+        m_vm_ulAisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_OVER;
     }
     
 }

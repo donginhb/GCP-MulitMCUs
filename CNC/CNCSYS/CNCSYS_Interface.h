@@ -2,25 +2,25 @@
 /*
 Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 
-文件名称：SYS_Interface.h
+文件名称:SYS_Interface.h
 
-摘    要：系统管理模块接口函数
+摘    要:系统管理模块接口函数
 
-运行环境：LPC43xx 
+运行环境:LPC43xx 
 
-修改描述：
+修改描述:
 
-当前版本：1.0
+当前版本:1.0
 
-修改作者：毛军
+修改作者:毛军
 
-修改日期：2015年9月17日
+修改日期:2015年9月17日
 
-使用说明：
-                1、升级数据格式说明如下：
-                    (1) 升级数据块包括：块头+数据
-                    (2) 块头包含的信息有：当前块序号，当前块数据长度
-                    (3) 第一块升级数据块具有两个作用：请求升级；发送升级文件头
+使用说明:
+                1、升级数据格式说明如下:
+                    (1) 升级数据块包括:块头+数据
+                    (2) 块头包含的信息有:当前块序号,当前块数据长度
+                    (3) 第一块升级数据块具有两个作用:请求升级;发送升级文件头
                     (4) 最后一块升级数据块进行数据校验
 */
 
@@ -45,9 +45,6 @@ typedef struct _CNCSYS_InterFace {
    // void （*pf_CAN_ExportInterface)(CAN_INTERFACE *pCanInterface);
     
 }CNCSYS_INTERFACE;
-
-
-
 
 
 #ifdef __cplusplus
@@ -91,7 +88,7 @@ void CNCSYS_InitStateData(void);
   * @param  None
   * @retval 系统状态数据读取地址(指针)
   */
-const SYS_STATE_DATA* CNCSYS_GetStateReadAddr(void);
+const CNSYS_STATE_DATA* CNCSYS_GetStateReadAddr(void);
 
 
 /**

@@ -65,7 +65,7 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_SYS_GetSLCVersion)(SOFTWARE_VERSION* pVersion);
     uBit32 (*pf_SYS_GetIPOVersion)(SOFTWARE_VERSION* pVersion);
     uBit32 (*pf_SYS_SetComType)(uBit32 ulComType);
-    const SYS_STATE_DATA* (*pf_SYS_GetStateReadAddr)(void);
+    const CNSYS_STATE_DATA* (*pf_SYS_GetStateReadAddr)(void);
     //将固定循环程序代码程序写入缓冲区 iBlockNo--块序号 从0开始
     uBit32 (*pf_SYS_UpdateCCFileData)(uBit32 ulBlockNo, uBit8 *pBuff, uBit32 ulSize,uBit8 uEndFlag);
     void   (*pf_SYS_Reset)(void);
@@ -110,26 +110,29 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_DEV_GetCount)(void);
     uBit32 (*pf_DEV_GetInfo)(uBit32 ulDevNO, DEVICE_INFO* pDeviceInfo);
     uBit32 (*pf_DEV_Scan)(void);                                        //设备扫描
-    const DEVICE_STATE* (*pf_DEV_GetStateReadAddr)(uBit32 ulDevNO); //需要在设备管理模块添加该接口
+    const DEVICE_STATE* (*pf_DEV_GetStateReadAddr)(uBit32 ulDevNO);     //需要在设备管理模块添加该接口
     uBit32 (*pf_DEV_SendUpdateAppData)(uBit32 ulDevNO, uBit8* pUpdateData, uBit32 ulDataLen);
-    uBit32 (*pf_DEV_SendUpdateBootData)(uBit32 ulDevNO, uBit8* pUpdateData, uBit32 ulDataLen);//???是否需要添加设置升级设备BOOTLOADER接口
-    uBit32 (*pf_DEV_CheckLastCmdExeState)(uBit32 ulDevNO, uBit32* pCmdType, uBit32 *pExeRes);    //获取上次执行结果
+    uBit32 (*pf_DEV_SendUpdateBootData)(uBit32 ulDevNO, uBit8* pUpdateData, uBit32 ulDataLen);  //???是否需要添加设置升级设备BOOTLOADER接口
+    uBit32 (*pf_DEV_CheckLastCmdExeState)(uBit32 ulDevNO, uBit32* pCmdType, uBit32 *pExeRes);   //获取上次执行结果
     
 
-    uBit32 (*pf_PAX_Home)(uBit32 ulAxisNO, Bit32 iHomeFlag, Bit32 iWaitExeResult);//电机回零                                                
-    uBit32 (*pf_PAX_SetCmdPos)(uBit32 ulAxisNO, Bit32 lCmdPos, Bit32 iWaitExeResult);    //设置电机当前置单位：um                
-    uBit32 (*pf_PAX_SetQeiPos)(uBit32 ulAxisNO, Bit32 lQeiPos, Bit32 iWaitExeResult);        //设置电机当前位置单位：um        
-    uBit32 (*pf_PAX_Enable)(uBit32 ulAxisNO, Bit32 iEnable, Bit32 iWaitExeResult);            //设置电机使能-断使能-加使能
-    uBit32 (*pf_PAX_Reset)(uBit32 ulAxisNO);                                                                //电机复位
-    uBit32 (*pf_PAX_SendSvParm)(uBit32 ulAxisNO, uBit8 *pParmData);                            //设置伺服参数
-    uBit32 (*pf_PAX_GetSvParm)(uBit32 ulAxisNO, uBit16 nParmNo, uBit8 *pParmData);        //
+    uBit32 (*pf_PAX_Home)(uBit32 ulAxisNO, Bit32 iHomeFlag, Bit32 iWaitExeResult);          //电机回零                                                
+    uBit32 (*pf_PAX_SetCmdPos)(uBit32 ulAxisNO, Bit32 lCmdPos, Bit32 iWaitExeResult);       //设置电机当前置单位：um                
+    uBit32 (*pf_PAX_SetQeiPos)(uBit32 ulAxisNO, Bit32 lQeiPos, Bit32 iWaitExeResult);       //设置电机当前位置单位：um        
+    uBit32 (*pf_PAX_Enable)(uBit32 ulAxisNO, Bit32 iEnable, Bit32 iWaitExeResult);          //设置电机使能-断使能-加使能
+    uBit32 (*pf_PAX_Reset)(uBit32 ulAxisNO);                                                //电机复位
+    uBit32 (*pf_PAX_SendSvParm)(uBit32 ulAxisNO, uBit8 *pParmData);                         //设置伺服参数
+    uBit32 (*pf_PAX_SetPulseRate)(float32 fPulseRate);                                      //设置脉冲当量 duhanfeng 2017.12.16 新增
+    uBit32 (*pf_PAX_GetRunningStatus)(uBit32 ulAxisNO);                                     //获取轴运行状态 duhanfeng 2017.12.16 新增
+    double64 (*pf_PAX_GetCmdPos)(uBit32 ulAxisNO);                                          //获取轴指令位置 duhanfeng 2017.12.16 新增
+    uBit32 (*pf_PAX_GetSvParm)(uBit32 ulAxisNO, uBit16 nParmNo, uBit8 *pParmData);          //获取伺服电机参数
 
 
-    uBit32 (*pf_IO_SetOutputStatus)(uBit32 ulIONO, uBit32 ulMask, uBit32 ulStatus);        //设置IO板状态.需要修改模块接口                
-    uBit32 (*pf_IO_SetOutPutPWMMode)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iMode);        //使能IOPWM功能            
-    uBit32 (*pf_IO_SetOutPutPWMDuty)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iDuty);            //设置占空比-100                    
-    uBit32 (*pf_IO_SetOutPutPWMFreq)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iFreq);            //设置输出口PWM频率
-    uBit32 (*pf_ADDA_SetDAStatus)(uBit32 ulADDANO, uBit32 iDAChNO, uBit32 iDAVaule);//设置DA板DA输出
+    uBit32 (*pf_IO_SetOutputStatus)(uBit32 ulIONO, uBit32 ulMask, uBit32 ulStatus);         //设置IO板状态.需要修改模块接口                
+    uBit32 (*pf_IO_SetOutPutPWMMode)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iMode);           //使能IOPWM功能            
+    uBit32 (*pf_IO_SetOutPutPWMDuty)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iDuty);           //设置占空比-100                    
+    uBit32 (*pf_IO_SetOutPutPWMFreq)(uBit32 ulIONO, Bit32 iIOBitNO, Bit32 iFreq);           //设置输出口PWM频率
+    uBit32 (*pf_ADDA_SetDAStatus)(uBit32 ulADDANO, uBit32 iDAChNO, uBit32 iDAVaule);        //设置DA板DA输出
 
     //--------------------------------------------通道管理模块------------------------------------------------
 
@@ -292,11 +295,11 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_ECM_GetErrorCode)(uBit32 *pulErrorCode);
     
     
-    //--------------------------------------------自动售货机相关控制接口-----------------------------------------------
-    
-    uBit32 (*pf_VM_EnabletAisleMotor)(uBit32 ulRow, uBit32 ulCol);    //货道电机启动
-    
-    
+    //-----------------------------------自动售货机相关控制接口(自定义接口)-----------------------------------
+    //使能货道电机
+    uBit32 (*pf_VM_EnabletAisleMotor)(uBit32 ulRow, uBit32 ulCol);      //货道电机启动
+    //获取货道电机运行状态
+    uBit32 (*pf_VM_GetAisleMotorRunningState)(void);                    //货道电机运行状态获取
     
     
     

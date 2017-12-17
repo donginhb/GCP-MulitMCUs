@@ -3,7 +3,7 @@
   * @file    Demo.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2017.12.15
+  * @date    2017.12.07
   * @brief   demo
   ******************************************************************************
   * @attention
@@ -15,9 +15,10 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "Demo.h"
+#include "CMU_CmdProcess.h"
+#include "CMU_ExApi.h"
+#include "AbstractionLayer/AbstractionLayer.h"
 #include "DataType/DataType.h"
-      
 
 /*****************************************************************************
  * 私有成员定义及实现
@@ -25,18 +26,24 @@
 
 
 /*****************************************************************************
- * DEMO相关控制接口
+ * CMU相关控制接口
  ****************************************************************************/
 
-
 /**
-  * @brief  Demo
-  * @param  None
-  * @retval None
+  * @brief  CMU模块初始化
+  * @param  uComType 端口类型
+  * @retval 0-成功 非0-失败
   */
-void DEMO_Function(void)
+uBit32 CMU_Init(uBit8 uComType)                                
 {
-    
-    
-      
+    //绑定初始化处理函数
+    CMU_InitExApi();
+
+    //打开通信连接
+    if (COM_AL_Open(uComType))
+    {
+        return CMU_ERR_CONNECT;
+    }
+
+    return CMU_ERR_SUCCESS;
 }

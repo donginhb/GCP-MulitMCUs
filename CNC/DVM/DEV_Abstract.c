@@ -1478,7 +1478,7 @@ uBit32 PAX_GetRunningStatus(uBit32 ulAxisNO)
 函 数 名:PAX_GetCmdPos
 功    能:获取轴指令位置
 参    数:ulAxisNO --轴编号
-返 回 值:轴指令位置
+返 回 值:轴指令位置(单位:用户计数单位)
 调用位置:
 注意事项:
 */

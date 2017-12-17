@@ -19,11 +19,17 @@
 #include "SYS_Ctrl.h"
 #include "SysConfig.h"
 #include "DataType/DataType.h"
+      
+#if SYS_USING_SIMP_CMU
+#include "CMU/Simplify/CMU_Interface.h"
+#include "CMU/Simplify/CMU_DataStructDef.h"
+#elif SYS_USING_FULL_CMU
 #include "CMU/CMU_Interface.h"
 #include "CMU/CMU_DataStructDef.h"
+#include "CMU/ProtocolLayer/CMU_ExApi.h"
+#endif
 
 #if SYS_USING_CNC
-
 #include "CNC/CNCSYS/CNCSYS_Interface.h"
 #include "CNC/CSM/CSM_Interface.h"
 #include "CNC/DVM/DEV_Interface.h"
@@ -48,10 +54,9 @@
  * CMU 初始化相关接口
  ****************************************************************************/
 
-#if SYS_USING_CMU
+#if SYS_USING_FULL_CMU
 static uBit8 m_CmuBuff[SYS_CMU_BUFF_SIZE] = {0};    //CMU缓冲区定义
 
-extern uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol);;
 
 //CMU 通信缓冲区初始化
 static uBit32 SYS_InitCmuBuff(void)
@@ -86,8 +91,6 @@ static uBit32 SYS_InitCmuUartInterface(void)
 static uBit32 SYS_InitCmuFunTable(void)
 {
     CMU_EXTERNAL_FUN_TEBLE CMUFunTable = {0};
-    
-    CMU_SetExternFun(CMUFunTable);
     
     //--------------------------------------------系统管理模块------------------------------------------------
     
@@ -154,6 +157,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_PAX_Enable = PAX_Enable;
     CMUFunTable.pf_PAX_Reset    = PAX_Reset;
     CMUFunTable.pf_PAX_SendSvParm    = PAX_SendSvParm;
+    CMUFunTable.pf_PAX_GetRunningStatus = PAX_GetRunningStatus; //获取轴运行状态 duhanfeng 2017.12.16 新增
+    CMUFunTable.pf_PAX_GetCmdPos    = PAX_GetCmdPos;            //获取轴指令位置 duhanfeng 2017.12.16 新增
     CMUFunTable.pf_PAX_GetSvParm    = PAX_GetSvParm;
     
     CMUFunTable.pf_IO_SetOutputStatus = IO_SetOutputStatus;    
@@ -244,11 +249,11 @@ static uBit32 SYS_InitCmuFunTable(void)
     
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
     
-    CMUFunTable.pf_VM_EnabletAisleMotor = VM_EnableAisleMotor;
-    
 #endif
     
     CMU_SetExternFun(CMUFunTable);
+    
+    CMU_InitExApi();
     
     return 0;
 }
@@ -269,5 +274,66 @@ uBit32 SYS_InitCMU(void)
     return 0;
 }
 
+#elif SYS_USING_SIMP_CMU
 
-#endif //SYS_USING_CMU
+
+
+//CMU 通信接口初始化
+static uBit32 SYS_InitCmuUartInterface(void)
+{
+    //配置通信接口
+    CMU_UART_INTERFACE CmuUartInterface = {0};
+    
+    CmuUartInterface.pf_UART_Open = UART_Open;
+    CmuUartInterface.pf_UART_Close = UART_Close;
+    CmuUartInterface.pf_UART_SendBuff = UART_SendBuff;
+    CmuUartInterface.pf_UART_RecvBuff = UART_RecvBuff;
+    CmuUartInterface.pf_UART_RecvHandler = UART_RecvHandler;
+    
+    CMU_UART_SetInterface(UART_NODE_0, &CmuUartInterface);
+    
+    //初始化通信接口
+    UART_Init(SYS_CMU_COM_NODE, 115200);
+    
+    return 0;
+}
+
+
+static uBit32 SYS_InitCmuFunTable(void)
+{
+    CMU_EXTERNAL_FUN_TEBLE CMUFunTable = {0};
+    
+    //--------------------------------------------系统管理模块------------------------------------------------
+    
+    //系统控制接口
+    //CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSLC;
+    //CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateIPO;
+    CMUFunTable.pf_SYS_GetSLCVersion = SYS_GetSLCVersion;
+    CMUFunTable.pf_SYS_Reset = CoreCtrl_ResetSystemNow;
+    //CMUFunTable.pf_SYS_WriteSLCProgID = BOOT_WriteSLCProgID;
+    
+    CMU_SetExternFun(&CMUFunTable);
+    
+    CMU_InitExApi();
+    
+    return 0;
+}
+
+
+/**
+  * @brief  CMU初始化
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_InitCMU(void)
+{
+    SYS_InitCmuFunTable();
+    SYS_InitCmuUartInterface();
+    CMU_Init(COM_TYPE_UART);
+    
+    return 0;
+}
+
+
+
+#endif //SYS_USING_FULL_CMU

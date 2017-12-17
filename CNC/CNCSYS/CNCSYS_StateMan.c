@@ -32,7 +32,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-static SYS_STATE_DATA m_CncSysStateData;    //CNC 系统状态控制数据
+static CNSYS_STATE_DATA m_CncSysStateData;    //CNC 系统状态控制数据
 
 
 /*****************************************************************************
@@ -56,7 +56,7 @@ void CNCSYS_InitStateData(void)
   * @param  None
   * @retval 系统状态数据读取地址(指针)
   */
-const SYS_STATE_DATA* CNCSYS_GetStateReadAddr(void)
+const CNSYS_STATE_DATA* CNCSYS_GetStateReadAddr(void)
 {
     return &m_CncSysStateData;
 }

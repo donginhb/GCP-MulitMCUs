@@ -16,7 +16,7 @@ uBit32 u32Fun_p8_u32(Bit8* pUpdateData, uBit32 ulDataLen){return CMU_ERR_UNBAND;
 
 const DEVICE_STATE* SysGetDevStateFun(uBit32 ulDeviceNo){return NULL;}
 const SYS_CTRL_PARM* SysGetCtrlParmFun(void){return NULL;}
-const SYS_STATE_DATA* SysGetStateFun(void){return NULL;}        //pState是出参
+const CNSYS_STATE_DATA* SysGetStateFun(void){return NULL;}        //pState是出参
 uBit32 CrdSetAxisMapFun(CRDSYS_AXIS_MAP_TABLE* pCrdAxisMapTable, Bit32 iCrdSysCount){return CMU_ERR_UNBAND;}
 uBit32 CrdSetCtrlParmFun(Bit32 iCrdSysIndex, CRDSYS_PARM* pCrdParm){return CMU_ERR_UNBAND;}
 
@@ -542,12 +542,53 @@ void CMU_InitExApi(void)
 #ifdef RS_MONITOR_ENALBE        
     memset(&g_sCmuRsMonitorData,0, sizeof(CMU_RS_MS_DATA));
 #endif
+    
+    //初始化自定义接口
+    
+    //售货机接口------
+    
+    if (m_sExternalFunTable.pf_VM_EnabletAisleMotor==0)
+    {
+        m_sExternalFunTable.pf_VM_EnabletAisleMotor         = u32Fun_u32_u32;
+    }
+    if (m_sExternalFunTable.pf_VM_GetAisleMotorRunningState==0)
+    {
+        m_sExternalFunTable.pf_VM_GetAisleMotorRunningState = u32Fun_void;
+    }
+    
 }                                     
 
 
+//设置外部接口函数
 void CMU_SetExternFun(CMU_EXTERNAL_FUN_TEBLE sCmuExternFunTable)
 {
     m_sExternalFunTable = sCmuExternFunTable;
+}
+
+
+//设置外部自定义接口函数(在CMU初始化之后调用)
+void CMU_SetExternCustomFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable)
+{
+    if (pCmuExternFunTable->pf_VM_EnabletAisleMotor != 0)
+    {
+        m_sExternalFunTable.pf_VM_EnabletAisleMotor = pCmuExternFunTable->pf_VM_EnabletAisleMotor;
+    }
+    
+    if (pCmuExternFunTable->pf_VM_GetAisleMotorRunningState != 0)
+    {
+        m_sExternalFunTable.pf_VM_GetAisleMotorRunningState = pCmuExternFunTable->pf_VM_GetAisleMotorRunningState;
+    }
+    
+    if (pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion != 0)
+    {
+        m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion = pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion;
+    }
+    
+    if (pCmuExternFunTable->pf_PAX_SetPulseRate != 0)
+    {
+        m_sExternalFunTable.pf_PAX_SetPulseRate = pCmuExternFunTable->pf_PAX_SetPulseRate;
+    }
+    
 }
 
 

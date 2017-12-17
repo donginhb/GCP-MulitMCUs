@@ -1656,6 +1656,11 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             ulRet = m_sExternalFunTable.pf_CSM_SetMotorSpeedCtrlMotion(ulMotorNo, &SpeedMotionData);
             break;
         }
+    case MOTOR_SETCMD_PULSE_RATE:       //获取脉冲当量
+        {
+            float fPluseRate = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
+            ulRet = m_sExternalFunTable.pf_PAX_SetPulseRate(fPluseRate);
+        }
         
     default:break;
     }
@@ -1689,56 +1694,91 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     uBit8 *pParmBuf;
     const AXIS_PARM* pAxisParm;
     const AXIS_PITCH_CMP_PARM *pAxisPitchCmpParm;
-          
-    //获取螺距补偿参数
-    if(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex==MOTOR_GETCMD_PITCH_CMP_PARM)
-    {
-        pAxisPitchCmpParm = m_sExternalFunTable.pf_SPM_GetAxisPitchCmpParmAddr();
-        pAxisPitchCmpParm += pRcvCtrlData->ulRevID.ulComDataID.ulDevNo;
-        CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)pAxisPitchCmpParm, sizeof(AXIS_PITCH_CMP_PARM));
-        return CMU_ERR_SUCCESS;
-    }
-
-    //获取伺服参数
-    if (pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex == MOTOR_GETCMD_SV_PARM)
-    {
-        CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, NULL, 0);
-        pParmBuf = CMU_GetSendBufAddr();
-        ulRet = m_sExternalFunTable.pf_PAX_GetSvParm(pRcvCtrlData->ulRevID.ulComDataID.ulDevNo,
-            *(uBit16*)pRcvCtrlData->pRevBuf, pParmBuf);
-        CMU_AddToSendCtrlData(NULL, 4);
-        return ulRet;
-    }
-          
+    
     pAxisParm = m_sExternalFunTable.pf_SPM_GetAxisParmAddr();
     pAxisParm += pRcvCtrlData->ulRevID.ulComDataID.ulDevNo;
 
     ulRet = CMU_ERR_SUCCESS;
+    
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
+    case MOTOR_GETCMD_PITCH_CMP_PARM:                    //获取螺距补偿参数
+        {
+            pAxisPitchCmpParm = m_sExternalFunTable.pf_SPM_GetAxisPitchCmpParmAddr();
+            pAxisPitchCmpParm += pRcvCtrlData->ulRevID.ulComDataID.ulDevNo;
+            CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)pAxisPitchCmpParm, sizeof(AXIS_PITCH_CMP_PARM));
+            break;
+        }
+    case MOTOR_GETCMD_SV_PARM:                          //获取伺服参数
+        {
+            CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, NULL, 0);
+            pParmBuf = CMU_GetSendBufAddr();
+            ulRet = m_sExternalFunTable.pf_PAX_GetSvParm(pRcvCtrlData->ulRevID.ulComDataID.ulDevNo,
+                                                         *(uBit16*)pRcvCtrlData->pRevBuf, pParmBuf);
+            CMU_AddToSendCtrlData(NULL, 4);
+            break;
+        }
     case MOTOR_GETCMD_CTRL_PARM:                        //电机所有控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)pAxisParm, sizeof(AXIS_PARM));
             break;
+        }
     case MOTOR_GETCMD_SIGNAL_PARM:                      //信号量控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisSignalConfig, sizeof(AXIS_SIGNAL_CONFIG));
             break;
+        }
     case MOTOR_GETCMD_SAFE_PARM:                        //安全控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisSafeParm, sizeof(AXIS_SAFE_PARM));
             break;
+        }
     case MOTOR_GETCMD_HOME_PARM:                        //回零控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisHomeParm, sizeof(AXIS_HOME_PARM));
             break;
+        }
     case MOTOR_GETCMD_SCALE_PARM:                       //比例控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisScaleParm, sizeof(AXIS_SCALE_PARM));
             break;
+        }
     case MOTOR_GETCMD_MOVE_PARM:                        //运动控制参数
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisMoveParm, sizeof(AXIS_MOVE_PARM));
             break;
+        }
     case MOTOR_GETCMD_BACKLASH_CMP_PARM:                //反向间隙补偿
+        {
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID, (uBit8*)&pAxisParm->AxisCmpParm, sizeof(AXIS_BACK_LASH_CMP_PARM));
             break;
+        }
+        
+    //2017.12.16 duhanfeng 新增
+    case MOTOR_GETCMD_RUNNING_STATUS:                   //获取电机运行状态
+        {
+            uBit32 ulAxisNO = (*(long int *)(&pRcvCtrlData->pRevBuf[0]));
+            CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID,NULL,0);
+            uBit8 *pSendBuf = CMU_GetSendBufAddr();
+            
+            *(uBit32 *)pSendBuf = m_sExternalFunTable.pf_PAX_GetRunningStatus(ulAxisNO);
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
+    case MOTOR_GETCMD_CMD_POS:                          //获取指令位置
+        {
+            uBit32 ulAxisNO = (*(long int *)(&pRcvCtrlData->pRevBuf[0]));
+            CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID,NULL,0);
+            uBit8 *pSendBuf = CMU_GetSendBufAddr();
+            
+            *(uBit32 *)pSendBuf = (uBit32)(m_sExternalFunTable.pf_PAX_GetCmdPos(ulAxisNO) * 10000.0); //将浮点数转换成整型传输,放大因子:10000
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
+        
     default: ulRet = CMU_ERR_INVALID_CMD;
     }
+          
 
     return ulRet;
 }
@@ -2191,7 +2231,7 @@ uBit32 Servo_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 
  /*
-函数名称:uBit32 Io_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+函数名称:uBit32 Custom_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
 功    能:IO常规设置指令处理线程,处理的指令包括
         #define IO_SETCMD_STATE                 (1)//设置IO板输出状态
@@ -2204,7 +2244,7 @@ uBit32 Servo_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
           非0--错误码
 注意事项:
 */ 
-uBit32 Vm_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+uBit32 Custom_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
     uBit32 ulRow = 0;
     uBit32 ulCol = 0;
@@ -2227,6 +2267,45 @@ uBit32 Vm_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 }
 
 
+
+ /*
+函数名称:uBit32 Custom_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData);
+
+功    能:IO常规获取指令处理线程,如果获取成功则配置回包,指令包括
+                #define IO_GETCMD_HSPD_OUT_STATUS   (1)//获取高速IO输出口状态
+                #define IO_GETCMD_HSPD_IN_STATUS    (2)//获取高速IO输入口状态
+参    数:pRcvCtrlData--接收控制数据区
+
+返 回 值:0--成功
+          非0--错误码
+注意事项:IO指令处理线程调用
+*/ 
+uBit32 Custom_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+{
+    uBit8 *pSendBuf;
+    uBit32  ulRet = CMU_ERR_INVALID_CMD;
+
+    CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID,NULL,0);
+    pSendBuf = CMU_GetSendBufAddr();
+
+    switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
+    {
+    case VM_GETCMD_AISLE_MOTOR_STATUS: //获取货道电机完成状态
+        {
+            *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_VM_GetAisleMotorRunningState();
+            ulRet = CMU_ERR_SUCCESS;
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
+        
+    default:break;
+    }
+    
+    return ulRet;
+}
+
+
+
  /*
 函数名称:uBit32 Io_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 
@@ -2242,7 +2321,7 @@ uBit32 Vm_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
           非0--错误码
 注意事项:数据块接收完成后调用
 */ 
-uBit32 Vm_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
+uBit32 Custom_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
 {
     uBit32 ulRet = CMU_ERR_INVALID_CMD;
 
@@ -2251,7 +2330,7 @@ uBit32 Vm_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdType)
         {
         case SETCMD_TYPE_NOMAL:    //常规设置指令
-            ulRet = Vm_NomalSetCmdProcess(pRcvCtrlData);
+            ulRet = Custom_NomalSetCmdProcess(pRcvCtrlData);
             break;
         default:break;
         }
@@ -2266,7 +2345,7 @@ uBit32 Vm_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdType)
         {
         case GETCMD_TYPE_NOMAL://获取常规数据
-            //ulRet = Io_NomalGetCmdProcess(pRcvCtrlData);
+            ulRet = Custom_NomalGetCmdProcess(pRcvCtrlData);
             break;
         default:break;
         }
@@ -2331,7 +2410,7 @@ uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         ulRet = Servo_CmdProcess(pRcvCtrlData);
         break;
     case DATA_TYPE_CUSTOM:      //2017.12.13 duhanfeng  水果机接口 新增
-        ulRet = Vm_CmdProcess(pRcvCtrlData);
+        ulRet = Custom_CmdProcess(pRcvCtrlData);
         break;
     default: break;
     }

@@ -56,7 +56,7 @@ Copyright (c) 2015, 东莞华科精机有限公司 All rights reserved.
 #define CMU_ERR_IPO_BUSY                    (24)    //插补器不空闲
 #define CMU_ERR_CSM_BUSY                    (25)    //通道不空闲
 #define CMU_ERR_RS_MALLOC_FAIL              (26)    //接收缓冲区申请空间失败
-#define CMU_ERR_IPR_ENABLE                  (27)//解释器已使能
+#define CMU_ERR_IPR_ENABLE                  (27)    //解释器已使能
 
 #pragma pack(pop)
 #endif

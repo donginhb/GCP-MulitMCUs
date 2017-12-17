@@ -43,16 +43,25 @@ void VM_MainWorkLedShow(void);
   * @retval 0-成功 非0-失败
   */
 uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol);
-     
+
 
 /**
-  * @brief  VM限位信号检测
+  * @brief  货道电机运行状态获取
+  * @param  None
+  * @retval 货道电机运行状态
+  *   @arg  VM_AISLE_MOTOR_STATUS_IDLE    货道电机空闲
+  *         VM_AISLE_MOTOR_STATUS_RUNNING 货道电机运行中
+  *         VM_AISLE_MOTOR_STATUS_OVER    超时
+  */
+uBit32 VM_GetAisleMotorRunningState(void);
+
+
+/**
+  * @brief  VM 货道电机处理
   * @param  None
   * @retval None
   */
-void VM_MotorLimitDetectHandler(void);
-
-
+void VM_AisleMotorHandler(void);
 
 
 #ifdef __cplusplus

@@ -31,6 +31,9 @@ Copyright (c) 2013, 东莞华科精机有限公司 All rights reserved.
 //初始化外部接口，通信模块初始化调用，内部函数
 extern void CMU_InitExApi(void);
 
+//设置外部自定义接口函数(在CMU初始化之后调用)
+void CMU_SetExternCustomFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable);
+
 extern CMU_EXTERNAL_FUN_TEBLE m_sExternalFunTable;
 #endif
 

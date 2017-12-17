@@ -27,10 +27,13 @@
 
 #include <stdlib.h>
 
-#if SYS_USING_CMU
+#if SYS_USING_FULL_CMU
 #include "SYS_CmuConfig.h"
 #include "CMU/CMU_Interface.h"
-#include "CMU/CMU_DataStructDef.h"
+#elif SYS_USING_SIMP_CMU
+#include "SYS_CmuConfig.h"
+#include "CMU/Simplify/CMU_Interface.h"
+#include "CMU/Simplify/CMU_DataStructDef.h"
 #endif
 
 #if SYS_USING_CNC
@@ -39,6 +42,7 @@
 #endif
       
 #if SYS_USING_BOOT
+#include "CMU/Simplify/CMU_CmdProcess.h"
 #include "SysUpdate/Bootloader.h"
 #include "SysUpdate/SysUpdate.h"
 #endif
@@ -71,7 +75,7 @@ uBit32 SYS_Init(void)
 #endif
     
     //初始化CMU
-#if SYS_USING_CMU    
+#if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU)
     SYS_InitCMU();
 #endif
     
@@ -102,7 +106,7 @@ void SYS_MainTaskHandler(void)
     CoreCtrl_ResetHandler();
     
     //CMU管理
-#if SYS_USING_CMU    
+#if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU)
     CMU_MainProc();
 #endif
     

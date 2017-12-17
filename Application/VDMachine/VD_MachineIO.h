@@ -34,6 +34,9 @@ typedef enum
     INPUT_IO_INPUT16,
     INPUT_IO_INPUT17,
     
+    //通用INPUT 定义
+    INPUT_IO_LIFT_MOTOR_UP_LIMIT   = INPUT_IO_INPUT11,  //提升电机上限位
+    INPUT_IO_LIFT_MOTOR_DOWN_LIMIT = INPUT_IO_INPUT12,  //提升电机下限位
 
 }INPUT_IO_TABLE;
 
