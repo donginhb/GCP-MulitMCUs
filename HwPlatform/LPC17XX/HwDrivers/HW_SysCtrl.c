@@ -75,7 +75,7 @@ void HW_SystemReset(void)
   * @brief  程序跳转
   * @param  None
   * @retval None
-  * @note   此函数应用于Bootloader对APP的跳转,APP地址写死为0x70000000
+  * @note   此函数应用于Bootloader对APP的跳转,APP地址写死为0x00007000
   */
 void HW_JumToApp(void)
 {
@@ -103,5 +103,29 @@ void HW_JumToApp(void)
     //跳转到应用程序入口处
     asm("LDR LR,[R0]");
     asm("BX LR");
+    
+}
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HW_EnableIRQ(void)
+{
+    __enable_irq();
+    
+}
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HW_DisableIRQ(void)
+{
+    __disable_irq();
     
 }

@@ -25,7 +25,7 @@
 
 //外部函数空指针入口(避免意外访问空指针导致程序挂掉)
 static void voidFun_void(void){};
-static uBit32 u32Fun_p8_u32(Bit8* a, uBit32 b){return CMU_ERR_UNBAND;}
+static uBit32 u32Fun_pvoid_u32(void* a, uBit32 b){return CMU_ERR_UNBAND;}
 static uBit32 u32Fun_pvoid(void* a){return CMU_ERR_UNBAND;}
 
 //外部函数列表
@@ -75,10 +75,10 @@ uBit32 CMU_SetExternFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable)
 void CMU_InitExApi(void)
 {
     if (!m_sExternalFunTable.pf_SYS_UpdateSLC)
-        m_sExternalFunTable.pf_SYS_UpdateSLC            = u32Fun_p8_u32        ;
+        m_sExternalFunTable.pf_SYS_UpdateSLC            = (uBit32 (*)(uBit8*, uBit32))u32Fun_pvoid_u32;;
 
     if (!m_sExternalFunTable.pf_SYS_UpdateIPO)
-        m_sExternalFunTable.pf_SYS_UpdateIPO            = u32Fun_p8_u32         ;
+        m_sExternalFunTable.pf_SYS_UpdateIPO            = (uBit32 (*)(uBit8*, uBit32))u32Fun_pvoid_u32;
  
     if (!m_sExternalFunTable.pf_SYS_GetSLCVersion)
         m_sExternalFunTable.pf_SYS_GetSLCVersion        = (uBit32 (*)(SOFTWARE_VERSION*))u32Fun_pvoid;

@@ -39,6 +39,8 @@
   * @param  nPort 端口号
   * @param  nPin  引脚号
   * @param  uTrgSource 触发源
+  *   @arg HW_EXTI_TRG_RISING  上升沿触发
+  *   @arg HW_EXTI_TRG_FALLING 下降沿触发
   * @retval 0-成功 非0-失败
   */
 uint32_t HW_EXTI_Init(uint16_t nPort, uint16_t nPin, uint8_t uTrgSource)
@@ -55,11 +57,25 @@ uint32_t HW_EXTI_Init(uint16_t nPort, uint16_t nPin, uint8_t uTrgSource)
     //配置GPIO中断触发条件
     if (uTrgSource & HW_EXTI_TRG_RISING)
     {
-        Chip_GPIOINT_SetIntRising (LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort, 1 << nPin);
+        //获取当前的配置值
+        uint32_t ulTempRising = Chip_GPIOINT_GetIntRising(LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort);
+        
+        //更新配置值
+        ulTempRising |= (1 << nPin);
+        
+        //写入配置值
+        Chip_GPIOINT_SetIntRising (LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort, ulTempRising);
     }
     if (uTrgSource & HW_EXTI_TRG_FALLING)
     {
-        Chip_GPIOINT_SetIntFalling(LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort, 1 << nPin);
+        //获取当前的配置值
+        uint32_t ulTempFalling = Chip_GPIOINT_GetIntFalling(LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort);
+        
+        //更新配置值
+        ulTempFalling |= (1 << nPin);
+        
+        //写入配置值
+        Chip_GPIOINT_SetIntFalling(LPC_GPIOINT, (LPC_GPIOINT_PORT_T)nPort, ulTempFalling);
     } 
     
     //使能内核中断

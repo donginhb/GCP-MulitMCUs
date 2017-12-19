@@ -13,6 +13,7 @@ CMU_EXTERNAL_FUN_TEBLE m_sExternalFunTable={NULL};
 void voidFun_void(void){};
 
 uBit32 u32Fun_p8_u32(Bit8* pUpdateData, uBit32 ulDataLen){return CMU_ERR_UNBAND;}
+uBit32 u32Fun_pu8_u32(uBit8* pUpdateData, uBit32 ulDataLen){return CMU_ERR_UNBAND;}
 
 const DEVICE_STATE* SysGetDevStateFun(uBit32 ulDeviceNo){return NULL;}
 const SYS_CTRL_PARM* SysGetCtrlParmFun(void){return NULL;}
@@ -128,10 +129,10 @@ void CMU_InitExApi(void)
         m_sExternalFunTable.pf_SYS_Reset        =&voidFun_void        ;
     
     if (m_sExternalFunTable.pf_SYS_UpdateSLC==0)
-        m_sExternalFunTable.pf_SYS_UpdateSLC        = &u32Fun_p8_u32    ;
+        m_sExternalFunTable.pf_SYS_UpdateSLC        = &u32Fun_pu8_u32    ;
 
     if (m_sExternalFunTable.pf_SYS_UpdateIPO==0)
-        m_sExternalFunTable.pf_SYS_UpdateIPO        =&u32Fun_p8_u32        ;
+        m_sExternalFunTable.pf_SYS_UpdateIPO        =&u32Fun_pu8_u32        ;
 
     if (m_sExternalFunTable.pf_DEV_BlinkLED==0)
         m_sExternalFunTable.pf_DEV_BlinkLED            =&u32Fun_u32            ;
@@ -199,21 +200,35 @@ void CMU_InitExApi(void)
         m_sExternalFunTable.pf_GPIO_SetHSpdOutputState        =&u32Fun_u32_u32        ;
 
     
-    //2017.12.01 新增 -- 杜寒枫----------------------------------------
+    //2017.12.01 新增 -- Duhanfeng----------------------------------------
     
     if (m_sExternalFunTable.pf_GPIO_SetOutputPinState==0)
-        m_sExternalFunTable.pf_GPIO_SetOutputPinState        =&voidFun_u32_bool        ;
+        m_sExternalFunTable.pf_GPIO_SetOutputPinState        =&voidFun_u32_bool ;
 
     if (m_sExternalFunTable.pf_GPIO_GetOutputPinState==0)
-        m_sExternalFunTable.pf_GPIO_GetOutputPinState        =&boolFun_u32        ;
+        m_sExternalFunTable.pf_GPIO_GetOutputPinState        =&boolFun_u32      ;
 
     if (m_sExternalFunTable.pf_GPIO_GetInputPinState==0)
-        m_sExternalFunTable.pf_GPIO_GetInputPinState         =&boolFun_u32        ;
+        m_sExternalFunTable.pf_GPIO_GetInputPinState         =&boolFun_u32      ;
+    
+    //2017.12.18 新增 -- Duanfeng----------------------------------------
+    
+    if (m_sExternalFunTable.pf_SYS_GetCncAlarmStatus == 0)
+        m_sExternalFunTable.pf_SYS_GetCncAlarmStatus         =&u32Fun_void      ;
+    
+    
+    //2017.12.19 新增 -- Duanfeng----------------------------------------
+    
+    if (m_sExternalFunTable.pf_SYS_ClearAppFlag == 0)
+        m_sExternalFunTable.pf_SYS_ClearAppFlag             =&u32Fun_void      ;
+    
+    if (m_sExternalFunTable.pf_SYS_ClearSubAppFlag == 0)
+        m_sExternalFunTable.pf_SYS_ClearSubAppFlag          =&u32Fun_void      ;
     
     //----------------------------------------------------------------
     
     if (m_sExternalFunTable.pf_MDAC_SetHSpdDaData==0)
-        m_sExternalFunTable.pf_MDAC_SetHSpdDaData        =&u32Fun_u32_u32        ;
+        m_sExternalFunTable.pf_MDAC_SetHSpdDaData        =&u32Fun_u32_u32       ;
 
     if (m_sExternalFunTable.pf_MDAC_GetHSpdDaData==0)
         m_sExternalFunTable.pf_MDAC_GetHSpdDaData        =&u32Fun_u32_pu32        ;
@@ -227,7 +242,6 @@ void CMU_InitExApi(void)
 
     if (m_sExternalFunTable.pf_DEV_GetStateReadAddr==0)
         m_sExternalFunTable.pf_DEV_GetStateReadAddr             =&SysGetDevStateFun;
-
 
     if (m_sExternalFunTable.pf_SPM_SetCrdSysAxisMapTable==0)
         m_sExternalFunTable.pf_SPM_SetCrdSysAxisMapTable            =&CrdSetAxisMapFun                ;

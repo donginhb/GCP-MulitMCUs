@@ -95,3 +95,27 @@ void CoreCtrl_JumToApp(void)
     HAL_JumToApp();
     
 }
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void CoreCtrl_EnableIRQ(void)
+{
+    HAL_EnableIRQ();
+    
+}
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void CoreCtrl_DisableIRQ(void)
+{
+    HAL_DisableIRQ();
+    
+}

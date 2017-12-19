@@ -97,7 +97,7 @@ typedef union _COM_DATA_ID{
     HK_COM_ID    ulComDataID;
     ADDA_COM_ID  ulADDADataID;
     REG_COM_ID   ulRegDataID;
-    uBit32       ulFrameID;
+    uBit32      ulFrameID;
 }COM_DATA_ID,*P_COM_DATA_ID;
 
 #define SAME_TYPE_PACK_MASK                 (0X007FFFFF)//同类型数据包屏蔽字，BIT0-BIT22(该字段是固定不变数据，可确定唯一数据)
@@ -143,6 +143,11 @@ typedef union _COM_DATA_ID{
 #define SYS_SETCMD_SYS_RESET                (16)    //系统复位    
 #define SYS_SETCMD_MACHINE_TYPE             (17)    //设备类型          //AutoSale
 
+//2017.12.19 新增 Duhanfeng
+#define SYS_SETCMD_APP_FLAG_CLEAR           (20)    //APP存在标志清除
+#define SYS_SETCMD_SUB_APP_FLAG_CLEAR       (21)    //副APP存在标志清除
+
+
 //系统数据常规获取指令(获取无周期性数据区的数据)
 #define SYS_GETCMD_SLC_VER                  (1)     //获取SLC版本
 #define SYS_GETCMD_IPO_VER                  (2)     //获取IPO版本
@@ -155,6 +160,10 @@ typedef union _COM_DATA_ID{
 #define SYS_GETCMD_CSM_VER                  (9)     //获取CSM版本
 #define SYS_GETCMD_HQEIPOS                  (10)    //获取高速编码器位置
 #define SYS_GETCMD_HQEISPD                  (11)    //获取高速编码器速度
+
+//2017.12.18 新增 Duanfeng
+#define SYS_GETCMD_CNC_ALARM                (20)    //获取系统报警
+
 /************************************************************************/
 
 

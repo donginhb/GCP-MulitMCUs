@@ -2,6 +2,8 @@
 #define  __CORE_CTRL_H
 
 #include "DataType/DataType.h"
+#include "HAL/HAL_SysCtrl.h"
+
 
 #ifdef __cplusplus
 extern "C"
@@ -56,6 +58,22 @@ void CoreCtrl_ResetHandler(void);
   * @note   此函数应用于Bootloader对APP的跳转
   */
 void CoreCtrl_JumToApp(void);
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void CoreCtrl_EnableIRQ(void);
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void CoreCtrl_DisableIRQ(void);   
 
 
 #ifdef __cplusplus

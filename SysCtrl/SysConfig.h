@@ -7,7 +7,7 @@
 
 #ifdef BOOTLOADER   //假如定义了Bootloader
 
-#define SYS_USING_BOOT          (0)     //使用Bootloader
+#define SYS_USING_BOOT          (1)     //使用Bootloader
 #define SYS_USING_SIMP_CMU      (1)     //使用精简版本的CMU
 #define SYS_USING_FULL_CMU      (0)     //使用完全版本的CMU
 #define SYS_USING_CNC           (0)     //使用CNC模块

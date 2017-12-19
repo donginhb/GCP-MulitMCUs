@@ -1,6 +1,8 @@
 #ifndef  __HW_SYSCTRL_H
 #define  __HW_SYSCTRL_H
 
+#include "chip.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,6 +26,23 @@ void HW_SystemReset(void);
   * @note   此函数应用于Bootloader对APP的跳转,APP地址写死为0x70000000
   */
 void HW_JumToApp(void);
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HW_EnableIRQ(void);
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HW_DisableIRQ(void);
+
 
 
 #ifdef __cplusplus

@@ -16,8 +16,8 @@
   
 /***********************************<INCLUDES>**********************************/
 #include "CMU_CmdProcess.h"
-//#include "CMU_ExApi.h"
-#include "AbstractionLayer.h"
+#include "CMU_ExApi.h"
+#include "AbstractionLayer/AbstractionLayer.h"
 #include "DataType/DataType.h"
 
 /*****************************************************************************
@@ -37,7 +37,7 @@
 uBit32 CMU_Init(uBit8 uComType)                                
 {
     //绑定初始化处理函数
-    //CMU_InitExApi();
+    CMU_InitExApi();
 
     //打开通信连接
     if (COM_AL_Open(uComType))

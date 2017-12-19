@@ -174,6 +174,34 @@ static uBit32 BOOT_EraseAppFlash(void)
 }
 
 
+/**
+  * @brief  将缓冲区数据写入FALSH之中
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+static uBit32 BOOT_WriteBuffToFlah(void)
+{
+    //校验缓冲区长度
+    if (m_ulBuffIndex == 0)
+    {
+        return BOOT_ERR_PACK_SIZE;
+    }
+    
+    //若缓冲区满,将数据写入FLASH之中
+    if (FLASH_Write(m_ulBaseFlashAddr + m_ulFlashIndex, m_uUpdateDataBuff, UPDATE_DATA_BUFF_SIZE))
+    {
+        return BOOT_ERR_FLASH_OPS;   //(写入失败)
+    }
+    
+    //写入成功,则进行数据更新
+    m_ulBuffIndex = 0;                                      //清空Buff索引
+    m_ulFlashIndex += UPDATE_DATA_BUFF_SIZE;                //更新Flash地址索引
+    memset(m_uUpdateDataBuff, 0, UPDATE_DATA_BUFF_SIZE);    //清空Buff
+    
+    return BOOT_ERR_SUCCESS;
+}
+
+
 /*****************************************************************************
  * BOOTLOADER相关控制接口
  ****************************************************************************/
@@ -211,35 +239,6 @@ uBit32 BOOT_InitFlash(uBit32 ulFlashBank, uBit16 nBinFileCheckSum, uBit32 ulBinF
 
 
 /**
-  * @brief  将缓冲区数据写入FALSH之中
-  * @param  None
-  * @retval 0-成功 非0-失败
-  */
-uBit32 BOOT_WriteBuffToFlah(void)
-{
-    //校验缓冲区长度
-    if (m_ulBuffIndex == 0)
-    {
-        return BOOT_ERR_PACK_SIZE;
-    }
-    
-    //若缓冲区满,将数据写入FLASH之中
-    if (FLASH_Write(m_ulBaseFlashAddr + m_ulFlashIndex, m_uUpdateDataBuff, UPDATE_DATA_BUFF_SIZE))
-    {
-        return BOOT_ERR_FLASH_OPS;   //(写入失败)
-    }
-    
-    //写入成功,则进行数据更新
-    m_ulCurFileLen += m_ulBuffIndex;                        //记录文件长度
-    m_ulBuffIndex = 0;                                      //清空Buff索引
-    m_ulFlashIndex += UPDATE_DATA_BUFF_SIZE;                //更新Flash地址索引
-    memset(m_uUpdateDataBuff, 0, UPDATE_DATA_BUFF_SIZE);    //清空Buff
-    
-    return BOOT_ERR_SUCCESS;
-}
-
-
-/**
   * @brief  升级数据存储
   * @param  pBuff 升级数据
   * @param  ulSize 数据长度 
@@ -265,6 +264,9 @@ uBit32 BOOT_StoreUpdateDataToBuff(uBit8 *pBuff, uBit32 ulSize, uBit32 ulFinshFlg
     //复制数据到缓冲区
     memcpy(&m_uUpdateDataBuff[m_ulBuffIndex], pBuff, ulSize);
     m_ulBuffIndex += ulSize;
+    
+    //更新文件长度
+    m_ulCurFileLen += ulSize;
     
     //判断是否最后一包
     if (ulFinshFlg)

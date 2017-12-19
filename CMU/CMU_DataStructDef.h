@@ -59,8 +59,8 @@ typedef struct _cmu_external_fun_table
     void (*pf_SYS_SetSysStatusBit)(uBit32 ulStatusBit);
     uBit32 (*pf_SYS_PreUpdateDevProc)(Bit8* pUpdateData, uBit32 ulDataLen);         //
     uBit32 (*pf_SYS_PostUpdateDevProc)(Bit8* pUpdateData, uBit32 ulDataLen);        //
-    uBit32 (*pf_SYS_UpdateSLC)(Bit8* pUpdateData, uBit32 ulDataLen);                //更新M0程序(进入Bootloader)
-    uBit32 (*pf_SYS_UpdateIPO)(Bit8* pUpdateData, uBit32 ulDataLen);                //更新M4程序(进入Bootloader)
+    uBit32 (*pf_SYS_UpdateSLC)(uBit8* pUpdateData, uBit32 ulDataLen);                //更新M0程序(进入Bootloader)
+    uBit32 (*pf_SYS_UpdateIPO)(uBit8* pUpdateData, uBit32 ulDataLen);                //更新M4程序(进入Bootloader)
     uBit32 (*pf_SYS_UpdateBootloader)(Bit8* pUpdateData, uBit32 ulDataLen);    
     uBit32 (*pf_SYS_GetSLCVersion)(SOFTWARE_VERSION* pVersion);
     uBit32 (*pf_SYS_GetIPOVersion)(SOFTWARE_VERSION* pVersion);
@@ -69,6 +69,10 @@ typedef struct _cmu_external_fun_table
     //将固定循环程序代码程序写入缓冲区 iBlockNo--块序号 从0开始
     uBit32 (*pf_SYS_UpdateCCFileData)(uBit32 ulBlockNo, uBit8 *pBuff, uBit32 ulSize,uBit8 uEndFlag);
     void   (*pf_SYS_Reset)(void);
+    
+    uBit32 (*pf_SYS_GetCncAlarmStatus)(void);       //获取CNC报警状态 2017.12.18 Duhanfeng
+    uBit32 (*pf_SYS_ClearAppFlag)(void);            //清除APP存在标志 2017.12.19 Duhanfeng
+    uBit32 (*pf_SYS_ClearSubAppFlag)(void);         //清除副APP存在标志 2017.12.19 Duhanfeng
     
     //高速接口
     uBit32 (*pf_GPIO_GetHSpdOutputStatus)(void);
@@ -122,9 +126,9 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_PAX_Enable)(uBit32 ulAxisNO, Bit32 iEnable, Bit32 iWaitExeResult);          //设置电机使能-断使能-加使能
     uBit32 (*pf_PAX_Reset)(uBit32 ulAxisNO);                                                //电机复位
     uBit32 (*pf_PAX_SendSvParm)(uBit32 ulAxisNO, uBit8 *pParmData);                         //设置伺服参数
-    uBit32 (*pf_PAX_SetPulseRate)(float32 fPulseRate);                                      //设置脉冲当量 duhanfeng 2017.12.16 新增
-    uBit32 (*pf_PAX_GetRunningStatus)(uBit32 ulAxisNO);                                     //获取轴运行状态 duhanfeng 2017.12.16 新增
-    double64 (*pf_PAX_GetCmdPos)(uBit32 ulAxisNO);                                          //获取轴指令位置 duhanfeng 2017.12.16 新增
+    uBit32 (*pf_PAX_SetPulseRate)(float32 fPulseRate);                                      //设置脉冲当量 Duanfeng 2017.12.16 新增
+    uBit32 (*pf_PAX_GetRunningStatus)(uBit32 ulAxisNO);                                     //获取轴运行状态 Duanfeng 2017.12.16 新增
+    double64 (*pf_PAX_GetCmdPos)(uBit32 ulAxisNO);                                          //获取轴指令位置 Duanfeng 2017.12.16 新增
     uBit32 (*pf_PAX_GetSvParm)(uBit32 ulAxisNO, uBit16 nParmNo, uBit8 *pParmData);          //获取伺服电机参数
 
 

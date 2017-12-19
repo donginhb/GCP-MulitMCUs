@@ -590,6 +590,10 @@ int CNCSYS_Init(void)
 #endif
     
     
+#if !CNC_USING_EXT_SRAM 
+    CNCSYS_ClrAlarmBit(SYS_ALARM_SDRAM_INIT_ERROR);
+#endif
+    
     ////////////////////////////////////////////
     
     return 0;

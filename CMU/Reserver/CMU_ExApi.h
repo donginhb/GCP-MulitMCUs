@@ -10,8 +10,8 @@
 
 typedef struct
 {
-    uBit32 (*pf_SYS_UpdateSLC)(Bit8* pUpdateData, uBit32 ulDataLen);
-    uBit32 (*pf_SYS_UpdateIPO)(Bit8* pUpdateData, uBit32 ulDataLen);
+    uBit32 (*pf_SYS_UpdateSLC)(uBit8* pUpdateData, uBit32 ulDataLen);
+    uBit32 (*pf_SYS_UpdateIPO)(uBit8* pUpdateData, uBit32 ulDataLen);
     uBit32 (*pf_SYS_GetSLCVersion)(SOFTWARE_VERSION* pVersion);
     void   (*pf_SYS_Reset)(void);
     void   (*pf_SYS_WriteSLCProgID)(void);

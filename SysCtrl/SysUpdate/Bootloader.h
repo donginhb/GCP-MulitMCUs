@@ -4,13 +4,13 @@
 #include "DataType/DataType.h"
 
 //BOOTLOADER 错误码定义
-#define BOOT_ERR_SUCCESS        (0) //成功
-#define BOOT_ERR_FLASH_ADDR     (1) //FLASH地址错误
-#define BOOT_ERR_FLASH_OPS      (2) //FLASH操作出错
-#define BOOT_ERR_FILE_INFO      (3) //BIN文件信息错误
-#define BOOT_ERR_PACK_SIZE      (4) //数据包的长度出错
-#define BOOT_ERR_DATA_CHECK     (5) //数据校验出错
-
+#define BOOT_ERR_SUCCESS                        (0)                 //成功
+#define BOOT_ERR_FLASH_ADDR                     (1)                 //FLASH地址错误
+#define BOOT_ERR_FLASH_OPS                      (2)                 //FLASH操作出错
+#define BOOT_ERR_FILE_INFO                      (3)                 //BIN文件信息错误
+#define BOOT_ERR_PACK_SIZE                      (4)                 //数据包的长度出错
+#define BOOT_ERR_DATA_CHECK                     (5)                 //数据校验出错
+#define BOOT_ERR_DATA_LOST                      (6)                 //数据丢失(数据包不连续)
 
 
 #ifdef __cplusplus

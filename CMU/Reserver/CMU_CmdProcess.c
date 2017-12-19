@@ -15,10 +15,10 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "AbstractionLayer.h"
+#include "AbstractionLayer/AbstractionLayer.h"
 #include "CMU_CmdProcess.h"
 #include "CMU_DataStructDef.h"
-//#include "CMU_ExApi.h"
+#include "CMU_ExApi.h"
 #include "CMU_ErrorMana.h"
 
 #include "DataType/DataType.h"
@@ -30,23 +30,6 @@
 
 static COM_DATA_PACK   m_sPackData;     //数据包缓冲区
 
-
-/**
-  * @brief  系统APP更新
-  * @param  pBuff 数据缓冲区
-  * @param  ulSize 缓冲区长度
-  * @retval 0-成功 非0-失败
-  */
-uBit32 SYS_UpdateAPP(uBit8 *pBuff, uBit32 ulSize);
-
-
-/**
-  * @brief  系统副APP更新
-  * @param  pBuff 数据缓冲区
-  * @param  ulSize 缓冲区长度
-  * @retval 0-成功 非0-失败
-  */
-uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize);
 
 /*****************************************************************************
  * 内部指令实现接口
@@ -60,27 +43,24 @@ uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize);
 static uBit32 Sys_SetNomalCmdProcess(COM_DATA_PACK *pRcvCtrlData)
 {
     uBit32 ulRet = CMU_ERR_INVALID_CMD;
-    //CMU_EXTERNAL_FUN_TEBLE *pExternFun = CMU_GetExternFunAddr();
+    CMU_EXTERNAL_FUN_TEBLE *pExternFun = CMU_GetExternFunAddr();
     
     switch(pRcvCtrlData->ulID.ulComDataID.ulCmdIndex)
     {
     case SYS_SETCMD_UPDATE_SLC:                        //SLC升级数据
-        //ulRet = pExternFun->pf_SYS_UpdateSLC((Bit8*)pRcvCtrlData->pDataBuf, 
-        //    pRcvCtrlData->ulDataLen);
-        ulRet = SYS_UpdateSubAPP((uBit8*)pRcvCtrlData->pDataBuf, pRcvCtrlData->ulDataLen);
+        ulRet = pExternFun->pf_SYS_UpdateSLC((Bit8*)pRcvCtrlData->pDataBuf, 
+            pRcvCtrlData->ulDataLen);
         break;
     case SYS_SETCMD_UPDATE_IPO:                        //IPO升级数据
-        //ulRet = pExternFun->pf_SYS_UpdateIPO((Bit8*)pRcvCtrlData->pDataBuf, 
-        //    pRcvCtrlData->ulDataLen);
-        
-        ulRet = SYS_UpdateAPP((uBit8*)pRcvCtrlData->pDataBuf, pRcvCtrlData->ulDataLen);
+        ulRet = pExternFun->pf_SYS_UpdateIPO((Bit8*)pRcvCtrlData->pDataBuf, 
+            pRcvCtrlData->ulDataLen);
         break;
     case SYS_SETCMD_SYS_RESET:
-        //pExternFun->pf_SYS_Reset();
+        pExternFun->pf_SYS_Reset();
         ulRet = CMU_ERR_SUCCESS;
         break;
     case SYS_SETCMD_SET_SLC_FLAG:
-        //pExternFun->pf_SYS_WriteSLCProgID();
+        pExternFun->pf_SYS_WriteSLCProgID();
         ulRet = CMU_ERR_SUCCESS;
         break;
         

@@ -78,36 +78,16 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     switch(pRcvCtrlData->ulRevID.ulComDataID.ulCmdIndex)
     {
     case SYS_SETCMD_UPDATE_SLC:                         //SLC升级数据
-        ulRet = m_sExternalFunTable.pf_SYS_UpdateSLC((Bit8*)pRcvCtrlData->pRevBuf, 
+        ulRet = m_sExternalFunTable.pf_SYS_UpdateSLC((uBit8*)pRcvCtrlData->pRevBuf, 
             pRcvCtrlData->ulRevLen);
         break;
     case SYS_SETCMD_UPDATE_IPO:                         //IPO升级数据
-        ulRet = m_sExternalFunTable.pf_SYS_UpdateIPO((Bit8*)pRcvCtrlData->pRevBuf, 
+        ulRet = m_sExternalFunTable.pf_SYS_UpdateIPO((uBit8*)pRcvCtrlData->pRevBuf, 
             pRcvCtrlData->ulRevLen);
         break;
     case SYS_SETCMD_COM_STYLE:                          //通信类型
         {
             break;
-#if 0
-            /*暂时未启用,防止不当操作使系统不可用*/
-            ulComType = *(uBit16*)pRcvCtrlData->pRevBuf;
-
-            if (ulComType==COM_AL_GetComType())
-            {
-                ulRet = CMU_ERR_SUCCESS;
-                break;
-            }
-
-            //检查通信方式是否挂接
-            if (COM_AL_IsComTypeValid(ulComType)==false)
-            {
-                ulRet = CMU_ERR_INVALID_COMTYPE;
-                break;
-            }
-
-            //调用外部接口设置通信方式
-            ulRet = m_sExternalFunTable.pf_SYS_SetComType(ulComType);
-#endif
         }
     case SYS_SETCMD_BLINK_DEV_LED:                    //测试板卡
         ulRet = m_sExternalFunTable.pf_DEV_BlinkLED(*(uBit32*)pRcvCtrlData->pRevBuf);
@@ -173,6 +153,15 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case SYS_SETCMD_SYS_RESET://系统复位
         m_sExternalFunTable.pf_SYS_Reset();
         break;
+        
+    case SYS_SETCMD_APP_FLAG_CLEAR:         //APP存在标志清除 2017.12.19 Duhanfeng]
+        ulRet = m_sExternalFunTable.pf_SYS_ClearAppFlag();
+        break;
+        
+    case SYS_SETCMD_SUB_APP_FLAG_CLEAR:     //副APP存在标志清除 2017.12.19 Duhanfeng]
+        ulRet = m_sExternalFunTable.pf_SYS_ClearSubAppFlag();
+        break;
+        
     default:break;
     }
 
@@ -328,7 +317,15 @@ uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             CMU_AddToSendCtrlData(NULL,sizeof(Bit32));
             ulRet = CMU_ERR_SUCCESS;
             break;
-        }        
+        }
+    case SYS_GETCMD_CNC_ALARM:                      //获取CNC系统报警 2017.12.18 Duanfeng
+        {
+            
+            *(Bit32*)pSendBuf = m_sExternalFunTable.pf_SYS_GetCncAlarmStatus();
+            CMU_AddToSendCtrlData(NULL,sizeof(Bit32));
+            ulRet = CMU_ERR_SUCCESS;
+            break;
+        }
         
     default: break;
     }
@@ -1631,7 +1628,7 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             break;
         }
         
-    case MOTOR_SETCMD_BASE_CTRL_PARM:   //基本控制参数设置 2017.12.11 duhanfeng
+    case MOTOR_SETCMD_BASE_CTRL_PARM:   //基本控制参数设置 2017.12.11 Duanfeng
         {
             ulRet = Motor_SetAxisBaseCtrlPram(ulMotorNo, pRcvCtrlData);
             break;
@@ -1754,7 +1751,7 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             break;
         }
         
-    //2017.12.16 duhanfeng 新增
+    //2017.12.16 Duanfeng 新增
     case MOTOR_GETCMD_RUNNING_STATUS:                   //获取电机运行状态
         {
             uBit32 ulAxisNO = (*(long int *)(&pRcvCtrlData->pRevBuf[0]));
@@ -2409,7 +2406,7 @@ uBit32 CMU_CmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case DATA_TYPE_SERVO:
         ulRet = Servo_CmdProcess(pRcvCtrlData);
         break;
-    case DATA_TYPE_CUSTOM:      //2017.12.13 duhanfeng  水果机接口 新增
+    case DATA_TYPE_CUSTOM:      //2017.12.13 Duanfeng  水果机接口 新增
         ulRet = Custom_CmdProcess(pRcvCtrlData);
         break;
     default: break;

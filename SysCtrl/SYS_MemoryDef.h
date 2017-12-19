@@ -64,10 +64,10 @@
 
 //Sub-Application(0)
 #define FLASH_SUB_APP_BANK              (3)                 //副应用程序FLASH块
-#define FLASH_SUB_APP_START_SECTOR      (0)                 //副应用程序开始扇区
-#define FLASH_SUB_APP_END_SECTOR        (0)                 //副应用程序结束扇区
-#define FLASH_SUB_APP_START_ADDR        (0x00000000)        //副应用程序开始地址
-#define FLASH_SUB_APP_END_ADDR          (0x00000000)        //副应用程序结束地址
+#define FLASH_SUB_APP_START_SECTOR      (7)                 //副应用程序开始扇区
+#define FLASH_SUB_APP_END_SECTOR        (29)                //副应用程序结束扇区
+#define FLASH_SUB_APP_START_ADDR        (0x00007000)        //副应用程序开始地址
+#define FLASH_SUB_APP_END_ADDR          (0x0007FFFF)        //副应用程序结束地址
 
 #elif defined(LPC43XX)
 

@@ -22,6 +22,7 @@
 #include "VM_HardwareDef.h"
       
 #include "DataType/DataType.h"
+#include "SysCtrl/SysUpdate/SysUpdate.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include "SysPeripheral/KEY/KEY.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
@@ -155,6 +156,10 @@ void VM_HwInit(void)
     
     //初始化轴
     AXIS_Init(0, 3, 1, 0, 0, OUTPUT_IO_MOTOR_DIR);
+    
+    //设置Bootloader LED灯
+    SYS_UPDATE_SetMainWorkLed(g_GcpIOTable.pOutputGroup[OUTPUT_IO_LED_RUN1].nPort, 
+                              g_GcpIOTable.pOutputGroup[OUTPUT_IO_LED_RUN1].nPin);
     
 }
 

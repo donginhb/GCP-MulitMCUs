@@ -24,7 +24,7 @@
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 #include "SysPeripheral/IRQ/IRQ_Man.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
-
+#include "SysUpdate/SysUpdate.h"
 #include <stdlib.h>
 
 #if SYS_USING_FULL_CMU
@@ -44,7 +44,6 @@
 #if SYS_USING_BOOT
 #include "CMU/Simplify/CMU_CmdProcess.h"
 #include "SysUpdate/Bootloader.h"
-#include "SysUpdate/SysUpdate.h"
 #endif
 
 
@@ -66,12 +65,17 @@ uBit32 SYS_Init(void)
     //初始化中断接口
     IRQ_Init();
     
+    //开总中断
+    CoreCtrl_EnableIRQ();
+    
     //初始化系统时钟
     SysTime_Init(1, false, 0);
     
     //初始化Bootloader
-#if SYS_USING_BOOT
     SYS_UPDATE_Init();
+    
+#if SYS_USING_BOOT
+    SYS_UPDATE_JumToApp();
 #endif
     
     //初始化CMU
@@ -114,6 +118,11 @@ void SYS_MainTaskHandler(void)
 #if SYS_USING_CNC
     CNCSYS_MainCtrl();
 #endif
-        
+    
+    //Bootloader LED管理
+#if SYS_USING_BOOT
+    SYS_UPDATE_ShowMainWorkLed();
+#endif
+    
 }
 

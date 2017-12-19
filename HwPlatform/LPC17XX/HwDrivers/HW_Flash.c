@@ -42,7 +42,7 @@
 #define LPC17XX_FLASH_SMALL_CAPACITY_SECTOR         (16)    //小容量扇区数
 #define LPC17XX_FLASH_BIG_CAPACITY_SECTOR           (14)    //大容量扇区数
 
-#define LPC17XX_FLASH_MIX_WRITE_BYTE                (256)   //写操作最小的字节数
+#define LPC17XX_FLASH_MIN_WRITE_BYTE                (256)   //写操作最小的字节数
 
 //定义flash内存尺寸
 typedef enum
@@ -123,7 +123,7 @@ static uint32_t HW_FLASH_CheckAddr(uint32_t ulFlashAddr)
 uint32_t HW_FLASH_GetMinWriteByte(void)
 {
     
-    return LPC17XX_FLASH_MIX_WRITE_BYTE;
+    return LPC17XX_FLASH_MIN_WRITE_BYTE;
 }
 
 
@@ -362,7 +362,7 @@ uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_
     
     switch (ulCheckSize)
     {
-    case 1: 
+    case sizeof(uint8_t): 
         {
             uint8_t uCheckSum = 0;
             
@@ -373,7 +373,7 @@ uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_
             
             return uCheckSum;
         }
-    case 2:
+    case sizeof(uint16_t):
         {
             uint16_t nCheckSum = 0;
             
@@ -384,7 +384,7 @@ uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_
             
             return nCheckSum;
         }
-    case 4:
+    case sizeof(uint32_t):
         {
             uint32_t ulCheckSum = 0;
             

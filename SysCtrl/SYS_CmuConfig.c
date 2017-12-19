@@ -19,7 +19,7 @@
 #include "SYS_Ctrl.h"
 #include "SysConfig.h"
 #include "DataType/DataType.h"
-      
+
 #if SYS_USING_SIMP_CMU
 #include "CMU/Simplify/CMU_Interface.h"
 #include "CMU/Simplify/CMU_DataStructDef.h"
@@ -41,6 +41,7 @@
 #include "CNC/SPM/SPM_ParmCheck.h"
 #endif
 
+#include "SysCtrl/SysUpdate/SysUpdate.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 #include "SysPeripheral/IRQ/IRQ_Man.h"
@@ -101,10 +102,18 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_SYS_SetComType = CMU_SetComType;
     CMUFunTable.pf_SYS_Reset = CoreCtrl_ResetSystemNow;
     
+    CMUFunTable.pf_SYS_ClearAppFlag = SYS_ClearAppFlag;     //清除APP存在标志 2017.12.19 Duhanfeng
+    CMUFunTable.pf_SYS_ClearSubAppFlag = SYS_ClearSubAppFlag;
+    
     //IO控制接口
     CMUFunTable.pf_GPIO_SetOutputPinState = GPIO_MAN_SetOutputPinState;
     CMUFunTable.pf_GPIO_GetOutputPinState = GPIO_MAN_GetOutputPinState;
     CMUFunTable.pf_GPIO_GetInputPinState = GPIO_MAN_GetInputPinState;
+    
+#if SYS_USING_BOOT
+    CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSubAPP;
+    CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateAPP;
+#endif
     
 #if SYS_USING_CNC
     
@@ -118,6 +127,8 @@ static uBit32 SYS_InitCmuFunTable(void)
 #endif
     
     CMUFunTable.pf_SYS_GetStateReadAddr = CNCSYS_GetStateReadAddr;
+    
+    CMUFunTable.pf_SYS_GetCncAlarmStatus = CNCSYS_GetAlarmStatus;   //获取CNC报警状态 2017.12.18 Duhanfeng
     
     //--------------------------------------------参数管理模块------------------------------------------------
     CMUFunTable.pf_SPM_SetSysCtrlParm = SPM_SetSysCtrlParm;
@@ -157,8 +168,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_PAX_Enable = PAX_Enable;
     CMUFunTable.pf_PAX_Reset    = PAX_Reset;
     CMUFunTable.pf_PAX_SendSvParm    = PAX_SendSvParm;
-    CMUFunTable.pf_PAX_GetRunningStatus = PAX_GetRunningStatus; //获取轴运行状态 duhanfeng 2017.12.16 新增
-    CMUFunTable.pf_PAX_GetCmdPos    = PAX_GetCmdPos;            //获取轴指令位置 duhanfeng 2017.12.16 新增
+    CMUFunTable.pf_PAX_GetRunningStatus = PAX_GetRunningStatus; //获取轴运行状态 Duanfeng 2017.12.16 新增
+    CMUFunTable.pf_PAX_GetCmdPos    = PAX_GetCmdPos;            //获取轴指令位置 Duanfeng 2017.12.16 新增
     CMUFunTable.pf_PAX_GetSvParm    = PAX_GetSvParm;
     
     CMUFunTable.pf_IO_SetOutputStatus = IO_SetOutputStatus;    
@@ -298,7 +309,7 @@ static uBit32 SYS_InitCmuUartInterface(void)
     return 0;
 }
 
-
+#if 0
 static uBit32 SYS_InitCmuFunTable(void)
 {
     CMU_EXTERNAL_FUN_TEBLE CMUFunTable = {0};
@@ -306,8 +317,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     //--------------------------------------------系统管理模块------------------------------------------------
     
     //系统控制接口
-    //CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSLC;
-    //CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateIPO;
+    CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSubAPP;
+    CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateAPP;
     CMUFunTable.pf_SYS_GetSLCVersion = SYS_GetSLCVersion;
     CMUFunTable.pf_SYS_Reset = CoreCtrl_ResetSystemNow;
     //CMUFunTable.pf_SYS_WriteSLCProgID = BOOT_WriteSLCProgID;
@@ -318,6 +329,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     
     return 0;
 }
+#endif
 
 
 /**
@@ -327,7 +339,7 @@ static uBit32 SYS_InitCmuFunTable(void)
   */
 uBit32 SYS_InitCMU(void)
 {
-    SYS_InitCmuFunTable();
+    //SYS_InitCmuFunTable();
     SYS_InitCmuUartInterface();
     CMU_Init(COM_TYPE_UART);
     

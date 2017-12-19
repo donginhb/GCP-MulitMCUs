@@ -48,3 +48,27 @@ void HAL_JumToApp(void)
     HW_JumToApp();
     
 }
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HAL_EnableIRQ(void)
+{
+    HW_EnableIRQ();
+    
+}
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HAL_DisableIRQ(void)
+{
+    HW_DisableIRQ();
+    
+}

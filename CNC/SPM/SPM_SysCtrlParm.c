@@ -148,7 +148,7 @@ void SPM_InitSysCtrlParm()
         }
     }
     
-#if 0   //2017.12.05 duhanfeng 暂时屏蔽 
+#if 0   //2017.12.05 Duanfeng 暂时屏蔽 
     //从FLASH加载系统控制参数
     if (!SPM_LoadParm())
     { 
