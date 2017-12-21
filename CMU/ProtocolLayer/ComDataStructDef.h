@@ -327,6 +327,7 @@ typedef union _COM_DATA_ID{
 
 //常规查询指令
 #define VM_GETCMD_AISLE_MOTOR_STATUS        (1)     //查询货道电机运行状态
+#define VM_GETCMD_TEMP_SAMPLING_VALUE       (2)     //查询温度采样值
 
 /******************************************************************************/
 

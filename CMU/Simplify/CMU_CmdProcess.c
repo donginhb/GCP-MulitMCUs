@@ -63,7 +63,7 @@ void CoreCtrl_ResetSystemDelay(uBit32 ulDelayMs);
   * @param  pVersion 版本结构指针
   * @retval 0-成功 非0-失败
   */
-uBit32 SYS_GetSLCVersion(SOFTWARE_VERSION* pVersion);
+uBit32 SYS_GetGCPVersion(SOFTWARE_VERSION* pVersion);
 
 
 /*****************************************************************************
@@ -140,7 +140,7 @@ static uBit32 Sys_GetNomalCmdProcess(COM_DATA_PACK *pRcvCtrlData)
             m_sSendPackData.ulDataLen = sizeof(SOFTWARE_VERSION);
             m_sSendPackData.ulID.ulComDataID.ulTransmitFrame = TRANSMIT_SELF_FRAME;
             
-            ulRet = SYS_GetSLCVersion((SOFTWARE_VERSION *)m_sSendPackData.pDataBuf);
+            ulRet = SYS_GetGCPVersion((SOFTWARE_VERSION *)m_sSendPackData.pDataBuf);
             
             break;
         }

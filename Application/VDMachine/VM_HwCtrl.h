@@ -28,8 +28,27 @@ void VM_HwInit(void);
   * @param  None
   * @retval None
   */
-void VM_MainWorkLedShow(void);
+void VM_ShowMainWorkLed(void);
 
+
+/*****************************************************************************
+ * 温度采集线程接口
+ ****************************************************************************/
+
+/**
+  * @brief  温度数据采集
+  * @param  None
+  * @retval None
+  */
+void VM_SamplingTempValue(void);
+
+
+/**
+  * @brief  温度采集数据获取
+  * @param  None
+  * @retval 采集到的温度数据(原始AD值,未作转换)
+  */
+uBit32 VM_GetTempSamplingValue(void);
 
 
 /*****************************************************************************

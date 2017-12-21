@@ -2294,7 +2294,13 @@ uBit32 Custom_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
             break;
         }
-        
+    case VM_GETCMD_TEMP_SAMPLING_VALUE: //查询温度采样值
+        {
+            *((uBit32*)pSendBuf) = m_sExternalFunTable.pf_VM_GetTempSamplingValue();
+            ulRet = CMU_ERR_SUCCESS;
+            CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
+            break;
+        }
     default:break;
     }
     

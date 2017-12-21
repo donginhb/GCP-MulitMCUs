@@ -47,6 +47,7 @@ static void VM_InitExCmu(void)
     CMU_EXTERNAL_FUN_TEBLE CMUFunTable = {0};
     CMUFunTable.pf_VM_EnabletAisleMotor = VM_EnableAisleMotor;
     CMUFunTable.pf_VM_GetAisleMotorRunningState = VM_GetAisleMotorRunningState;
+    CMUFunTable.pf_VM_GetTempSamplingValue = VM_GetTempSamplingValue;
     CMUFunTable.pf_CSM_SetMotorPosCtrlMotion = VM_MoveLiftMotor;
     CMUFunTable.pf_PAX_SetPulseRate = VM_SetPulseRate;
     
@@ -87,12 +88,15 @@ void VM_Init(void)
 void VM_MainProc(void)
 {
     //LED显示
-    VM_MainWorkLedShow();
+    VM_ShowMainWorkLed();
     
     //货道电机控制检测
     VM_AisleMotorHandler();
     
     //升降平台限位检测
     VM_LiftPlatformHandler();
+    
+    //温度数据采集处理
+    VM_SamplingTempValue();
     
 }

@@ -48,8 +48,8 @@
 //定时器数量定义
 #define HW_TIME_COUNT               (4)             //定时器数量定义
 
-#define TIME_CH_COUNT               (2)             //通道计数
-#define TIME_CH_MASK(n)             ((n)&0x3)       //通道掩码
+#define HW_TIME_CH_COUNT            (2)             //通道计数
+#define HW_TIME_CH_MASK(n)          ((n)&0x3)       //通道掩码
 
 //输入计数功能配置
 static void HW_TIM_InputCountConfig(uint8_t uTimeNode, uint8_t uChannelNum);
@@ -60,7 +60,7 @@ static LPC_TIMER_T * const TIM[HW_TIME_COUNT] = {LPC_TIMER0, LPC_TIMER1, LPC_TIM
 static const IRQn_Type TIM_IRQn[HW_TIME_COUNT] = {TIMER0_IRQn, TIMER1_IRQn, TIMER2_IRQn, TIMER3_IRQn};   //中断向量
 
 //PWM1 IO 引脚定义
-static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][TIME_CH_COUNT] = 
+static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] = 
 {
     //TIME0
     {
@@ -97,9 +97,9 @@ static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][TIME_CH_COUNT] =
   */
 static void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask)
 {
-    for (int i = 0; i < TIME_CH_COUNT; i++)
+    for (int i = 0; i < HW_TIME_CH_COUNT; i++)
     {
-        if (TIME_CH_MASK(uChannelMask) & (0x1<<i))
+        if (HW_TIME_CH_MASK(uChannelMask) & (0x1<<i))
         {
             Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimePinMux[uTimeNode][i].pingrp, m_TimePinMux[uTimeNode][i].pinnum, m_TimePinMux[uTimeNode][i].modefunc);
         }

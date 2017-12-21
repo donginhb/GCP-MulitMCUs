@@ -301,10 +301,11 @@ typedef struct _cmu_external_fun_table
     
     //-----------------------------------自动售货机相关控制接口(自定义接口)-----------------------------------
     //使能货道电机
-    uBit32 (*pf_VM_EnabletAisleMotor)(uBit32 ulRow, uBit32 ulCol);      //货道电机启动
+    uBit32 (*pf_VM_EnabletAisleMotor)(uBit32 ulRow, uBit32 ulCol);
     //获取货道电机运行状态
-    uBit32 (*pf_VM_GetAisleMotorRunningState)(void);                    //货道电机运行状态获取
-    
+    uBit32 (*pf_VM_GetAisleMotorRunningState)(void);
+    //查询温度采样值
+    uBit32 (*pf_VM_GetTempSamplingValue)(void);
     
     
 }CMU_EXTERNAL_FUN_TEBLE;

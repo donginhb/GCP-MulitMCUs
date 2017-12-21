@@ -569,6 +569,11 @@ void CMU_InitExApi(void)
     {
         m_sExternalFunTable.pf_VM_GetAisleMotorRunningState = u32Fun_void;
     }
+    if (m_sExternalFunTable.pf_VM_GetTempSamplingValue==0)
+    {
+        m_sExternalFunTable.pf_VM_GetTempSamplingValue = u32Fun_void;
+    }
+    
     
 }                                     
 
@@ -593,6 +598,11 @@ void CMU_SetExternCustomFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable)
         m_sExternalFunTable.pf_VM_GetAisleMotorRunningState = pCmuExternFunTable->pf_VM_GetAisleMotorRunningState;
     }
     
+    if (pCmuExternFunTable->pf_VM_GetTempSamplingValue != 0)
+    {
+        m_sExternalFunTable.pf_VM_GetTempSamplingValue = pCmuExternFunTable->pf_VM_GetTempSamplingValue;
+    }
+    
     if (pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion != 0)
     {
         m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion = pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion;
@@ -602,6 +612,7 @@ void CMU_SetExternCustomFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable)
     {
         m_sExternalFunTable.pf_PAX_SetPulseRate = pCmuExternFunTable->pf_PAX_SetPulseRate;
     }
+    
     
 }
 

@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V7.40.7.9843/W32 for ARM                 19/Dec/2017  17:47:39
+# IAR ELF Linker V7.40.7.9843/W32 for ARM                 20/Dec/2017  19:49:28
 # Copyright 2007-2015 IAR Systems AB.
 #
 #    Output file  =  
@@ -674,6 +674,7 @@ HW_UART_DmaSend         0x00001bb3    0x24  Code  Lc  HW_Uart.o [1]
 HW_UART_DmaSendBuff     0x00001bf9    0x5e  Code  Gb  HW_Uart.o [1]
 HW_UART_DmaTxInit       0x000019a7    0x86  Code  Lc  HW_Uart.o [1]
 HW_UART_Enable          0x00001aaf    0x44  Code  Gb  HW_Uart.o [1]
+HW_UART_IOConfig        0x0000185f    0xb2  Code  Lc  HW_Uart.o [1]
 HW_UART_Init            0x00001a2d    0x82  Code  Gb  HW_Uart.o [1]
 HW_UART_RecvBuff        0x00001af3    0x24  Code  Gb  HW_Uart.o [1]
 HW_UART_RecvHandler     0x00001b17    0x32  Code  Gb  HW_Uart.o [1]
@@ -714,7 +715,7 @@ RingBuffer_PopMult      0x00001def    0xb2  Code  Gb  ring_buffer.o [1]
 SPI_IRQHandler          0x000021a9     0xa  Code  Gb  HW_IRQHandler.o [1]
 SSP0_IRQHandler         0x000021b3     0xa  Code  Gb  HW_IRQHandler.o [1]
 SSP1_IRQHandler         0x000021bd     0xa  Code  Gb  HW_IRQHandler.o [1]
-SYS_GetSLCVersion       0x00004499    0x26  Code  Gb  SYS_Ctrl.o [1]
+SYS_GetGCPVersion       0x00004499    0x26  Code  Gb  SYS_Ctrl.o [1]
 SYS_Init                0x00004925    0x2c  Code  Gb  SYS_Init.o [1]
 SYS_InitCMU             0x000048fd    0x10  Code  Gb  SYS_CmuConfig.o [1]
 SYS_InitCmuUartInterface
@@ -759,7 +760,6 @@ UART1_IRQHandler        0x00002163     0xa  Code  Gb  HW_IRQHandler.o [1]
 UART2_IRQHandler        0x0000216d     0xa  Code  Gb  HW_IRQHandler.o [1]
 UART3_IRQHandler        0x00002177     0xa  Code  Gb  HW_IRQHandler.o [1]
 UART_Close              0x00004865    0x10  Code  Gb  UART.o [1]
-UART_IO_Init            0x0000185f    0xb2  Code  Lc  HW_Uart.o [1]
 UART_Init               0x00004841    0x14  Code  Gb  UART.o [1]
 UART_Open               0x00004855    0x10  Code  Gb  UART.o [1]
 UART_RecvBuff           0x0000488d    0x16  Code  Gb  UART.o [1]

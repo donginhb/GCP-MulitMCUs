@@ -133,7 +133,7 @@ static void HW_UART3_DMATC_IRQHandler(void);
   * @param  uUartNode 串口节点号
   * @retval None
   */
-static void UART_IO_Init(uint8_t uUartNode)
+static void HW_UART_IOConfig(uint8_t uUartNode)
 {
     switch (uUartNode)
     {
@@ -300,7 +300,7 @@ void HW_UART_Init(uint8_t uUartNode, uint32_t ulBaudRate)
     m_uUartInitFlags |= (0x1<<uUartNode);
     
     //初始化IO
-    UART_IO_Init(uUartNode);
+    HW_UART_IOConfig(uUartNode);
     
     //初始化串口基本配置
     Chip_UART_Init(USART[uUartNode]);

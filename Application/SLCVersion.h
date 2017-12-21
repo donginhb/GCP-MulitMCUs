@@ -24,6 +24,10 @@
   * 修改时间: 2017.12.19
   * 修改描述: 1.实现其Bootloader V2.0支持
   * 
+  * 系统版本: SJ40_0_4_R
+  * 修改时间: 2017.12.20
+  * 修改描述: 1.增加温度采集接口
+  * 
   ******************************************************************************
   */
   
@@ -35,9 +39,9 @@
 //APP版本定义
 #define APP_VER_STR                     "SJ40XXXD"      //项目版本
 #define APP_VER_NO0                     (0)             //大版本号
-#define APP_VER_NO1                     (3)             //小版本号
+#define APP_VER_NO1                     (4)             //小版本号
 #define APP_VER_PART                    (0)             //组件号(预留)
-#define APP_VER_FLAG                    'D'             //版本标示
+#define APP_VER_FLAG                    'R'             //版本标示
 
 
 #endif /* __SCL_VERSION_H */

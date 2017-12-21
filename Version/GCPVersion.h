@@ -48,7 +48,10 @@
   * 修改描述: 1.扩展CMU的相关接口
   *           2.修复LPC17XX EXTI 接口中,只能使能一路中断的BUG;
   * 
-  * 
+  * 系统版本: GC10_0_8_R
+  * 修改时间: 2017.12.20
+  * 修改描述: 1.增加LPC17XX ADC相关控制接口
+  *           2.当前版本作为LPC17XX的发布版本
   * 
   ******************************************************************************
   */
@@ -60,11 +63,11 @@
 
 
 //APP版本定义
-#define GCP_VER_STR                     "GC10XXXD"      //项目版本
+#define GCP_VER_STR                     "GC10XXXX"      //项目版本
 #define GCP_VER_NO0                     (0)             //大版本号
-#define GCP_VER_NO1                     (7)             //小版本号
+#define GCP_VER_NO1                     (8)             //小版本号
 #define GCP_VER_PART                    (0)             //组件号(预留)
-#define GCP_VER_FLAG                    'D'             //版本标示
+#define GCP_VER_FLAG                    'R'             //版本标示
 
 
 #endif /* __SCL_VERSION_H */

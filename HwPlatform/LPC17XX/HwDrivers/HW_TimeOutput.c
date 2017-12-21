@@ -50,9 +50,9 @@
 //定时器数量定义
 #define HW_TIME_COUNT               (4)             //定时器数量
 
-#define TIME_CH_COUNT               (4)             //通道计数
-#define TIME_CH_MASK(n)             ((n)&0xF)       //通道掩码
-#define TIME_DEFAULT_COUNT_RANG     (2)             //默认定时器计数范围
+#define HW_TIME_CH_COUNT            (4)             //通道计数
+#define HW_TIME_CH_MASK(n)          ((n)&0xF)       //通道掩码
+#define HW_TIME_DEFAULT_COUNT_RANG  (2)             //默认定时器计数范围
 
 //串口相关变量定义
 static LPC_TIMER_T * const TIM[HW_TIME_COUNT] = {LPC_TIMER0, LPC_TIMER1, LPC_TIMER2, LPC_TIMER3};
@@ -60,7 +60,7 @@ static const IRQn_Type TIM_IRQn[HW_TIME_COUNT] = {TIMER0_IRQn, TIMER1_IRQn, TIME
 
 
 //PWM1 IO 引脚定义
-static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][TIME_CH_COUNT] = 
+static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] = 
 {
     //TIME0
     {
@@ -99,9 +99,9 @@ static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][TIME_CH_COUNT] =
   */
 static void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask)
 {
-    for (int i = 0; i < TIME_CH_COUNT; i++)
+    for (int i = 0; i < HW_TIME_CH_COUNT; i++)
     {
-        if (TIME_CH_MASK(uChannelMask) & (0x1<<i))
+        if (HW_TIME_CH_MASK(uChannelMask) & (0x1<<i))
         {
             Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimePinMux[uTimeNode][i].pingrp, m_TimePinMux[uTimeNode][i].pinnum, m_TimePinMux[uTimeNode][i].modefunc);
         }
@@ -132,9 +132,9 @@ static void HW_TIM_OutputConfig(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t
     Chip_TIMER_ResetOnMatchEnable(TIM[uTimeNode], 3);
     
     //设置PWM时序
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 0, TIME_DEFAULT_COUNT_RANG-1);
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 1, TIME_DEFAULT_COUNT_RANG-1);
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 3, TIME_DEFAULT_COUNT_RANG-1);
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 0, HW_TIME_DEFAULT_COUNT_RANG-1);
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 1, HW_TIME_DEFAULT_COUNT_RANG-1);
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 3, HW_TIME_DEFAULT_COUNT_RANG-1);
     
     //外部引脚状态设置(翻转)
     Chip_TIMER_ExtMatchControlSet(TIM[uTimeNode], 0, TIMER_EXTMATCH_TOGGLE, 0);
@@ -229,9 +229,9 @@ void HW_TIM_SetOutputPwmDutyRatio(uint8_t uTimeNode, uint8_t uChannelMask, float
     uint32_t ulCmpVal = TIM[uTimeNode]->MR[3];
     uint16_t nRegValue = (uint16_t)((fDutyRatio * ulCmpVal) / 100.0);
     
-    for (int i = 0; i < TIME_CH_COUNT; i++)
+    for (int i = 0; i < HW_TIME_CH_COUNT; i++)
     {
-        if (TIME_CH_MASK(uChannelMask) & (0x01<<i))
+        if (HW_TIME_CH_MASK(uChannelMask) & (0x01<<i))
         {
             Chip_TIMER_SetMatch(TIM[uTimeNode], i, nRegValue);
         }
@@ -249,9 +249,9 @@ void HW_TIM_SetOutputPwmDutyRatio(uint8_t uTimeNode, uint8_t uChannelMask, float
   */
 void HW_TIM_SetOutputCmpVal(uint8_t uTimeNode, uint8_t uChannelMask, uint16_t nCompareVal)
 {
-    for (int i = 0; i < TIME_CH_COUNT; i++)
+    for (int i = 0; i < HW_TIME_CH_COUNT; i++)
     {
-        if (TIME_CH_MASK(uChannelMask) & (0x01<<i))
+        if (HW_TIME_CH_MASK(uChannelMask) & (0x01<<i))
         {
             Chip_TIMER_SetMatch(TIM[uTimeNode], i, nCompareVal);
         }
@@ -269,7 +269,7 @@ void HW_TIM_SetOutputCmpVal(uint8_t uTimeNode, uint8_t uChannelMask, uint16_t nC
 void HW_TIM_SetOutputPwmFrq(uint8_t uTimeNode, uint32_t ulFrequency)
 {
     uint32_t ulTimeClock = HW_TIM_GetPeripheralClock(uTimeNode);
-    uint32_t ulPrescale = ((ulTimeClock / (ulFrequency*TIME_DEFAULT_COUNT_RANG*2)))-1;
+    uint32_t ulPrescale = ((ulTimeClock / (ulFrequency*HW_TIME_DEFAULT_COUNT_RANG*2)))-1;
     Chip_TIMER_PrescaleSet(TIM[uTimeNode], ulPrescale);
         
 }
