@@ -255,8 +255,8 @@ uBit32 WFC_DisplayWeather(void)
     
     //拼装数据
     sprintf((char *)uDisplayBuff, "%d-%.2d-%.2d %.2d:%.2d:%.2d\r\nname: %s\r\nweather: %s\r\ntemp: %s\r\n\r\n", 
-                                   CLOCK_GetSysClockAddr()->year, CLOCK_GetSysClockAddr()->month, CLOCK_GetSysClockAddr()->day,
-                                   CLOCK_GetSysClockAddr()->hour, CLOCK_GetSysClockAddr()->min, CLOCK_GetSysClockAddr()->sec,
+                                   RTC_GetTimeAddr()->year, RTC_GetTimeAddr()->month, RTC_GetTimeAddr()->day,
+                                   RTC_GetTimeAddr()->hour, RTC_GetTimeAddr()->min, RTC_GetTimeAddr()->sec,
                                    uName, uText, uTemperature);
     UART_BlockSendStr(0, uDisplayBuff);
     

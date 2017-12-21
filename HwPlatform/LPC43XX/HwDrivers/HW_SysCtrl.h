@@ -16,6 +16,29 @@ extern "C" {
   */
 void HW_SystemReset(void);
 
+/**
+  * @brief  程序跳转
+  * @param  None
+  * @retval None
+  */
+void HW_JumToApp(void);
+
+
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HW_EnableIRQ(void);
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HW_DisableIRQ(void);
+
 
 #ifdef __cplusplus
 }
