@@ -82,7 +82,6 @@ uint32_t HW_EXTI_Init(uint16_t nPort, uint16_t nPin, uint8_t uTrgSource)
     NVIC_ClearPendingIRQ(HW_GPIOINT_IRQn);
     NVIC_EnableIRQ(HW_GPIOINT_IRQn);
     
-    
     return 0;
 }
 

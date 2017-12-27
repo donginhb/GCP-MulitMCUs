@@ -59,9 +59,9 @@ typedef struct
     
     uBit32 ulCrcValue;              //CRC16(考虑字节对齐,用32位变量存储)
     
-}SYS_UAER_BOOTLOADER_DATE;          //用户Bootloader数据
+}SYS_USER_BOOTLOADER_DATE;          //用户Bootloader数据
 
-static SYS_UAER_BOOTLOADER_DATE m_sys_BootloaderData = {0};         //系统Bootloader数据
+static SYS_USER_BOOTLOADER_DATE m_sys_BootloaderData = {0};         //系统Bootloader数据
 
 
 /**

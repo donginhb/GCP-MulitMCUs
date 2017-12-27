@@ -1,0 +1,40 @@
+
+黄章键: 
+
+LPC17XX平台 
+1. 电机PWM模块输出模式驱动(HW_Mcpwm.c)
+2. PWM,定时器,电机PWM捕获功能的驱动(HW_TimeCapture)
+3. CAN 模块的位过滤功能实现
+4. DAC功能驱动
+5. 编码器(QEI)驱动
+6. SPI控制接口
+
+
+LPC43XX平台 
+1. 电机PWM模块输出模式驱动(HW_Mcpwm.c)
+2. 定时器,电机PWM捕获功能的驱动(HW_TimeCapture)
+3. DAC功能驱动
+4. 编码器(QEI)驱动
+5. IO开漏模式配置
+6. SPI控制接口
+7. EXTI的配置
+
+HAL:
+整合pwm,time,mcpwm等模块,完善HAL_Pwm,将其分配到不同的uPwmNode
+假如: mcpwm有2个,pwm有1个,tim有4个,将其划分成不同的uPwmNode:
+uPwmNode0~1,调用mcpwm实现pwm功能,uPwmNode2,调用pwm实现pwm功能.....
+
+
+陈晓聪: 
+
+应用层: 
+1. CAN环形缓冲应用
+2. LWIP规范化整理,及完善LPC17XX和LPC43XX的底层调用
+3. Bootloader V2.O 默认IO电平配置表
+
+LPC17XX平台+LPC43XX平台:
+1. DMA+ADC多通道采集功能
+2. ENET驱动,网卡dp83848及smsc87x0驱动整理
+
+
+

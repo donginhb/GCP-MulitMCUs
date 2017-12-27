@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    Demo.c
+  * @file    CMU_Init.c
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.12.07
-  * @brief   demo
+  * @brief   CMU Init
   ******************************************************************************
   * @attention
   * 
@@ -15,8 +15,8 @@
   */
   
 /***********************************<INCLUDES>**********************************/
+#include "CMU_Init.h"
 #include "CMU_CmdProcess.h"
-//#include "CMU_ExApi.h"
 #include "AbstractionLayer.h"
 #include "DataType/DataType.h"
 

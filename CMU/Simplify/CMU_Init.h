@@ -21,4 +21,4 @@ uBit32 CMU_Init(uBit8 uComType);
 }
 #endif
 
-#endif /* __DEMO_H */
+#endif /* __CMU_INIT_H */

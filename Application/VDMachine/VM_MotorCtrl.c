@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    Demo.c
+  * @file    VM_MotorCtrl.c
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.12.05
-  * @brief   demo
+  * @brief   VM Motor Ctrl Application
   ******************************************************************************
   * @attention
   * 

@@ -239,7 +239,6 @@ uBit32 VM_GetTempSamplingValue(void)
 }
 
 
-
 /*****************************************************************************
  * 货道限位IO检测线程接口
  ****************************************************************************/
@@ -251,7 +250,7 @@ uBit32 VM_GetTempSamplingValue(void)
 
 //货道电机时间参数定义
 #define VM_AISLE_MOTOR_DELAY_TIME       (100)           //货道电机检测延时时间(MS)
-#define VM_AISLE_MOTOR_OVER_TIME        (5000)          //货道电机超时时间(MS)
+#define VM_AISLE_MOTOR_OVER_TIME        (3500)          //货道电机超时时间(MS)
 static SYS_TIME_DATA m_AisleDelayTimer = {0};           //货道电机检测延时定时器
 static SYS_TIME_DATA m_AisleOverTimer = {0};            //货道电机超时定时器
 
