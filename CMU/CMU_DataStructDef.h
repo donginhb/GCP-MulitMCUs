@@ -84,7 +84,7 @@ typedef struct _cmu_external_fun_table
      Bit32 (*pf_QEI_GetHSpdQeiSpeed)(void);
     uBit32 (*pf_SYS_IPREnable)(Bit32 iEnable);  //使能解释器
     
-    //以编号的方式对IO进行控制 2017.12.01 新增 -- 杜寒枫
+    //以编号的方式对IO进行控制 2017.12.01 新增 -- Duhanfeng
     void  (*pf_GPIO_SetOutputPinState)(uBit32 uOutputNO, bool uState);
     bool   (*pf_GPIO_GetOutputPinState)(uBit32 ulIntputNO);
     bool   (*pf_GPIO_GetInputPinState)(uBit32 ulIntputNO);
@@ -176,7 +176,11 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_CSM_SetAxisSpeedCtrlMotion)(Bit32 iCrdSysIndex, uBit32 ulAxisMask, SPEEDCTRL_MOTION_DATA* pSpeedCtrlMotion);        
     uBit32 (*pf_CSM_SetAxisJogStop)(Bit32 iCrdSysIndex, uBit32 ulAxisMask);//轴停止            
     uBit32 (*pf_CSM_AxisJogEStop)(Bit32 iCrdSysIndex, uBit32 ulAxisMask);  //轴急停
-
+    
+    //电机寻找零点相关控制接口 2018.01.09 新增 -- Duhanfeng
+    uBit32 (*pf_CSM_StartLiftPlatformHomeScan)(void);   //零点搜寻开始
+    uBit32 (*pf_CSM_StopLiftPlatformHomeScan)(void);    //零点搜寻停止
+    uBit32 (*pf_CSM_GetHomeScanStatus)(void);           //零点搜寻状态获取
 
     uBit32 (*pf_CSM_SetProgBufMode)(Bit32 iCrdSysIndex, Bit32 iMode);    
     uBit32 (*pf_CSM_ClearProgData)(Bit32 iCrdSysIndex, Bit32 iClearMode); //上位机接口仍然保持单一的全部清除方式

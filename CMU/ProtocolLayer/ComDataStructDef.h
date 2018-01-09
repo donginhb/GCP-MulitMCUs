@@ -266,6 +266,8 @@ typedef union _COM_DATA_ID{
 #define MOTOR_SETCMD_POS_MOTION_EX          (31)    //设置位置控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
 #define MOTOR_SETCMD_SPEED_MOTION_EX        (32)    //设置速度控制运动数据(扩展)  采用整型数据传输代替浮点数据传输,放大因子: 10000
 #define MOTOR_SETCMD_PULSE_RATE             (33)    //设置脉冲当量
+#define MOTOR_SETCMD_START_SCAN_HOME        (34)    //开始寻找零点
+#define MOTOR_SETCMD_STOP_SCAN_HOME         (35)    //停止寻到零点
 
 //轴(电机)常规获取指令
 #define MOTOR_GETCMD_CTRL_PARM              (1)     //电机所有控制参数
@@ -281,7 +283,7 @@ typedef union _COM_DATA_ID{
 //轴(电机)常规获取指令 2017.12.16 新增 --- 杜寒枫
 #define MOTOR_GETCMD_RUNNING_STATUS         (20)    //获取电机运行状态
 #define MOTOR_GETCMD_CMD_POS                (21)    //获取指令位置(放大因子:10000)
-
+#define MOTOR_GETCMD_SCAN_HOME_STATUS       (22)    //获取找零点状态 0-正常 1-找零点中
 
 
 /**************************************************************************/

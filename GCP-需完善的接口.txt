@@ -28,13 +28,32 @@ uPwmNode0~1,调用mcpwm实现pwm功能,uPwmNode2,调用pwm实现pwm功能.....
 陈晓聪: 
 
 应用层: 
-1. CAN环形缓冲应用
+1. CAN环形缓冲应用(完成)
 2. LWIP规范化整理,及完善LPC17XX和LPC43XX的底层调用
 3. Bootloader V2.O 默认IO电平配置表
 
 LPC17XX平台+LPC43XX平台:
 1. DMA+ADC多通道采集功能
 2. ENET驱动,网卡dp83848及smsc87x0驱动整理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -26,17 +26,9 @@ typedef struct
 }HW_CANAF_ID_GROUP_T;
 
 
-//CAN节点数
-typedef enum
-{
-    HW_CAN_NODE0 = 0,
-    HW_CAN_NODE1,
-    HW_CAN_NODE_NUM,
-    
-}HW_CAN_NODE;
-
-
-typedef CAN_MSG_T HW_CAN_MSG_TYPE;
+//CAN节点定义
+#define HW_CAN_NODE_0      (0)
+#define HW_CAN_NODE_1      (1)
 
 
 #ifdef __cplusplus
@@ -57,12 +49,21 @@ void HW_CAN_Init(uint8_t uCanNode, uint32_t ulBitRate);
 
 
 /**
+  * @brief  CAN使能
+  * @param  uCanNode CAN节点号
+  * @param  bIsEnable 使能标志
+  * @retval None
+  */
+void HW_CAN_Enable(uint8_t uCanNode, bool bIsEnable);
+
+
+/**
   * @brief  数据发送
   * @param  uCanNode CAN节点号
   * @param  pMsgObj 消息对象变量
   * @retval 0-成功 1-失败
   */
-uint32_t HW_CAN_SendMsg(uint8_t uCanNode, HW_CAN_MSG_TYPE *pMsgObj);
+uint32_t HW_CAN_SendMsg(uint8_t uCanNode, CAN_MSG_T *pMsgObj);
 
 
 /**
@@ -71,7 +72,7 @@ uint32_t HW_CAN_SendMsg(uint8_t uCanNode, HW_CAN_MSG_TYPE *pMsgObj);
   * @param  pMsgObj 消息对象变量
   * @retval 0-成功 1-失败
   */
-uint32_t HW_CAN_RecvMsg(uint8_t uCanNode, HW_CAN_MSG_TYPE *pMsgObj);
+uint32_t HW_CAN_RecvMsg(uint8_t uCanNode, CAN_MSG_T *pMsgObj);
 
 
 /*****************************************************************************

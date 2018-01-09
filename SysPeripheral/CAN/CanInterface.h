@@ -11,6 +11,7 @@ Copyright (c) 2013, 东莞华中科技大学制造工程研究院 All rights res
 
 #include "CanDataStructDef.h"
 
+#if 0
 
 #ifdef __cplusplus
 extern "C"
@@ -123,6 +124,8 @@ extern "C"
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif

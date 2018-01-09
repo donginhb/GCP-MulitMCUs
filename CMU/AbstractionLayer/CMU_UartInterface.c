@@ -145,13 +145,11 @@ void CMU_UART_RecvHandler(void)
     //获取数据包
     if (CMU_UnPack(m_uRecvBuff, &ulPackLen) == 0)
     {
-#if 0
-        memcpy(&m_UartRecvPack, m_uRecvBuff, ulPackLen);
-#endif
-        m_UartRecvPack.ulID = *(uBit32 *)m_uRecvBuff;
-        m_UartRecvPack.ulDataLen = ulPackLen;
+        ulPackLen -= 4;     //前4个字节是ID信息,数据区长度不算进里面
+        m_UartRecvPack.ulID = *(uBit32 *)m_uRecvBuff;   //提取ID信息
+        m_UartRecvPack.ulDataLen = ulPackLen;           //提取数据区长度
         
-        memcpy(m_UartRecvPack.uDataBuff, &m_uRecvBuff[4], ulPackLen);
+        memcpy(m_UartRecvPack.uDataBuff, &m_uRecvBuff[4], ulPackLen);   //数据提取
         
         m_uRecvPackValidFlag = 1;
     }

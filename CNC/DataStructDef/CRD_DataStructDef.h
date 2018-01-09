@@ -141,7 +141,7 @@ typedef struct CrdSysParm {
 #define    CRDSYS_STATUS_MODE_STEP                        (3)                //步进模式
 #define    CRDSYS_STATUS_MODE_HANDWHEEL                (4)                //手摇模式
 #define    CRDSYS_STATUS_MODE_HOME                        (5)                //回零模式
-#define CRDSYS_STATUS_SGL_BLK                        (0x00000008)    //单段方式
+#define    CRDSYS_STATUS_SGL_BLK                        (0x00000008)    //单段方式
 #define    CRDSYS_STATUS_PROG_RUN                        (0x00000010)    //循环启动
 #define    CRDSYS_STATUS_PROG_HOLD                        (0x00000020)    //进给保持
 #define    CRDSYS_STATUS_PROG_STOP                        (0x00000040)    //程序停止

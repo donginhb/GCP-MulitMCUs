@@ -513,7 +513,16 @@ void CMU_InitExApi(void)
 
     if (m_sExternalFunTable.pf_CSM_AxisJogEStop==0)
         m_sExternalFunTable.pf_CSM_AxisJogEStop            =u32Fun_32_u32                ;
-
+    
+    if (m_sExternalFunTable.pf_CSM_StartLiftPlatformHomeScan == 0)
+        m_sExternalFunTable.pf_CSM_StartLiftPlatformHomeScan = u32Fun_void;
+    
+    if (m_sExternalFunTable.pf_CSM_StopLiftPlatformHomeScan == 0)
+        m_sExternalFunTable.pf_CSM_StopLiftPlatformHomeScan = u32Fun_void;
+    
+    if (m_sExternalFunTable.pf_CSM_GetHomeScanStatus == 0)
+        m_sExternalFunTable.pf_CSM_GetHomeScanStatus = u32Fun_void;
+    
     if (m_sExternalFunTable.pf_LAX_SetCmdPos==0)
         m_sExternalFunTable.pf_LAX_SetCmdPos            =u32Fun_32_32_32_32            ;
 
@@ -603,14 +612,30 @@ void CMU_SetExternCustomFun(CMU_EXTERNAL_FUN_TEBLE *pCmuExternFunTable)
         m_sExternalFunTable.pf_VM_GetTempSamplingValue = pCmuExternFunTable->pf_VM_GetTempSamplingValue;
     }
     
+    if (pCmuExternFunTable->pf_PAX_SetPulseRate != 0)
+    {
+        m_sExternalFunTable.pf_PAX_SetPulseRate = pCmuExternFunTable->pf_PAX_SetPulseRate;
+    }
+    
+    
     if (pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion != 0)
     {
         m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion = pCmuExternFunTable->pf_CSM_SetMotorPosCtrlMotion;
     }
     
-    if (pCmuExternFunTable->pf_PAX_SetPulseRate != 0)
+    if (pCmuExternFunTable->pf_CSM_StartLiftPlatformHomeScan != 0)
     {
-        m_sExternalFunTable.pf_PAX_SetPulseRate = pCmuExternFunTable->pf_PAX_SetPulseRate;
+        m_sExternalFunTable.pf_CSM_StartLiftPlatformHomeScan = pCmuExternFunTable->pf_CSM_StartLiftPlatformHomeScan;
+    }
+    
+    if (pCmuExternFunTable->pf_CSM_StopLiftPlatformHomeScan != 0)
+    {
+        m_sExternalFunTable.pf_CSM_StopLiftPlatformHomeScan = pCmuExternFunTable->pf_CSM_StopLiftPlatformHomeScan;
+    }
+    
+    if (pCmuExternFunTable->pf_CSM_GetHomeScanStatus != 0)
+    {
+        m_sExternalFunTable.pf_CSM_GetHomeScanStatus = pCmuExternFunTable->pf_CSM_GetHomeScanStatus;
     }
     
     

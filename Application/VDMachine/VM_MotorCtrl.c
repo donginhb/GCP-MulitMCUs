@@ -34,7 +34,6 @@
 #include <string.h>
 
 
-#define LIFT_MOTOR_DEV_NO (0)
 
 /*****************************************************************************
  * 私有成员定义及实现
@@ -144,7 +143,7 @@ static void VM_MoveLiftMotorConfig(void)
 #define VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE         (2)     //在下限位
 #define VM_LIFT_PLATFORM_IN_CENTRE_SITE             (3)     //在中间(上下限位之间)
 
-static uBit32 m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UNKNOWN; //提升平台的位置
+static uBit32 m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UNKNOWN; //提升平台的位置
 
 
 
@@ -158,18 +157,18 @@ uBit32 VM_InitLiftMotor(void)
     //升降电机配置
     VM_MoveLiftMotorConfig();
     
-    PAX_SetCmdPos(LIFT_MOTOR_DEV_NO, 0,1);  //设置轴指令位置
-    PAX_SetQeiPos(LIFT_MOTOR_DEV_NO, 0,1);  //设置编码器位置
+    PAX_SetCmdPos(VM_LIFT_MOTOR_DEV_NO, 0,1);  //设置轴指令位置
+    PAX_SetQeiPos(VM_LIFT_MOTOR_DEV_NO, 0,1);  //设置编码器位置
     
     //使能电机
-    uBit32 ulRet =PAX_Enable(LIFT_MOTOR_DEV_NO, 1, 1);
+    uBit32 ulRet =PAX_Enable(VM_LIFT_MOTOR_DEV_NO, 1, 1);
     ulRet = CSM_SetCtrlMode(0, CRDSYS_STATUS_MODE_STEP);
     
     return ulRet;
 }
 
 
-static float m_vm_fPulseRate = 100.0;
+static float m_vm_fPulseRate = 170.0;   //脉冲当量
 
 /**
   * @brief  脉冲当量设置
@@ -205,7 +204,7 @@ uBit32 VM_MoveLiftMotor(Bit32 iMotorNO, POSCTRL_MOTION_DATA* pPosCtrlMotion)
     }
     
     //设置电机移动
-    if(CSM_SetMotorPosCtrlMotion(LIFT_MOTOR_DEV_NO, &TempPosCtrlMotion))
+    if(CSM_SetMotorPosCtrlMotion(VM_LIFT_MOTOR_DEV_NO, &TempPosCtrlMotion))
     {
         return VM_ERR_LIFT_MOTOR;
     }
@@ -219,24 +218,24 @@ uBit32 VM_MoveLiftMotor(Bit32 iMotorNO, POSCTRL_MOTION_DATA* pPosCtrlMotion)
   * @param  None
   * @retval None
   */
-void VM_LiftPlatformHandler(void)
+void VM_LiftPlatformLimitHandler(void)
 {
     //假如当前升降电机的位置未知,则读取限位电平以确定其电机位置
-    if (m_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_UNKNOWN)
+    if (m_vm_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_UNKNOWN)
     {
         //查询上限位状态
         if (GPIO_GetInputState(INPUT_IO_LIFT_MOTOR_UP_LIMIT) == VM_LIFT_MOTOR_TRIGGER_LEVEL)
         {
-            m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE;       //升降平台在上限位
+            m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE;       //升降平台在上限位
         }
         //查询下限位状态
         else if (GPIO_GetInputState(INPUT_IO_LIFT_MOTOR_DOWN_LIMIT) == VM_LIFT_MOTOR_TRIGGER_LEVEL)
         {
-            m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE;     //升降平台在上限位
+            m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE;     //升降平台在上限位
         }
         else
         {
-            m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_CENTRE_SITE;         //升降平台在中间
+            m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_CENTRE_SITE;         //升降平台在中间
         }
         
         return;
@@ -246,33 +245,219 @@ void VM_LiftPlatformHandler(void)
     if (GPIO_MAN_GetInputPinState(INPUT_IO_LIFT_MOTOR_UP_LIMIT) == VM_LIFT_MOTOR_TRIGGER_LEVEL)
     {
         //假如先前的升降平台不在上限位上而当前到达上限位,则急停电机
-        if (m_ulLiftPlatformPosition != VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE)
+        if (m_vm_ulLiftPlatformPosition != VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE)
         {
             //设置当前升降平台位置
-            m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE;
+            m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_UP_LIMIT_SITE;
             
             //急停电机
-            CSM_MotorJogEStop(0);
+            CSM_MotorJogEStop(VM_LIFT_MOTOR_DEV_NO);
         }
     }
     //查询下限位状态
     else if (GPIO_MAN_GetInputPinState(INPUT_IO_LIFT_MOTOR_DOWN_LIMIT) == VM_LIFT_MOTOR_TRIGGER_LEVEL)
     {
         //假如先前的升降平台不在下限位上而当前到达下限位,则急停电机
-        if (m_ulLiftPlatformPosition != VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE)
+        if (m_vm_ulLiftPlatformPosition != VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE)
         {
             //设置当前升降平台位置
-            m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE;
+            m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE;
             
             //急停电机
-            CSM_MotorJogEStop(0);
+            CSM_MotorJogEStop(VM_LIFT_MOTOR_DEV_NO);
         }
         
     }
     else 
     {
         //设置当前升降平台位置
-        m_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_CENTRE_SITE;
+        m_vm_ulLiftPlatformPosition = VM_LIFT_PLATFORM_IN_CENTRE_SITE;
+    }
+    
+}
+
+
+//升降平台回零操作步骤
+#define VM_LP_HOME_RESET            (0)     //复位(默认状态)
+#define VM_LP_HOME_START            (1)     //开始
+#define VM_LP_HOME_DOWN             (2)     //下降
+#define VM_LP_HOME_PREPARE_UP       (3)     //准备上升(机器惯性的原因,此阶段延时一小会)
+#define VM_LP_HOME_UP               (4)     //上升
+#define VM_LP_HOME_STOP             (5)     //停止
+#define VM_LP_HOME_BAK              (6)     //抱闸
+
+static uBit8 m_vm_uLiftPlatformHomeStep = VM_LP_HOME_RESET; //升降平台回零步骤
+
+//零点搜寻状态定义
+#define VM_HOME_STATUS_NORMAL       (0)     //正常
+#define VM_HOME_STATUS_SCAN         (1)     //寻找零点中
+
+static uBit8 m_vm_uScanHomeStatus = VM_HOME_STATUS_NORMAL;  //零点搜寻状态
+static SYS_TIME_DATA m_vm_HomeCtrlTimer = {0};              //回零控制定时器
+
+/**
+  * @brief  零点搜寻开始
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 VM_StartLiftPlatformHomeScan(void)
+{
+    if (m_vm_uLiftPlatformHomeStep == VM_LP_HOME_RESET)
+    {
+        m_vm_uLiftPlatformHomeStep = VM_LP_HOME_START;
+        
+        return 0;
+    }
+    
+    return 1;
+}
+
+
+/**
+  * @brief  零点搜寻停止
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 VM_StopLiftPlatformHomeScan(void)
+{
+    m_vm_uLiftPlatformHomeStep = VM_LP_HOME_BAK;
+    
+    //停止电机
+    CSM_SetMotorJogStop(VM_LIFT_MOTOR_DEV_NO);
+    
+    //设置抱闸延时
+    SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 1000);   //延时1S
+    
+    return 0;
+}
+
+
+/**
+  * @brief  零点搜寻状态获取
+  * @param  None
+  * @retval 0-正常 1-零点搜寻中
+  */
+uBit32 VM_GetHomeScanStatus(void)
+{
+    
+    return m_vm_uScanHomeStatus;
+}
+
+
+/**
+  * @brief  升降平台零点搜寻处理
+  * @param  None
+  * @retval None
+  */
+void VM_LiftPlatformHomeHandler(void)
+{
+    
+    
+    switch (m_vm_uLiftPlatformHomeStep)
+    {
+    case VM_LP_HOME_RESET:  break;
+    case VM_LP_HOME_START:
+        
+        if (m_vm_ulLiftPlatformPosition != VM_LIFT_PLATFORM_IN_UNKNOWN)
+        {
+            //设置零点寻找状态:搜寻中
+            m_vm_uScanHomeStatus = VM_HOME_STATUS_SCAN;
+            
+            //开抱闸
+            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, true);
+            
+            //若升降平台在下限位,则往上走,否则则往下走
+            if (m_vm_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE)
+            {
+                m_vm_uLiftPlatformHomeStep = VM_LP_HOME_UP;
+                
+                POSCTRL_MOTION_DATA PosCtrlMotion = {0};
+                
+                PosCtrlMotion.dPos = 10000;
+                PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED;
+                
+                VM_MoveLiftMotor(VM_LIFT_MOTOR_DEV_NO, &PosCtrlMotion);
+            }
+            else 
+            {
+                m_vm_uLiftPlatformHomeStep = VM_LP_HOME_DOWN;   
+                
+                POSCTRL_MOTION_DATA PosCtrlMotion = {0};
+                
+                PosCtrlMotion.dPos = -10000;
+                PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED;
+                
+                VM_MoveLiftMotor(VM_LIFT_MOTOR_DEV_NO, &PosCtrlMotion);
+            }
+        }
+        
+        break;
+    case VM_LP_HOME_DOWN :
+        
+        //假如到达下限位,则往上走
+        if (m_vm_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE)
+        {
+            m_vm_uLiftPlatformHomeStep = VM_LP_HOME_PREPARE_UP;
+            
+            SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 1000);   //延时1S
+        }
+        
+        break;
+    case VM_LP_HOME_PREPARE_UP :
+        
+        if (SysTime_CheckExpiredState(&m_vm_HomeCtrlTimer))
+        {
+            m_vm_uLiftPlatformHomeStep = VM_LP_HOME_UP;
+            
+            POSCTRL_MOTION_DATA PosCtrlMotion = {0};
+                
+            PosCtrlMotion.dPos = 10000;
+            PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED;
+            
+            VM_MoveLiftMotor(VM_LIFT_MOTOR_DEV_NO, &PosCtrlMotion);
+        }
+        
+        break;
+    case VM_LP_HOME_UP   :
+        
+        //假如平台离开限位,则停止电机
+        if (m_vm_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_CENTRE_SITE)
+        {
+            m_vm_uLiftPlatformHomeStep = VM_LP_HOME_STOP;
+        }
+        
+        break;
+    case VM_LP_HOME_STOP :                                                                              
+        
+        m_vm_uLiftPlatformHomeStep = VM_LP_HOME_BAK;
+        
+        //急停电机
+        CSM_MotorJogEStop(VM_LIFT_MOTOR_DEV_NO);
+        
+        //设置当前位置为零点
+        PAX_SetCmdPos(VM_LIFT_MOTOR_DEV_NO, 0, 0);
+        
+        //设置零点寻找状态
+        m_vm_uScanHomeStatus = VM_HOME_STATUS_NORMAL;
+        
+        //设置下个步骤的执行时间
+        SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 1000);   //延时1S
+        
+        break;
+    case VM_LP_HOME_BAK:
+        
+        if (SysTime_CheckExpiredState(&m_vm_HomeCtrlTimer))
+        {
+            m_vm_uLiftPlatformHomeStep = VM_LP_HOME_RESET;
+            
+            //关抱闸
+            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, false);
+        }
+            
+        break;
+    default:    //不应该到这里
+        m_vm_uLiftPlatformHomeStep = VM_LP_HOME_RESET;
+        break;
     }
     
 }

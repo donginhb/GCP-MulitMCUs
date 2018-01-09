@@ -35,14 +35,15 @@
 #include <string.h>
 #include <stdio.h>
 
-#pragma diag_suppress=Pe177 //屏蔽以下static函数已定义但未使用的警告
-
 
 /*****************************************************************************
  * 私有类型/变量定义
  ****************************************************************************/
-static const uint32_t CAN_BASE[HW_CAN_NODE_NUM] = {LPC_CAN1_BASE, LPC_CAN1_BASE};  //CAN基地址
 
+//CAN数量定义
+#define HW_CAN_COUNT       (2)
+
+static LPC_CAN_T * const CAN[HW_CAN_COUNT] = {(LPC_CAN_T *)LPC_CAN1_BASE, (LPC_CAN_T *)LPC_CAN2_BASE};    //CAN基地址
 
 /**
   * @brief  CAN_IO_MUX初始化(选定某组引脚作为CAN的引脚).
@@ -53,7 +54,7 @@ static void HW_CAN_IO_Init(uint8_t uCanNode)
 {
     switch (uCanNode)
     {
-    case HW_CAN_NODE0: 
+    case HW_CAN_NODE_0: 
 #if 1
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  1, IOCON_MODE_INACT, IOCON_FUNC1);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  0, IOCON_MODE_INACT, IOCON_FUNC1);
@@ -62,7 +63,7 @@ static void HW_CAN_IO_Init(uint8_t uCanNode)
         Chip_IOCON_PinMux(LPC_IOCON, 0x00, 21, IOCON_MODE_INACT, IOCON_FUNC3);
 #endif
         break;
-    case HW_CAN_NODE1:
+    case HW_CAN_NODE_1:
 #if 1
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  5, IOCON_MODE_INACT, IOCON_FUNC2);
         Chip_IOCON_PinMux(LPC_IOCON, 0x00,  4, IOCON_MODE_INACT, IOCON_FUNC2);
@@ -93,17 +94,37 @@ void HW_CAN_Init(uint8_t uCanNode, uint32_t ulBitRate)
     HW_CAN_IO_Init(uCanNode);
     
     //初始化模块
-    Chip_CAN_Init((LPC_CAN_T *)&CAN_BASE[uCanNode], LPC_CANAF, LPC_CANAF_RAM);
+    Chip_CAN_Init(CAN[uCanNode], LPC_CANAF, LPC_CANAF_RAM);
     
     //设置比特率
-    Chip_CAN_SetBitRate((LPC_CAN_T *)&CAN_BASE[uCanNode], ulBitRate); 
+    Chip_CAN_SetBitRate(CAN[uCanNode], ulBitRate); 
     
     //设置中断模式
-    Chip_CAN_EnableInt((LPC_CAN_T *)&CAN_BASE[uCanNode], 0);
+    Chip_CAN_EnableInt(CAN[uCanNode], 0);
     
     //设置过滤器
     HW_CAN_ResetRecvIDGroup();
     Chip_CAN_SetAFMode(LPC_CANAF, CAN_AF_BYBASS_MODE);
+    
+}
+
+
+/**
+  * @brief  CAN使能
+  * @param  uCanNode CAN节点号
+  * @param  bIsEnable 使能标志
+  * @retval None
+  */
+void HW_CAN_Enable(uint8_t uCanNode, bool bIsEnable)
+{
+    if (bIsEnable)
+    {
+        CAN[uCanNode]->MOD = CAN_MOD_OPERATION;
+    }
+    else 
+    {
+        CAN[uCanNode]->MOD = CAN_MOD_RM;
+    }
     
 }
 
@@ -116,13 +137,13 @@ void HW_CAN_Init(uint8_t uCanNode, uint32_t ulBitRate)
   */
 uint32_t HW_CAN_SendMsg(uint8_t uCanNode, CAN_MSG_T *pMsgObj)
 {
-    CAN_BUFFER_ID_T TxBuf = Chip_CAN_GetFreeTxBuf((LPC_CAN_T *)&CAN_BASE[uCanNode]);
-    Chip_CAN_Send((LPC_CAN_T *)&CAN_BASE[uCanNode], TxBuf, pMsgObj);
+    CAN_BUFFER_ID_T TxBuf = Chip_CAN_GetFreeTxBuf(CAN[uCanNode]);
+    Chip_CAN_Send(CAN[uCanNode], TxBuf, pMsgObj);
     
     uint32_t ulTick = HW_SysTick_GetCount();
     
     //等待发送完成
-    while (!(Chip_CAN_GetStatus((LPC_CAN_T *)&CAN_BASE[uCanNode]) & CAN_SR_TCS(TxBuf)))
+    while (!(Chip_CAN_GetStatus(CAN[uCanNode]) & CAN_SR_TCS(TxBuf)))
     {
         //发送超时
         if ((HW_SysTick_GetCount() - ulTick) >= 200)
@@ -143,11 +164,11 @@ uint32_t HW_CAN_SendMsg(uint8_t uCanNode, CAN_MSG_T *pMsgObj)
   */
 uint32_t HW_CAN_RecvMsg(uint8_t uCanNode, CAN_MSG_T *pMsgObj)
 {
-    uint32_t IntStatus = Chip_CAN_GetGlobalStatus((LPC_CAN_T *)&CAN_BASE[uCanNode]);
+    uint32_t IntStatus = Chip_CAN_GetGlobalStatus(CAN[uCanNode]);
     
     if (IntStatus & CAN_GSR_RBS) 
     {
-        Chip_CAN_Receive((LPC_CAN_T *)&CAN_BASE[uCanNode], pMsgObj);
+        Chip_CAN_Receive(CAN[uCanNode], pMsgObj);
         return 0;
     }
     

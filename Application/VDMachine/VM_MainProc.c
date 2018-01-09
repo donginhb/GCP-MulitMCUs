@@ -51,6 +51,10 @@ static void VM_InitExCmu(void)
     CMUFunTable.pf_CSM_SetMotorPosCtrlMotion = VM_MoveLiftMotor;
     CMUFunTable.pf_PAX_SetPulseRate = VM_SetPulseRate;
     
+    CMUFunTable.pf_CSM_StartLiftPlatformHomeScan = VM_StartLiftPlatformHomeScan;
+    CMUFunTable.pf_CSM_StopLiftPlatformHomeScan  = VM_StopLiftPlatformHomeScan ;
+    CMUFunTable.pf_CSM_GetHomeScanStatus = VM_GetHomeScanStatus;
+    
     //设置外部自定义接口
     CMU_SetExternCustomFun(&CMUFunTable);
     
@@ -94,7 +98,10 @@ void VM_MainProc(void)
     VM_AisleMotorHandler();
     
     //升降平台限位检测
-    VM_LiftPlatformHandler();
+    VM_LiftPlatformLimitHandler();
+    
+    //升降平台回零处理
+    VM_LiftPlatformHomeHandler();
     
     //温度数据采集处理
     VM_SamplingTempValue();

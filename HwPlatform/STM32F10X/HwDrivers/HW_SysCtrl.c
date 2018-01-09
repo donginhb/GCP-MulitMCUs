@@ -99,12 +99,12 @@ __asm void HW_WFI_SET(void)//MDK下调用
   */
 static void HW_SystemStandby(void)
 {
-    SCB->SCR |= SCB_SCR_SLEEPDEEP;        //使能SLEEPDEEP位 (SYS->CTRL)       
-    RCC->APB1ENR |= RCC_APB1ENR_PWREN;    //使能电源时钟        
-    PWR->CSR |= PWR_CSR_EWUP;             //设置WKUP用于唤醒
-    PWR->CR  |= PWR_CSR_PVDO;             //清除Wake-up标志
-    PWR->CR  |= PWR_CSR_SBF;              //PDDS置位          
-    HW_WFI_SET();                        //执行WFI指令         
+    SCB->SCR |= SCB_SCR_SLEEPDEEP;          //使能SLEEPDEEP位 (SYS->CTRL)       
+    RCC->APB1ENR |= RCC_APB1ENR_PWREN;      //使能电源时钟        
+    PWR->CSR |= PWR_CSR_EWUP;               //设置WKUP用于唤醒
+    PWR->CR  |= PWR_CSR_PVDO;               //清除Wake-up标志
+    PWR->CR  |= PWR_CSR_SBF;                //PDDS置位          
+    HW_WFI_SET();                           //执行WFI指令         
     
 }
 
