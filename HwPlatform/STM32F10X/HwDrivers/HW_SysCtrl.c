@@ -68,6 +68,30 @@ void HW_NVIC_DisableIRQ(IRQn_Type IRQn)
 }
 
 
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HW_EnableIRQ(void)
+{
+    __enable_irq();
+    
+}
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HW_DisableIRQ(void)
+{
+    __disable_irq();
+    
+}
+
+
 /*****************************************************************************
  * 系统唤醒休眠相关
  ****************************************************************************/

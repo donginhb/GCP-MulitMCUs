@@ -282,7 +282,7 @@ uBit32 WFC_GetBaseClock(void)
     
     ulBaseClock = atol((char const *)uBaseClock);
     
-    CLOCK_SetCurClock(ulBaseClock);
+    RTC_SetCurClock(ulBaseClock, 8);
     
     UART_BlockSendStr(0, uBaseClock);
     
@@ -307,7 +307,7 @@ void WFC_UnpackTest(void)
     {
         SysTime_StartOneShot(&m_WifiCtrlTimer, WFC_WIFI_TOGGLE_TIME); //设置下一次执行的时间
         
-        CLOCK_Update();
+        RTC_Update();
         
         WFC_DisplayWeather();
     }

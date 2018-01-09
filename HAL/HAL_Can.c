@@ -36,8 +36,10 @@
   */
 void HAL_CAN_Init(uBit8 uCanNode, uBit32 ulBitRate)
 {
+#if defined(LPC17XX)
     HW_CAN_Init(uCanNode, ulBitRate);
-      
+#endif
+    
 }
 
 
@@ -48,7 +50,9 @@ void HAL_CAN_Init(uBit8 uCanNode, uBit32 ulBitRate)
   */
 uBit32 HAL_CAN_Open(uBit8 uCanNode)
 {
+#if defined(LPC17XX)
     HW_CAN_Enable(uCanNode, true);
+#endif
     
     return 0;
 }
@@ -61,7 +65,9 @@ uBit32 HAL_CAN_Open(uBit8 uCanNode)
   */
 uBit32 HAL_CAN_Close(uBit8 uCanNode)
 {
+#if defined(LPC17XX)
     HW_CAN_Enable(uCanNode, false);
+#endif
     
     return 0;
 }
@@ -76,6 +82,8 @@ uBit32 HAL_CAN_Close(uBit8 uCanNode)
 uBit32 HAL_CAN_Send(uBit8 uCanNode, HAL_CAN_FRAME_T *pSendFrame)
 {
     uBit32 ulRet = 0;
+    
+#if defined(LPC17XX)
     CAN_MSG_T TempMsg = {0};
     
     //匹配数据
@@ -96,6 +104,9 @@ uBit32 HAL_CAN_Send(uBit8 uCanNode, HAL_CAN_FRAME_T *pSendFrame)
     //发送数据
     ulRet = HW_CAN_SendMsg(uCanNode, &TempMsg);
     
+#endif
+    
+    
     return ulRet;
 }
 
@@ -109,6 +120,8 @@ uBit32 HAL_CAN_Send(uBit8 uCanNode, HAL_CAN_FRAME_T *pSendFrame)
 uBit32 HAL_CAN_Recv(uBit8 uCanNode, HAL_CAN_FRAME_T *pRecvFrame)
 {
     uBit32 ulRet = 0;
+    
+#if defined(LPC17XX)
     CAN_MSG_T TempMsg = {0};
     
     //接收数据
@@ -132,6 +145,7 @@ uBit32 HAL_CAN_Recv(uBit8 uCanNode, HAL_CAN_FRAME_T *pRecvFrame)
             pRecvFrame->uType |= HAL_CAN_TYPE_EXT_FRAME;
         }
     }
+#endif
     
     return ulRet;
 }

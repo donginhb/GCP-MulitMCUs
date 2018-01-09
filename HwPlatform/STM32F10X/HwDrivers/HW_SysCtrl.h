@@ -83,6 +83,22 @@ void HW_NVIC_Enable(IRQn_Type IRQn, uint32_t ulPreemptPrio, uint32_t ulSubPrio);
 void HW_NVIC_DisableIRQ(IRQn_Type IRQn);
 
 
+/**
+  * @brief  总中断使能
+  * @param  None
+  * @retval None
+  */
+void HW_EnableIRQ(void);
+
+
+/**
+  * @brief  总中断关闭
+  * @param  None
+  * @retval None
+  */
+void HW_DisableIRQ(void);
+
+
 /*****************************************************************************
  * 系统唤醒休眠相关
  ****************************************************************************/

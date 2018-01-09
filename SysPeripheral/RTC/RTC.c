@@ -50,8 +50,9 @@ static bool RTC_IsLeapYear(uBit32 ulYear)
  ****************************************************************************/
 
 /**
-  * @brief  当前时间设置(从1970到现在的秒数)
-  * @param  None
+  * @brief  当前时间设置
+  * @param  ulSec 当前秒数(从1970到现在的秒数)
+  * @param  uGmtIndex 当前地区的市区偏移
   * @retval 0-成功 非0-失败
   */
 uBit32 RTC_SetCurClock(uBit32 ulSec, uBit8 uGmtIndex)
@@ -70,7 +71,11 @@ uBit32 RTC_SetCurClock(uBit32 ulSec, uBit8 uGmtIndex)
 }
 
 
-//系统时间更新
+/**
+  * @brief  系统时间更新
+  * @param  None
+  * @retval None
+  */
 void RTC_Update(void)
 {
     uBit32 ulDay;
@@ -129,7 +134,11 @@ void RTC_Update(void)
 }
 
 
-//系统时钟地址获取
+/**
+  * @brief  系统时钟地址获取
+  * @param  None
+  * @retval Rtc时间结构指针
+  */
 RTC_TIME *RTC_GetTimeAddr(void)
 {
     

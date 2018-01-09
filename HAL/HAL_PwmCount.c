@@ -99,7 +99,9 @@ void HAL_PWM_SendCount(uBit8 uPwmOuputNode, uBit8 uOuputChNum, uBit32 ulPwmCount
   */
 void HAL_TIM_InputCountInit(uBit8 uTimeNode, uBit8 uChannelMask)
 {
+#if defined(LPC17XX)
     HW_TIM_InputInit(uTimeNode, uChannelMask, HW_TIME_INPUT_COUNT_MODE);
+#endif
     
 }
 

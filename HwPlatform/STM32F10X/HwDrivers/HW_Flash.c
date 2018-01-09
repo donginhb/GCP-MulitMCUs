@@ -100,9 +100,9 @@ int32_t HW_FLASH_Erase(uint32_t ulStartSector, uint32_t ulEndSector)
     //准备去擦除/写扇区
     for (int i = 0; i < FLASH_OPERA_RETRY_NUM; i++)
     {
-        uRetCode = Chip_IAP_PreSectorForReadWrite(ulStartSector, ulEndSector);
+        //uRetCode = Chip_IAP_PreSectorForReadWrite(ulStartSector, ulEndSector);
         
-        if (uRetCode == IAP_CMD_SUCCESS)
+        //if (uRetCode == IAP_CMD_SUCCESS)
         {
             break;
         }
@@ -111,9 +111,9 @@ int32_t HW_FLASH_Erase(uint32_t ulStartSector, uint32_t ulEndSector)
     //擦除扇区
     for (int i = 0; i < FLASH_OPERA_RETRY_NUM; i++)
     {
-        uRetCode = Chip_IAP_EraseSector(ulStartSector, ulEndSector);
+        //uRetCode = Chip_IAP_EraseSector(ulStartSector, ulEndSector);
         
-        if (uRetCode == IAP_CMD_SUCCESS)
+        //if (uRetCode == IAP_CMD_SUCCESS)
         {
             break;
         }
@@ -174,9 +174,9 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
     //准备去擦除/写扇区
     for (int i = 0; i < FLASH_OPERA_RETRY_NUM; i++)
     {
-        uRetCode = Chip_IAP_PreSectorForReadWrite(ulStartSector, ulEndSector);
+        //uRetCode = Chip_IAP_PreSectorForReadWrite(ulStartSector, ulEndSector);
         
-        if (uRetCode == IAP_CMD_SUCCESS)
+        //if (uRetCode == IAP_CMD_SUCCESS)
         {
             break;
         }
@@ -185,9 +185,9 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
     //将数据写入Flash
     for (int i = 0; i < FLASH_OPERA_RETRY_NUM; i++)
     {
-        uRetCode = Chip_IAP_CopyRamToFlash(ulFlashAddr, (uint32_t *)pWriteBuff, ulByteSize);
+        //uRetCode = Chip_IAP_CopyRamToFlash(ulFlashAddr, (uint32_t *)pWriteBuff, ulByteSize);
         
-        if (uRetCode == IAP_CMD_SUCCESS)
+        //if (uRetCode == IAP_CMD_SUCCESS)
         {
             break;
         }

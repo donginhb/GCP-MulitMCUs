@@ -18,7 +18,7 @@
 #include "SysCtrl/SYS_Init.h"
 
 #if defined(LPC17XX)
-#include "Application/VDMachine/VM_MainProc.h"
+#include "Application/GCPTest/GCP_MainProc.h"
 #elif defined(LPC43XX)
 #include "Application/CNMachine/CN_MainProc.h"
 #elif defined(STM32F10X)
@@ -32,7 +32,7 @@ int main(void)
     
 #if !defined(BOOTLOADER)
 #if defined(LPC17XX)
-    VM_Init();
+    GCP_Init();
 #elif defined(LPC43XX)
     CN_Init();
 #elif defined(STM32F10X)
@@ -48,7 +48,7 @@ int main(void)
         //业务逻辑管理
 #if !defined(BOOTLOADER)
 #if defined(LPC17XX)
-        VM_MainProc();
+        GCP_MainProc();
 #elif defined(LPC43XX)
         CN_MainProc();
 #elif defined(STM32F10X)
