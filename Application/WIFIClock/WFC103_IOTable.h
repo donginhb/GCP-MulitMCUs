@@ -14,8 +14,6 @@ extern "C"
 typedef enum
 {
     INPUT_IO_KEY0 = 0,
-    INPUT_IO_KEY1,
-    INPUT_IO_KEY2,
 
 }INPUT_IO_TABLE;
 

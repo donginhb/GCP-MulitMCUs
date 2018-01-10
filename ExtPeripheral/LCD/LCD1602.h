@@ -32,10 +32,12 @@ uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(uBit8 uData),
 
 /**
   * @brief  字符串输入
+  * @param  uRowIndex 显示行索引
+  * @param  uColIndex 显示列索引
   * @param  pStr 字符串,必须以'\0'结束
   * @retval 无
   */
-void LCD1602_WriteStr(uBit8 *pStr);
+void LCD1602_WriteStr(uBit8 uRowIndex, uBit8 uColIndex, uBit8 *pStr);
 
 
 #ifdef __cplusplus

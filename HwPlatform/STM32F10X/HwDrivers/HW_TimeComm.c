@@ -26,7 +26,7 @@
 
 //定时器节点定义
 TIM_TypeDef * const TIM[HW_TIM_NODE_NUM] = {   TIM1,TIM8, TIM2, TIM3, TIM4, TIM5, TIM6, TIM7, \
-                                                TIM9, TIM10, TIM11, TIM12, TIM13, TIM14, TIM15, TIM16, TIM17};
+                                               TIM9, TIM10, TIM11, TIM12, TIM13, TIM14, TIM15, TIM16, TIM17};
 
 
 /**

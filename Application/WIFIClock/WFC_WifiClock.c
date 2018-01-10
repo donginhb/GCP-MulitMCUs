@@ -17,6 +17,7 @@
 /***********************************<INCLUDES>**********************************/
 #include "WFC_WifiClock.h"
 #include "WFC_WifiCom.h"
+#include "WFC_HardwareDef.h"
 #include "DataType/DataType.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
@@ -258,7 +259,7 @@ uBit32 WFC_DisplayWeather(void)
                                    RTC_GetTimeAddr()->year, RTC_GetTimeAddr()->month, RTC_GetTimeAddr()->day,
                                    RTC_GetTimeAddr()->hour, RTC_GetTimeAddr()->min, RTC_GetTimeAddr()->sec,
                                    uName, uText, uTemperature);
-    UART_BlockSendStr(0, uDisplayBuff);
+    UART_BlockSendStr(WFC_DEBUG_UART_NODE, uDisplayBuff);
     
     return 0;
 }

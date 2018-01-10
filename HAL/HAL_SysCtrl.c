@@ -45,7 +45,9 @@ void HAL_SystemReset(void)
   */
 void HAL_JumToApp(void)
 {
+#if defined(LPC17XX)
     HW_JumToApp();
+#endif
     
 }
 
@@ -84,6 +86,8 @@ void HAL_DisableIRQ(void)
   */
 void HAL_JTAGConfig(uBit8 uMode)
 {
+#if defined(STM32F10X)
     HW_SWJConfig(uMode);
+#endif
     
 }

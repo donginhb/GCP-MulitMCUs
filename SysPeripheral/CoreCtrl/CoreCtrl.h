@@ -76,6 +76,18 @@ void CoreCtrl_EnableIRQ(void);
 void CoreCtrl_DisableIRQ(void);   
 
 
+/*****************************************************************************
+ * JTAG相关接口函数
+ ****************************************************************************/
+
+/**
+  * @brief  JTAG引脚配置
+  * @param  None
+  * @retval None
+  */
+void CoreCtrl_JTAGConfig(void);
+
+
 #ifdef __cplusplus
 }
 #endif

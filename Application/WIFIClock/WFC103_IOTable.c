@@ -24,9 +24,7 @@
 static GPIO_DATA m_InputIOTable[] = 
 {
     //按键
-    {4,   4},
-    {4,   3},
-    {4,   2},
+    {GPIO_PORT_A,  0},
 };
 
 
@@ -58,6 +56,7 @@ GPIO_CTRL_TABLE g_WFC103_IOTable =
     m_OutputIOTable,
     m_InputIOTable,
     sizeof(m_OutputIOTable)/sizeof(GPIO_DATA),
-    sizeof(m_InputIOTable)/sizeof(GPIO_DATA),
+    //sizeof(m_InputIOTable)/sizeof(GPIO_DATA),
+    0
     
 };

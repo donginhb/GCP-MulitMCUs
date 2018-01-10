@@ -23,7 +23,7 @@
 #include "WFC_WifiClock.h"
 #include "DataType/DataType.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
-
+#include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 
 
 
