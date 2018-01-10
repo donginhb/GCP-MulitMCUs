@@ -111,6 +111,18 @@ void HW_DisableIRQ(void);
 void HW_EnterSrandby(void);
 
 
+/*****************************************************************************
+ * 系统JTAG引脚相关
+ ****************************************************************************/
+
+/**
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @retval None
+  */
+void HW_SWJConfig(uint8_t uMode);
+
+
 #ifdef __cplusplus
 }
 #endif

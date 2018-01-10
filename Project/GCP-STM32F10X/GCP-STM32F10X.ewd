@@ -41,11 +41,11 @@
         </option>
         <option>
           <name>MemOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>MemFile</name>
-          <state>$TOOLKIT_DIR$\CONFIG\debugger\NXP\LPC1768.ddf</state>
+          <state>$TOOLKIT_DIR$\CONFIG\debugger\ST\STM32F103x8.ddf</state>
         </option>
         <option>
           <name>RunToEnable</name>
@@ -85,7 +85,7 @@
         </option>
         <option>
           <name>OCDynDriverList</name>
-          <state>JLINK_ID</state>
+          <state>STLINK_ID</state>
         </option>
         <option>
           <name>OCLastSavedByProductVersion</name>
@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>UseFlashLoader</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CLowLevel</name>
@@ -117,7 +117,7 @@
         </option>
         <option>
           <name>FlashLoadersV3</name>
-          <state>$TOOLKIT_DIR$\config\flashloader\NXP\FlashNXPLPC512K_Cortex.board</state>
+          <state>$TOOLKIT_DIR$\config\flashloader\ST\FlashSTM32F10xxE.board</state>
         </option>
         <option>
           <name>OCImagesSuppressCheck1</name>
@@ -145,7 +145,7 @@
         </option>
         <option>
           <name>OverrideDefFlashBoard</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCImagesOffset1</name>
@@ -1163,7 +1163,7 @@
         </option>
         <option>
           <name>CCSTLinkInterfaceRadio</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCSTLinkInterfaceCmdLine</name>
@@ -1180,7 +1180,7 @@
         </option>
         <option>
           <name>CCSwoClockAuto</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCSwoClockEdit</name>

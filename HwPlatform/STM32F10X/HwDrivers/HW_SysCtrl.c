@@ -145,3 +145,21 @@ void HW_EnterSrandby(void)
     HW_SystemStandby();//进入待机模式
     
 }
+
+
+/*****************************************************************************
+ * 系统JTAG引脚相关
+ ****************************************************************************/
+
+/**
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @retval None
+  */
+void HW_SWJConfig(uint8_t uMode)
+{
+    RCC->APB2ENR |= RCC_APB2ENR_AFIOEN; //开启辅助时钟       
+    AFIO->MAPR &= ~AFIO_MAPR_SWJ_CFG;
+    AFIO->MAPR |=  uMode;
+  
+} 

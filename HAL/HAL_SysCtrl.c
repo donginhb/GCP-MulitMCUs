@@ -72,3 +72,18 @@ void HAL_DisableIRQ(void)
     HW_DisableIRQ();
     
 }
+
+/*****************************************************************************
+ * 系统JTAG引脚相关
+ ****************************************************************************/
+
+/**
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @retval None
+  */
+void HAL_JTAGConfig(uBit8 uMode)
+{
+    HW_SWJConfig(uMode);
+    
+}

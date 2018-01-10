@@ -75,6 +75,7 @@ void WFC_HwInit(void)
                               OUTPUT_IO_LCD_D4, OUTPUT_IO_LCD_D5, OUTPUT_IO_LCD_D6, OUTPUT_IO_LCD_D7};
     
     LCD_Init(ulPortNoGroup, OUTPUT_IO_LCD_EN, OUTPUT_IO_LCD_RW, OUTPUT_IO_LCD_RS);
+    LCD_WriteStr("123");
     
     //初始化串口
     UART_Init(WFC_UART_NODE, 115200);

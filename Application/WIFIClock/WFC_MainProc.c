@@ -37,6 +37,9 @@ void WFC_Init(void)
     //上电延时
     SysTime_DelayMs(200);
     
+    //配置JTAG引脚
+    CoreCtrl_JTAGConfig();
+    
     //硬件初始化
     WFC_HwInit();
     

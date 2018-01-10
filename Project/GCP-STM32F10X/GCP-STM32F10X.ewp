@@ -89,7 +89,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F103xE	ST STM32F103xE</state>
+          <state>STM32F103x8	ST STM32F103x8</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -149,7 +149,7 @@
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>STM32F103xE	ST STM32F103xE</state>
+          <state>STM32F103x8	ST STM32F103x8</state>
         </option>
         <option>
           <name>FPU2</name>
@@ -734,7 +734,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\settings\GCP-STM32F10X.icf</state>
+          <state>$PROJ_DIR$\settings\GCP-STM32F103X8.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1480,7 +1480,7 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_WatchDog.h</name>
         </file>
       </group>
       <group>

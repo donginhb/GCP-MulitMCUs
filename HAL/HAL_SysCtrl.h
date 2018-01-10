@@ -45,6 +45,14 @@ void HAL_EnableIRQ(void);
 void HAL_DisableIRQ(void);
 
 
+/**
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @retval None
+  */
+void HAL_JTAGConfig(uBit8 uMode);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -34,20 +34,21 @@ static GPIO_DATA m_InputIOTable[] =
 static GPIO_DATA m_OutputIOTable[] = 
 {
     //LED灯
-    {GPIO_PORT_B,   5},
+    {GPIO_PORT_C, 13},
     
-    {GPIO_PORT_A, 12},
-    {GPIO_PORT_A, 11},
-    {GPIO_PORT_A, 10},
-    {GPIO_PORT_A,  9},
-    {GPIO_PORT_B, 15},
-    {GPIO_PORT_B, 14},
-    {GPIO_PORT_B, 13},
-    {GPIO_PORT_B, 12},
+    {GPIO_PORT_A, 11},  //D0,
+    {GPIO_PORT_A, 10},  //D1,
+    {GPIO_PORT_A,  9},  //D2,
+    {GPIO_PORT_A,  8},  //D3,
+    {GPIO_PORT_B, 15},  //D4,
+    {GPIO_PORT_B, 14},  //D5,
+    {GPIO_PORT_B, 13},  //D6,
+    {GPIO_PORT_B, 12},  //D7,
     
-    {GPIO_PORT_A, 15},  //E
-    {GPIO_PORT_B,  3},  //RW
-    {GPIO_PORT_B,  4},  //RS
+    {GPIO_PORT_A, 12},  //EN
+    {GPIO_PORT_A, 15},  //RW
+    {GPIO_PORT_B,  3},  //RS
+    
 };
 
 
