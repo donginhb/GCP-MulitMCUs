@@ -27,9 +27,8 @@
 #include "SysPeripheral/EXTI/EXTI.h"
 #include "SysPeripheral/UART/UART.h"
 
-//#include "ExtPeripheral/EEPROM/EEPROM.h"
-#include "ExtPeripheral/TempSensor/TempSensor.h"
 #include "ExtPeripheral/WIFI/ESP82XX.h"
+#include "ExtPeripheral/LCD/LCD.h"
       
 #include <stdio.h>
 #include <string.h>
@@ -51,20 +50,6 @@ static void WFC_IOConfig(void)
     //初始化资源表内的IO
     GPIO_InitIOTable(&g_GcpIOTable);
     
-#if 0
-    
-    //初始化IIC引脚
-    //GPIO_InitIOGroup(&g_GcpIOTable.pOutputGroup[OUTPUT_IO_SCL], 2, GPIO_MODE_OD);  //开漏模式
-    
-    //初始化温度传感器应交
-    //GPIO_InitIOGroup(&g_GcpIOTable.pOutputGroup[OUTPUT_IO_DS18B20_BUS], 1, GPIO_MODE_OD);  //开漏模式
-    
-    //翻转按键的电平逻辑
-    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY0, 1);
-    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY1, 1);
-    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_KEY2, 1);
-#endif
-    
 }
 
 
@@ -84,6 +69,12 @@ void WFC_HwInit(void)
     
     //初始化IO
     WFC_IOConfig();
+    
+    //初始化LCD
+    uBit32 ulPortNoGroup[] = {OUTPUT_IO_LCD_D0, OUTPUT_IO_LCD_D1, OUTPUT_IO_LCD_D2, OUTPUT_IO_LCD_D3,
+                              OUTPUT_IO_LCD_D4, OUTPUT_IO_LCD_D5, OUTPUT_IO_LCD_D6, OUTPUT_IO_LCD_D7};
+    
+    LCD_Init(ulPortNoGroup, OUTPUT_IO_LCD_EN, OUTPUT_IO_LCD_RW, OUTPUT_IO_LCD_RS);
     
     //初始化串口
     UART_Init(WFC_UART_NODE, 115200);
@@ -126,96 +117,4 @@ void WFC_MainWorkLedShow(void)
     }
 
 }
-
-
-/*****************************************************************************
- * 按键处理线程接口
- ****************************************************************************/
-#define WFC_KEY_SCAN_INTERVAL       (50)        //按键扫描间隔(MS)
-static  SYS_TIME_DATA m_ScanTimer = {1};        //扫描定时器
-
-
-/**
-  * @brief  按键处理
-  * @param  None
-  * @retval None
-  */
-void WFC_KeyProc(void)
-{
-    if (SysTime_CheckExpiredState(&m_ScanTimer))
-    {
-        SysTime_StartOneShot(&m_ScanTimer, WFC_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
-        
-        uBit32 ulKeyVlue = 0;
-        uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
-        
-        if (ulCurTrg)
-        {
-            GPIO_ToggleOutputState(OUTPUT_IO_LED1);
-        }
-        
-    }
-      
-}
-
-
-/*****************************************************************************
- * 传感器数据处理线程接口
- ****************************************************************************/
-#define WFC_SENSOR_SAMPLE_INTERVAL          (500)        //温度采样间隔间隔(MS)
-static  SYS_TIME_DATA m_SensorSampleTimer = {1};        //扫描定时器
-
-/**
-  * @brief  按键处理
-  * @param  None
-  * @retval None
-  */
-void WFC_SensorSampleProc(void)
-{
-    static uBit8 s_uProStep = 0;    //工作步骤
-    
-    if (SysTime_CheckExpiredState(&m_SensorSampleTimer))
-    {
-        SysTime_StartOneShot(&m_SensorSampleTimer, WFC_SENSOR_SAMPLE_INTERVAL);   //设置下一次执行的时间
-        
-#if 1
-        switch (s_uProStep)
-        {
-        case 0: //启动温度转换
-            {
-                TEMP_StartConvert(); 
-                s_uProStep++;
-                break;
-            }
-        case 1: //获取温度值
-            {
-                Bit32 TempValue = (Bit32)(TEMP_GetValue() * 10); 
-                uBit8 uDisBuff[128] = {0};
-                sprintf((char *)uDisBuff, (const char *)"TempValue: %d\r\n", TempValue);
-                UART_SendBuff(WFC_UART_NODE, uDisBuff, strlen((const char *)uDisBuff));
-                
-                s_uProStep++;
-                break;     
-            }
-        case 2: 
-            {
-                s_uProStep++;   
-                break;
-            }
-        case 3:
-            {
-                s_uProStep++;   
-                break;
-            }
-        default: 
-            {
-                s_uProStep = 0;   
-                break;
-            }
-        }
-#endif
-    }
-    
-}
-
 

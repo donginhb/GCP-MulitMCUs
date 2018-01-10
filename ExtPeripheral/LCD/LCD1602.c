@@ -24,7 +24,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-static void (*pf_LCD1602_PORT)(bool bState);
+static void (*pf_LCD1602_PORT)(uBit8 uData);
 static void (*pf_LCD1602_RS)(bool bState);
 static void (*pf_LCD1602_EN)(bool bState);
 static void (*pf_LCD1602_RW)(bool bState);
@@ -36,11 +36,11 @@ static void (*pf_LCD1602_DelayMs)(uBit32 ulMs);
   * @param  bState IO状态,代表实际的电平
   * @retval 无
   */
-static void (LCD1602_PORT)(bool bState)
+static void (LCD1602_PORT)(uBit8 uData)
 {
     if (pf_LCD1602_PORT)
     {
-        pf_LCD1602_PORT(bState);
+        pf_LCD1602_PORT(uData);
     }
     
 }
@@ -151,7 +151,7 @@ static void LCD1602_WriteData(uBit8 uData)
   * @param  pf_LCD_DelayMs  LCD毫秒级延时
   * @retval 0-成功 非0-失败
   */
-uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(bool bState),
+uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(uBit8 uData),
                               void (*pf_LCD_RS)(bool bState),
                               void (*pf_LCD_EN)(bool bState),
                               void (*pf_LCD_RW)(bool bState),
@@ -176,11 +176,11 @@ uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(bool bState),
         LCD1602_EN(0);
         LCD1602_RW(0);                  //设置为写状态
         LCD1602_DelayMs(30);
-        LCD1602_WriteCmd(0x38);        //显示模式设定
+        LCD1602_WriteCmd(0x38);         //显示模式设定
         LCD1602_DelayMs(5);
-        LCD1602_WriteCmd(0x0c);        //开关显示、光标有无设置、光标闪烁设置
-        LCD1602_WriteCmd(0x06);        //写一个字符后指针加一
-        LCD1602_WriteCmd(0x01);        //清屏指令
+        LCD1602_WriteCmd(0x0c);         //开关显示、光标有无设置、光标闪烁设置
+        LCD1602_WriteCmd(0x06);         //写一个字符后指针加一
+        LCD1602_WriteCmd(0x01);         //清屏指令
         
         return 0;
     }while (0);

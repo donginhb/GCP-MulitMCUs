@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\GCP-LPC17XX\GCP-LPC17XX.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\GCP-LPC17XX_Booloader\GCP-LPC17XX_Booloader.ewp</path>
+  </project>
+   <project>
+    <path>$WS_DIR$\GCP-LPC43XX\GCP-LPC43XX.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\GCP-STM32F10X\GCP-STM32F10X.ewp</path>
+  </project>
+  <batchBuild/>
+</workspace>
+
+

@@ -23,7 +23,7 @@ extern "C"
   * @param  pf_LCD_DelayMs  LCD毫秒级延时
   * @retval 0-成功 非0-失败
   */
-uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(bool bState),
+uBit32 LCD1602_InitInterfaces(void (*pf_LCD_PORT)(uBit8 uData),
                               void (*pf_LCD_RS)(bool bState),
                               void (*pf_LCD_EN)(bool bState),
                               void (*pf_LCD_RW)(bool bState),

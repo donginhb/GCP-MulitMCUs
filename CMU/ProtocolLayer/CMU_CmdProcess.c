@@ -1788,7 +1788,9 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         }
     case MOTOR_GETCMD_SCAN_HOME_STATUS:                 //获取找零点状态 0-正常 1-找零点中
         {
+            CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID,NULL,0);
             uBit8 *pSendBuf = CMU_GetSendBufAddr();
+            
             *(uBit32 *)pSendBuf = m_sExternalFunTable.pf_CSM_GetHomeScanStatus();
             CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
             break;

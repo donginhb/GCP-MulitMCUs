@@ -35,7 +35,7 @@
 void WFC_Init(void)
 {
     //上电延时
-    //SysTime_DelayMs(2000);
+    SysTime_DelayMs(200);
     
     //硬件初始化
     WFC_HwInit();
@@ -43,9 +43,10 @@ void WFC_Init(void)
     //获取天气信息
     WFC_UpdateWeather();
     
-    //获取北京时间
+    //获取北京时间数据包
     WFC_UpdateClock();
     
+    //解析数据包并设置北京时间
     WFC_GetBaseClock();
     
 }
