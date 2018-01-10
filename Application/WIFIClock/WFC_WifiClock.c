@@ -22,6 +22,7 @@
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/RTC/RTC.h"
+#include "ExtPeripheral/LCD/LCD.h"
 #include "Algorithm/Json/cJSON.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,15 +34,17 @@
 
 
 /*****************************************************************************
- * WIFI CLOCK相关控制接口
+ * JSON数据包相关解析接口
  ****************************************************************************/
 
 /**
-  * @brief  天气获取
-  * @param  None
+  * @brief  天气获取(从JSON数据包中获取想要的数据)
+  * @param  pJsonPack JSON数据包字符串
+  * @param  pKey 要提取的秘钥
+  * @param  pValue 提取到的数据
   * @retval 0-成功 非0-失败
   */
-uBit32 WFC_GetWeatherParmForJson(char const *pJsonPack, char *pKey, char *pValue)
+static uBit32 WFC_GetWeatherParmForJson(char const *pJsonPack, char *pKey, char *pValue)
 {
     uBit32 ulRet = 0;
     cJSON *pWeatherJson = NULL;
@@ -131,13 +134,14 @@ uBit32 WFC_GetWeatherParmForJson(char const *pJsonPack, char *pKey, char *pValue
 }
 
 
-
 /**
-  * @brief  天气获取
-  * @param  None
+  * @brief  基北京时间获取(从JSON数据包中获取想要的数据)
+  * @param  pJsonPack JSON数据包字符串
+  * @param  pKey 要提取的秘钥
+  * @param  pValue 提取到的数据
   * @retval 0-成功 非0-失败
   */
-uBit32 WFC_GetBaseClockForJson(char const *pJsonPack, char *pKey, char *pValue)
+static uBit32 WFC_GetBaseClockForJson(char const *pJsonPack, char *pKey, char *pValue)
 {
     uBit32 ulRet = 0;
     cJSON *pClockJson = NULL;
@@ -193,6 +197,12 @@ uBit32 WFC_GetBaseClockForJson(char const *pJsonPack, char *pKey, char *pValue)
 }
 
 
+/*****************************************************************************
+ * 网络参数接口获取解析相关接口
+ ****************************************************************************/
+#define WFC_CLOCK_UPDATE_TIME          (24 * 60 * 60 * 1000)    //更新时间(MS)
+static SYS_TIME_DATA m_UpdateClockTimer  = {0};    //网络更新定时器
+
 static uBit8 m_uWeatherJsonPack[512] = {0}; //天气JSON包(字符串)
 static uBit32 m_ulWeatherJsonLen = 0;       //天气JSON包长度
 
@@ -200,6 +210,10 @@ static uBit8 m_uClockJsonPack[512] = {0};   //北京时间JSON包(字符串)
 static uBit32 m_ulClockJsonLen = 0;         //北京时间JSON包长度
 
 
+static uBit8 m_uCityName[64] = {0};         //城市名
+static uBit8 m_uWeather[64] = {0};          //天气
+static uBit8 m_uTemp[64] = {0};             //温度值
+static uBit8 m_uBaseClock[64] = {0};        //基时钟
 
 
 /**
@@ -209,8 +223,30 @@ static uBit32 m_ulClockJsonLen = 0;         //北京时间JSON包长度
   */
 uBit32 WFC_UpdateWeather(void)
 {
+    //从网络中获取最新的JSON包
+    uBit32 ulRet = WFC_RecvWeatherPack(m_uWeatherJsonPack, &m_ulWeatherJsonLen);
     
-    return WFC_RecvWeatherPack(m_uWeatherJsonPack, &m_ulWeatherJsonLen);
+    //判断获取结果
+    if (ulRet == 0)
+    {
+        //解析数据包并提取参数
+        if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "name", (char *)&m_uCityName))
+        {
+            return 1;
+        }
+        
+        if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "text", (char *)&m_uWeather))
+        {
+            return 1;
+        }
+        
+        if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "temperature", (char *)&m_uTemp))
+        {
+            return 1;
+        }
+    }
+    
+    return ulRet;
 }
 
 
@@ -221,97 +257,127 @@ uBit32 WFC_UpdateWeather(void)
   */
 uBit32 WFC_UpdateClock(void)
 {
+    //从网络中获取最新的JSON包
+    uBit32 ulRet = WFC_RecvClockPack(m_uClockJsonPack, &m_ulClockJsonLen);
     
-    return WFC_RecvClockPack(m_uClockJsonPack, &m_ulClockJsonLen);
+    //判断获取结果
+    if (ulRet == 0)
+    {
+        //解析数据包
+        if (WFC_GetBaseClockForJson((char const *)m_uClockJsonPack, "timestamp", (char *)&m_uBaseClock))
+        {
+            return 1;
+        }
+        
+        //字符串转整型
+        uBit32 ulBaseClock = atol((char const *)m_uBaseClock);
+        
+        //设置RTC
+        RTC_SetCurClock(ulBaseClock, 8);
+        
+        //设置下次网络同步的时间
+        SysTime_StartOneShot(&m_UpdateClockTimer, WFC_CLOCK_UPDATE_TIME); 
+        
+    }
+    
+    return ulRet;
 }
 
 
 /**
-  * @brief  天气显示
+  * @brief  时间更新管理
   * @param  None
   * @retval None
   */
-uBit32 WFC_DisplayWeather(void)
+void WFC_UpdateClockHandler(void)
 {
-    uBit8 uName[64] = {0};
-    uBit8 uText[64] = {0};
-    uBit8 uTemperature[64] = {0};
-    uBit8 uDisplayBuff[256] = {0};
-    
-    //解析数据包
-    if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "name", (char *)&uName))
+    //计算下次网络时间同步的时间,当时间到达,则自动从网络更新时间和天气
+    if (SysTime_CheckExpiredState(&m_UpdateClockTimer))
     {
-        return 1;
+        //更新网络时间
+        WFC_UpdateClock();
+        
+        //更新网络天气
+        WFC_UpdateWeather();
     }
     
-    if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "text", (char *)&uText))
-    {
-        return 1;
-    }
-    
-    if (WFC_GetWeatherParmForJson((char const *)m_uWeatherJsonPack, "temperature", (char *)&uTemperature))
-    {
-        return 1;
-    }
-    
-    //拼装数据
-    sprintf((char *)uDisplayBuff, "%d-%.2d-%.2d %.2d:%.2d:%.2d\r\nname: %s\r\nweather: %s\r\ntemp: %s\r\n\r\n", 
-                                   RTC_GetTimeAddr()->year, RTC_GetTimeAddr()->month, RTC_GetTimeAddr()->day,
-                                   RTC_GetTimeAddr()->hour, RTC_GetTimeAddr()->min, RTC_GetTimeAddr()->sec,
-                                   uName, uText, uTemperature);
-    UART_BlockSendStr(WFC_DEBUG_UART_NODE, uDisplayBuff);
-    
-    return 0;
 }
-
-
-/**
-  * @brief  基时钟获取
-  * @param  None
-  * @retval None
-  */
-uBit32 WFC_GetBaseClock(void)
-{
-    uBit8 uBaseClock[64] = {0};
-    uBit32 ulBaseClock = 0;
-    
-    //解析数据包
-    if (WFC_GetBaseClockForJson((char const *)m_uClockJsonPack, "timestamp", (char *)&uBaseClock))
-    {
-        return 0;
-    }
-    
-    ulBaseClock = atol((char const *)uBaseClock);
-    
-    RTC_SetCurClock(ulBaseClock, 8);
-    
-    UART_BlockSendStr(0, uBaseClock);
-    
-    return ulBaseClock;
-}
-
-
 
 
 /*****************************************************************************
- * JSON解包测试相关线程接口
+ * WIFI时钟显示相关接口
  ****************************************************************************/
-#define WFC_WIFI_TOGGLE_TIME          (1000)       //LED翻转时间(MS)
-static SYS_TIME_DATA m_WifiCtrlTimer  = {1};     //LED控定时器
+#define WFC_WIFI_TOGGLE_TIME          (1000)    //翻转时间(MS)
+static SYS_TIME_DATA m_DisplayTimer  = {1};    //定时器
 
 
-//解包测试
-//长时间测试,以确定是否有内存溢出
-void WFC_UnpackTest(void)
+/**
+  * @brief  WIFI 时钟参数显示
+  * @param  None
+  * @retval None
+  */
+static void WFC_DisplayParm(void)
 {
-    if (SysTime_CheckExpiredState(&m_WifiCtrlTimer))
+    static uBit8 uDisplayStep = 0;
+    uBit8 uDisplayBuff[128] = {0};
+    
+    //显示时钟 格式: 20:54:00  
+    sprintf((char *)uDisplayBuff, "%.2d:%.2d:%.2d", RTC_GetTimeAddr()->hour, RTC_GetTimeAddr()->min, RTC_GetTimeAddr()->sec);
+    LCD_WriteStr(1, 0, uDisplayBuff);
+    
+    switch (uDisplayStep%4)
     {
-        SysTime_StartOneShot(&m_WifiCtrlTimer, WFC_WIFI_TOGGLE_TIME); //设置下一次执行的时间
+    case 0: //显示日期
+        memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
+        sprintf((char *)uDisplayBuff, "%d-%.2d-%.2d", RTC_GetTimeAddr()->year, RTC_GetTimeAddr()->month, RTC_GetTimeAddr()->day);
+        LCD_WriteStr(0, 0, uDisplayBuff);
+        break;
         
+    case 1: //显示城市
+        memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
+        sprintf((char *)uDisplayBuff, "City: %s",  m_uCityName);
+        LCD_WriteStr(0, 0, uDisplayBuff);
+        break;
+        
+    case 2: //显示天气
+        memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
+        sprintf((char *)uDisplayBuff, "Weather: %s",  m_uWeather);
+        LCD_WriteStr(0, 0, uDisplayBuff);
+        break;
+        
+    case 3: //显示温度
+        memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
+        sprintf((char *)uDisplayBuff, "Temp: %s",  m_uTemp);
+        LCD_WriteStr(0, 0, uDisplayBuff);
+        break;
+        
+    default: uDisplayStep = 0; break;
+    }
+    
+    uDisplayStep++;
+    
+}
+
+
+/**
+  * @brief  更新显示数据
+  * @param  None
+  * @retval None
+  */
+void WFC_UpdateDisplay(void)
+{
+    if (SysTime_CheckExpiredState(&m_DisplayTimer))
+    {
+        //设置下一次执行的时间
+        SysTime_StartOneShot(&m_DisplayTimer, WFC_WIFI_TOGGLE_TIME); 
+        
+        //更新RTC时钟
         RTC_Update();
         
-        WFC_DisplayWeather();
+        //显示
+        WFC_DisplayParm();
     }
     
 }
+
 

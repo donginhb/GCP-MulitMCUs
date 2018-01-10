@@ -25,14 +25,22 @@ extern "C"
   */
 uBit32 WFC_InitWifi(uBit8 uUartNode);
 
-uBit32 WFC_RecvWeatherPack(uBit8 *pJsonPack, uBit32 *pJsonLen);
 
 /**
-  * @brief  获取北京时间信息包
+  * @brief  天气信息包获取
+  * @param  None
+  * @retval 0-成功  非0-失败
+  */
+uBit32 WFC_RecvWeatherPack(uBit8 *pJsonPack, uBit32 *pJsonLen);
+
+
+/**
+  * @brief  北京时间信息包获取
   * @param  None
   * @retval 0-成功  非0-失败
   */
 uBit32 WFC_RecvClockPack(uBit8 *pJsonPack, uBit32 *pJsonLen);
+
     
 
 #ifdef __cplusplus

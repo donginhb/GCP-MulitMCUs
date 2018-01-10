@@ -46,8 +46,6 @@
 
 
 
-
-
 #define WIFI_DEF_BUADRATE               (115200)            //默认串口波特率
       
 static uBit32 WFC_GetJson(uBit8 *RecvPack, uBit32 ulRecvLen, uBit8 *JsonPack, uBit32 *pJsonLen)
@@ -152,7 +150,7 @@ uBit32 WFC_InitWifi(uBit8 uUartNode)
 
 
 /**
-  * @brief  获取天气信息包
+  * @brief  天气信息包获取
   * @param  None
   * @retval 0-成功  非0-失败
   */
@@ -226,7 +224,7 @@ uBit32 WFC_RecvWeatherPack(uBit8 *pJsonPack, uBit32 *pJsonLen)
 
 
 /**
-  * @brief  获取北京时间信息包
+  * @brief  北京时间信息包获取
   * @param  None
   * @retval 0-成功  非0-失败
   */
@@ -292,8 +290,6 @@ uBit32 WFC_RecvClockPack(uBit8 *pJsonPack, uBit32 *pJsonLen)
         
         
     }while (0);
-    
-    
     
     return ulRet;
 }

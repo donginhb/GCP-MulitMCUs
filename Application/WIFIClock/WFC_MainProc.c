@@ -28,7 +28,7 @@
 
 
 /**
-  * @brief  格子柜相关资源初始化
+  * @brief  相关资源初始化
   * @param  None
   * @retval None
   */
@@ -49,14 +49,11 @@ void WFC_Init(void)
     //获取北京时间数据包
     WFC_UpdateClock();
     
-    //解析数据包并设置北京时间
-    WFC_GetBaseClock();
-    
 }
 
 
 /**
-  * @brief  格子柜主任务处理
+  * @brief  主任务处理
   * @param  None
   * @retval None
   */
@@ -65,6 +62,9 @@ void WFC_MainProc(void)
     //LED显示
     WFC_MainWorkLedShow();
     
-    WFC_UnpackTest();
+    //更新WIFI时钟
+    WFC_UpdateDisplay();
     
+    //网络时间更新管理
+    WFC_UpdateClockHandler();
 }

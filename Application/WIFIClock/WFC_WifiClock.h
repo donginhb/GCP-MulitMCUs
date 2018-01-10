@@ -9,42 +9,45 @@ extern "C"
 #endif
     
 
-/**
-  * @brief  天气更新
-  * @param  None
-  * @retval None
-  */
-uBit32 WFC_UpdateWeather(void);
-
-
-/**
-  * @brief  天气显示
-  * @param  None
-  * @retval None
-  */
-uBit32 WFC_DisplayWeather(void);
-
+/*****************************************************************************
+ * 网络参数接口获取解析相关接口
+ ****************************************************************************/
 
 /**
   * @brief  天气更新
   * @param  None
   * @retval 0-成功 非0-失败
   */
-uBit32 WFC_UpdateClock(void);
+uBit32 WFC_UpdateWeather(void);
+
 
 /**
-  * @brief  时钟获取
+  * @brief  时间更新
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 WFC_UpdateClock(void);
+
+
+/**
+  * @brief  时间更新管理
   * @param  None
   * @retval None
   */
-uBit32 WFC_GetBaseClock(void);
+void WFC_UpdateClockHandler(void);
 
 
+/*****************************************************************************
+ * WIFI时钟显示相关接口
+ ****************************************************************************/
 
+/**
+  * @brief  更新显示数据
+  * @param  None
+  * @retval None
+  */
+void WFC_UpdateDisplay(void);
 
-//解包测试
-//长时间测试,以确定是否有内存溢出
-void WFC_UnpackTest(void);
 
 #ifdef __cplusplus
 }

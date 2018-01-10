@@ -53,7 +53,6 @@ static void WFC_IOConfig(void)
 }
 
 
-
 /*****************************************************************************
  * 硬件配置接口
  ****************************************************************************/
@@ -75,20 +74,24 @@ void WFC_HwInit(void)
                               OUTPUT_IO_LCD_D4, OUTPUT_IO_LCD_D5, OUTPUT_IO_LCD_D6, OUTPUT_IO_LCD_D7};
     
     LCD_Init(ulPortNoGroup, OUTPUT_IO_LCD_EN, OUTPUT_IO_LCD_RW, OUTPUT_IO_LCD_RS);
-    LCD_WriteStr(0, 0, "123");
+    LCD_WriteStr(0, 0, "WIFI CLOCK INIT");
     
-    //初始化串口
+#if 0
+    //初始化调试串口
     UART_Init(WFC_DEBUG_UART_NODE, 115200);
+#endif
     
     //初始化ESP8266
     ulRet = WFC_InitWifi(WFC_ESP_UART_NODE);
     
+    LCD_WriteStr(0, 0, "ESP82XX:");
+    
     switch (ulRet)
     {
-    case WFC_WIFI_ERR_SUCCESS: UART_SendStr(WFC_DEBUG_UART_NODE, "ESP82XX: Success!\r\n"); break;
-    case WFC_WIFI_ERR_COM    : UART_SendStr(WFC_DEBUG_UART_NODE, "ESP82XX: Comunication Err!\r\n"); break;
-    case WFC_WIFI_ERR_SET    : UART_SendStr(WFC_DEBUG_UART_NODE, "ESP82XX: Set Config Err!\r\n"); break;
-    case WFC_WIFI_RER_CONNET : UART_SendStr(WFC_DEBUG_UART_NODE, "ESP82XX: WIFI Connect Err!\r\n"); break;
+    case WFC_WIFI_ERR_SUCCESS: LCD_WriteStr(1, 0, "Success!"); break;
+    case WFC_WIFI_ERR_COM    : LCD_WriteStr(1, 0, "Comunication Err!"); break;
+    case WFC_WIFI_ERR_SET    : LCD_WriteStr(1, 0, "Set Config Err!"); break;
+    case WFC_WIFI_RER_CONNET : LCD_WriteStr(1, 0, "WIFI Connect Err!"); break;
     default:break;
     }
     
