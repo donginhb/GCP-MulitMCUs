@@ -44,8 +44,8 @@ static GPIO_DATA m_OutputIOTable[] =
     {GPIO_PORT_B, 12},  //D7,
     
     {GPIO_PORT_A, 12},  //EN
-    {GPIO_PORT_A, 15},  //RW
-    {GPIO_PORT_B,  3},  //RS
+    {GPIO_PORT_B,  5},  //RW
+    {GPIO_PORT_B,  6},  //RS
     
 };
 

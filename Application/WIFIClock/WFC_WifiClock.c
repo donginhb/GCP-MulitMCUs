@@ -325,33 +325,37 @@ static void WFC_DisplayParm(void)
     sprintf((char *)uDisplayBuff, "%.2d:%.2d:%.2d", RTC_GetTimeAddr()->hour, RTC_GetTimeAddr()->min, RTC_GetTimeAddr()->sec);
     LCD_WriteStr(1, 0, uDisplayBuff);
     
-    switch (uDisplayStep%4)
+    switch (uDisplayStep%20)
     {
     case 0: //显示日期
         memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
         sprintf((char *)uDisplayBuff, "%d-%.2d-%.2d", RTC_GetTimeAddr()->year, RTC_GetTimeAddr()->month, RTC_GetTimeAddr()->day);
+        LCD_WriteStr(0, 0, "                ");
         LCD_WriteStr(0, 0, uDisplayBuff);
         break;
         
-    case 1: //显示城市
+    case 5: //显示城市
         memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
         sprintf((char *)uDisplayBuff, "City: %s",  m_uCityName);
+        LCD_WriteStr(0, 0, "                ");
         LCD_WriteStr(0, 0, uDisplayBuff);
         break;
         
-    case 2: //显示天气
+    case 10: //显示天气
         memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
         sprintf((char *)uDisplayBuff, "Weather: %s",  m_uWeather);
+        LCD_WriteStr(0, 0, "                ");
         LCD_WriteStr(0, 0, uDisplayBuff);
         break;
         
-    case 3: //显示温度
+    case 15: //显示温度
         memset(uDisplayBuff, 0, sizeof(uDisplayBuff));
-        sprintf((char *)uDisplayBuff, "Temp: %s",  m_uTemp);
+        sprintf((char *)uDisplayBuff, "Temp: %s C",  m_uTemp);
+        LCD_WriteStr(0, 0, "                ");
         LCD_WriteStr(0, 0, uDisplayBuff);
         break;
         
-    default: uDisplayStep = 0; break;
+    default: break;
     }
     
     uDisplayStep++;
@@ -375,7 +379,7 @@ void WFC_UpdateDisplay(void)
         RTC_Update();
         
         //显示
-        WFC_DisplayParm();
+         WFC_DisplayParm();
     }
     
 }

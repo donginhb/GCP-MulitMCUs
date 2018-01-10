@@ -63,7 +63,7 @@ void WFC_MainProc(void)
     WFC_MainWorkLedShow();
     
     //更新WIFI时钟
-    WFC_UpdateDisplay();
+     WFC_UpdateDisplay();
     
     //网络时间更新管理
     WFC_UpdateClockHandler();

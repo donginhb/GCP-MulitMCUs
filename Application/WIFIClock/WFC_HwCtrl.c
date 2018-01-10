@@ -50,6 +50,20 @@ static void WFC_IOConfig(void)
     //初始化资源表内的IO
     GPIO_InitIOTable(&g_GcpIOTable);
     
+    //设置默认电平
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D0, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D1, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D2, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D3, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D4, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D5, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D6, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_D7, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_EN, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_RW, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LCD_RS, false);
+
 }
 
 
@@ -74,6 +88,8 @@ void WFC_HwInit(void)
                               OUTPUT_IO_LCD_D4, OUTPUT_IO_LCD_D5, OUTPUT_IO_LCD_D6, OUTPUT_IO_LCD_D7};
     
     LCD_Init(ulPortNoGroup, OUTPUT_IO_LCD_EN, OUTPUT_IO_LCD_RW, OUTPUT_IO_LCD_RS);
+    LCD_WriteStr(0, 0, "                ");
+    LCD_WriteStr(1, 0, "                ");
     LCD_WriteStr(0, 0, "WIFI CLOCK INIT");
     
 #if 0
@@ -83,7 +99,8 @@ void WFC_HwInit(void)
     
     //初始化ESP8266
     ulRet = WFC_InitWifi(WFC_ESP_UART_NODE);
-    
+    LCD_WriteStr(0, 0, "                ");
+    LCD_WriteStr(1, 0, "                ");
     LCD_WriteStr(0, 0, "ESP82XX:");
     
     switch (ulRet)

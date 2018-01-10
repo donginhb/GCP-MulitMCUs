@@ -85,9 +85,9 @@ void RTC_Update(void)
     ulSecIndex = (SysTime_GetTickCount() - m_ulBaseSysClock)/1000;  //距离上次执行的秒数
     
     m_ulBaseClock += ulSecIndex;    //刷新基时钟(单位:S)
-    m_ulBaseSysClock += ulSecIndex*1000;    //刷新系统基时钟(单位:MS)
-    
-    ulDay = m_ulBaseSysClock/(24*3600);//算出总的天数
+    m_ulBaseSysClock += ulSecIndex *1000;    //刷新系统基时钟(单位:MS)
+
+    ulDay = m_ulBaseClock/(24*3600);//算出总的天数
     
     while(ulDay>=365)
     {
@@ -127,9 +127,9 @@ void RTC_Update(void)
     //假如有32天 11:21:23 2月2号11:21:23
     m_RtcClock.month = ulTemp+1;    //为什么要+1？原因：比如temp=1，就证明day里面的数不止一个月，即已经到2月了
     m_RtcClock.day = ulDay+1;       //+1即表示当天的日期不加就表示前天的
-    m_RtcClock.hour = m_ulBaseSysClock/3600%24;
-    m_RtcClock.min = m_ulBaseSysClock/60%60;
-    m_RtcClock.sec = m_ulBaseSysClock%60;
+    m_RtcClock.hour = m_ulBaseClock/3600%24;
+    m_RtcClock.min = m_ulBaseClock/60%60;
+    m_RtcClock.sec = m_ulBaseClock%60;
     
 }
 

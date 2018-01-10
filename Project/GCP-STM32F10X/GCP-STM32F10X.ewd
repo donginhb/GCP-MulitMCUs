@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>UseFlashLoader</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CLowLevel</name>
@@ -1023,7 +1023,7 @@
         <option>
           <name>CEmuCommPort</name>
           <version>0</version>
-          <state>0</state>
+          <state>4</state>
         </option>
         <option>
           <name>jtago</name>
@@ -1159,7 +1159,7 @@
         <debug>0</debug>
         <option>
           <name>OCDriverInfo</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCSTLinkInterfaceRadio</name>
@@ -1180,7 +1180,7 @@
         </option>
         <option>
           <name>CCSwoClockAuto</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCSwoClockEdit</name>
