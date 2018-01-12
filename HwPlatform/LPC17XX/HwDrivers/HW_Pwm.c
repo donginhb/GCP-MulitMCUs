@@ -23,8 +23,8 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-#define PWM_GET_PR_BY_CNT_FRE(CntFre)            (Chip_PWM_GetClock(PWM[uPwmNode])/(CntFre) - 1)   //通过计数频率计算预分频值
-#define PWM_GET_PR_BY_OP_FRE(OutFre, AutoLoad)   (PWM_GET_PR_BY_CNT_FRE((OutFre) * (AutoLoad))) //通过输出频率计算预分频值(计数频率=输出频率*自动重装载值)
+#define PWM_GET_PR_BY_CNT_FRE(CntFre)            (Chip_PWM_GetClock(PWM[uPwmNode])/(CntFre) - 1)    //通过计数频率计算预分频值
+#define PWM_GET_PR_BY_OP_FRE(OutFre, AutoLoad)   (PWM_GET_PR_BY_CNT_FRE((OutFre) * (AutoLoad)))     //通过输出频率计算预分频值(计数频率=输出频率*自动重装载值)
 
 //PWM数量定义
 #define HW_PWM_COUNT                (1)             //PWM数量

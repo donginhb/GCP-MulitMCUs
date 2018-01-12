@@ -1,5 +1,5 @@
 
-黄章键: 
+
 
 LPC17XX平台 
 1. 电机PWM模块输出模式驱动(HW_Mcpwm.c)
@@ -24,8 +24,6 @@ HAL:
 假如: mcpwm有2个,pwm有1个,tim有4个,将其划分成不同的uPwmNode:
 uPwmNode0~1,调用mcpwm实现pwm功能,uPwmNode2,调用pwm实现pwm功能.....
 
-
-陈晓聪: 
 
 应用层: 
 1. CAN环形缓冲应用(完成)

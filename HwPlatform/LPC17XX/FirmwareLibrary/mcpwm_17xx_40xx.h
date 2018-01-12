@@ -51,12 +51,12 @@ typedef struct {                    /*!< MCPWM Structure        */
     __I  uint32_t  CAPCON;            /*!< Capture Control read address */
     __O  uint32_t  CAPCON_SET;        /*!< Capture Control set address */
     __O  uint32_t  CAPCON_CLR;        /*!< Event Control clear address */
-    __IO uint32_t TC[3];            /*!< Timer Counter register */
-    __IO uint32_t LIM[3];            /*!< Limit register         */
-    __IO uint32_t MAT[3];            /*!< Match register         */
+    __IO uint32_t  TC[3];            /*!< Timer Counter register */
+    __IO uint32_t  LIM[3];            /*!< Limit register         */
+    __IO uint32_t  MAT[3];            /*!< Match register         */
     __IO uint32_t  DT;                /*!< Dead time register     */
     __IO uint32_t  CCP;                /*!< Communication Pattern register */
-    __I  uint32_t CAP[3];            /*!< Capture register       */
+    __I  uint32_t  CAP[3];            /*!< Capture register       */
     __I  uint32_t  INTEN;            /*!< Interrupt Enable read address */
     __O  uint32_t  INTEN_SET;        /*!< Interrupt Enable set address */
     __O  uint32_t  INTEN_CLR;        /*!< Interrupt Enable clear address */

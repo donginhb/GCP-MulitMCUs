@@ -35,6 +35,8 @@
 
 #include "ExtPeripheral/NixieTube/NixieTube.h"
 
+#include "HwDrivers/HW_Mcpwm.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -169,6 +171,11 @@ void GCP_HwInit(void)
     
     //初始化CAN
     CAN_Init(GCP_CAN_DEF_NODE, GCP_CAN_DEF_BAUDRATE);
+    
+    //初始化
+    HW_MCPWM_InitOutput(HW_MCPWM_NODE_0, true);
+    HW_MCPWM_InitOutput(HW_MCPWM_NODE_1, true);
+    HW_MCPWM_InitOutput(HW_MCPWM_NODE_2, true);
     
 }
 
