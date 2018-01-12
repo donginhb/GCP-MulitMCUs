@@ -1348,7 +1348,7 @@ uBit32 Motor_SetAxisBaseCtrlPram(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlDat
     sAxisCtrlParm = pAxisCtrlParmAddr[ulAxisNo];
     ulParmType =  *(uBit32*)pRcvCtrlData->pRevBuf;
     
-    float fTempParm = (*(uBit32 *)(&pRcvCtrlData->pRevBuf[4]))/10000.0;
+    float fTempParm = (*(uBit32 *)(&pRcvCtrlData->pRevBuf[4]))/FLOAT_AMP_FACTOR;
     
     
     //控制参数检查
@@ -1637,8 +1637,8 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case MOTOR_SETCMD_POS_MOTION_EX:    //设置位置控制运动数据(扩展)
         {
             POSCTRL_MOTION_DATA PosMotionData = {0};
-            PosMotionData.dPos = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
-            PosMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / 10000.0;
+            PosMotionData.dPos = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / FLOAT_AMP_FACTOR;
+            PosMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / FLOAT_AMP_FACTOR;
             
             ulRet = m_sExternalFunTable.pf_CSM_SetMotorPosCtrlMotion(ulMotorNo, &PosMotionData);
             break;
@@ -1646,16 +1646,16 @@ uBit32 Motor_NomalSetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case MOTOR_SETCMD_SPEED_MOTION_EX:  //设置速度控制运动数据(扩展)
         {
             SPEEDCTRL_MOTION_DATA SpeedMotionData = {0};
-            SpeedMotionData.dAcc   = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
-            SpeedMotionData.dDec   = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / 10000.0;
-            SpeedMotionData.dJerk  = (*(long int *)(&pRcvCtrlData->pRevBuf[8])) / 10000.0;
-            SpeedMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[12]))/ 10000.0;
+            SpeedMotionData.dAcc   = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / FLOAT_AMP_FACTOR;
+            SpeedMotionData.dDec   = (*(long int *)(&pRcvCtrlData->pRevBuf[4])) / FLOAT_AMP_FACTOR;
+            SpeedMotionData.dJerk  = (*(long int *)(&pRcvCtrlData->pRevBuf[8])) / FLOAT_AMP_FACTOR;
+            SpeedMotionData.dSpeed = (*(long int *)(&pRcvCtrlData->pRevBuf[12]))/ FLOAT_AMP_FACTOR;
             ulRet = m_sExternalFunTable.pf_CSM_SetMotorSpeedCtrlMotion(ulMotorNo, &SpeedMotionData);
             break;
         }
     case MOTOR_SETCMD_PULSE_RATE:       //获取脉冲当量
         {
-            float fPluseRate = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / 10000.0;
+            float fPluseRate = (*(long int *)(&pRcvCtrlData->pRevBuf[0])) / FLOAT_AMP_FACTOR;
             ulRet = m_sExternalFunTable.pf_PAX_SetPulseRate(fPluseRate);
             break;
         }
@@ -1782,7 +1782,7 @@ uBit32 Motor_NomalGetCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
             CMU_ResetSendCtrlData(pRcvCtrlData->ulRevID.ulFrameID,NULL,0);
             uBit8 *pSendBuf = CMU_GetSendBufAddr();
             
-            *(uBit32 *)pSendBuf = (uBit32)(m_sExternalFunTable.pf_PAX_GetCmdPos(ulAxisNO) * 10000.0); //将浮点数转换成整型传输,放大因子:10000
+            *(uBit32 *)pSendBuf = (uBit32)(m_sExternalFunTable.pf_PAX_GetCmdPos(ulAxisNO) * FLOAT_AMP_FACTOR); //将浮点数转换成整型传输,放大因子:FLOAT_AMP_FACTOR
             CMU_AddToSendCtrlData(NULL,sizeof(uBit32));
             break;
         }

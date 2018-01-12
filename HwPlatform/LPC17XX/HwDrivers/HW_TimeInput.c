@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    HW_TimeInput.c
   * @author  Duhanfeng
-  * @version V4.2 寄存器版本
+  * @version V1.0
   * @date    2017.12.04
   * @brief   TIM input drivers
   ******************************************************************************
@@ -254,6 +254,7 @@ void HW_TIM_EnableInputIRQ(uint8_t uTimeNode, uint8_t uChannelNum, bool bIsEnabl
     }
     else 
     {
+        //关内核中断
         NVIC_DisableIRQ(TIM_IRQn[uTimeNode]);
     }
     

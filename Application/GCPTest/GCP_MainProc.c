@@ -35,9 +35,10 @@
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-#define GCP_CAN_MASTER_MODE                 (0)
+#define GCP_CAN_MASTER_MODE                 (1)
 #define GCP_CAN_COM_INTERVAL                (1000)  //CAN通信间隔(MS)
 
+#if 0
 void GCP_CanMainProc(void)
 {
 #if GCP_CAN_MASTER_MODE
@@ -75,6 +76,7 @@ void GCP_CanMainProc(void)
 #endif
     
 }
+#endif
 
 
 /*****************************************************************************
@@ -106,10 +108,9 @@ void GCP_MainProc(void)
     GCP_ShowMainWorkLed();
 #endif
     
-    //温度数据采集处理
-    GCP_SamplingTempValue();
-    
+#if 0
     GCP_CanMainProc();
+#endif
     
     CAN_MainHandler(GCP_CAN_DEF_NODE);
 }

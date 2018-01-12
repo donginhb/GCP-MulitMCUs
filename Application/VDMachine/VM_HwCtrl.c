@@ -392,3 +392,50 @@ void VM_AisleMotorHandler(void)
     
 }
 
+
+/*****************************************************************************
+ * 取货门锁IO检测线程接口
+ ****************************************************************************/
+
+//取货门锁检测接口
+#define VM_DOOR_LOCK_SCAN_TIME          (100)           //取货门锁检扫描时间(MS)
+#define VM_DOOR_LOCK_OVER_TIME          (10000)         //取货门锁打开超时时间(MS)
+static SYS_TIME_DATA m_LockScanTimer = {1};             //取货门锁检测延时定时器
+static SYS_TIME_DATA m_LockOverTimer = {0};             //取货门锁超时定时器
+
+
+/**
+  * @brief  取货门锁管理
+  * @param  None
+  * @retval None
+  * @note   若取货门锁通电时间太久,则会烧坏电磁锁,此线程负责对门锁进行超时保护
+  */
+void VM_DoorLockHandler(void)
+{
+    //扫描计时器
+    if (SysTime_CheckExpiredState(&m_LockScanTimer))
+    {
+        SysTime_StartOneShot(&m_LockScanTimer, VM_DOOR_LOCK_SCAN_TIME);
+        
+        //假如电磁锁打开,则启动超时计时
+        if (GPIO_MAN_GetOutputPinState(OUTPUT_IO_OUTPUT27) == true)
+        {
+            if (m_LockOverTimer.ulEnable == false)
+            {
+                SysTime_StartOneShot(&m_LockOverTimer, VM_DOOR_LOCK_OVER_TIME);
+            }
+        }
+        else 
+        {
+            SysTime_Cancel(&m_LockOverTimer);
+        }
+    }
+    
+    //超时计时器
+    if (SysTime_CheckExpiredState(&m_LockOverTimer))
+    {
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT27, false);
+    }
+    
+}
+

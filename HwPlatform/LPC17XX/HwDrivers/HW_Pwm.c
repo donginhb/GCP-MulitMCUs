@@ -191,6 +191,9 @@ void HW_PWM_SetOutputPwmDutyRatio(uint8_t uPwmNode, uint8_t uChannelMask, float 
     PWM[uPwmNode]->MR5 = (uChannelMask & 0X10) ? nRegValue : PWM[uPwmNode]->MR5;
     PWM[uPwmNode]->MR6 = (uChannelMask & 0X20) ? nRegValue : PWM[uPwmNode]->MR6;
     
+    //设置更新
+    PWM[uPwmNode]->LER = uChannelMask<<1;
+    
 }
 
 
@@ -209,6 +212,9 @@ void HW_PWM_SetOutputCmpVal(uint8_t uPwmNode, uint8_t uChannelMask, uint16_t nCo
     PWM[uPwmNode]->MR4 = (uChannelMask & 0X08) ? nCompareVal : PWM[uPwmNode]->MR4;
     PWM[uPwmNode]->MR5 = (uChannelMask & 0X10) ? nCompareVal : PWM[uPwmNode]->MR5;
     PWM[uPwmNode]->MR6 = (uChannelMask & 0X20) ? nCompareVal : PWM[uPwmNode]->MR6;
+    
+    //设置更新
+    PWM[uPwmNode]->LER = uChannelMask<<1;
     
 }
 

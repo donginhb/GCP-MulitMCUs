@@ -83,6 +83,18 @@ uBit32 VM_GetAisleMotorRunningState(void);
 void VM_AisleMotorHandler(void);
 
 
+/*****************************************************************************
+ * 取货门锁IO检测线程接口
+ ****************************************************************************/
+
+/**
+  * @brief  取货门锁管理
+  * @param  None
+  * @retval None
+  */
+void VM_DoorLockHandler(void);
+
+
 #ifdef __cplusplus
 }
 #endif

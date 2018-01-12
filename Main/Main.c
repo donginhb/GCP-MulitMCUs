@@ -21,8 +21,10 @@
 #include "Application/GCPTest/GCP_MainProc.h"
 #elif defined(LPC43XX)
 #include "Application/CNMachine/CN_MainProc.h"
-#elif defined(STM32F10X)
+#elif defined(WFC_APP)
 #include "Application/WIFIClock/WFC_MainProc.h"
+#elif defined(MD_APP)
+#include "Application/MotorDriver/MD_MainProc.h"
 #endif
 
 
@@ -35,8 +37,10 @@ int main(void)
     GCP_Init();
 #elif defined(LPC43XX)
     CN_Init();
-#elif defined(STM32F10X)
+#elif defined(WFC_APP)
     WFC_Init();
+#elif defined(MD_APP)
+    MD_Init();
 #endif
 #endif 
     
@@ -51,8 +55,10 @@ int main(void)
         GCP_MainProc();
 #elif defined(LPC43XX)
         CN_MainProc();
-#elif defined(STM32F10X)
+#elif defined(WFC_APP)
         WFC_MainProc();
+#elif defined(MD_APP)
+        MD_MainProc();
 #endif
 #endif
         

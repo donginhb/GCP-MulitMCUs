@@ -35,8 +35,6 @@
 #define HW_ADC_CH_COUNT         (8)             //ADC通道数
 #define HW_ADC_CH_MASK(n)       ((n)&0xFF)      //通道掩码
 
-static bool m_bBurstModeFlag = false;
-
 
 
 /**
@@ -71,7 +69,7 @@ static void HW_ADC_PortConfig(uint8_t uAdcNode, uint32_t ulChMask)
   */
 uint32_t HW_ADC_Init(uint8_t uAdcNode, uint32_t ulChMask, bool bBurstModeFlag)
 {
-
+    HW_ADC_PortConfig(uAdcNode, ulChMask);
 
     return 0;
 }

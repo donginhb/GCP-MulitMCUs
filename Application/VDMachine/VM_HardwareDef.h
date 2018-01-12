@@ -21,7 +21,8 @@
 
 //设置升降电机相关参数
 #define VM_LIFT_MOTOR_DEV_NO            (0)                         //升降电机设备编号
-#define VM_LIFT_MOTOR_HOME_SPEED        (10)                        //升降电机回零速度
+#define VM_LIFT_MOTOR_HOME_SPEED        (5)                         //升降电机回零速度
+#define VM_LIFT_MOTOR_HOME_INDEX        (10)                        //升降电机零点偏移
 #define VM_LIFT_MOTOR_IDLE_LEVEL        (false)                     //升降电机空闲电平
 #define VM_LIFT_MOTOR_TRIGGER_LEVEL     (true)                      //升降电机触发电平
 

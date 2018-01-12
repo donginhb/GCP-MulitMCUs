@@ -284,7 +284,8 @@ void VM_LiftPlatformLimitHandler(void)
 #define VM_LP_HOME_PREPARE_UP       (3)     //准备上升(机器惯性的原因,此阶段延时一小会)
 #define VM_LP_HOME_UP               (4)     //上升
 #define VM_LP_HOME_STOP             (5)     //停止
-#define VM_LP_HOME_BAK              (6)     //抱闸
+#define VM_LP_HOME_INDEX            (6)     //偏移
+#define VM_LP_HOME_BAK              (7)     //抱闸
 
 static uBit8 m_vm_uLiftPlatformHomeStep = VM_LP_HOME_RESET; //升降平台回零步骤
 
@@ -351,7 +352,7 @@ uBit32 VM_GetHomeScanStatus(void)
   */
 void VM_LiftPlatformHomeHandler(void)
 {
-    
+    POSCTRL_MOTION_DATA PosCtrlMotion = {0};
     
     switch (m_vm_uLiftPlatformHomeStep)
     {
@@ -364,14 +365,12 @@ void VM_LiftPlatformHomeHandler(void)
             m_vm_uScanHomeStatus = VM_HOME_STATUS_SCAN;
             
             //开抱闸
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, true);
+            //GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, true);
             
             //若升降平台在下限位,则往上走,否则则往下走
             if (m_vm_ulLiftPlatformPosition == VM_LIFT_PLATFORM_IN_DOWN_LIMIT_SITE)
             {
                 m_vm_uLiftPlatformHomeStep = VM_LP_HOME_UP;
-                
-                POSCTRL_MOTION_DATA PosCtrlMotion = {0};
                 
                 PosCtrlMotion.dPos = 10000;
                 PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED;
@@ -408,8 +407,6 @@ void VM_LiftPlatformHomeHandler(void)
         if (SysTime_CheckExpiredState(&m_vm_HomeCtrlTimer))
         {
             m_vm_uLiftPlatformHomeStep = VM_LP_HOME_UP;
-            
-            POSCTRL_MOTION_DATA PosCtrlMotion = {0};
                 
             PosCtrlMotion.dPos = 10000;
             PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED;
@@ -429,19 +426,39 @@ void VM_LiftPlatformHomeHandler(void)
         break;
     case VM_LP_HOME_STOP :                                                                              
         
-        m_vm_uLiftPlatformHomeStep = VM_LP_HOME_BAK;
+        m_vm_uLiftPlatformHomeStep = VM_LP_HOME_INDEX;
         
         //急停电机
-        CSM_MotorJogEStop(VM_LIFT_MOTOR_DEV_NO);
+        CSM_SetMotorJogStop(VM_LIFT_MOTOR_DEV_NO);
         
         //设置当前位置为零点
         PAX_SetCmdPos(VM_LIFT_MOTOR_DEV_NO, 0, 0);
         
-        //设置零点寻找状态
-        m_vm_uScanHomeStatus = VM_HOME_STATUS_NORMAL;
+#if 0
+        //往上走一定距离,作为零点偏移
+        PosCtrlMotion.dPos = VM_LIFT_MOTOR_HOME_INDEX;
+        PosCtrlMotion.dSpeed = VM_LIFT_MOTOR_HOME_SPEED*5;
+
+        VM_MoveLiftMotor(VM_LIFT_MOTOR_DEV_NO, &PosCtrlMotion);
+#endif
         
         //设置下个步骤的执行时间
-        SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 1000);   //延时1S
+        SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 2000);   //延时1S
+        
+        break;
+    case VM_LP_HOME_INDEX:
+        
+        if (SysTime_CheckExpiredState(&m_vm_HomeCtrlTimer))
+        {
+            m_vm_uLiftPlatformHomeStep = VM_LP_HOME_BAK;
+            
+            //设置当前位置为零点(偏移后的位置)
+            PAX_SetCmdPos(VM_LIFT_MOTOR_DEV_NO, 0, 0);
+            
+            //设置下个步骤的执行时间
+            SysTime_StartOneShot(&m_vm_HomeCtrlTimer, 20);   //延时
+        }
+        
         
         break;
     case VM_LP_HOME_BAK:
@@ -450,8 +467,11 @@ void VM_LiftPlatformHomeHandler(void)
         {
             m_vm_uLiftPlatformHomeStep = VM_LP_HOME_RESET;
             
+            //设置零点寻找状态
+            m_vm_uScanHomeStatus = VM_HOME_STATUS_NORMAL;
+            
             //关抱闸
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, false);
+            //GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUTPUT26, false);
         }
             
         break;

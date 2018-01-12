@@ -106,4 +106,7 @@ void VM_MainProc(void)
     //温度数据采集处理
     VM_SamplingTempValue();
     
+    //取货门超时检测处理
+    VM_DoorLockHandler();
+    
 }

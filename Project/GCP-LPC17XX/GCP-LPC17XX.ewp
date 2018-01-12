@@ -1970,7 +1970,10 @@
     <group>
       <name>GCPTest</name>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_ErrorDef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\DS_IODef.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\DS_IODef.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_HardwareDef.h</name>
@@ -1992,12 +1995,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.h</name>
       </file>
     </group>
     <file>
