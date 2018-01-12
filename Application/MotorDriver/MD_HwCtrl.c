@@ -62,6 +62,12 @@ void MD_HwInit(void)
     //初始化IO
     MD_IOConfig();
     
+    //初始化电机信号逻辑
+    //GPIO_MAN_SetOutputPinLogicToggle(OUTPUT_IO_MOTOR_SIGNAL_A,  true);
+    //GPIO_MAN_SetOutputPinLogicToggle(OUTPUT_IO_MOTOR_SIGNAL_B,  true);
+    //GPIO_MAN_SetOutputPinLogicToggle(OUTPUT_IO_MOTOR_SIGNAL_C,  true);
+    //GPIO_MAN_SetOutputPinLogicToggle(OUTPUT_IO_MOTOR_SIGNAL_D,  true);
+    
     //初始化按键
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY1, INPUT_IO_KEY2};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));

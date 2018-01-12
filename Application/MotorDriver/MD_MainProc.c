@@ -24,8 +24,7 @@
 #include "SysCtrl/SysConfig.h"
 
 #include "SysPeripheral/SysTimer/SysTimer.h"
-#include "SysPeripheral/GPIO/GPIO_Man.h"
-
+#include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 
 /*****************************************************************************
  * 售货机主任务相关控制接口
@@ -38,6 +37,12 @@
   */
 void MD_Init(void)
 {
+    //上电延时
+    SysTime_DelayMs(200);
+    
+    //配置JTAG引脚
+    CoreCtrl_JTAGConfig();
+    
     //初始化硬件
     MD_HwInit();
     

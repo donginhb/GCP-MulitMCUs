@@ -36,8 +36,8 @@ static GPIO_DATA m_OutputIOTable[] =
     //LED灯
     {GPIO_PORT_C, 13},
     
+    {GPIO_PORT_A, 11},
     {GPIO_PORT_A, 12},
-    {GPIO_PORT_A, 15},
     {GPIO_PORT_B,  5},
     {GPIO_PORT_B,  6},
     
