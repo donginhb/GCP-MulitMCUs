@@ -46,6 +46,10 @@ void MD_Init(void)
     //初始化硬件
     MD_HwInit();
     
+    //电机控制
+    MD_EnableMotor(1);
+    MD_SetMotorSpeed(4);
+    
 }
 
 
@@ -60,7 +64,7 @@ void MD_MainProc(void)
     MD_ShowMainWorkLed();
     
     //按键扫描
-    MD_KeyProc();
+    //MD_KeyProc();
     
     //电机驱动管理
     MD_MotorDriverHandler();
