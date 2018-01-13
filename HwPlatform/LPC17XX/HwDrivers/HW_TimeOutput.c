@@ -41,8 +41,6 @@
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-
-
 #define TIM_GET_PR_BY_CNT_FRE(CntFre)            (Chip_TIME_GetClock(TIM[uTimeNode])/(CntFre) - 1)   //通过计数频率计算预分频值
 #define TIM_GET_PR_BY_OP_FRE(OutFre, AutoLoad)   (TIM_GET_PR_BY_CNT_FRE((OutFre) * (AutoLoad))) //通过输出频率计算预分频值(计数频率=输出频率*自动重装载值)
 
@@ -116,7 +114,7 @@ static void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask)
   * @param  uOutputCfgCode 工作模式
   * @retval None
   */
-static void HW_TIM_OutputConfig(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode)
+static void HW_TIM_OutputConfig(uint8_t uTimeNode, uint8_t uChannelMask)
 {
     //初始化模块
     Chip_TIMER_Init(TIM[uTimeNode]);
@@ -175,13 +173,13 @@ static uint32_t HW_TIM_GetPeripheralClock(uint8_t uTimeNode)
   * @param  uOutputCfgCode 工作模式
   * @retval None
   */
-void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode)
+void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask)
 {
     //引脚配置
     HW_TIM_PortConfig(uTimeNode, uChannelMask);
     
     //模式配置
-    HW_TIM_OutputConfig(uTimeNode, uChannelMask, uOutputMode);
+    HW_TIM_OutputConfig(uTimeNode, uChannelMask);
     
     //时序配置
     HW_TIM_SetOutputPwmDutyRatio(uTimeNode, uChannelMask, 50);

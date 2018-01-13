@@ -26,12 +26,92 @@
 
 
 /*****************************************************************************
- * 电机控制线程接口
+ * 电机相关控制接口
  ****************************************************************************/
-static  SYS_TIME_DATA m_MotorCtrlTimer = {1};   //按键控制定时器
+static  SYS_TIME_DATA m_MotorCtrlTimer = {1};   //电机控制定时器
+static uBit32 m_md_ulMotorSpeedGroup[] = {1, 2, 5, 10, 15, 20, 25, 40, 50, 70, 100};//电机速度组
+static uBit32 m_md_ulSpeedIndex = 5;        //电机速度索引
+static uBit32 m_md_ulMotorDir = 1;          //电机方向控制
+static uBit32 m_md_ulMotorEnable = 0;       //电机使能
 
-static uBit32 m_md_ulMotorTrgTime = 20;
-static uBit32 m_md_ulMotorDir = 1;
+
+/**
+  * @brief  电机使能
+  * @param  bIsEnable 电机使能位
+  * @retval None
+  */
+void MD_EnableMotor(bool bIsEnable)
+{
+    m_md_ulMotorEnable = bIsEnable;
+    
+}
+
+
+/**
+  * @brief  电机使能状态获取
+  * @param  None
+  * @retval 电机使能状态
+  */
+bool MD_GetMotorEnableStatue(void)
+{
+    
+    return m_md_ulMotorEnable;
+}
+
+
+/**
+  * @brief  电机方向设置
+  * @param  bDirect 电机方向位
+  * @retval None
+  */
+void MD_SetMotorDirect(bool bDirect)
+{
+    m_md_ulMotorDir = bDirect;
+    
+}
+
+
+/**
+  * @brief  电机方向获取
+  * @param  None
+  * @retval 电机方向
+  */
+bool MD_GetMotorDirect(void)
+{
+    
+    return m_md_ulMotorDir;
+}
+
+
+/**
+  * @brief  电机方向设置
+  * @param  ulSpeedIndex 速度索引
+  * @retval 0-成功 非0-失败
+  */
+uBit32 MD_SetMotorSpeed(uBit32 ulSpeedIndex)
+{
+    //校验数据
+    if (ulSpeedIndex >= sizeof(m_md_ulMotorSpeedGroup))
+    {
+        return 1;
+    }
+    
+    m_md_ulSpeedIndex = ulSpeedIndex;
+    
+    return 0;
+}
+
+
+/**
+  * @brief  电机速度索引获取
+  * @param  None
+  * @retval 速度索引
+  */
+bool MD_GetMotorSpeedIndex(void)
+{
+    
+    return m_md_ulSpeedIndex;
+}
 
 
 /**
@@ -45,27 +125,38 @@ void MD_MotorDriverHandler(void)
     
     if (SysTime_CheckExpiredState(&m_MotorCtrlTimer))
     {
-        SysTime_StartOneShot(&m_MotorCtrlTimer, m_md_ulMotorTrgTime);   //设置下一次执行的时间
+        SysTime_StartOneShot(&m_MotorCtrlTimer, m_md_ulMotorSpeedGroup[m_md_ulSpeedIndex]);   //设置下一次执行的时间
         
-        switch (s_uCurStep%4)
+        if (m_md_ulMotorEnable)
         {
-        case 0: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
-        case 1: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
-        case 2: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
-        case 3: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, true);  break;
-        default: break;
-        }
-        
-        if (m_md_ulMotorDir)
-        {
-            s_uCurStep++;
+            //电机驱动
+            switch (s_uCurStep%4)
+            {
+            case 0: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
+            case 1: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
+            case 2: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, true);  GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); break;
+            case 3: GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, true);  break;
+            default: break;
+            }
+            
+            //方向控制
+            if (m_md_ulMotorDir)
+            {
+                s_uCurStep++;
+            }
+            else 
+            {
+                s_uCurStep--;
+            }
         }
         else 
         {
-            s_uCurStep--;
+            GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_A, false); 
+            GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_B, false); 
+            GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_C, false); 
+            GPIO_SetOutputState(OUTPUT_IO_MOTOR_SIGNAL_D, false); 
         }
-        
     }
-      
+    
 }
 

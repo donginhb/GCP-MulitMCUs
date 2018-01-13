@@ -37,7 +37,7 @@ static LPC_PWM_T * const PWM[HW_PWM_COUNT] = {LPC_PWM1};
 
 
 //PWM1 IO 引脚定义
-static const PINMUX_GRP_T pinmuxing[] = 
+static const PINMUX_GRP_T m_PwmPinMux[] = 
 {
     /* PWM1 */
     {0x2, 0,  IOCON_MODE_INACT | IOCON_FUNC1},    //PWM_CH1
@@ -62,7 +62,7 @@ static void HW_PWM_IOConfig(uint8_t uPwmNode, uint8_t uChannelMask)
     {
         if (PWM_CH_MASK(uChannelMask) & (0x1<<i))
         {
-            Chip_IOCON_PinMuxSet(LPC_IOCON, pinmuxing[i].pingrp, pinmuxing[i].pinnum, pinmuxing[i].modefunc);
+            Chip_IOCON_PinMuxSet(LPC_IOCON, m_PwmPinMux[i].pingrp, m_PwmPinMux[i].pinnum, m_PwmPinMux[i].modefunc);
         }
     }
     
@@ -167,7 +167,7 @@ void HW_PWM_EnableChannel(uint8_t uPwmNode, uint8_t uChannelMask, bool bIsEnble)
     }
     else 
     {
-        //使能PWM通道
+        //禁止PWM通道
         PWM[uPwmNode]->PCR &= ~(PWM_CH_MASK(uChannelMask)<<9);
     }
 }

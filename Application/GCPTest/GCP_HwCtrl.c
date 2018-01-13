@@ -82,16 +82,16 @@ void GCP_HwInit(void)
     CAN_Init(GCP_CAN_DEF_NODE, GCP_CAN_DEF_BAUDRATE);
     
     //初始化
-    HW_MCPWM_InitOutput(HW_MCPWM_NODE_0, true);
-    HW_MCPWM_EnableOutput(HW_MCPWM_NODE_0, true);
+    PWM_Init(HW_MCPWM_NODE_0, true);
+    PWM_OutputEnable(HW_MCPWM_NODE_0, true);
     
-    HW_MCPWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 1000);
-    HW_MCPWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 10*1000);
-    HW_MCPWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 100*1000);
-    HW_MCPWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 20);
-    HW_MCPWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 40);
-    HW_MCPWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 60);
-    HW_MCPWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 80);
+    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 1000);
+    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 10*1000);
+    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 100*1000);
+    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 20);
+    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 40);
+    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 60);
+    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 80);
     
     HW_MCPWM_InitInputCount(HW_MCPWM_NODE_2, 2, 1);
     HW_MCPWM_SetMaxInputCount(HW_MCPWM_NODE_2, 0xFFFFFFFF);

@@ -9,6 +9,23 @@ extern "C"
 #endif
 
 
+//PWM节点定义
+#define HAL_PWM_NODE_0      ( 0)
+#define HAL_PWM_NODE_1      ( 1)
+#define HAL_PWM_NODE_2      ( 2)
+#define HAL_PWM_NODE_3      ( 3)
+#define HAL_PWM_NODE_4      ( 4)
+#define HAL_PWM_NODE_5      ( 5)
+#define HAL_PWM_NODE_6      ( 6)
+#define HAL_PWM_NODE_7      ( 7)
+#define HAL_PWM_NODE_8      ( 8)
+#define HAL_PWM_NODE_9      ( 9)
+#define HAL_PWM_NODE_10     (10)
+#define HAL_PWM_NODE_11     (11)
+#define HAL_PWM_NODE_12     (12)
+
+    
+
 /*****************************************************************************
  * PWM相关控制接口
  ****************************************************************************/

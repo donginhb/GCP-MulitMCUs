@@ -1967,6 +1967,12 @@
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD103_IODef.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HardwareDef.h</name>
       </file>
       <file>

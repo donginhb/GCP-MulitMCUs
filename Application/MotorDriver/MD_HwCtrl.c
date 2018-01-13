@@ -18,12 +18,13 @@
 /***********************************<INCLUDES>**********************************/
 #include "MD_HwCtrl.h"
 #include "MD_HardwareDef.h"
-      
+#include "MD_MotorCtrl.h"
+
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
-
+#include "SysPeripheral/KEY/KEY.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -118,11 +119,14 @@ void MD_KeyProc(void)
         uBit32 ulKeyVlue = 0;
         uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
         
-        if (ulCurTrg)
+        if (ulCurTrg == 1)
         {
-            
+            MD_SetMotorDirect(!MD_GetMotorDirect());
         }
-        
+        else if (ulCurTrg == 2)
+        {
+            MD_EnableMotor(!MD_GetMotorEnableStatue());
+        }
     }
       
 }

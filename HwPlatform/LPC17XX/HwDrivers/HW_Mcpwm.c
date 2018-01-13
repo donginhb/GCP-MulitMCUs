@@ -30,7 +30,9 @@
   * 
   * 在本应用之中,将LIM寄存器作为周期寄存器,MAT寄存器作为脉冲宽度寄存器;
   * 
-  * 注: 在实际的测试中发现,
+  * 注: 由于影子寄存器的关系,当对LIM/MAT等寄存器进行写入操作后,随即读取寄存器的
+  *     数值得不到想要的结果,导致在连续配置模块的情况下会出错.所以当对LIM和MATH
+  *     寄存器进行写入操作时,会先关闭模块,让配置直接写入操作寄存器而非影子寄存器;
   * 
   ******************************************************************************
   */
@@ -111,6 +113,7 @@ static void HW_MCPWM_ConfigInputIO(uint8_t uMcpwmNode)
     
 }
 
+#if 0
 
 /**
   * @brief  MCPWM LIM寄存器写入
@@ -123,9 +126,10 @@ static void HW_MCPWM_WriteLimitReg(uint8_t uMcpwmNode, uint32_t ulRegValue)
     LPC_MCPWM->LIM[uMcpwmNode] = ulRegValue;
     
     //等待写入完成
-    while (LPC_MCPWM->LIM[uMcpwmNode] != ulRegValue);
+    //while (LPC_MCPWM->LIM[uMcpwmNode] != ulRegValue);
     
 }
+
 
 
 /**
@@ -139,10 +143,10 @@ static void HW_MCPWM_WriteMatchReg(uint8_t uMcpwmNode, uint32_t ulRegValue)
     LPC_MCPWM->MAT[uMcpwmNode] = ulRegValue;
     
     //等待写入完成
-    while (LPC_MCPWM->MAT[uMcpwmNode] != ulRegValue);
+    //while (LPC_MCPWM->MAT[uMcpwmNode] != ulRegValue);
     
 }
-
+#endif
 
 /*****************************************************************************
  * MCPWM 输出相关控制接口
@@ -183,8 +187,8 @@ uint32_t HW_MCPWM_InitOutput(uint8_t uMcpwmNode, bool bOppositeOutput)
     LPC_MCPWM->CNTCON_CLR = (0x1<<(29+uMcpwmNode)); //设置为计数器模式(PLCK输入作为时钟源)
     
     //设置PWM波时序
-    HW_MCPWM_WriteLimitReg(uMcpwmNode, ulMcpwmClockRate/HW_MCPWM_DEF_OUT_FRE - 1);
-    HW_MCPWM_WriteMatchReg(uMcpwmNode, (uint32_t)((ulMcpwmClockRate/HW_MCPWM_DEF_OUT_FRE) * (1.0 - (HW_MCPWM_DEF_OUT_DUTY_RATE/100.0))));
+    LPC_MCPWM->LIM[uMcpwmNode] = ulMcpwmClockRate/HW_MCPWM_DEF_OUT_FRE - 1;
+    LPC_MCPWM->MAT[uMcpwmNode] = (uint32_t)((ulMcpwmClockRate/HW_MCPWM_DEF_OUT_FRE) * (1.0 - (HW_MCPWM_DEF_OUT_DUTY_RATE/100.0)));
     
     //关闭定时器
     LPC_MCPWM->CON_CLR = (0x1 << (0 + uMcpwmNode*8));
@@ -201,9 +205,25 @@ uint32_t HW_MCPWM_InitOutput(uint8_t uMcpwmNode, bool bOppositeOutput)
   */
 void HW_MCPWM_SetOutputPwmDutyRatio(uint8_t uMcpwmNode, float fDutyRatio)
 {
+    //获取模块使能状态
+    bool bDriverIsEnable = (LPC_MCPWM->CON & (0x1 << (0 + uMcpwmNode*8))) ? true : false;
+    
+    //关闭定时器
+    LPC_MCPWM->CON_CLR = (0x1 << (0 + uMcpwmNode*8));
+    
+    //清空计数器
+    LPC_MCPWM->TC[uMcpwmNode] = 0;
+    
     //写入匹配寄存器
-    uint32_t ulMatchRegValue = (uint32_t)((LPC_MCPWM->LIM[uMcpwmNode] + 1) * (1.0 - (fDutyRatio/100.0)));
-    HW_MCPWM_WriteMatchReg(uMcpwmNode, ulMatchRegValue);
+    uint32_t ulMatchValue = (uint32_t)((LPC_MCPWM->LIM[uMcpwmNode] + 1) * (1.0 - (fDutyRatio/100.0)));
+    LPC_MCPWM->MAT[uMcpwmNode] = ulMatchValue;
+    
+    //还原使能状态
+    if (bDriverIsEnable)
+    {
+        //开启定时器
+        LPC_MCPWM->CON_SET = (0x1 << (0 + uMcpwmNode*8));
+    }
     
 }
 
@@ -217,6 +237,15 @@ void HW_MCPWM_SetOutputPwmDutyRatio(uint8_t uMcpwmNode, float fDutyRatio)
   */
 void HW_MCPWM_SetOutputPwmFrq(uint8_t uMcpwmNode, uint32_t ulFrequency)
 {
+    //获取模块使能状态
+    bool bDriverIsEnable = (LPC_MCPWM->CON & (0x1 << (0 + uMcpwmNode*8))) ? true : false;
+    
+    //关闭定时器
+    LPC_MCPWM->CON_CLR = (0x1 << (0 + uMcpwmNode*8));
+    
+    //清空计数器
+    LPC_MCPWM->TC[uMcpwmNode] = 0;
+    
     //计算当前的占空比
     float fDutyRatio = ((float)LPC_MCPWM->MAT[uMcpwmNode] / (LPC_MCPWM->LIM[uMcpwmNode] + 1)) * 100;
     
@@ -224,11 +253,18 @@ void HW_MCPWM_SetOutputPwmFrq(uint8_t uMcpwmNode, uint32_t ulFrequency)
     uint32_t ulMcpwmClockRate = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_MCPWM);
     
     //设置频率
-    HW_MCPWM_WriteLimitReg(uMcpwmNode, ulMcpwmClockRate/ulFrequency - 1);
+    LPC_MCPWM->LIM[uMcpwmNode] = ulMcpwmClockRate/ulFrequency - 1;
     
     //还原占空比
-    uint32_t ulMatchRegValue = (uint32_t)((ulMcpwmClockRate/ulFrequency) * (1.0 - (fDutyRatio/100.0)));
-    HW_MCPWM_WriteMatchReg(uMcpwmNode, ulMatchRegValue);
+    uint32_t ulMatchValue = (uint32_t)((ulMcpwmClockRate/ulFrequency) * (1.0 - (fDutyRatio/100.0)));
+    LPC_MCPWM->MAT[uMcpwmNode] = ulMatchValue;
+    
+    //还原使能状态
+    if (bDriverIsEnable)
+    {
+        //开启定时器
+        LPC_MCPWM->CON_SET = (0x1 << (0 + uMcpwmNode*8));
+    }
     
 }
 
@@ -245,6 +281,9 @@ void HW_MCPWM_EnableOutput(uint8_t uMcpwmNode, bool bIsEnablle)
     {
         //启动定时器
         LPC_MCPWM->CON_SET = (0x1 << (0 + uMcpwmNode*8));
+        
+        //清空计数器
+        LPC_MCPWM->TC[uMcpwmNode] = 0;
     }
     else 
     {

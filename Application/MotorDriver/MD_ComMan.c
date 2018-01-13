@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    Demo.c
+  * @file    MD_ComMan.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2018.01.15
-  * @brief   demo
+  * @date    2018.01.13
+  * @brief   Motor driver communication manage
   ******************************************************************************
   * @attention
   * 
@@ -15,7 +15,7 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "Demo.h"
+#include "MD_ComMan.h"
 #include "DataType/DataType.h"
       
 
@@ -30,11 +30,11 @@
 
 
 /**
-  * @brief  Demo
+  * @brief  通信管理
   * @param  None
   * @retval None
   */
-void DEMO_Function(void)
+void MD_ComHandler(void)
 {
     
     
