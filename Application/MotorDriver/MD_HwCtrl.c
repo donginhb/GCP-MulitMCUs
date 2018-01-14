@@ -73,6 +73,9 @@ void MD_HwInit(void)
     uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY1, INPUT_IO_KEY2};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
     
+    //初始化串口
+    UART_Init(MD_COM_UART_NODE, 115200);
+    
 }
 
 

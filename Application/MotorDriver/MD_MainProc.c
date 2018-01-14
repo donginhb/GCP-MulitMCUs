@@ -20,6 +20,7 @@
 #include "MD_HwCtrl.h"
 #include "MD_HardwareDef.h"
 #include "MD_MotorCtrl.h"
+#include "MD_Comman.h"
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
 
@@ -47,8 +48,9 @@ void MD_Init(void)
     MD_HwInit();
     
     //电机控制
-    MD_EnableMotor(1);
-    MD_SetMotorSpeed(4);
+    MD_EnableMotor(0);
+    MD_SetMotorSpeed(7);
+    MD_SetMotorDirect(MD_MOTOR_DIRECT_CW);
     
 }
 
@@ -68,5 +70,8 @@ void MD_MainProc(void)
     
     //电机驱动管理
     MD_MotorDriverHandler();
+    
+    //通信管理
+    MD_ComHandler();
     
 }

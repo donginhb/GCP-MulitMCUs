@@ -29,7 +29,7 @@
  * 电机相关控制接口
  ****************************************************************************/
 static  SYS_TIME_DATA m_MotorCtrlTimer = {1};   //电机控制定时器
-static uBit32 m_md_ulMotorSpeedGroup[] = {1, 2, 5, 10, 15, 20, 25, 40, 50, 70, 100};//电机速度组
+static uBit32 m_md_ulMotorSpeedGroup[] = {4, 6, 8, 10, 15, 20, 40, 60};//电机速度组
 static uBit32 m_md_ulSpeedIndex = 5;        //电机速度索引
 static uBit32 m_md_ulMotorDir = 1;          //电机方向控制
 static uBit32 m_md_ulMotorEnable = 0;       //电机使能
@@ -84,7 +84,7 @@ bool MD_GetMotorDirect(void)
 
 
 /**
-  * @brief  电机方向设置
+  * @brief  电机速度设置
   * @param  ulSpeedIndex 速度索引
   * @retval 0-成功 非0-失败
   */
@@ -107,10 +107,22 @@ uBit32 MD_SetMotorSpeed(uBit32 ulSpeedIndex)
   * @param  None
   * @retval 速度索引
   */
-bool MD_GetMotorSpeedIndex(void)
+uBit32 MD_GetMotorSpeedIndex(void)
 {
     
     return m_md_ulSpeedIndex;
+}
+
+
+/**
+  * @brief  电机最大速度索引获取
+  * @param  None
+  * @retval 最大速度索引
+  */
+uBit32 MD_GetMaxMotorSpeedIndex(void)
+{
+    
+    return (sizeof(m_md_ulMotorSpeedGroup)/sizeof(m_md_ulMotorSpeedGroup[0])) - 1;
 }
 
 

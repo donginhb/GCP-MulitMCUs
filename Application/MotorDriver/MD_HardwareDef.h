@@ -9,12 +9,8 @@
  ****************************************************************************/
 
 //定义IO资源表
-#define g_GcpIOTable                        g_MD103_IOTable            //使用图书机V3(1768)的IO资源表
+#define g_GcpIOTable                        g_MD103_IOTable             //IO资源表
 
-//定义CAN总线节点
-#define MD_CAN_DEF_NODE                    (0)                         //默认CAN节点
-#define MD_CAN_DEF_BAUDRATE                (500000)                    //默认CAN波特率
-
-
+#define MD_COM_UART_NODE                    (1)                         //用于通信的串口节点
 
 #endif /* __MD_HARDWARE_DEF_H */

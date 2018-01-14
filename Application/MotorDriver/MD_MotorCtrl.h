@@ -9,6 +9,9 @@ extern "C"
 #endif
     
 
+#define MD_MOTOR_DIRECT_CW      (1)     //顺时针旋转
+#define MD_MOTOR_DIRECT_ACW     (0)     //逆时针旋转
+    
 /*****************************************************************************
  * 电机相关控制接口
  ****************************************************************************/
@@ -38,7 +41,7 @@ void MD_SetMotorDirect(bool bDirect);
 
 
 /**
-  * @brief  电机方向获取
+  * @brief  电机速度设置
   * @param  None
   * @retval 电机方向
   */
@@ -58,7 +61,15 @@ uBit32 MD_SetMotorSpeed(uBit32 ulSpeedIndex);
   * @param  None
   * @retval 速度索引
   */
-bool MD_GetMotorSpeedIndex(void);
+uBit32 MD_GetMotorSpeedIndex(void);
+      
+
+/**
+  * @brief  电机最大速度索引获取
+  * @param  None
+  * @retval 最大速度索引
+  */
+uBit32 MD_GetMaxMotorSpeedIndex(void);
 
 
 /**
