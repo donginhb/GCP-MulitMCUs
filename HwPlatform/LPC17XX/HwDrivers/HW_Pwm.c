@@ -170,6 +170,7 @@ void HW_PWM_EnableChannel(uint8_t uPwmNode, uint8_t uChannelMask, bool bIsEnble)
         //禁止PWM通道
         PWM[uPwmNode]->PCR &= ~(PWM_CH_MASK(uChannelMask)<<9);
     }
+    
 }
 
 

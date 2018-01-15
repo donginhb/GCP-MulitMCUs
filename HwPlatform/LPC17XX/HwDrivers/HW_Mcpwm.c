@@ -113,41 +113,6 @@ static void HW_MCPWM_ConfigInputIO(uint8_t uMcpwmNode)
     
 }
 
-#if 0
-
-/**
-  * @brief  MCPWM LIM寄存器写入
-  * @param  uMcpwmNode MCPWM节点
-  * @retval None
-  */
-static void HW_MCPWM_WriteLimitReg(uint8_t uMcpwmNode, uint32_t ulRegValue)
-{
-    //写入寄存器
-    LPC_MCPWM->LIM[uMcpwmNode] = ulRegValue;
-    
-    //等待写入完成
-    //while (LPC_MCPWM->LIM[uMcpwmNode] != ulRegValue);
-    
-}
-
-
-
-/**
-  * @brief  MCPWM MATH寄存器写入
-  * @param  uMcpwmNode MCPWM节点
-  * @retval None
-  */
-static void HW_MCPWM_WriteMatchReg(uint8_t uMcpwmNode, uint32_t ulRegValue)
-{
-    //写入寄存器
-    LPC_MCPWM->MAT[uMcpwmNode] = ulRegValue;
-    
-    //等待写入完成
-    //while (LPC_MCPWM->MAT[uMcpwmNode] != ulRegValue);
-    
-}
-#endif
-
 /*****************************************************************************
  * MCPWM 输出相关控制接口
  ****************************************************************************/

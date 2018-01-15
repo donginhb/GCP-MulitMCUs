@@ -14,9 +14,10 @@
   *   PWM:   NODE 7~12
   * 
   * MCPWM: 无预分频处理器,所以频率与分辨率互斥,频率越高,分辨率越低,反之亦然;
-  *        本模块无法应用于分辨率需要明确的场合;
+  *        本模块无法应用于分辨率固定而频率可变的场合;
   * TIM:   只有比较输出,所以无法调节占空比;
-  * PWM:   功能齐全,分辨率,频率,分辨都可控;
+  * PWM:   功能齐全,分辨率,频率,占空比都可控;因为LPC43XX无PWM模块,所以考虑到两个
+  *        平台之间的移植成本,在能满足需求的前提下,尽量改用MCPWM/TIM;
   * 
   * V1.1------------
   * 修改描述: 整合LPC17XX平台,将MCPWM,TIM,PWM等模块整合在一起
@@ -47,10 +48,49 @@
  ****************************************************************************/
 
 //LPC17XX PWM模块定义
-#define HAL_LPC17XX_MCPWM_MAX_NODE      (3)
-#define HAL_LPC17XX_TIMER_MAX_NODE      (7)
-#define HAL_LPC17XX_PWM_MAX_NODE        (13)
-#define HAL_LPC17XX_MAX_NODE            (HAL_LPC17XX_PWM_MAX_NODE)
+#define HAL_LPC17XX_MCPWM_NODE_COUNT        (3)
+#define HAL_LPC17XX_TIMER_NODE_COUNT        (4)
+#define HAL_LPC17XX_PWM_NODE_COUNT          (1)
+#define HAL_LPC17XX_MAX_NODE_COUNT          (HAL_LPC17XX_MCPWM_NODE_COUNT + \
+                                             HAL_LPC17XX_TIMER_NODE_COUNT + \
+                                             HAL_LPC17XX_PWM_NODE_COUNT)
+
+//LPC17XX 模块定义
+#define HAL_LPC17XX_MCPWM_MODULE            (0)
+#define HAL_LPC17XX_TIMER_MODULE            (1)
+#define HAL_LPC17XX_PWM_MODULE              (2)
+#define HAL_LPC17XX_RESERVER_MODULE         (0xFF)
+
+//LPC17XX 通道掩码定义
+#define HAL_LPC17XX_TIM_CHANNEL_MASK(x)     ((x) & 0x03)
+#define HAL_LPC17XX_TIM_PWM_MASK(x)         ((x) & 0x3F)
+
+
+/**
+  * @brief  PWM 初始化
+  * @param  uPwmNode PWM节点
+  * @retval None
+  */
+static uBit8 HAL_PWM_GetNodeIndex(uBit8 uPwmNode)
+{
+    uBit8 uPwmNodeIndex = 0;
+    
+    if (uPwmNode < HAL_LPC17XX_MCPWM_NODE_COUNT)
+    {
+        uPwmNodeIndex = uPwmNode;
+    }
+    else if (uPwmNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT))
+    {
+        uPwmNodeIndex = (uPwmNode - HAL_LPC17XX_MCPWM_NODE_COUNT);
+    }
+    else if (uPwmNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT + HAL_LPC17XX_PWM_NODE_COUNT))
+    {
+        uPwmNodeIndex = (uPwmNode - (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT));
+    }
+    
+    return uPwmNodeIndex;
+}
+
 
 /**
   * @brief  PWM 初始化
@@ -58,24 +98,28 @@
   * @param  uChannelMask 通道掩码字
   * @retval None
   */
-static uBit8 HAL_PWM_GetNodeIndex(uBit8 uPwmNode)
+static uBit8 HAL_PWM_GetModuleIndex(uBit8 uPwmNode)
 {
-    uBit8 uPwmNodeIndex = 0;
+    uBit8 uModuleIndex = 0;
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    if (uPwmNode < HAL_LPC17XX_MCPWM_NODE_COUNT)
     {
-        uPwmNodeIndex = uPwmNode;
+        uModuleIndex = HAL_LPC17XX_MCPWM_MODULE;
     }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
+    else if (uPwmNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT))
     {
-        uPwmNodeIndex = (uPwmNode - HAL_LPC17XX_MCPWM_MAX_NODE);
+        uModuleIndex = HAL_LPC17XX_TIMER_MODULE;
     }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
+    else if (uPwmNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT + HAL_LPC17XX_PWM_NODE_COUNT))
     {
-        uPwmNodeIndex = (uPwmNode - HAL_LPC17XX_TIMER_MAX_NODE);
+        uModuleIndex = HAL_LPC17XX_PWM_MODULE;
+    }
+    else 
+    {
+        uModuleIndex = HAL_LPC17XX_RESERVER_MODULE;
     }
     
-    return uPwmNodeIndex;
+    return uModuleIndex;
 }
 
 
@@ -94,31 +138,26 @@ void HAL_PWM_Init(uBit8 uPwmNode, uBit8 uChannelMask)
 {
 #if defined(LPC17XX)
     
-    //数据校验
-    if (uPwmNode >= HAL_LPC17XX_MAX_NODE)
-    {
-        return;
-    }
-    
-    //获取节点索引
+    //获取索引
+    uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uPwmNode);
     uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uPwmNode);
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    switch (uModuleIndex)
     {
+    case HAL_LPC17XX_MCPWM_MODULE: 
         HW_MCPWM_InitOutput(uPwmNodeIndex, false);
-    }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
-    {
-        HW_TIM_OutputInit(uPwmNodeIndex, uChannelMask);
-    }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
-    {
-        HW_PWM_Init(uPwmNodeIndex, uChannelMask);
-        
+        break;
+    case HAL_LPC17XX_TIMER_MODULE: 
+        HW_TIM_InitOutput(uPwmNodeIndex, HAL_LPC17XX_TIM_CHANNEL_MASK(uChannelMask));
+        break;
+    case HAL_LPC17XX_PWM_MODULE: 
+        HW_PWM_Init(uPwmNodeIndex, HAL_LPC17XX_TIM_PWM_MASK(uChannelMask));
+        break;
+    case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)
-    HW_TIM_OutputInit(uPwmNode, uChannelMask, TIM_OUTPUT_MODE_PWM1);
+    HW_TIM_InitOutput(uPwmNode, uChannelMask, TIM_OUTPUT_MODE_PWM1);
 #endif
     
 }
@@ -136,26 +175,22 @@ void HAL_PWM_EnableChannel(uBit8 uPwmNode, uBit8 uChannelMask, bool bIsEnble)
 {
 #if defined(LPC17XX)
     
-    //数据校验
-    if (uPwmNode >= HAL_LPC17XX_MAX_NODE)
-    {
-        return;
-    }
-    
-    //获取节点索引
+    //获取索引
+    uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uPwmNode);
     uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uPwmNode);
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    switch (uModuleIndex)
     {
+    case HAL_LPC17XX_MCPWM_MODULE: 
         
-    }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
-    {
-        HW_TIM_OutputEnable(uPwmNodeIndex, bIsEnble);
-    }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
-    {
-        HW_PWM_EnableChannel(uPwmNodeIndex, uChannelMask, bIsEnble);
+        break;
+    case HAL_LPC17XX_TIMER_MODULE: 
+        HW_TIM_EnableChannel(uPwmNodeIndex, HAL_LPC17XX_TIM_CHANNEL_MASK(uChannelMask), bIsEnble);
+        break;
+    case HAL_LPC17XX_PWM_MODULE: 
+        HW_PWM_EnableChannel(uPwmNodeIndex, HAL_LPC17XX_TIM_PWM_MASK(uChannelMask), bIsEnble);
+        break;
+    case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)
@@ -176,26 +211,22 @@ void HAL_PWM_SetOutputPwmDutyRatio(uBit8 uPwmNode, uBit8 uChannelMask, float fDu
 {
 #if defined(LPC17XX)
     
-    //数据校验
-    if (uPwmNode >= HAL_LPC17XX_MAX_NODE)
-    {
-        return;
-    }
-    
-    //获取节点索引
+    //获取索引
+    uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uPwmNode);
     uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uPwmNode);
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    switch (uModuleIndex)
     {
+    case HAL_LPC17XX_MCPWM_MODULE: 
         HW_MCPWM_SetOutputPwmDutyRatio(uPwmNodeIndex, fDutyRatio);
-    }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
-    {
-        HW_TIM_SetOutputPwmDutyRatio(uPwmNodeIndex, uChannelMask, fDutyRatio);
-    }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
-    {
-        HW_PWM_SetOutputPwmDutyRatio(uPwmNodeIndex, uChannelMask, fDutyRatio);
+        break;
+    case HAL_LPC17XX_TIMER_MODULE: 
+        HW_TIM_SetOutputPwmDutyRatio(uPwmNodeIndex, HAL_LPC17XX_TIM_CHANNEL_MASK(uChannelMask), fDutyRatio);
+        break;
+    case HAL_LPC17XX_PWM_MODULE: 
+        HW_PWM_SetOutputPwmDutyRatio(uPwmNodeIndex, HAL_LPC17XX_TIM_PWM_MASK(uChannelMask), fDutyRatio);
+        break;
+    case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)
@@ -215,26 +246,22 @@ void HAL_PWM_SetOutputPwmFrq(uBit8 uPwmNode, uBit32 ulFrequency)
 {
 #if defined(LPC17XX)
     
-    //数据校验
-    if (uPwmNode >= HAL_LPC17XX_MAX_NODE)
-    {
-        return;
-    }
-    
-    //获取节点索引
+    //获取索引
+    uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uPwmNode);
     uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uPwmNode);
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    switch (uModuleIndex)
     {
+    case HAL_LPC17XX_MCPWM_MODULE: 
         HW_MCPWM_SetOutputPwmFrq(uPwmNodeIndex, ulFrequency);
-    }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
-    {
+        break;
+    case HAL_LPC17XX_TIMER_MODULE: 
         HW_TIM_SetOutputPwmFrq(uPwmNodeIndex, ulFrequency);
-    }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
-    {
+        break;
+    case HAL_LPC17XX_PWM_MODULE: 
         HW_PWM_SetOutputPwmFrq(uPwmNodeIndex, ulFrequency);
+        break;
+    case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)
@@ -254,26 +281,22 @@ void HAL_PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnablle)
 {
 #if defined(LPC17XX)
     
-    //数据校验
-    if (uPwmNode >= HAL_LPC17XX_MAX_NODE)
-    {
-        return;
-    }
-    
-    //获取节点索引
+    //获取索引
+    uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uPwmNode);
     uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uPwmNode);
     
-    if (uPwmNode < HAL_LPC17XX_MCPWM_MAX_NODE)
+    switch (uModuleIndex)
     {
+    case HAL_LPC17XX_MCPWM_MODULE: 
         HW_MCPWM_EnableOutput(uPwmNodeIndex, bIsEnablle);
-    }
-    else if (uPwmNode < HAL_LPC17XX_TIMER_MAX_NODE)
-    {
+        break;
+    case HAL_LPC17XX_TIMER_MODULE: 
         HW_TIM_OutputEnable(uPwmNodeIndex, bIsEnablle);
-    }
-    else if (uPwmNode < HAL_LPC17XX_PWM_MAX_NODE)
-    {
+        break;
+    case HAL_LPC17XX_PWM_MODULE: 
         HW_PWM_OutputEnable(uPwmNodeIndex, bIsEnablle);
+        break;
+    case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)

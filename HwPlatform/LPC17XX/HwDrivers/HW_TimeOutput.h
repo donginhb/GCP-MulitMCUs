@@ -26,8 +26,20 @@ extern "C"
   * @param  uChannelMask 通道掩码字
   * @param  uOutputCfgCode 工作模式
   * @retval None
+  * @note   初始化后,默认已经打开定时器通道,但是尚未启动定时器
   */
-void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask);
+void HW_TIM_InitOutput(uint8_t uTimeNode, uint8_t uChannelMask);
+
+
+/**
+  * @brief  定时器通道使能设置
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelMask 通道掩码字
+  * @param  bIsEnble true-使能 flase-关闭
+  * @retval None
+  * @note   选择的通道,必须是已初始化的通道
+  */
+void HW_TIM_EnableChannel(uint8_t uTimeNode, uint8_t uChannelMask, bool bIsEnble);
 
 
 /**

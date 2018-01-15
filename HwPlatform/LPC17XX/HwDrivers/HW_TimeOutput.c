@@ -57,7 +57,7 @@ static const IRQn_Type TIM_IRQn[HW_TIME_COUNT] = {TIMER0_IRQn, TIMER1_IRQn, TIME
 
 
 //PWM1 IO 引脚定义
-static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] = 
+static const PINMUX_GRP_T m_TimeOutputPinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] = 
 {
     //TIME0
     {
@@ -88,19 +88,49 @@ static const PINMUX_GRP_T m_TimePinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] =
 };
 
 
+//PWM1 IO 引脚定义
+static const PINMUX_GRP_T m_TimeInputPinMux[HW_TIME_COUNT][HW_TIME_CH_COUNT] = 
+{
+    //TIME0
+    {
+        {0x01, 26,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x01, 27,  IOCON_MODE_INACT | IOCON_FUNC3},
+    },
+    
+    //TIME1
+    {
+        {0x01, 18,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x01, 19,  IOCON_MODE_INACT | IOCON_FUNC3},
+    },
+    
+    //TIME2
+    {
+        {0x00,  4,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x00,  5,  IOCON_MODE_INACT | IOCON_FUNC3},
+    },
+    
+    //TIME3
+    {
+        {0x00, 23,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x00, 24,  IOCON_MODE_INACT | IOCON_FUNC3},
+    },
+
+};
+
+
 /**
-  * @brief  定时器引脚初始化
+  * @brief  定时器输出IO配置
   * @param  uTimeNode 定时器节点
   * @param  uChannelMask 通道掩码
   * @retval None
   */
-static void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask)
+static void HW_TIM_ConfigOutputIO(uint8_t uTimeNode, uint8_t uChannelMask)
 {
     for (int i = 0; i < HW_TIME_CH_COUNT; i++)
     {
         if (HW_TIME_CH_MASK(uChannelMask) & (0x1<<i))
         {
-            Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimePinMux[uTimeNode][i].pingrp, m_TimePinMux[uTimeNode][i].pinnum, m_TimePinMux[uTimeNode][i].modefunc);
+            Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimeOutputPinMux[uTimeNode][i].pingrp, m_TimeOutputPinMux[uTimeNode][i].pinnum, m_TimeOutputPinMux[uTimeNode][i].modefunc);
         }
     }
 
@@ -108,35 +138,21 @@ static void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask)
 
 
 /**
-  * @brief  定时器输出模式配置
+  * @brief  定时器输入IO配置
   * @param  uTimeNode 定时器节点
-  * @param  uChannelMask 通道掩码字
-  * @param  uOutputCfgCode 工作模式
+  * @param  uChannelMask 通道掩码
   * @retval None
   */
-static void HW_TIM_OutputConfig(uint8_t uTimeNode, uint8_t uChannelMask)
+static void HW_TIM_ConfigInputIO(uint8_t uTimeNode, uint8_t uChannelMask)
 {
-    //初始化模块
-    Chip_TIMER_Init(TIM[uTimeNode]);
-    
-    //复位计数器
-    Chip_TIMER_Reset(TIM[uTimeNode]);
-    
-    //设置PWM模式(计时)
-    Chip_TIMER_TIMER_SetCountClockSrc(TIM[uTimeNode], TIMER_CAPSRC_RISING_PCLK, 0);
-    
-    //设置PWM触发操作(复位计数)
-    Chip_TIMER_ResetOnMatchEnable(TIM[uTimeNode], 3);
-    
-    //设置PWM时序
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 0, HW_TIME_DEFAULT_COUNT_RANG-1);
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 1, HW_TIME_DEFAULT_COUNT_RANG-1);
-    Chip_TIMER_SetMatch(TIM[uTimeNode], 3, HW_TIME_DEFAULT_COUNT_RANG-1);
-    
-    //外部引脚状态设置(翻转)
-    Chip_TIMER_ExtMatchControlSet(TIM[uTimeNode], 0, TIMER_EXTMATCH_TOGGLE, 0);
-    Chip_TIMER_ExtMatchControlSet(TIM[uTimeNode], 0, TIMER_EXTMATCH_TOGGLE, 1);
-    
+    for (int i = 0; i < HW_TIME_CH_COUNT; i++)
+    {
+        if (HW_TIME_CH_MASK(uChannelMask) & (0x1<<i))
+        {
+            Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimeInputPinMux[uTimeNode][i].pingrp, m_TimeInputPinMux[uTimeNode][i].pinnum, m_TimeInputPinMux[uTimeNode][i].modefunc);
+        }
+    }
+
 }
 
 
@@ -167,19 +183,53 @@ static uint32_t HW_TIM_GetPeripheralClock(uint8_t uTimeNode)
  ****************************************************************************/
 
 /**
-  * @brief  定时器输出模式初始化
+  * @brief  定时器输出模式配置
   * @param  uTimeNode 定时器节点
   * @param  uChannelMask 通道掩码字
   * @param  uOutputCfgCode 工作模式
   * @retval None
   */
-void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask)
+static void HW_TIM_ConfigOutputMode(uint8_t uTimeNode, uint8_t uChannelMask)
+{
+    //初始化模块
+    Chip_TIMER_Init(TIM[uTimeNode]);
+    
+    //复位计数器
+    Chip_TIMER_Reset(TIM[uTimeNode]);
+    
+    //设置PWM模式(计时)
+    Chip_TIMER_TIMER_SetCountClockSrc(TIM[uTimeNode], TIMER_CAPSRC_RISING_PCLK, 0);
+    
+    //设置PWM触发操作(复位计数)
+    Chip_TIMER_ResetOnMatchEnable(TIM[uTimeNode], 3);
+    
+    //设置PWM时序
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 0, HW_TIME_DEFAULT_COUNT_RANG-1);
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 1, HW_TIME_DEFAULT_COUNT_RANG-1);
+    Chip_TIMER_SetMatch(TIM[uTimeNode], 3, HW_TIME_DEFAULT_COUNT_RANG-1);
+    
+    //外部引脚状态设置(翻转)
+    Chip_TIMER_ExtMatchControlSet(TIM[uTimeNode], 0, TIMER_EXTMATCH_TOGGLE, 0);
+    Chip_TIMER_ExtMatchControlSet(TIM[uTimeNode], 0, TIMER_EXTMATCH_TOGGLE, 1);
+    
+}
+
+
+/**
+  * @brief  定时器输出模式初始化
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelMask 通道掩码字
+  * @param  uOutputCfgCode 工作模式
+  * @retval None
+  * @note   初始化后,默认已经打开定时器通道,但是尚未启动定时器
+  */
+void HW_TIM_InitOutput(uint8_t uTimeNode, uint8_t uChannelMask)
 {
     //引脚配置
-    HW_TIM_PortConfig(uTimeNode, uChannelMask);
+    HW_TIM_ConfigOutputIO(uTimeNode, uChannelMask);
     
     //模式配置
-    HW_TIM_OutputConfig(uTimeNode, uChannelMask);
+    HW_TIM_ConfigOutputMode(uTimeNode, uChannelMask);
     
     //时序配置
     HW_TIM_SetOutputPwmDutyRatio(uTimeNode, uChannelMask, 50);
@@ -187,6 +237,30 @@ void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask)
     
     //开启定时器
     //HW_TIM_OutputEnable(uTimeNode, 1);
+    
+}
+
+
+/**
+  * @brief  定时器通道使能设置
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelMask 通道掩码字
+  * @param  bIsEnble true-使能 flase-关闭
+  * @retval None
+  * @note   选择的通道,必须是已初始化的通道
+  */
+void HW_TIM_EnableChannel(uint8_t uTimeNode, uint8_t uChannelMask, bool bIsEnble)
+{
+    if (bIsEnble)
+    {
+        //使能定时器通道
+        HW_TIM_SetOutputPwmDutyRatio(uTimeNode, uChannelMask, 50);
+    }
+    else 
+    {
+        //禁止定时器通道
+        HW_TIM_SetOutputPwmDutyRatio(uTimeNode, uChannelMask, 0);
+    }
     
 }
 
@@ -314,3 +388,51 @@ void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnablle)
     }
     
 }
+
+
+/*****************************************************************************
+ * 定时器输入计数相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  定时器输入模式初始化
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @retval None
+  */
+static void HW_TIM_ConfigInputCountMode(uint8_t uTimeNode, uint8_t uChannelNum)
+{
+    //初始化模块
+    Chip_TIMER_Init(TIM[uTimeNode]);
+    
+    //复位计数器
+    Chip_TIMER_Reset(TIM[uTimeNode]);
+    
+    //设置PWM模式(计时)
+    Chip_TIMER_TIMER_SetCountClockSrc(TIM[uTimeNode], TIMER_CAPSRC_FALLING_CAPN, uChannelNum);
+    
+    //复位PWM触发操作
+    TIM[uTimeNode]->MCR = 0;
+    
+}
+
+
+/**
+  * @brief  定时器输入计数初始化
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelMask 通道掩码字
+  * @retval None
+  */
+void HW_TIM_InitInputCount(uint8_t uTimeNode, uint8_t uChannelMask)
+{
+    //引脚配置
+    HW_TIM_ConfigInputIO(uTimeNode, uChannelMask);
+    
+    //模式配置
+    uint8_t uChannelNum = (uChannelMask & 0x1) ? 0 : 1;
+    HW_TIM_ConfigInputCountMode(uTimeNode, uChannelNum);
+
+    
+}
+
+
