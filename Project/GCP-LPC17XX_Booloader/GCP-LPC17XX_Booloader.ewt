@@ -1063,12 +1063,12 @@
       </file>
     </group>
     <group>
-      <name>Json</name>
+      <name>RingBuff</name>
       <file>
-        <name>$PROJ_DIR$\..\..\Algorithm\Json\cJSON.c</name>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Algorithm\Json\cJSON.h</name>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.h</name>
       </file>
     </group>
   </group>
@@ -1082,6 +1082,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\CMU\Simplify\AbstractionLayer.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\CMU\Simplify\CMU_CanInterface.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\CMU\Simplify\CMU_CanInterface.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\CMU\Simplify\CMU_CmdProcess.c</name>
@@ -1131,69 +1137,6 @@
   </group>
   <group>
     <name>ExtPeripheral</name>
-    <group>
-      <name>Ammeter</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Ammeter\Ammeter_Spm91.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Ammeter\Ammeter_Spm91.h</name>
-      </file>
-    </group>
-    <group>
-      <name>Eeprom</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Eeprom\at24cxx.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Eeprom\at24cxx.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Eeprom\Eeprom.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\Eeprom\Eeprom.h</name>
-      </file>
-    </group>
-    <group>
-      <name>LCD</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\LCD\LCD1602.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\LCD\LCD1602.h</name>
-      </file>
-    </group>
-    <group>
-      <name>NixieTube</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\NixieTube\NixieTube.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\NixieTube\NixieTube.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\NixieTube\TM1617.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\NixieTube\TM1617.h</name>
-      </file>
-    </group>
-    <group>
-      <name>TempSensor</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\TempSensor\Ds18b20.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\TempSensor\Ds18b20.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\TempSensor\TempSensor.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\ExtPeripheral\TempSensor\TempSensor.h</name>
-      </file>
-    </group>
   </group>
   <group>
     <name>HAL</name>
@@ -1202,6 +1145,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\Demo.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_ADC.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_ADC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Can.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Can.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Config.h</name>
@@ -1241,12 +1196,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Pwm.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\HAL\HAL_PwmCount.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\HAL\HAL_PwmCount.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Spi.c</name>
@@ -1586,22 +1535,16 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_SysTick.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeInput.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeInput.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeOutput.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeOutput.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Uart.c</name>
@@ -1635,12 +1578,6 @@
   </group>
   <group>
     <name>MotorCtrl</name>
-    <file>
-      <name>$PROJ_DIR$\..\..\MotorCtrl\MotorCtrl.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\MotorCtrl\MotorCtrl.h</name>
-    </file>
   </group>
   <group>
     <name>SysCtrl</name>
@@ -1666,12 +1603,6 @@
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_CmuConfig.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_CncConfig.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_CncConfig.h</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_Ctrl.c</name>
     </file>
     <file>
@@ -1687,6 +1618,12 @@
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_MemoryDef.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SysConfig.h</name>
     </file>
   </group>
@@ -1694,6 +1631,21 @@
     <name>SysPeripheral</name>
     <group>
       <name>CAN</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanDataStructDef.h</name>
+      </file>
     </group>
     <group>
       <name>CoreCtrl</name>
@@ -1712,12 +1664,6 @@
     </group>
     <group>
       <name>EXTI</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\EXTI\EXTI.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\EXTI\EXTI.h</name>
-      </file>
     </group>
     <group>
       <name>FLASH</name>
@@ -1739,21 +1685,6 @@
     </group>
     <group>
       <name>I2C</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\I2C\I2C_BaseOps.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\I2C\I2C_DataStructDef.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\I2C\I2C_DeviceAPI.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\I2C\I2C_DeviceOps.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\I2C\I2C_Interface.h</name>
-      </file>
     </group>
     <group>
       <name>IRQ</name>
@@ -1766,45 +1697,15 @@
     </group>
     <group>
       <name>KEY</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\KEY\KEY.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\KEY\KEY.h</name>
-      </file>
     </group>
     <group>
       <name>PWM</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM_Count.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM_Count.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM_MotorCtrl.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\PWM\PWM_MotorCtrl.h</name>
-      </file>
     </group>
     <group>
       <name>QEI</name>
     </group>
     <group>
       <name>RTC</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\RTC\RTC.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\RTC\RTC.h</name>
-      </file>
     </group>
     <group>
       <name>SysTimer</name>
@@ -1842,6 +1743,9 @@
   </group>
   <group>
     <name>Version</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\Version\BootVersion.h</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\..\Version\GCPVersion.h</name>
     </file>

@@ -17,14 +17,14 @@
 /***********************************<INCLUDES>**********************************/
 #include "PWM_Count.h"
 #include "DataType/DataType.h"
-#include "HAL/HAL_PwmCount.h"
+#include "HAL/HAL_Pwm.h"
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
 
 /*****************************************************************************
- * PWM输入相关控制接口
+ * PWM输入计数模式相关控制接口
  ****************************************************************************/
 
 /**
@@ -38,7 +38,7 @@
   */
 void PWM_InputCountInit(uBit8 uTimeNode, uBit8 uChannelMask)
 {
-    HAL_TIM_InputCountInit(uTimeNode, uChannelMask);
+    HAL_PWM_InitInputCount(uTimeNode, uChannelMask);
     
 }
 
@@ -46,12 +46,12 @@ void PWM_InputCountInit(uBit8 uTimeNode, uBit8 uChannelMask)
 /**
   * @brief  PWM使能
   * @param  uTimeNode PWM节点
-  * @param  bIsEnablle PWM使能位
+  * @param  bIsEnable PWM使能位
   * @retval None
   */
-void PWM_InputCountEnable(uBit8 uTimeNode, bool bIsEnablle)
+void PWM_EnableInputCount(uBit8 uTimeNode, bool bIsEnable)
 {
-    HAL_TIM_InputCountEnable(uTimeNode, bIsEnablle);
+    HAL_PWM_EnableInputCount(uTimeNode, bIsEnable);
     
 }
 
@@ -64,7 +64,7 @@ void PWM_InputCountEnable(uBit8 uTimeNode, bool bIsEnablle)
 uBit32 PWM_GetInputCount(uBit8 uTimeNode)
 {
     
-    return HAL_TIM_GetInputCount(uTimeNode);
+    return HAL_PWM_GetInputCount(uTimeNode);
 }
 
 
@@ -83,7 +83,7 @@ uBit32 PWM_GetInputCount(uBit8 uTimeNode)
   */
 void PWM_SetMaxInputCount(uBit8 uTimeNode, uBit8 uChannelNum, uBit32 ulMaxCount)
 {
-    HAL_TIM_SetMaxInputCount(uTimeNode, uChannelNum, ulMaxCount);
+    HAL_PWM_SetMaxInputCount(uTimeNode, uChannelNum, ulMaxCount);
     
 }
 
@@ -101,7 +101,7 @@ void PWM_SetMaxInputCount(uBit8 uTimeNode, uBit8 uChannelNum, uBit32 ulMaxCount)
   */
 void PWM_EnableInputCountIRQ(uBit8 uTimeNode, uBit8 uChannelNum, bool bIsEnable)
 {
-    HAL_TIM_EnableInputCountIRQ(uTimeNode, uChannelNum, bIsEnable);
+    HAL_PWM_EnableInputCountIRQ(uTimeNode, uChannelNum, bIsEnable);
     
 }
 
@@ -115,7 +115,7 @@ void PWM_EnableInputCountIRQ(uBit8 uTimeNode, uBit8 uChannelNum, bool bIsEnable)
 bool PWM_GetInputCountITStatus(uBit8 uTimeNode, uBit8 uChannelNum)
 {
     
-    return HAL_TIM_GetInputCountITStatus(uTimeNode, uChannelNum);
+    return HAL_PWM_GetInputCountITStatus(uTimeNode, uChannelNum);
 }
 
 
@@ -127,7 +127,7 @@ bool PWM_GetInputCountITStatus(uBit8 uTimeNode, uBit8 uChannelNum)
   */
 void PWM_ClearInputCountITStatus(uBit8 uTimeNode, uBit8 uChannelNum)
 {
-    HAL_TIM_ClearInputCountITStatus(uTimeNode, uChannelNum);
+    HAL_PWM_ClearInputCountITStatus(uTimeNode, uChannelNum);
     
 }
 

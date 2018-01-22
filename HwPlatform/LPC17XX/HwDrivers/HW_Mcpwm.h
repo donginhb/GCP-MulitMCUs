@@ -60,10 +60,10 @@ void HW_MCPWM_SetOutputPwmFrq(uint8_t uMcpwmNode, uint32_t ulFrequency);
 /**
   * @brief  MCPWM输出使能
   * @param  uMcpwmNode MCPWM节点
-  * @param  bIsEnablle 使能位
+  * @param  bIsEnable 使能位
   * @retval None
   */
-void HW_MCPWM_EnableOutput(uint8_t uMcpwmNode, bool bIsEnablle);
+void HW_MCPWM_EnableOutput(uint8_t uMcpwmNode, bool bIsEnable);
 
 
 /*****************************************************************************
@@ -87,10 +87,10 @@ uint32_t HW_MCPWM_InitInputCount(uint8_t uMcpwmNode, uint8_t uInputSource, uint8
 /**
   * @brief  MCPWM计数使能
   * @param  uMcpwmNode MCPWM节点
-  * @param  bIsEnablle 使能位
+  * @param  bIsEnable 使能位
   * @retval None
   */
-void HW_MCPWM_EnableInputCount(uint8_t uMcpwmNode, bool bIsEnablle);
+void HW_MCPWM_EnableInputCount(uint8_t uMcpwmNode, bool bIsEnable);
 
 
 /**
@@ -119,7 +119,7 @@ uint32_t HW_MCPWM_GetCurInputCount(uint8_t uMcpwmNode);
   * @brief  MCPWM计数使能
   * @param  uMcpwmNode MCPWM节点
   * @param  uIntModeMask 中断模式掩码(可以多种模式'与'后入参)
-  * @param  bIsEnablle 使能位
+  * @param  bIsEnable 使能位
   * @retval None
   */
 void HW_MCPWM_EnableIRQ(uint8_t uMcpwmNode, uint8_t uIntModeMask, bool bIsEnable);

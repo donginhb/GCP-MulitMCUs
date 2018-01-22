@@ -38,6 +38,9 @@
 #define LPC_GPIOINT_PORT_COUNT      (2)
 #define LPC_GPIOINT_PIN_COUNT       (32)
 
+//MCPWM中断组
+#define LPC_MCPWM_COUNT             (3)
+
 typedef struct 
 {
     void (*pf_SysTick_Update        )(void);
@@ -70,7 +73,7 @@ typedef struct
     void (*pf_I2S_IRQHandler        )(void);
     void (*pf_ENET_IRQHandler       )(void);
     void (*pf_RIT_IRQHandler        )(void);
-    void (*pf_MCPWM_IRQHandler      )(void);
+//    void (*pf_MCPWM_IRQHandler      )(void);
     void (*pf_QEI_IRQHandler        )(void);
     void (*pf_PLL1_IRQHandler       )(void);
     void (*pf_USBActivity_IRQHandler)(void);
@@ -78,6 +81,7 @@ typedef struct
     
     void (*pf_DMA_CHx_IRQHandler[LPC_DMA_CH_COUNT])(void);
     void (*pf_GPIO_IRQHandler[LPC_GPIOINT_PORT_COUNT][LPC_GPIOINT_PIN_COUNT])(void);
+    void (*pf_MCPWM_IRQHandler[LPC_MCPWM_COUNT])(void);
     
 }LPC17XX_IRQ_INTERFACE;
 
@@ -131,7 +135,7 @@ void HW_IRQ_Init(void)
     g_IRQInterface.pf_I2S_IRQHandler         = HW_IRQ_NullEntry;
     g_IRQInterface.pf_ENET_IRQHandler        = HW_IRQ_NullEntry;
     g_IRQInterface.pf_RIT_IRQHandler         = HW_IRQ_NullEntry;
-    g_IRQInterface.pf_MCPWM_IRQHandler       = HW_IRQ_NullEntry;
+    //g_IRQInterface.pf_MCPWM_IRQHandler       = HW_IRQ_NullEntry;
     g_IRQInterface.pf_QEI_IRQHandler         = HW_IRQ_NullEntry;
     g_IRQInterface.pf_PLL1_IRQHandler        = HW_IRQ_NullEntry;
     g_IRQInterface.pf_USBActivity_IRQHandler = HW_IRQ_NullEntry;
@@ -148,6 +152,11 @@ void HW_IRQ_Init(void)
         {
             g_IRQInterface.pf_GPIO_IRQHandler[i][j] = HW_IRQ_NullEntry;
         }
+    }
+    
+    for (int i = 0; i < LPC_MCPWM_COUNT; i++)
+    {
+        g_IRQInterface.pf_MCPWM_IRQHandler[i] = HW_IRQ_NullEntry;
     }
     
 }
@@ -263,6 +272,12 @@ void HW_IRQ_SetTrgCallback(void (*ptr)(void), uint32_t ulTrgSource)
     case LPC_IRQ_TRG_TIME2: g_IRQInterface.pf_TIMER2_IRQHandler = ptr;
     case LPC_IRQ_TRG_TIME3: g_IRQInterface.pf_TIMER3_IRQHandler = ptr;
     
+    case LPC_IRQ_TRG_MCPWM0: g_IRQInterface.pf_MCPWM_IRQHandler[0] = ptr;
+    case LPC_IRQ_TRG_MCPWM1: g_IRQInterface.pf_MCPWM_IRQHandler[1] = ptr;
+    case LPC_IRQ_TRG_MCPWM2: g_IRQInterface.pf_MCPWM_IRQHandler[2] = ptr;
+    
+    case LPC_IRQ_TRG_PWM0:  g_IRQInterface.pf_PWM1_IRQHandler = ptr;
+    
     default: break;
     }
     
@@ -371,6 +386,12 @@ void HW_IRQ_ReleaseTrgCallback(uint32_t ulTrgSource)
     case LPC_IRQ_TRG_TIME2: g_IRQInterface.pf_TIMER2_IRQHandler = HW_IRQ_NullEntry;
     case LPC_IRQ_TRG_TIME3: g_IRQInterface.pf_TIMER3_IRQHandler = HW_IRQ_NullEntry;
     
+    case LPC_IRQ_TRG_MCPWM0: g_IRQInterface.pf_MCPWM_IRQHandler[0] = HW_IRQ_NullEntry;
+    case LPC_IRQ_TRG_MCPWM1: g_IRQInterface.pf_MCPWM_IRQHandler[1] = HW_IRQ_NullEntry;
+    case LPC_IRQ_TRG_MCPWM2: g_IRQInterface.pf_MCPWM_IRQHandler[2] = HW_IRQ_NullEntry;
+    
+    case LPC_IRQ_TRG_PWM0:  g_IRQInterface.pf_PWM1_IRQHandler = HW_IRQ_NullEntry;
+    
     default: break;
     }
     
@@ -390,6 +411,126 @@ void SysTick_Handler(void)
 }
 
 
+/**
+  * @brief  This function handles DMA Handler.
+  * @param  None
+  * @retval None
+  */
+void DMA_IRQHandler(void)
+{
+    for (int i = 0; i < LPC_DMA_CH_COUNT; i++)
+    {
+        //判断中断入口
+        if (Chip_GPDMA_IntGetStatus(LPC_GPDMA, GPDMA_STAT_INTTC, i) == SET)
+        {
+            //清标志位
+            Chip_GPDMA_ClearIntPending(LPC_GPDMA, GPDMA_STATCLR_INTTC, i);
+            
+            //执行回调
+            g_IRQInterface.pf_DMA_CHx_IRQHandler[i]();
+        }
+    }
+    
+}
+
+
+/**
+  * @brief  This function handles GPIO Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO_IRQHandler(void)
+{
+    LPC_GPIOINT_PORT_T GpioIntPortGroup[LPC_GPIOINT_PORT_COUNT] = {GPIOINT_PORT0, GPIOINT_PORT2};
+    
+    for (int iPortIndex = 0; iPortIndex < LPC_GPIOINT_PORT_COUNT; iPortIndex++)
+    {
+        if (Chip_GPIOINT_IsIntPending(LPC_GPIOINT, GpioIntPortGroup[iPortIndex]))
+        {
+            //获取中断置位状态
+            uint32_t IntStatus = Chip_GPIOINT_GetStatusFalling(LPC_GPIOINT, GpioIntPortGroup[iPortIndex]) | 
+                                 Chip_GPIOINT_GetStatusRising (LPC_GPIOINT, GpioIntPortGroup[iPortIndex]);
+            
+            //确认中断入口
+            for (int iPinIndex = 0; iPinIndex < LPC_GPIOINT_PIN_COUNT; iPinIndex++)
+            {
+                if (IntStatus & (0x1<<iPinIndex))
+                {
+                    IntStatus &= ~(0x1<<iPinIndex);
+                    Chip_GPIOINT_ClearIntStatus(LPC_GPIOINT, GpioIntPortGroup[iPortIndex], (0x1<<iPinIndex));    //清中断
+                    
+                    //执行中断回调
+                    g_IRQInterface.pf_GPIO_IRQHandler[iPortIndex][iPinIndex]();
+                    
+                    if (IntStatus == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+
+
+/**
+  * @brief  This function handles MCPWM Handler.
+  * @param  None
+  * @retval None
+  */
+void MCPWM_IRQHandler(void)
+{
+    for (int i = 0; i < LPC_MCPWM_COUNT; i++)
+    {
+        g_IRQInterface.pf_MCPWM_IRQHandler[i]();
+    }
+    
+}
+
+
+
+
+void WDT_IRQHandler         (void) { g_IRQInterface.pf_WDT_IRQHandler         (); }
+void TIMER0_IRQHandler      (void) { g_IRQInterface.pf_TIMER0_IRQHandler      (); }
+void TIMER1_IRQHandler      (void) { g_IRQInterface.pf_TIMER1_IRQHandler      (); }
+void TIMER2_IRQHandler      (void) { g_IRQInterface.pf_TIMER2_IRQHandler      (); }
+void TIMER3_IRQHandler      (void) { g_IRQInterface.pf_TIMER3_IRQHandler      (); }
+void UART0_IRQHandler       (void) { g_IRQInterface.pf_UART0_IRQHandler       (); }
+void UART1_IRQHandler       (void) { g_IRQInterface.pf_UART1_IRQHandler       (); }
+void UART2_IRQHandler       (void) { g_IRQInterface.pf_UART2_IRQHandler       (); }
+void UART3_IRQHandler       (void) { g_IRQInterface.pf_UART3_IRQHandler       (); }
+void PWM1_IRQHandler        (void) { g_IRQInterface.pf_PWM1_IRQHandler        (); }
+void I2C0_IRQHandler        (void) { g_IRQInterface.pf_I2C0_IRQHandler        (); }
+void I2C1_IRQHandler        (void) { g_IRQInterface.pf_I2C1_IRQHandler        (); }
+void I2C2_IRQHandler        (void) { g_IRQInterface.pf_I2C2_IRQHandler        (); }
+void SPI_IRQHandler         (void) { g_IRQInterface.pf_SPI_IRQHandler         (); }
+void SSP0_IRQHandler        (void) { g_IRQInterface.pf_SSP0_IRQHandler        (); }
+void SSP1_IRQHandler        (void) { g_IRQInterface.pf_SSP1_IRQHandler        (); }
+void PLL0_IRQHandler        (void) { g_IRQInterface.pf_PLL0_IRQHandler        (); }
+void RTC_IRQHandler         (void) { g_IRQInterface.pf_RTC_IRQHandler         (); }
+void EINT0_IRQHandler       (void) { g_IRQInterface.pf_EINT0_IRQHandler       (); }
+void EINT1_IRQHandler       (void) { g_IRQInterface.pf_EINT1_IRQHandler       (); }
+void EINT2_IRQHandler       (void) { g_IRQInterface.pf_EINT2_IRQHandler       (); }
+//void EINT3_IRQHandler       (void) { g_IRQInterface.pf_EINT3_IRQHandler       (); }
+void ADC_IRQHandler         (void) { g_IRQInterface.pf_ADC_IRQHandler         (); }
+void BOD_IRQHandler         (void) { g_IRQInterface.pf_BOD_IRQHandler         (); }
+void USB_IRQHandler         (void) { g_IRQInterface.pf_USB_IRQHandler         (); }
+void CAN_IRQHandler         (void) { g_IRQInterface.pf_CAN_IRQHandler         (); }
+//void DMA_IRQHandler         (void) { g_IRQInterface.pf_DMA_IRQHandler         (); }
+void I2S_IRQHandler         (void) { g_IRQInterface.pf_I2S_IRQHandler         (); }
+void ENET_IRQHandler        (void) { g_IRQInterface.pf_ENET_IRQHandler        (); }
+void RIT_IRQHandler         (void) { g_IRQInterface.pf_RIT_IRQHandler         (); }
+//void MCPWM_IRQHandler       (void) { g_IRQInterface.pf_MCPWM_IRQHandler       (); }
+void QEI_IRQHandler         (void) { g_IRQInterface.pf_QEI_IRQHandler         (); }
+void PLL1_IRQHandler        (void) { g_IRQInterface.pf_PLL1_IRQHandler        (); }
+void USBActivity_IRQHandler (void) { g_IRQInterface.pf_USBActivity_IRQHandler (); }
+void CANActivity_IRQHandler (void) { g_IRQInterface.pf_CANActivity_IRQHandler (); }
+
+
+
+#if 0
 /**
   * @brief  This function handles WDT Handler.
   * @param  None
@@ -847,4 +988,23 @@ void CANActivity_IRQHandler(void)
     g_IRQInterface.pf_CANActivity_IRQHandler();
 
 }
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -69,27 +69,25 @@
  * CMU相关配置
  ****************************************************************************/
 
+//通信端口节点配置
+#define SYS_CMU_DEF_UART_NODE       (0)
+#define SYS_CMU_DEF_UART_BAUDRATE   (115200)
+
+#define SYS_CMU_DEF_CAN_NODE        (0)
+#define SYS_CMU_DEF_CAN_BAUDRATE    (500000)
+
 #if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU)
 
 //通信端口配置
-#define SYS_CMU_USING_CAN       (0)     //使用CAN 作为CMU的通信接口
-#define SYS_CMU_USING_ENET      (0)     //使用ENET作为CMU的通信接口
-#define SYS_CMU_USING_UART      (1)     //使用UART作为CMU的通信接口
-
-#if ((SYS_CMU_USING_CAN + SYS_CMU_USING_ENET + SYS_CMU_USING_UART) != 1)
-#error 只能选择一个通信接口作为CMU的接口
-#endif
-
-//通信端口节点配置
-#if (SYS_CMU_USING_CAN || SYS_CMU_USING_UART)
-#define SYS_CMU_COM_NODE        (0)
-#endif
+#define SYS_CMU_USING_CAN           (1)     //使用CAN 作为CMU的通信接口
+#define SYS_CMU_USING_ENET          (0)     //使用ENET作为CMU的通信接口
+#define SYS_CMU_USING_UART          (1)     //使用UART作为CMU的通信接口
 
 #if (SYS_USING_FULL_CMU)    //对完整版本的CMU,需要对数据缓冲区配置
 #ifndef COM_TRANSMIT_BUF_SIZE
-#define COM_TRANSMIT_BUF_SIZE   (1280)  //CMU TX/RX缓冲区大小
+#define COM_TRANSMIT_BUF_SIZE       (1280)  //CMU TX/RX缓冲区大小
 #endif
-#define SYS_CMU_BUFF_SIZE       (3*COM_TRANSMIT_BUF_SIZE)   //开辟给CMU的BUFF大小,必须是2个COM_TRANSMIT_BUF_SIZE以上
+#define SYS_CMU_BUFF_SIZE           (3*COM_TRANSMIT_BUF_SIZE)   //开辟给CMU的BUFF大小,必须是2个COM_TRANSMIT_BUF_SIZE以上
 #endif 
 
 #endif //#if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU) ....

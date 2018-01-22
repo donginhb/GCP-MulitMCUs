@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    HW_TimeOutput.c
+  * @file    HW_Tim.c
   * @author  Duhanfneg
   * @version V1.0
   * @date    2017.11.29
@@ -34,7 +34,7 @@
   */
   
 /***********************************<INCLUDES>**********************************/
-#include "HW_TimeOutput.h"
+#include "HW_Tim.h"
 #include "chip.h"
       
 
@@ -373,12 +373,12 @@ uint16_t HW_TIM_GetOutputAutoReloadValue(uint8_t uTimeNode)
 /**
   * @brief  定时器输出使能
   * @param  uTimeNode 定时器节点
-  * @param  bIsEnablle 定时器使能位
+  * @param  bIsEnable 定时器使能位
   * @retval None
   */
-void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnablle)
+void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnable)
 {
-    if (bIsEnablle)
+    if (bIsEnable)
     {
         Chip_TIMER_Enable(TIM[uTimeNode]);
     }
@@ -431,8 +431,143 @@ void HW_TIM_InitInputCount(uint8_t uTimeNode, uint8_t uChannelMask)
     //模式配置
     uint8_t uChannelNum = (uChannelMask & 0x1) ? 0 : 1;
     HW_TIM_ConfigInputCountMode(uTimeNode, uChannelNum);
-
     
 }
 
+
+/**
+  * @brief  定时器计数使能
+  * @param  uTimeNode 定时器节点
+  * @param  bIsEnable 使能位
+  * @retval None
+  */
+void HW_TIM_EnableInputCount(uint8_t uTimeNode, bool bIsEnable)
+{
+    if (bIsEnable)
+    {
+        //启动定时器
+        Chip_TIMER_Enable(TIM[uTimeNode]);
+    }
+    else 
+    {
+        //关闭定时器
+        Chip_TIMER_Disable(TIM[uTimeNode]);
+    }
+    
+}
+
+
+/**
+  * @brief  定时器最大输入计数设置
+  * @param  uTimeNode 定时器节点
+  * @param  ulMaxCount 最大计数值
+  * @retval None
+  * @note   到达最大计数值后,计数寄存器会复位;若设置多个通道的"最大计数值",以最小的计数值为准;
+  */
+void HW_TIM_SetMaxInputCount(uint8_t uTimeNode, uint8_t uChannelNum, uint32_t ulMaxCount)
+{
+    //设置最大计数值
+    Chip_TIMER_ResetOnMatchEnable(TIM[uTimeNode], uChannelNum);     //到达最大值时复位
+    Chip_TIMER_SetMatch(TIM[uTimeNode], uChannelNum, ulMaxCount);   //设置最大计数值
+    
+}
+
+
+/**
+  * @brief  定时器计数值获取
+  * @param  uTimeNode 定时器节点
+  * @retval 当前计数值
+  */
+uint32_t HW_TIM_GetCurInputCount(uint8_t uTimeNode)
+{
+    
+    return Chip_TIMER_ReadCount(TIM[uTimeNode]);
+}
+
+
+/*****************************************************************************
+ * 定时器输入中断相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  MCPWM计数使能
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @param  uIntModeMask 中断模式掩码(可以多种模式'与'后入参)
+  * @param  bIsEnable 使能位
+  * @retval None
+  */
+void HW_TIM_EnableIRQ(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uIntModeMask, bool bIsEnable)
+{
+    if (bIsEnable)
+    {
+        //开外设中断
+        if (uIntModeMask & HW_TIM_INT_MATCH)
+        {
+            Chip_TIMER_MatchEnableInt(TIM[uTimeNode], uChannelNum);
+        }
+        if (uIntModeMask & HW_TIM_INT_CAPTURE)
+        {
+            Chip_TIMER_CaptureEnableInt(TIM[uTimeNode], uChannelNum);
+        }
+        
+        //开内核中断
+        NVIC_EnableIRQ(MCPWM_IRQn);
+    }
+    else 
+    {
+        //关外设中断
+        if (uIntModeMask & HW_TIM_INT_MATCH)
+        {
+            Chip_TIMER_MatchDisableInt(TIM[uTimeNode], uChannelNum);
+        }
+        if (uIntModeMask & HW_TIM_INT_CAPTURE)
+        {
+            Chip_TIMER_CaptureDisableInt(TIM[uTimeNode], uChannelNum);
+        }
+    }
+    
+}
+
+
+/**
+  * @brief  MCPWM中断状态获取
+  * @param  uTimeNode 定时器节点
+  * @param  uIntMode 中断模式(仅能获取一种中断的标志)
+  * @retval None
+  */
+bool HW_TIM_GetITStatus(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uIntMode)
+{
+    bool bITStatus = false;
+    
+    if (uIntMode & HW_TIM_INT_MATCH)
+    {
+        bITStatus = Chip_TIMER_MatchPending(TIM[uTimeNode], uChannelNum);
+    }
+    else if (uIntMode & HW_TIM_INT_CAPTURE)
+    {
+        bITStatus = Chip_TIMER_CapturePending(TIM[uTimeNode], uChannelNum);
+    }
+    
+    return bITStatus;
+}
+
+
+/**
+  * @brief  MCPWM中断状态清除
+  * @param  uTimeNode 定时器节点
+  * @param  uIntModeMask 中断模式掩码(可以多种模式'与'后入参)
+  * @retval None
+  */
+void HW_TIM_ClearITStatus(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uIntModeMask)
+{
+    if (uIntModeMask & HW_TIM_INT_MATCH)
+    {
+        Chip_TIMER_ClearMatch(TIM[uTimeNode], uChannelNum);
+    }
+    if (uIntModeMask & HW_TIM_INT_CAPTURE)
+    {
+        Chip_TIMER_ClearCapture(TIM[uTimeNode], uChannelNum);
+    }
+}
 

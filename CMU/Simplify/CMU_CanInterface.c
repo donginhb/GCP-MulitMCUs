@@ -41,7 +41,7 @@
   
 /***********************************<INCLUDES>**********************************/
 #include "CMU_CanInterface.h"
-#include "../ProtocolLayer/ComDataStructDef.h"
+#include "CMU_DataStructDef.h"
 #include "DataType/DataType.h"
 
 #include <string.h>

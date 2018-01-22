@@ -51,10 +51,10 @@ void PWM_SetOutputPwmFrq(uBit8 uPwmNode, uBit32 ulFrequency);
 /**
   * @brief  PWM输出使能
   * @param  uPwmNode PWM节点
-  * @param  bIsEnablle PWM使能位
+  * @param  bIsEnable PWM使能位
   * @retval None
   */
-void PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnablle);
+void PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnable);
 
 
 #ifdef __cplusplus

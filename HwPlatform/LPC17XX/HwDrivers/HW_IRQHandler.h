@@ -101,6 +101,14 @@ typedef enum
     LPC_IRQ_TRG_TIME2,
     LPC_IRQ_TRG_TIME3,
     
+    //MCPWM
+    LPC_IRQ_TRG_MCPWM0,
+    LPC_IRQ_TRG_MCPWM1,
+    LPC_IRQ_TRG_MCPWM2,
+    
+    //PWM
+    LPC_IRQ_TRG_PWM0,
+    
 }LPC_IRQ_TRIGGER_SOURCE;
 
 

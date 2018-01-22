@@ -84,10 +84,10 @@ uint16_t HW_PWM_GetOutputAutoReloadValue(uint8_t uPwmNode);
 /**
   * @brief  PWM输出使能
   * @param  uPwmNode PWM节点
-  * @param  bIsEnablle PWM使能位
+  * @param  bIsEnable PWM使能位
   * @retval None
   */
-void HW_PWM_OutputEnable(uint8_t uPwmNode, bool bIsEnablle);
+void HW_PWM_OutputEnable(uint8_t uPwmNode, bool bIsEnable);
 
 
 #ifdef __cplusplus

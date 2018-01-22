@@ -17,7 +17,7 @@
 /***********************************<INCLUDES>**********************************/
 #include <string.h>
 #include "AbstractionLayer.h"
-//#include "CMU_CanInterface.h"
+#include "CMU_CanInterface.h"
 //#include "CMU_EnetInterface.h"
 #include "CMU_UartInterface.h"
 #include "CMU_ErrorMana.h"
@@ -88,13 +88,13 @@ uBit32 COM_AL_Open(uBit32 ulComType)
     //校验接口是否挂接
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         if (!CMU_CAN_CheckInterfaceValid())
         {
             return CMU_ERR_CONNECT;
         }
         break;
+#if 0
     case COM_TYPE_ENET:
         if (!CMU_ENET_CheckInterfaceValid())
         {
@@ -114,10 +114,10 @@ uBit32 COM_AL_Open(uBit32 ulComType)
     //关闭已经建立的连接
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         CMU_CAN_Close();
         break;
+#if 0
     case COM_TYPE_ENET:
         CMU_ENET_Close();
         break;
@@ -134,10 +134,10 @@ uBit32 COM_AL_Open(uBit32 ulComType)
     //打开新的通信连接
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         ulRet = CMU_CAN_Open();
         break;
+#if 0
     case COM_TYPE_ENET:
         ulRet = CMU_ENET_Open();
         break;
@@ -176,11 +176,10 @@ uBit32 COM_AL_GetComType(void)
   */
 BooLean COM_AL_IsComTypeValid(uBit32 ulComType)
 {
-#if 0
     if (m_ulComType==COM_TYPE_CAN && 
         (m_ucComInvalidFlag &= COM_CAN_VALID_MASK)==COM_CAN_VALID_MASK)
         return true;
-
+#if 0
     if (m_ulComType==COM_TYPE_ENET && 
         (m_ucComInvalidFlag &= COM_ENET_VALID_MASK)==COM_ENET_VALID_MASK)
         return true;
@@ -202,10 +201,10 @@ void COM_AL_Close(void)
 {
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         CMU_CAN_Close();
         break;
+#if 0
     case COM_TYPE_ENET:
         CMU_ENET_Close();
         break;
@@ -229,9 +228,10 @@ uBit32 COM_AL_GetPack(COM_DATA_PACK* pDataPack)
 {
     switch(m_ulComType)
     {
-#if 0
+
     case COM_TYPE_CAN:
         return CMU_CAN_GetPack(&pDataPack->ulID.ulFrameID, &pDataPack->pDataBuf, &pDataPack->ulDataLen);
+#if 0
     case COM_TYPE_ENET:
         return CMU_ENET_GetPack(&pDataPack->ulID.ulFrameID, &pDataPack->pDataBuf, &pDataPack->ulDataLen);
 #endif
@@ -255,9 +255,9 @@ uBit32 COM_AL_SendPack(uBit32 ulID, uBit8* pDataBuf, uBit32 ulDataBufLen)
 {
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         return CMU_CAN_SendPack(ulID, pDataBuf, ulDataBufLen);
+#if 0
     case COM_TYPE_ENET:
         return CMU_ENET_SendPack(ulID, pDataBuf, ulDataBufLen);
 #endif
@@ -279,9 +279,9 @@ uBit32 COM_AL_GetMaxSendLen(void)
 {
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         return CMU_CAN_GetMaxSendLen();
+#if 0
     case COM_TYPE_ENET:
         return CMU_ENET_GetMaxSendLen();
 #endif
@@ -305,9 +305,9 @@ uBit32 COM_AL_GetMaxSendPacks(void)
 {
     switch(m_ulComType)
     {
-#if 0
     case COM_TYPE_CAN:
         return COM_CAN_MAX_PACK_PER_TIME;
+#if 0
     case COM_TYPE_ENET:
         return COM_ENET_MAX_PACK_PER_TIME;
 #endif
@@ -329,10 +329,11 @@ void COM_AL_RcvHandle(void)
 {
     switch(m_ulComType)
     {
-#if 0
+
     case COM_TYPE_CAN:
         CMU_CAN_RecvHandler();
         break;
+#if 0
     case COM_TYPE_ENET:
         CMU_ENET_RecvHandler();
         break;

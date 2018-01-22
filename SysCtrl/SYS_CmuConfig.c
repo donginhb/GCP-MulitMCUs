@@ -18,6 +18,7 @@
 #include "SYS_CmuConfig.h"
 #include "SYS_Ctrl.h"
 #include "SysConfig.h"
+#include "SYS_ParmMan.h"
 #include "DataType/DataType.h"
 
 #if SYS_USING_SIMP_CMU
@@ -47,15 +48,20 @@
 #include "SysPeripheral/IRQ/IRQ_Man.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include "SysPeripheral/UART/UART.h"
+#include "SysPeripheral/CAN/CAN.h"
 
 #include <stdlib.h>
-
+#include <string.h>
 
 /*****************************************************************************
- * CMU 初始化相关接口
+ * CMU扩展函数相关控制接口
  ****************************************************************************/
 
+#if SYS_USING_FULL_CMU || SYS_USING_SIMP_CMU
+
 #if SYS_USING_FULL_CMU
+
+
 static uBit8 m_CmuBuff[SYS_CMU_BUFF_SIZE] = {0};    //CMU缓冲区定义
 
 
@@ -66,28 +72,6 @@ static uBit32 SYS_InitCmuBuff(void)
     
     return 0;
 }
-
-
-//CMU 通信接口初始化
-static uBit32 SYS_InitCmuUartInterface(void)
-{
-    //配置通信接口
-    CMU_UART_INTERFACE CmuUartInterface = {0};
-    
-    CmuUartInterface.pf_UART_Open = UART_Open;
-    CmuUartInterface.pf_UART_Close = UART_Close;
-    CmuUartInterface.pf_UART_SendBuff = UART_SendBuff;
-    CmuUartInterface.pf_UART_RecvBuff = UART_RecvBuff;
-    CmuUartInterface.pf_UART_RecvHandler = UART_RecvHandler;
-    
-    CMU_UART_SetInterface(UART_NODE_0, &CmuUartInterface);
-    
-    //初始化通信接口
-    UART_Init(SYS_CMU_COM_NODE, 115200);
-    
-    return 0;
-}
-
 
 static uBit32 SYS_InitCmuFunTable(void)
 {
@@ -251,13 +235,6 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_CSM_ProgArcR = CSM_ProgArcR;
     CMUFunTable.pf_CSM_ProgArcPT = CSM_ProgArcPT;
     
-    //--------------------------------------------寄存器模块------------------------------------------------
-#if 0
-    CMUFunTable.pf_UREG_SetRegData = UREG_SetRegData;
-    CMUFunTable.pf_UREG_GetRegData = UREG_GetRegData;
-#endif
-    //--------------------------------------------错误管理模块------------------------------------------------
-    
     CMUFunTable.pf_ECM_GetErrorCode = ECM_GetErrorCode;
     
 #endif
@@ -269,28 +246,17 @@ static uBit32 SYS_InitCmuFunTable(void)
     return 0;
 }
 
+#endif
 
-/**
-  * @brief  CMU初始化
-  * @param  None
-  * @retval 0-成功 非0-失败
-  */
-uBit32 SYS_InitCMU(void)
-{
-    SYS_InitCmuBuff();
-    SYS_InitCmuFunTable();
-    SYS_InitCmuUartInterface();
-    CMU_Init(COM_TYPE_UART);
-    
-    return 0;
-}
 
-#elif SYS_USING_SIMP_CMU
-
+/*****************************************************************************
+ * CMU通信端口相关控制接口
+ ****************************************************************************/
+static SYS_USER_CMU_DATA *m_sys_pCmuData = NULL;    //CMU配置参数定义
 
 
 //CMU 通信接口初始化
-static uBit32 SYS_InitCmuUartInterface(void)
+static uBit32 SYS_InitCmuUartInterface(uBit8 uUartNode, uBit32 ulBaudRate)
 {
     //配置通信接口
     CMU_UART_INTERFACE CmuUartInterface = {0};
@@ -301,36 +267,93 @@ static uBit32 SYS_InitCmuUartInterface(void)
     CmuUartInterface.pf_UART_RecvBuff = UART_RecvBuff;
     CmuUartInterface.pf_UART_RecvHandler = UART_RecvHandler;
     
-    CMU_UART_SetInterface(UART_NODE_0, &CmuUartInterface);
+    CMU_UART_SetInterface(uUartNode, &CmuUartInterface);
     
     //初始化通信接口
-    UART_Init(SYS_CMU_COM_NODE, 115200);
+    UART_Init(uUartNode, ulBaudRate);
     
     return 0;
 }
 
-#if 0
-static uBit32 SYS_InitCmuFunTable(void)
+
+/**
+  * @brief  CAN数据包发送(非阻塞)
+  * @param  uCanNode CAN节点号
+  * @param  pSBuff 数据缓冲区地址
+  * @param  nSize 发送的数量
+  * @retval 0-成功 非0-失败
+  */
+static uBit32 CAN_SendPack(uBit8 uCanNode, uBit32 ulID, uBit8 *pSBuff, uBit32 ulSize)
 {
-    CMU_EXTERNAL_FUN_TEBLE CMUFunTable = {0};
+    //判断参数
+    if (ulSize > CAN_DATA_MAX_LEN)
+    {
+        return 1;
+    }
     
-    //--------------------------------------------系统管理模块------------------------------------------------
+    //拼装数据
+    CAN_FRAME_T CanFrame = {0};
+    CanFrame.ulID = ulID & CAN_MAX_EXT_ID;
+    CanFrame.uType = CAN_TYPE_EXT_FRAME;
+    CanFrame.uDLC = ulSize;
+    memcpy(CanFrame.uData, pSBuff, ulSize);
     
-    //系统控制接口
-    CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSubAPP;
-    CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateAPP;
-    CMUFunTable.pf_SYS_GetSLCVersion = SYS_GetSLCVersion;
-    CMUFunTable.pf_SYS_Reset = CoreCtrl_ResetSystemNow;
-    //CMUFunTable.pf_SYS_WriteSLCProgID = BOOT_WriteSLCProgID;
+    //发送数据包
+    uBit32 ulRet = CAN_Write(uCanNode, &CanFrame, 1, false);
     
-    CMU_SetExternFun(&CMUFunTable);
+    return ulRet;
+}
+
     
-    CMU_InitExApi();
+/**
+  * @brief  CAN数据包(非阻塞)
+  * @param  uCanNode CAN节点号
+  * @param  pRBuff 要接收的缓冲区
+  * @param  ulSize 要接收的数据长度
+  * @retval 0-成功 非0-失败
+  */
+static uBit32 CAN_RecvPack(uBit8 uCanNode, uBit32 *pID, uBit8 *pRBuff, uBit32 *pSize)
+{
+    CAN_FRAME_T CanFrame = {0};
+    
+    //接收数据
+    if (CAN_Recv(uCanNode, &CanFrame, 1) == 1)
+    {
+        //提取数据
+        *pID = CanFrame.ulID;
+        *pSize = CanFrame.uDLC;
+        memcpy(pRBuff, CanFrame.uData, CanFrame.uDLC);
+        
+        return 0;
+    }
+    
+    return 1;
+}
+
+//CMU 通信接口初始化
+static uBit32 SYS_InitCmuCanInterface(uBit8 uCanNode, uBit32 ulBaudRate)
+{
+    //配置通信接口
+    CMU_CAN_INTERFACE CmuCanInterface = {0};
+    
+    CmuCanInterface.pf_CAN_Open = CAN_Open;
+    CmuCanInterface.pf_CAN_Close = CAN_Close;
+    CmuCanInterface.pf_CAN_RecvHandler = CAN_MainHandler;
+    CmuCanInterface.pf_CAN_SendPack = CAN_SendPack;
+    CmuCanInterface.pf_CAN_RecvPack = CAN_RecvPack;
+    
+    CMU_CAN_SetInterface(uCanNode, &CmuCanInterface);
+    
+    //初始化通信接口
+    CAN_Init(uCanNode, ulBaudRate);
     
     return 0;
 }
-#endif
 
+
+/*****************************************************************************
+ * CMU配置相关控制接口
+ ****************************************************************************/
 
 /**
   * @brief  CMU初始化
@@ -339,13 +362,74 @@ static uBit32 SYS_InitCmuFunTable(void)
   */
 uBit32 SYS_InitCMU(void)
 {
-    //SYS_InitCmuFunTable();
-    SYS_InitCmuUartInterface();
-    CMU_Init(COM_TYPE_UART);
+    //获取CMU配置参数
+    m_sys_pCmuData = SYS_GetCmuConfigParm();
+    
+#if SYS_USING_FULL_CMU
+    SYS_InitCmuBuff();
+    SYS_InitCmuFunTable();
+#endif
+    
+    if (m_sys_pCmuData->ulComMode == COM_TYPE_UART)
+    {
+        SYS_InitCmuUartInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode, 
+                                 m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
+        CMU_Init(COM_TYPE_UART);
+    }
+    else if (m_sys_pCmuData->ulComMode == COM_TYPE_CAN)
+    {
+        SYS_InitCmuCanInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode,
+                                m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
+        CMU_Init(COM_TYPE_CAN);
+    }
     
     return 0;
 }
 
+
+/**
+  * @brief  CMU通信端口设置
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_SetCmuCom(uBit32 ulComMode, uBit8 uComNode, uBit32 ulBaudRate)
+{
+    //设置参数
+    m_sys_pCmuData->ulComMode = ulComMode;
+    m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode = uComNode;
+    m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate = ulBaudRate;
+    
+    //存储参数
+    uBit32 ulRet = SYS_StoreParmToFLash();
+    
+    return ulRet;
+}
+
+
+/**
+  * @brief  CMU默认串口通信设置
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_SetCmuDefUartCom(void)
+{
+    uBit32 ulRet = SYS_SetCmuCom(COM_TYPE_UART, SYS_CMU_DEF_UART_NODE, SYS_CMU_DEF_UART_BAUDRATE);
+    
+    return ulRet;
+}
+
+
+/**
+  * @brief  CMU默认CAN通信设置
+  * @param  None
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_SetCmuDefCanCom(void)
+{
+    uBit32 ulRet = SYS_SetCmuCom(COM_TYPE_CAN, SYS_CMU_DEF_CAN_NODE, SYS_CMU_DEF_CAN_BAUDRATE);
+    
+    return ulRet;
+}
 
 
 #endif //SYS_USING_FULL_CMU

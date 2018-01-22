@@ -25,8 +25,8 @@
  * SysTick 时间管理
  ****************************************************************************/
 
-static uint32_t m_ulSysTickTime  = 1.0;   //系统滴答间隔(单位:MS)
-static uint32_t m_ulSysTickCount = 0.0;   //系统滴答计数
+static uint32_t m_ulSysTickTime  = 1;   //系统滴答间隔(单位:MS)
+static uint32_t m_ulSysTickCount = 0;   //系统滴答计数
 
 /**
   * @brief  滴答时间设置

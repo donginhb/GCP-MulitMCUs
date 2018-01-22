@@ -2,6 +2,7 @@
 #define __CMU_INTERFACE_H
 
 #include "CMU/Simplify/CMU_UartInterface.h"
+#include "CMU/Simplify/CMU_CanInterface.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -20,6 +21,15 @@ extern "C"
   * @retval 0-成功 非0-失败
   */
 uBit32 CMU_UART_SetInterface(uBit8 uUartNode, CMU_UART_INTERFACE *pUartInterface);
+
+
+/**
+  * @brief  CMU UART 接口设置
+  * @param  uCanNode CAN节点
+  * @param  pCanInterface CAN接口指针
+  * @retval 0-成功 非0-失败
+  */
+uBit32 CMU_CAN_SetInterface(uBit8 uCanNode, CMU_CAN_INTERFACE *pCanInterface);
 
 
 /*****************************************************************************

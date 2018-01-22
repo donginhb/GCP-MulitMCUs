@@ -2164,6 +2164,12 @@
       <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.h</name>
+      </file>
     </group>
     <file>
       <name>$PROJ_DIR$\..\..\Application\SLCVersion.h</name>
@@ -2682,12 +2688,6 @@
       <name>$PROJ_DIR$\..\..\HAL\HAL_Pwm.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\HAL\HAL_PwmCount.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\HAL\HAL_PwmCount.h</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Spi.c</name>
     </file>
     <file>
@@ -3031,22 +3031,16 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_SysTick.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeInput.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeInput.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeOutput.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeOutput.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Uart.c</name>
@@ -3130,6 +3124,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_MemoryDef.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SysConfig.h</name>

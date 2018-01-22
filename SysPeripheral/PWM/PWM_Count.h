@@ -28,10 +28,10 @@ void PWM_InputCountInit(uBit8 uTimeNode, uBit8 uChannelMask);
 /**
   * @brief  PWM使能
   * @param  uTimeNode PWM节点
-  * @param  bIsEnablle PWM使能位
+  * @param  bIsEnable PWM使能位
   * @retval None
   */
-void PWM_InputCountEnable(uBit8 uTimeNode, bool bIsEnablle);
+void PWM_EnableInputCount(uBit8 uTimeNode, bool bIsEnable);
 
 
 /**

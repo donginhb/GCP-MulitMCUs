@@ -23,6 +23,8 @@
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
 
+#include "SysCtrl/SYS_CmuConfig.h"
+
 #include "CMU/CMU_Interface.h"
 #include "CMU/CMU_DataStructDef.h"
 #include "CMU/ProtocolLayer/CMU_ExApi.h"
@@ -31,52 +33,47 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 
+#include <string.h>
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
 #define GCP_CAN_MASTER_MODE                 (1)
-#define GCP_CAN_COM_INTERVAL                (1000)  //CAN通信间隔(MS)
 
-#if 0
+#define GCP_CAN_COM_INTERVAL                (100)  //CAN通信间隔(MS)
+
 void GCP_CanMainProc(void)
 {
-#if GCP_CAN_MASTER_MODE
-    
-    static uBit8 uData = 0;
     static SYS_TIME_DATA m_CanCtrlTimer       = {1};    //CAN通信定时器
     
     if (SysTime_CheckExpiredState(&m_CanCtrlTimer))
     {
+        static uBit8 uStatus = 0;
+        
+        uBit8 uSetCmdBuff[8] = {0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00};
+        uBit8 uResetCmdBuff[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         SysTime_StartOneShot(&m_CanCtrlTimer, GCP_CAN_COM_INTERVAL); //设置下一次执行的时间
         
-        uData++;
-        
         CAN_FRAME_T CanSendFrame = {0};
-        CanSendFrame.ulID = 0x34 ;
-        CanSendFrame.uDLC = 1;
-        CanSendFrame.uData[0] = uData;
+        CanSendFrame.ulID = 0x110000C6 ;
+        CanSendFrame.uDLC = 8;
         CanSendFrame.uType = CAN_TYPE_EXT_FRAME;
+        
+        if (uStatus)
+        {
+            memcpy(CanSendFrame.uData, uSetCmdBuff, 8);
+        }
+        else 
+        {
+            memcpy(CanSendFrame.uData, uResetCmdBuff, 8);
+        }
+        
+        uStatus = !uStatus;
         
         CAN_Write(GCP_CAN_DEF_NODE, &CanSendFrame, 1, false);
     }
     
-#else 
-    
-    CAN_FRAME_T CanRecvFrame = {0};
-    
-    if (CAN_Recv(GCP_CAN_DEF_NODE, &CanRecvFrame, 1) == 1)
-    {
-        if (((CanRecvFrame.ulID & CAN_EXT_ID_MASK) == 0x34) && (CanRecvFrame.uType & CAN_TYPE_EXT_FRAME))
-        {
-            GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
-        }
-    }
-    
-#endif
-    
 }
-#endif
 
 
 /*****************************************************************************
@@ -90,6 +87,9 @@ void GCP_CanMainProc(void)
   */
 void GCP_Init(void)
 {
+    //SYS_SetCmuCom(1, 0, 500000);
+    //SYS_SetCmuCom(4, 0, 115200);
+    
     //初始化硬件
     GCP_HwInit();
     
@@ -106,9 +106,6 @@ void GCP_MainProc(void)
 #if GCP_CAN_MASTER_MODE
     //LED显示
     GCP_ShowMainWorkLed();
-#endif
-    
-#if 0
     GCP_CanMainProc();
 #endif
     

@@ -2,7 +2,7 @@
 
 
 LPC17XX平台 
-1. 电机PWM模块输出模式驱动(HW_Mcpwm.c)
+1. 电机PWM模块输出模式驱动(HW_Mcpwm.c 已完成)
 2. PWM,定时器,电机PWM捕获功能的驱动(HW_TimeCapture)
 3. CAN 模块的位过滤功能实现
 4. DAC功能驱动
@@ -11,7 +11,7 @@ LPC17XX平台
 
 
 LPC43XX平台 
-1. 电机PWM模块输出模式驱动(HW_Mcpwm.c)
+1. 电机PWM模块输出模式驱动(HW_Mcpwm.c 已完成)
 2. 定时器,电机PWM捕获功能的驱动(HW_TimeCapture)
 3. DAC功能驱动
 4. 编码器(QEI)驱动
@@ -23,7 +23,7 @@ HAL:
 整合pwm,time,mcpwm等模块,完善HAL_Pwm,将其分配到不同的uPwmNode
 假如: mcpwm有2个,pwm有1个,tim有4个,将其划分成不同的uPwmNode:
 uPwmNode0~1,调用mcpwm实现pwm功能,uPwmNode2,调用pwm实现pwm功能.....
-
+(已完成)
 
 应用层: 
 1. CAN环形缓冲应用(完成)

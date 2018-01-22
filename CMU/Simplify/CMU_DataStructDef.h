@@ -64,9 +64,64 @@ typedef struct
 }COM_ID, *P_COM_ID;
 
 
+typedef struct 
+{
+    uBit32 ulOperType:              1;//Bit0        数据操作类型    
+    //DATA_OPRE_TYPE_SET    设置数据
+    //DATA_OPRE_TYPE_GET    获取数据
+
+    uBit32 ulDataType:              3;//Bit1-Bit3 操作数据种类
+    //DATA_TYPE_SYS         系统数据
+    //DATA_TYPE_CRD         坐标系数据
+    //DATA_TYPE_AXIS        轴数据
+    //DATA_TYPE_IO          IO数据
+    //DATA_TYPE_ADDA        ADDA数据
+    //DATA_TYPE_REG         寄存器数据
+    //DATA_TYPE_SERVO       伺服驱动器数据
+
+    uBit32 ulCmdType:               1;//Bit4        指令类型        
+    //SETCMD_TYPE_NOMAL(0)  常规设置指令
+    //SETCMD_TYPE_INQ(1)    周期查询设置指令
+    //GETCMD_TYPE_NOMAL(0)  常规获取指令
+    //GETCMD_TYPE_INQ(1)    周期新数据获取指令
+
+    uBit32 ulCmdIndex:              6;//Bit5-Bit10 指令序号        
+    //系统常规设置指令列表
+    //系统周期查询设置指令列表
+
+    //坐标系常规设置指令列表
+    //坐标系周期查询设置指令列表
+
+    //轴常规设置指令列表
+    //轴周期查询设置指令列表
+
+    //IO常规设置指令列表
+    //IO周期查询设置指令列表
+
+    //ADDA常规设置指令列表
+    //ADDA周期查询设置指令列表
+
+    uBit32 ulDevNo:                 8;//Bit11-Bit18 设备编号(包括电机编号、IO板编号)、轴号、轴屏蔽字
+    uBit32 ulFrameIndex:            4;//Bit19-Bit22 帧索引
+
+    uBit32 ulTransmitFrame:         2;//Bit23-bit24 数据传输帧类别    
+    //TRANSMIT_FIRST_FRAME  该文件开始传送（第一帧）
+    //TRANSMIT_BEING_FRAME  该文件传送中
+    //TRANSMIT_SELF_FRAME   独立发送帧
+    //TRANSMIT_VERIFY_FRAME 校验帧
+
+    uBit32 ulPackIndex:             1;//Bit25       数据包序号        取值：0-BLOCK_INDEX_MAX - 1
+    uBit32 ulErrFlag:               1;//Bit26       下位机出错标志，下位机收到数据包处理时出错回包时置位
+    uBit32 ulPeriodFlag:            1;//Bit27       周期性数据标志，下位机置位
+    uBit32 ulReceiveObj:            1;//Bit28       接收模块屏蔽字,该位为0--上位机接收，1--下位机接收
+    uBit32 ulReserver:              3;//Bit29-Bit31 CAN无效位
+}COM_CAN_ID, *P_COM_CAN_ID;
+
+
 //帧ID类型定义
 typedef union 
 {
+    COM_CAN_ID  ulCanDataID;
     COM_ID      ulComDataID;
     uBit32      ulFrameID;
 }COM_DATA_ID,*P_COM_DATA_ID;
@@ -147,7 +202,7 @@ typedef struct
 
 
 /*****************************************************************************
-* 下位机错误编号定义
+ * 下位机错误编号定义
  ****************************************************************************/
 #define CMU_ERR_SUCCESS                             (0)     //成功
 #define CMU_ERR_CONNECT                             (1)     //表示通信连接出错(接收和发送抽象层硬件出错)
@@ -181,7 +236,7 @@ typedef struct
 
 
 /*****************************************************************************
-* 通信类型定义
+ * 通信类型定义
  ****************************************************************************/
 
 #define COM_TYPE_NULL                               (0)     //没有连接

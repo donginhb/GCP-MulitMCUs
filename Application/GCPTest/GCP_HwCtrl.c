@@ -118,16 +118,6 @@ void GCP_ShowMainWorkLed(void)
         SysTime_StartOneShot(&m_LedCtrlTimer, GCP_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
-        
-        {
-            uBit8 uDisplayBuff[128] = {0};
-            
-            sprintf((char *)uDisplayBuff, "InputCount: %d\r\n", HW_MCPWM_GetCurInputCount(HW_MCPWM_NODE_2));
-            
-            UART_SendStr(0, uDisplayBuff);
-        }
-        
-        
     }
 
 }

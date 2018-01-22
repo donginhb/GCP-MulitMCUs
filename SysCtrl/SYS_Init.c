@@ -18,6 +18,7 @@
 #include "SYS_Init.h"
 #include "SYS_Ctrl.h"
 #include "SysConfig.h"
+#include "SYS_ParmMan.h"
 #include "DataType/DataType.h"
 
 #include "SysPeripheral/SysTimer/SysTimer.h"
@@ -70,6 +71,9 @@ uBit32 SYS_Init(void)
     
     //初始化系统时钟
     SysTime_Init(1, false, 0);
+    
+    //初始化系统参数
+    SYS_InitSysParm();
     
     //初始化Bootloader
     SYS_UPDATE_Init();

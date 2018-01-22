@@ -3,8 +3,6 @@
 
 #include "DataType/DataType.h"
 
-
-
 #ifdef __cplusplus
 extern "C"
 {

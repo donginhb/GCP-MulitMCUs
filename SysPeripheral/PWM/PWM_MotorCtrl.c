@@ -18,7 +18,6 @@
 #include "PWM_MotorCtrl.h"
 #include "DataType/DataType.h"
 #include "HAL/HAL_IRQHandler.h"
-#include "HAL/HAL_PwmCount.h"
 #include "HAL/HAL_Pwm.h"
 
 /*****************************************************************************
@@ -46,10 +45,10 @@ static bool   m_bPwmRunningFlag[MAX_PWM_NODE] = {0};
 static void PWM_Count0_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[0], m_ulPwmCountChannel[0]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[0], m_ulPwmCountChannel[0]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[0], m_ulPwmCountChannel[0]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[0], m_ulPwmCountChannel[0]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(0, false);
@@ -69,10 +68,10 @@ static void PWM_Count0_IRQHandler(void)
 static void PWM_Count1_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[1], m_ulPwmCountChannel[1]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[1], m_ulPwmCountChannel[1]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[1], m_ulPwmCountChannel[1]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[1], m_ulPwmCountChannel[1]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(1, false);
@@ -92,10 +91,10 @@ static void PWM_Count1_IRQHandler(void)
 static void PWM_Count2_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[2], m_ulPwmCountChannel[2]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[2], m_ulPwmCountChannel[2]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[2], m_ulPwmCountChannel[2]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[2], m_ulPwmCountChannel[2]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(2, false);
@@ -115,10 +114,10 @@ extern void AXIS_CountCallBack(void);
 static void PWM_Count3_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[3], m_ulPwmCountChannel[3]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[3], m_ulPwmCountChannel[3]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[3], m_ulPwmCountChannel[3]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[3], m_ulPwmCountChannel[3]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(3, false);
@@ -141,10 +140,10 @@ static void PWM_Count3_IRQHandler(void)
 static void PWM_Count4_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[4], m_ulPwmCountChannel[4]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[4], m_ulPwmCountChannel[4]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[4], m_ulPwmCountChannel[4]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[4], m_ulPwmCountChannel[4]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(4, false);
@@ -157,17 +156,17 @@ static void PWM_Count4_IRQHandler(void)
 
 
 /**
-  * @brief  PWM通道4计数中断处理
+  * @brief  PWM通道5计数中断处理
   * @param  None
   * @retval None
   */
 static void PWM_Count5_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[5], m_ulPwmCountChannel[5]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[5], m_ulPwmCountChannel[5]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[5], m_ulPwmCountChannel[5]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[5], m_ulPwmCountChannel[5]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(5, false);
@@ -180,17 +179,17 @@ static void PWM_Count5_IRQHandler(void)
 
 
 /**
-  * @brief  PWM通道4计数中断处理
+  * @brief  PWM通道6计数中断处理
   * @param  None
   * @retval None
   */
 static void PWM_Count6_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[6], m_ulPwmCountChannel[6]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[6], m_ulPwmCountChannel[6]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[6], m_ulPwmCountChannel[6]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[6], m_ulPwmCountChannel[6]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(6, false);
@@ -203,17 +202,17 @@ static void PWM_Count6_IRQHandler(void)
 
 
 /**
-  * @brief  PWM通道4计数中断处理
+  * @brief  PWM通道7计数中断处理
   * @param  None
   * @retval None
   */
 static void PWM_Count7_IRQHandler(void)
 {
     //判断中断入口
-    if (HAL_TIM_GetInputCountITStatus(m_uPwmCountNode[7], m_ulPwmCountChannel[7]))   
+    if (HAL_PWM_GetInputCountITStatus(m_uPwmCountNode[7], m_ulPwmCountChannel[7]))   
     {
         //清标志位
-        HAL_TIM_ClearInputCountITStatus(m_uPwmCountNode[7], m_ulPwmCountChannel[7]);  
+        HAL_PWM_ClearInputCountITStatus(m_uPwmCountNode[7], m_ulPwmCountChannel[7]);  
         
         //关闭PWM输出
         HAL_PWM_OutputEnable(7, false);
@@ -268,19 +267,18 @@ uBit32 PWM_MotorPulseInit(uBit8 uPwmOutputNode, uBit32 ulOutChNum,
     //存储映射
     m_uPwmCountNode[uPwmOutputNode] = uPwmCountNode;
     m_ulPwmCountChannel[uPwmOutputNode] = ulCountChNum;
-    //m_ulPwmOutputChannel[uPwmOutputNode] = ulOutChNum;
     
     //初始化PWM输出模块
     HAL_PWM_Init(uPwmOutputNode, 0x1<<ulOutChNum);
     
     //初始化PWM计数模块
-    HAL_TIM_InputCountInit(uPwmCountNode, 0x1<<ulCountChNum);
+    HAL_PWM_InitInputCount(uPwmCountNode, 0x1<<ulCountChNum);
     
     //使能计数中断
-    HAL_TIM_EnableInputCountIRQ(uPwmCountNode, ulCountChNum, true);
+    HAL_PWM_EnableInputCountIRQ(uPwmCountNode, ulCountChNum, true);
     
     //设置中断回调
-    HAL_IRQ_SetTrgCallback(pf_PwmCountIrqHandler[uPwmOutputNode], PWM_COUNT_IRQ_BASE+uPwmCountNode);
+    HAL_IRQ_SetTrgCallback(pf_PwmCountIrqHandler[uPwmOutputNode], HAL_PWM_GetIRQTrgSource(uPwmCountNode));
     
     return 0;
 }
@@ -300,10 +298,10 @@ void PWM_SendPulse(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
     }
     
     //设置最大计数
-    HAL_TIM_SetMaxInputCount(m_uPwmCountNode[uPwmOutputNode], m_ulPwmCountChannel[uPwmOutputNode], ulPulseCount);
+    HAL_PWM_SetMaxInputCount(m_uPwmCountNode[uPwmOutputNode], m_ulPwmCountChannel[uPwmOutputNode], ulPulseCount);
     
     //使能计数
-    HAL_TIM_InputCountEnable(m_uPwmCountNode[uPwmOutputNode], true);
+    HAL_PWM_EnableInputCount(m_uPwmCountNode[uPwmOutputNode], true);
     
     //开启PWM
     HAL_PWM_OutputEnable(uPwmOutputNode, true);
@@ -342,7 +340,7 @@ void PWM_SendPulseLimitMs(uBit8 uPwmOutputNode, uBit32 ulPulseCount)
 uBit32 PWM_GetCount(uBit8 uPwmOutputNode)
 {
     
-    return HAL_TIM_GetInputCount(m_uPwmCountNode[uPwmOutputNode]);
+    return HAL_PWM_GetInputCount(m_uPwmCountNode[uPwmOutputNode]);
 }
 
 

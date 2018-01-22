@@ -1348,7 +1348,7 @@ uBit32 Motor_SetAxisBaseCtrlPram(uBit32 ulAxisNo, COM_RCV_CTRL_DATA *pRcvCtrlDat
     sAxisCtrlParm = pAxisCtrlParmAddr[ulAxisNo];
     ulParmType =  *(uBit32*)pRcvCtrlData->pRevBuf;
     
-    float fTempParm = (*(uBit32 *)(&pRcvCtrlData->pRevBuf[4]))/FLOAT_AMP_FACTOR;
+    float fTempParm = (float)(*(uBit32 *)(&pRcvCtrlData->pRevBuf[4]))/FLOAT_AMP_FACTOR;
     
     
     //控制参数检查
