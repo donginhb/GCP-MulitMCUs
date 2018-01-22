@@ -13,6 +13,9 @@
   <project>
     <path>$WS_DIR$\GCP-STM32F10X\GCP-STM32F10X.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\GCP-STM32F0XX\GCP-STM32F0XX.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 

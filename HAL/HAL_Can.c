@@ -17,8 +17,12 @@
 /***********************************<INCLUDES>**********************************/
 #include "HAL_Can.h"
 #include "DataType/DataType.h"
-#include "HwDrivers/HW_Can.h"   
 #include <string.h>
+
+#if defined(LPC17XX)
+#include "HwDrivers/HW_Can.h"  
+#endif
+
 
 /*****************************************************************************
  * 私有成员定义及实现

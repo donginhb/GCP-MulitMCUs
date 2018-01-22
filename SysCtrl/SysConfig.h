@@ -35,6 +35,14 @@
 #define SYS_USING_FULL_CMU      (0)     //使用完全版本的CMU
 #define SYS_USING_CNC           (0)     //使用CNC模块
 
+#elif defined(STM32F0XX)
+
+#define SYS_USING_BOOT          (0)     //使用Bootloader
+#define SYS_USING_SIMP_CMU      (0)     //使用精简版本的CMU
+#define SYS_USING_FULL_CMU      (0)     //使用完全版本的CMU
+#define SYS_USING_CNC           (0)     //使用CNC模块
+
+
 #endif 
 
 #endif //#ifdef BOOTLOADER ... #else ...
@@ -123,7 +131,12 @@
 
 #define CNC_SRAM_BUFF_ADDR      (0)
 
+#elif defined(STM32F0XX)
+
+#define CNC_SRAM_BUFF_ADDR      (0)
+
 #endif
+
 
 
 #endif //SYS_USING_CNC

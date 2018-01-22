@@ -48,6 +48,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
+#if defined(LPC17XX)
 //LPC17XX PWM模块定义
 #define HAL_LPC17XX_MCPWM_NODE_COUNT        (3)
 #define HAL_LPC17XX_TIMER_NODE_COUNT        (4)
@@ -121,7 +122,7 @@ static uBit8 HAL_PWM_GetModuleIndex(uBit8 uPwmNode)
     
     return uModuleIndex;
 }
-
+#endif
 
 /*****************************************************************************
  * PWM 输出相关控制接口
