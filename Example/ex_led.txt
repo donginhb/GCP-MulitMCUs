@@ -1,0 +1,40 @@
+
+
+/*****************************************************************************
+ * LED初始化
+ ****************************************************************************/
+ 
+ /**
+  * @brief  系统硬件初始化
+  * @param  None
+  * @retval None
+  */
+void GCP_HwInit(void)
+{
+    //初始化IO
+    GCP_IOConfig();
+    
+}
+
+
+/*****************************************************************************
+ * LED显示线程接口
+ ****************************************************************************/
+#define GCP_LED_TOGGLE_TIME             (100)            //LED翻转时间(MS)
+static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
+
+/**
+  * @brief  LED 流水灯循环
+  * @param  None
+  * @retval None
+  */
+void GCP_ShowMainWorkLed(void)
+{
+    if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
+    {
+        SysTime_StartOneShot(&m_LedCtrlTimer, GCP_LED_TOGGLE_TIME); //设置下一次执行的时间
+        
+        GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
+    }
+
+}

@@ -200,7 +200,7 @@ static uBit32 WFC_GetBaseClockForJson(char const *pJsonPack, char *pKey, char *p
 /*****************************************************************************
  * 网络参数接口获取解析相关接口
  ****************************************************************************/
-#define WFC_CLOCK_UPDATE_TIME          (24 * 60 * 60 * 1000)    //更新时间(MS)
+#define WFC_CLOCK_UPDATE_TIME          (3 * 60 * 60 * 1000)    //更新时间(MS)
 static SYS_TIME_DATA m_UpdateClockTimer  = {0};    //网络更新定时器
 
 static uBit8 m_uWeatherJsonPack[512] = {0}; //天气JSON包(字符串)

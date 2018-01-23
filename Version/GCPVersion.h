@@ -8,7 +8,12 @@
   ******************************************************************************
   * @attention
   * 
-  * 当前版本: GC10_0_12_D
+  * 当前版本: GC10_0_13_D
+  * 
+  * 系统版本: GC10_0_13_D
+  * 修改时间: 2018.01.17
+  * 修改描述: 1.增加系统模块配置的裁剪功能;
+  *           2.Bootloader CAN升级实现;
   * 
   * 系统版本: GC10_0_12_D
   * 修改时间: 2018.01.17
@@ -88,9 +93,9 @@
 //APP版本定义
 #define GCP_VER_STR                     "GC10XXXX"      //项目版本
 #define GCP_VER_NO0                     (0)             //大版本号
-#define GCP_VER_NO1                     (12)             //小版本号
+#define GCP_VER_NO1                     (13)             //小版本号
 #define GCP_VER_PART                    (0)             //组件号(预留)
 #define GCP_VER_FLAG                    'D'             //版本标示
 
 
-#endif /* __SCL_VERSION_H */
+#endif /* __GCP_VERSION_H */

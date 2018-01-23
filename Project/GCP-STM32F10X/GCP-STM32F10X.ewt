@@ -2192,9 +2192,6 @@
         <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_WifiCom.h</name>
       </file>
     </group>
-    <file>
-      <name>$PROJ_DIR$\..\..\Application\SLCVersion.h</name>
-    </file>
   </group>
   <group>
     <name>CMU</name>

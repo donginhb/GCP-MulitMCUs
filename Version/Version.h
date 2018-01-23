@@ -3,8 +3,7 @@
 
 #include "DataType/DataType.h"
 #include "GCPVersion.h" 
-#include "Application/SLCVersion.h"
-
+#include "Application/Application.h"
 
 //软件版本特殊标示
 #define SYS_FLAG_DEBUG                  'D'             //内部测试版本

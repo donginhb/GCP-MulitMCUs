@@ -82,7 +82,3 @@ void HAL_DelayMs(uBit32 ulMs)
     
 }
 
-
-
-
-

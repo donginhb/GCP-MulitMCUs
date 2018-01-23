@@ -1,0 +1,54 @@
+
+
+/*****************************************************************************
+ * 按键初始化
+ ****************************************************************************/
+
+/**
+  * @brief  系统硬件初始化
+  * @param  None
+  * @retval None
+  */
+void GCP_HwInit(void)
+{
+    //初始化IO
+    GCP_IOConfig();
+    
+    //初始化按键
+    uBit32 ulKeyPinGourp[] = {INPUT_IO_KEY1, INPUT_IO_KEY2};
+    KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
+    
+}
+
+/*****************************************************************************
+ * 按键扫描线程接口
+ ****************************************************************************/
+
+#define GCP_KEY_SCAN_INTERVAL       (50)         //按键扫描间隔(MS)
+static  SYS_TIME_DATA m_KeyScanTimer = {1};     //扫描定时器
+
+/**
+  * @brief  按键处理
+  * @param  None
+  * @retval None
+  */
+void GCP_KeyProc(void)
+{
+    if (SysTime_CheckExpiredState(&m_KeyScanTimer))
+    {
+        SysTime_StartOneShot(&m_KeyScanTimer, GCP_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
+        
+        uBit32 ulKeyVlue = 0;
+        uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
+        
+        if (ulCurTrg == 1)
+        {
+            FUN_A();
+        }
+        else if (ulCurTrg == 2)
+        {
+            FUN_B();
+        }
+    }
+      
+}

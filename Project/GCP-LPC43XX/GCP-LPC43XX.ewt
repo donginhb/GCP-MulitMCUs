@@ -1071,6 +1071,15 @@
         <name>$PROJ_DIR$\..\..\Algorithm\Json\cJSON.h</name>
       </file>
     </group>
+    <group>
+      <name>RingBuff</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.h</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>Application</name>
@@ -1099,7 +1108,7 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\Application\SLCVersion.h</name>
+      <name>$PROJ_DIR$\..\..\Application\Application.h</name>
     </file>
   </group>
   <group>
@@ -1573,6 +1582,18 @@
       <name>$PROJ_DIR$\..\..\HAL\Demo.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_ADC.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_ADC.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Can.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Can.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Config.h</name>
     </file>
     <file>
@@ -1976,6 +1997,12 @@
       <group>
         <name>HwDrivers</name>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Adc.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Adc.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Eeprom.c</name>
         </file>
         <file>
@@ -2051,7 +2078,7 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Watchdog.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Watchdog.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_WatchDog.h</name>
         </file>
       </group>
       <group>
@@ -2122,6 +2149,12 @@
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_MemoryDef.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_ParmMan.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SysConfig.h</name>
     </file>
   </group>
@@ -2138,6 +2171,21 @@
     </group>
     <group>
       <name>CAN</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanDataStructDef.h</name>
+      </file>
     </group>
     <group>
       <name>CoreCtrl</name>

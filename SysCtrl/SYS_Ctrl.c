@@ -31,6 +31,7 @@
  * 系统版本相关控制接口
  ****************************************************************************/
 
+#if !defined(BOOTLOADER)
 /**
   * @brief  系统逻辑控制版本获取
   * @param  pVersion 版本结构指针
@@ -46,6 +47,7 @@ uBit32 SYS_GetSLCVersion(SOFTWARE_VERSION* pVersion)
     
     return 0;
 }
+#endif 
 
 
 /**

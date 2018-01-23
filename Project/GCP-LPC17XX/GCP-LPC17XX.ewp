@@ -1143,9 +1143,9 @@
         <debug>0</debug>
         <option>
           <name>CCDefines</name>
-          <state>NDEBUG</state>
           <state>CORE_M3</state>
           <state>LPC17XX</state>
+          <state>GCP_APP</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1976,6 +1976,9 @@
         <name>$PROJ_DIR$\..\..\Application\GCPTest\DS_IODef.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_AppVersion.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_HardwareDef.h</name>
       </file>
       <file>
@@ -1994,9 +1997,6 @@
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.c</name>
       </file>
       <file>
@@ -2004,7 +2004,7 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\Application\SLCVersion.h</name>
+      <name>$PROJ_DIR$\..\..\Application\Application.h</name>
     </file>
   </group>
   <group>
@@ -2040,6 +2040,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\CMU\AbstractionLayer\CMU_Unpack.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
       </file>
     </group>
     <group>

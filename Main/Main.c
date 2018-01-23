@@ -16,58 +16,21 @@
   
 /***********************************<INCLUDES>**********************************/
 #include "SysCtrl/SYS_Init.h"
-
-#if defined(LPC17XX)
-#include "Application/GCPTest/GCP_MainProc.h"
-#elif defined(LPC43XX)
-#include "Application/CNMachine/CN_MainProc.h"
-#elif defined(WFC_APP)
-#include "Application/WIFIClock/WFC_MainProc.h"
-#elif defined(MD_APP)
-#include "Application/MotorDriver/MD_MainProc.h"
-#elif defined(BMC_APP)
-#include "Application/BLEMotorCtrl/BMC_MainProc.h"
-#endif
-
+#include "Application/Application.h"
 
 int main(void)
 {
     SYS_Init(); //系统初始化
     
-#if !defined(BOOTLOADER)
-#if defined(LPC17XX)
-    GCP_Init();
-#elif defined(LPC43XX)
-    CN_Init();
-#elif defined(WFC_APP)
-    WFC_Init();
-#elif defined(MD_APP)
-    MD_Init();
-#elif defined(BMC_APP)
-    BMC_Init();
-#endif
-#endif 
-    
+    APP_Init(); //APP初始化
+
     while(1)
     {
         //系统内部管理
         SYS_MainTaskHandler();
         
-        //业务逻辑管理
-#if !defined(BOOTLOADER)
-#if defined(LPC17XX)
-        GCP_MainProc();
-#elif defined(LPC43XX)
-        CN_MainProc();
-#elif defined(WFC_APP)
-        WFC_MainProc();
-#elif defined(MD_APP)
-        MD_MainProc();
-#elif defined(BMC_APP)
-        BMC_MainProc();
-#endif
-#endif
-        
+        //应用逻辑管理
+        APP_MainProc();
     }
     
 } 
