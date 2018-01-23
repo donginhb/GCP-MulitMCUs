@@ -23,7 +23,7 @@ extern "C" {
   * @param  uOutputCfgCode 工作模式
   * @retval None
   */
-void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode);
+void HW_TIM_InitOutput(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode);
 
 
 /**

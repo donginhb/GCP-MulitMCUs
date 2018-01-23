@@ -52,12 +52,12 @@ static const IRQn_Type USART_DMA_IRQn[HW_UART_NODE_NUM] = {DMA1_Channel2_3_IRQn,
 
 
 /* ---定义接收缓冲区--- */
-#define RBUF_SIZE   64      /*** Must be a power of 2 (2,4,8,16,32,64,128,256,512,...) ***/
+#define RBUF_SIZE   (64)    /*** Must be a power of 2 (2,4,8,16,32,64,128,256,512,...) ***/
 uint8_t Uart1_RecvBuff[RBUF_SIZE] = {0};
 uint8_t Uart2_RecvBuff[RBUF_SIZE] = {0};
 
 //环形缓冲区定义
-#define UART_RB_SIZE    (128)
+#define UART_RB_SIZE    (64)
 static RINGBUFF_T m_RxRing[HW_UART_NODE_NUM] = {0};
 static uint8_t    m_uRxBuff[HW_UART_NODE_NUM][UART_RB_SIZE] = {0};
 

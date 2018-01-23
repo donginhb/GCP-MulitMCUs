@@ -43,7 +43,7 @@
 //CAN数量定义
 #define HW_CAN_COUNT       (2)
 
-static CAN_TypeDef * const CAN[HW_CAN_COUNT] = {(CAN_TypeDef *)CAN1_BASE, (CAN_TypeDef *)CAN2_BASE};    //CAN基地址
+//static CAN_TypeDef * const CAN[HW_CAN_COUNT] = {(CAN_TypeDef *)CAN1_BASE, (CAN_TypeDef *)CAN2_BASE};    //CAN基地址
 
 /**
   * @brief  CAN_IO_MUX初始化(选定某组引脚作为CAN的引脚).

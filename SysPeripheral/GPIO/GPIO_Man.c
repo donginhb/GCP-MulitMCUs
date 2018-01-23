@@ -21,6 +21,7 @@
 #include "DataType/DataType.h"
 #include "HAL/HAL_Gpio.H"
 #include "SysPeripheral/SysTimer/SysTimer.h"
+#include "SysCtrl/SysConfig.h"
 #include <string.h>
 
 
@@ -31,18 +32,24 @@
 #define IO_SAMP_INTERVAL        (10)    //采样间隔(MS)
 #define IO_FILTER_COUNT         (IO_FILTER_TIME/IO_SAMP_INTERVAL)   //滤波次数
 
-#define IO_MAX_COUNT            (256)   //最大支持的IO数
+#define IO_MAX_COUNT            (SYS_GPIO_SCAN_GROUP)   //最大支持的IO数
 #define IO_EACH_GROUP_PIN_COUNT (32)    //每组的IO数量
 #define IO_MAX_GROUP            (((IO_MAX_COUNT - 1)/IO_EACH_GROUP_PIN_COUNT) + 1)   //最大支持的组数
 
 static uBit32 m_ulInputStateGroup[IO_MAX_GROUP] = {0};      //输入IO状态
+
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
 static uBit32 m_ulOutputStateGroup[IO_MAX_GROUP] = {0};     //输出IO状态
+#endif
 
 static uBit32 m_ulInputToggleGroup[IO_MAX_GROUP] = {0};     //输入IO翻转标志
 static uBit32 m_ulOutputToggleGroup[IO_MAX_GROUP] = {0};    //输出IO翻转标志
 
 static uBit8  m_uInputChangeCount[IO_MAX_GROUP][IO_EACH_GROUP_PIN_COUNT]  = {0};    //记录每个输入IO的电平改变计数
+
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
 static uBit8  m_uOutputChangeCount[IO_MAX_GROUP][IO_EACH_GROUP_PIN_COUNT] = {0};    //记录每个输出IO的电平改变计数
+#endif
 
 static SYS_TIME_DATA m_IOUpdateTimer = {1};     //IO更新定时器
 GPIO_CTRL_TABLE  g_GpioCtrlTable = {0};         //IO资源配置表
@@ -240,11 +247,13 @@ static uBit32 GPIO_MAN_BuffInit(void)
         m_ulInputStateGroup[i/IO_EACH_GROUP_PIN_COUNT] |= GPIO_GetInputState(i) << (i%IO_EACH_GROUP_PIN_COUNT);
     }
     
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
     //刷新输出IOBuff
     for (int i = 0; i < g_GpioCtrlTable.ulOutputGroupLen; i++)
     {
         m_ulOutputStateGroup[i/IO_EACH_GROUP_PIN_COUNT] = GPIO_GetOutputState(i) << (i%IO_EACH_GROUP_PIN_COUNT);
     }
+#endif
     
     return 0;
 }
@@ -331,11 +340,22 @@ void GPIO_MAN_SetOutputPinLogicToggle(uBit32 ulOutputNO, bool bState)
   */
 bool GPIO_MAN_GetOutputPinState(uBit32 ulIntputNO)
 {
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
     //获取对应IO的状态
     uBit32 ulPinBit = m_ulOutputStateGroup[ulIntputNO/IO_EACH_GROUP_PIN_COUNT] & (0x1<<(ulIntputNO%IO_EACH_GROUP_PIN_COUNT));
     
     //根据m_ulOutputToggleGroup变量决定是否需要翻转逻辑
     ulPinBit ^= m_ulOutputToggleGroup[ulIntputNO/IO_EACH_GROUP_PIN_COUNT] & (0x1<<(ulIntputNO%IO_EACH_GROUP_PIN_COUNT));
+
+#else 
+    
+    //获取对应IO的状态
+    uBit32 ulPinBit = GPIO_GetOutputState(ulIntputNO);
+    
+    //根据m_ulOutputToggleGroup变量决定是否需要翻转逻辑
+    ulPinBit ^= m_ulOutputToggleGroup[ulIntputNO/IO_EACH_GROUP_PIN_COUNT] & (0x1<<(ulIntputNO%IO_EACH_GROUP_PIN_COUNT));
+    
+#endif
     
     //布尔化数据
     return (ulPinBit != 0);
@@ -432,6 +452,7 @@ static void GPIO_MAN_UpdateInputIOState(void)
 }
 
 
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
 /**
   * @brief  输出IO状态更新
   * @param  None
@@ -498,6 +519,7 @@ static void GPIO_MAN_UpdateOutputIOState(void)
     }
 
 }
+#endif
 
 
 /**
@@ -514,8 +536,10 @@ void GPIO_MAN_UpdateProc(void)
         //更新输入IO的电平状态
         GPIO_MAN_UpdateInputIOState();
         
+#if SYS_GPIO_OUTPUT_SCAN_USAGE
         //更新输出IO的电平状态
         GPIO_MAN_UpdateOutputIOState();
+#endif
         
     }
     

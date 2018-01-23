@@ -41,10 +41,12 @@
 #define COM_TYPE_ENET                               (2)     //ENET通信模式
 #define COM_TYPE_UART                               (4)     //UART通信模式
 
-
+#if SYS_PARM_MAN_USAGE
 static SYS_USER_PARM m_sys_ConfigParm = {0};
+#endif
 
 
+#if SYS_PARM_MAN_USAGE
 /**
   * @brief  系统参数获取
   * @param  None
@@ -53,7 +55,7 @@ static SYS_USER_PARM m_sys_ConfigParm = {0};
 static uBit32 SYS_GetSystemParm(void)
 {
     uBit32 ulRet = 1;
-    
+
     for (int i = 0; i < SYS_UPDATE_FLASH_OPERA_RETRY_NUM; i++)
     {
         //获取FLASH中的校验值
@@ -72,9 +74,10 @@ static uBit32 SYS_GetSystemParm(void)
         //延时
         SysTime_DelayMs(50);
     }
-    
+
     return ulRet;
 }
+#endif
 
 
 /*****************************************************************************
@@ -88,11 +91,13 @@ static uBit32 SYS_GetSystemParm(void)
   */
 uBit32 SYS_InitSysParm(void)
 {
+#if SYS_PARM_MAN_USAGE
     if (SYS_GetSystemParm())
     {
         SYS_SetDefaultParm();
         SYS_StoreParmToFLash();
     }
+#endif
     
     return 0;
 }
@@ -105,6 +110,7 @@ uBit32 SYS_InitSysParm(void)
   */
 void SYS_SetDefaultParm(void)
 {
+#if SYS_PARM_MAN_USAGE
     //设置Bootloader默认参数
     m_sys_ConfigParm.BootloaderData.ulMainAppFlag           = 0;        //主APP存在标志
     m_sys_ConfigParm.BootloaderData.ulSubAppFlag            = 0;        //副APP存在标志
@@ -136,6 +142,7 @@ void SYS_SetDefaultParm(void)
     m_sys_ConfigParm.IoConfigTable.ulLedEnable = 0;
     
     m_sys_ConfigParm.ulCrcValue = 0;
+#endif
     
 }
 
@@ -148,6 +155,8 @@ void SYS_SetDefaultParm(void)
 uBit32 SYS_StoreParmToFLash(void)
 {
     uBit32 ulRet = 0;
+    
+#if SYS_PARM_MAN_USAGE
     uBit32 ulWriteCount = 0;    //写入次数
     
 
@@ -186,6 +195,7 @@ uBit32 SYS_StoreParmToFLash(void)
         ulRet = FLASH_Write(FLASH_USER_START_ADDR + i*SYS_UPDATE_FLASH_MIN_WRITE_SIZE, uFlashBuff, SYS_UPDATE_FLASH_MIN_WRITE_SIZE);
         SysTime_DelayMs(10);
     }
+#endif
     
     return ulRet;
 }
@@ -198,8 +208,11 @@ uBit32 SYS_StoreParmToFLash(void)
   */
 SYS_USER_BOOTLOADER_DATE *SYS_GetSysUpadateParm(void)
 {
-    
+#if SYS_PARM_MAN_USAGE
     return &m_sys_ConfigParm.BootloaderData;
+#else 
+    return NULL;
+#endif
 }
 
 
@@ -210,8 +223,11 @@ SYS_USER_BOOTLOADER_DATE *SYS_GetSysUpadateParm(void)
   */
 SYS_USER_CMU_DATA *SYS_GetCmuConfigParm(void)
 {
-    
+#if SYS_PARM_MAN_USAGE
     return &m_sys_ConfigParm.CmuData;
+#else 
+    return NULL;
+#endif
 }
 
 
@@ -222,8 +238,11 @@ SYS_USER_CMU_DATA *SYS_GetCmuConfigParm(void)
   */
 SYS_USER_IO_CFG_DATA *SYS_GetIOConfigTable(void)
 {
-    
+#if SYS_PARM_MAN_USAGE
     return &m_sys_ConfigParm.IoConfigTable;
+#else 
+    return NULL;
+#endif
 }
 
 

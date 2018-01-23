@@ -21,16 +21,16 @@
 #include "SYS_ParmMan.h"
 #include "DataType/DataType.h"
 
-#if SYS_USING_SIMP_CMU
+#if SYS_SIMP_CMU_USAGE
 #include "CMU/Simplify/CMU_Interface.h"
 #include "CMU/Simplify/CMU_DataStructDef.h"
-#elif SYS_USING_FULL_CMU
+#elif SYS_FULL_CMU_USAGE
 #include "CMU/CMU_Interface.h"
 #include "CMU/CMU_DataStructDef.h"
 #include "CMU/ProtocolLayer/CMU_ExApi.h"
 #endif
 
-#if SYS_USING_CNC
+#if SYS_CNC_USAGE
 #include "CNC/CNCSYS/CNCSYS_Interface.h"
 #include "CNC/CSM/CSM_Interface.h"
 #include "CNC/DVM/DEV_Interface.h"
@@ -57,9 +57,9 @@
  * CMU扩展函数相关控制接口
  ****************************************************************************/
 
-#if SYS_USING_FULL_CMU || SYS_USING_SIMP_CMU
+#if SYS_FULL_CMU_USAGE || SYS_SIMP_CMU_USAGE
 
-#if SYS_USING_FULL_CMU
+#if SYS_FULL_CMU_USAGE
 
 
 static uBit8 m_CmuBuff[SYS_CMU_BUFF_SIZE] = {0};    //CMU缓冲区定义
@@ -94,12 +94,12 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_GPIO_GetOutputPinState = GPIO_MAN_GetOutputPinState;
     CMUFunTable.pf_GPIO_GetInputPinState = GPIO_MAN_GetInputPinState;
     
-#if SYS_USING_BOOT
+#if SYS_BOOT_USAGE
     CMUFunTable.pf_SYS_UpdateSLC = SYS_UpdateSubAPP;
     CMUFunTable.pf_SYS_UpdateIPO = SYS_UpdateAPP;
 #endif
     
-#if SYS_USING_CNC
+#if SYS_CNC_USAGE
     
 #if 0
     //升级相关接口
@@ -365,22 +365,32 @@ uBit32 SYS_InitCMU(void)
     //获取CMU配置参数
     m_sys_pCmuData = SYS_GetCmuConfigParm();
     
-#if SYS_USING_FULL_CMU
+#if SYS_FULL_CMU_USAGE
     SYS_InitCmuBuff();
     SYS_InitCmuFunTable();
 #endif
     
-    if (m_sys_pCmuData->ulComMode == COM_TYPE_UART)
+    //校验参数
+    if (m_sys_pCmuData != NULL)
     {
-        SYS_InitCmuUartInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode, 
-                                 m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
-        CMU_Init(COM_TYPE_UART);
+        if (m_sys_pCmuData->ulComMode == COM_TYPE_UART)
+        {
+            SYS_InitCmuUartInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode, 
+                                     m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
+            CMU_Init(COM_TYPE_UART);
+        }
+        else if (m_sys_pCmuData->ulComMode == COM_TYPE_CAN)
+        {
+            SYS_InitCmuCanInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode,
+                                    m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
+            CMU_Init(COM_TYPE_CAN);
+        }
+        
     }
-    else if (m_sys_pCmuData->ulComMode == COM_TYPE_CAN)
+    else 
     {
-        SYS_InitCmuCanInterface(m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode,
-                                m_sys_pCmuData->ComParm.CmuCanUartParm.ulBaudRate);
-        CMU_Init(COM_TYPE_CAN);
+        SYS_InitCmuUartInterface(SYS_CMU_DEF_UART_NODE, 
+                                 SYS_CMU_DEF_UART_BAUDRATE);
     }
     
     return 0;
@@ -432,4 +442,4 @@ uBit32 SYS_SetCmuDefCanCom(void)
 }
 
 
-#endif //SYS_USING_FULL_CMU
+#endif //SYS_FULL_CMU_USAGE

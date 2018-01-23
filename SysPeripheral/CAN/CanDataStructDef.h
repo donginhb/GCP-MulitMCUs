@@ -3,14 +3,15 @@
 
 #include "DataType/DataType.h"
 #include "HAL/HAL_Can.h"
+#include "SysCtrl/SysConfig.h"
 
 //CAN硬件参数定义
 #define CAN_NODE_COUNT                      (2)                         //CAN节点数(每个节点分配一个独立的环形缓存)
 
 
 //CAN缓冲区大小定义
-#define CAN_TX_RING_BUFF_LEN                (8)                         //发送缓冲区深度
-#define CAN_RX_RING_BUFF_LEN                (16)                        //接收缓冲区深度
+#define CAN_TX_RING_BUFF_LEN                (SYS_CAN_TX_BUFF_LEN)       //发送缓冲区深度
+#define CAN_RX_RING_BUFF_LEN                (SYS_CAN_RX_BUFF_LEN)       //接收缓冲区深度
 
 
 //CAN数据类型定义

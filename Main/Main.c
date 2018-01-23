@@ -25,6 +25,8 @@
 #include "Application/WIFIClock/WFC_MainProc.h"
 #elif defined(MD_APP)
 #include "Application/MotorDriver/MD_MainProc.h"
+#elif defined(BMC_APP)
+#include "Application/BLEMotorCtrl/BMC_MainProc.h"
 #endif
 
 
@@ -41,6 +43,8 @@ int main(void)
     WFC_Init();
 #elif defined(MD_APP)
     MD_Init();
+#elif defined(BMC_APP)
+    BMC_Init();
 #endif
 #endif 
     
@@ -59,6 +63,8 @@ int main(void)
         WFC_MainProc();
 #elif defined(MD_APP)
         MD_MainProc();
+#elif defined(BMC_APP)
+        BMC_MainProc();
 #endif
 #endif
         

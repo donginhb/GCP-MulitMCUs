@@ -132,7 +132,7 @@
         </option>
         <option>
           <name>OGUseCmsis</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>OGUseCmsisDspLib</name>
@@ -182,6 +182,7 @@
         <option>
           <name>CCDefines</name>
           <state>STM32F0XX</state>
+          <state>BMC_APP</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -242,7 +243,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000000</state>
+          <state>10010100</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -335,7 +336,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -344,7 +345,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -702,7 +703,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -989,75 +990,39 @@
   <group>
     <name>Application</name>
     <group>
-      <name>MotorDriver</name>
+      <name>BLEMotorCtrl</name>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD103_IODef.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC030_IODef.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD103_IODef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC030_IODef.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_ComMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_Comman.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_Comman.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HardwareDef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HardwareDef.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HwCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HwCtrl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HwCtrl.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HwCtrl.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_MainProc.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MainProc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_MainProc.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MainProc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_MotorCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MotorCtrl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_MotorCtrl.h</name>
-      </file>
-    </group>
-    <group>
-      <name>WIFIClock</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC103_IOTable.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC103_IOTable.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_HardwareDef.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_HwCtrl.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_HwCtrl.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_MainProc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_MainProc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_WifiClock.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_WifiClock.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_WifiCom.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\WIFIClock\WFC_WifiCom.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MotorCtrl.h</name>
       </file>
     </group>
     <file>

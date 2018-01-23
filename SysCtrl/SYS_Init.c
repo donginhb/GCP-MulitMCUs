@@ -28,21 +28,21 @@
 #include "SysUpdate/SysUpdate.h"
 #include <stdlib.h>
 
-#if SYS_USING_FULL_CMU
+#if SYS_FULL_CMU_USAGE
 #include "SYS_CmuConfig.h"
 #include "CMU/CMU_Interface.h"
-#elif SYS_USING_SIMP_CMU
+#elif SYS_SIMP_CMU_USAGE
 #include "SYS_CmuConfig.h"
 #include "CMU/Simplify/CMU_Interface.h"
 #include "CMU/Simplify/CMU_DataStructDef.h"
 #endif
 
-#if SYS_USING_CNC
+#if SYS_CNC_USAGE
 #include "SYS_CncConfig.h"
 #include "CNC/CNCSYS/CNCSYS_Interface.h"
 #endif
       
-#if SYS_USING_BOOT
+#if SYS_BOOT_USAGE
 #include "CMU/Simplify/CMU_CmdProcess.h"
 #include "SysUpdate/Bootloader.h"
 #endif
@@ -78,17 +78,17 @@ uBit32 SYS_Init(void)
     //初始化Bootloader
     SYS_UPDATE_Init();
     
-#if SYS_USING_BOOT
+#if SYS_BOOT_USAGE
     SYS_UPDATE_JumToApp();
 #endif
     
     //初始化CMU
-#if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU)
+#if (SYS_FULL_CMU_USAGE) || (SYS_SIMP_CMU_USAGE)
     SYS_InitCMU();
 #endif
     
     //初始化CNC
-#if SYS_USING_CNC
+#if SYS_CNC_USAGE
     SYS_InitCNC();
 #endif
     
@@ -114,17 +114,17 @@ void SYS_MainTaskHandler(void)
     CoreCtrl_ResetHandler();
     
     //CMU管理
-#if (SYS_USING_FULL_CMU) || (SYS_USING_SIMP_CMU)
+#if (SYS_FULL_CMU_USAGE) || (SYS_SIMP_CMU_USAGE)
     CMU_MainProc();
 #endif
     
     //CNC管理
-#if SYS_USING_CNC
+#if SYS_CNC_USAGE
     CNCSYS_MainCtrl();
 #endif
     
     //Bootloader LED管理
-#if SYS_USING_BOOT
+#if SYS_BOOT_USAGE
     SYS_UPDATE_ShowMainWorkLed();
 #endif
     

@@ -239,7 +239,7 @@ static void HW_TIM_OutputConfig(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t
   * @param  uOutputCfgCode 工作模式
   * @retval None
   */
-void HW_TIM_OutputInit(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode)
+void HW_TIM_InitOutput(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputMode)
 {
     //引脚配置
     HW_TIM_PortConfig(uTimeNode, uChannelMask, HW_TIME_PORT_OUTPUT);

@@ -108,6 +108,12 @@ uBit32 SYS_UPDATE_Init(void)
     m_sys_pIOConfigTable = SYS_GetIOConfigTable();      //获取IO配置表
     m_sys_pUpdateData = SYS_GetSysUpadateParm();        //获取系统升级参数
     
+    //判断系统参数
+    if ((m_sys_pIOConfigTable == NULL) || (m_sys_pUpdateData == NULL))
+    {
+        return 1;
+    }
+    
     //初始化LED
     if (m_sys_pIOConfigTable->ulLedEnable)
     {

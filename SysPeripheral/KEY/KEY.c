@@ -16,6 +16,7 @@
   
 /***********************************<INCLUDES>**********************************/
 #include "KEY.h"
+#include "SysCtrl/SysConfig.h"
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 #include <string.h>
@@ -25,7 +26,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-#define KEY_MAX_SCAN_NUM        (32)    //最大支持扫描的IO数
+#define KEY_MAX_SCAN_NUM        (SYS_KEY_SCAN_GROUP)    //最大支持扫描的IO数
 
 static uBit32 m_ulSacnPinGourp[KEY_MAX_SCAN_NUM] = {0}; //按键扫描组
 static uBit8  m_uGroupLen = 0;                          //组长度
