@@ -109,7 +109,7 @@ bool HW_GPIO_GetIOState(uint16_t nPort, uint16_t nPin)
   */
 void HW_GPIO_ConfigOD(uint16_t nPort, uint16_t nPin)
 {
-    HW_GPIO_ModeConfig(nPort, nPin, GPIO_GP_OD_H);
+    HW_GPIO_ModeConfig(nPort, nPin, HW_GPIO_GP_OD_H);
     
 }
 
@@ -122,7 +122,7 @@ void HW_GPIO_ConfigOD(uint16_t nPort, uint16_t nPin)
   */
 void HW_GPIO_ConfigInput(uint16_t nPort, uint16_t nPin)
 {
-    HW_GPIO_ModeConfig(nPort, nPin, GPIO_FLOAT);
+    HW_GPIO_ModeConfig(nPort, nPin, HW_GPIO_FLOAT);
     
 }
 
@@ -135,7 +135,23 @@ void HW_GPIO_ConfigInput(uint16_t nPort, uint16_t nPin)
   */
 void HW_GPIO_ConfigOutput(uint16_t nPort, uint16_t nPin)
 {
-    HW_GPIO_ModeConfig(nPort, nPin, GPIO_GP_PP_H);
+    HW_GPIO_ModeConfig(nPort, nPin, HW_GPIO_GP_PP_H);
     
 }
+
+
+/**
+  * @brief  复用模式配置
+  * @param  nPort IO端口号
+  * @param  nPin  IO引脚号
+  * @param  uMode 复用模式
+  * @retval None
+  */
+void HW_GPIO_SetAFMode(uint16_t nPort, uint16_t nPin, uint8_t uMode)
+{
+    GPIOx[nPort]->AFR[nPin/8] &= ~(0xFU<<((nPin%8)*4));
+    GPIOx[nPort]->AFR[nPin/8] |=  ((uMode & 0x0F)<<((nPin%8)*4));
+    
+}
+
 

@@ -19,13 +19,26 @@ extern "C" {
 void HW_SystemReset(void);
 
 
+
+/*****************************************************************************
+ * 系统NVIC相关
+ ****************************************************************************/
+
 /**
-  * @brief  程序跳转
-  * @param  None
+  * @brief  NVIC使能
+  * @param  IRQn 中断号
+  * @param  ulPreemptPrio  优先级
   * @retval None
-  * @note   此函数应用于Bootloader对APP的跳转,APP地址写死为0x70000000
   */
-void HW_JumToApp(void);
+void HW_NVIC_Enable(IRQn_Type IRQn, uint32_t ulPreemptPrio);
+
+
+/**
+  * @brief  禁止对应的内核中断
+  * @param  IRQn 中断号
+  * @retval None
+  */
+void HW_NVIC_DisableIRQ(IRQn_Type IRQn);
 
 
 /**
@@ -43,6 +56,37 @@ void HW_EnableIRQ(void);
   */
 void HW_DisableIRQ(void);
 
+
+/*****************************************************************************
+ * 系统唤醒休眠相关
+ ****************************************************************************/
+
+/**
+  * @brief  系统待机
+  * @param  None
+  * @retval None
+  */
+static void HW_SystemStandby(void);
+
+
+/**
+  * @brief  待机模式进入
+  * @param  None
+  * @retval None
+  */
+void HW_EnterSrandby(void);
+
+
+/*****************************************************************************
+ * 系统JTAG引脚相关
+ ****************************************************************************/
+
+/**
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @retval None
+  */
+void HW_SWJConfig(uint8_t uMode);
 
 
 #ifdef __cplusplus

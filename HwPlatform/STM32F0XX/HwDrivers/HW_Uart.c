@@ -78,26 +78,22 @@ static void HW_UART_IOConfig(uint8_t uUartNode)
     {
     case HW_UART_NODE0:
         // TX: PA9
-        HW_GPIO_ModeConfig(0, 9, GPIO_AF_PP_H);
-        GPIOA->AFR[1]  &= ~(0XFU<<((9-8)*4));
-        GPIOA->AFR[1]  |=  (0X1U<<((9-8)*4));   //USART_TX
+        HW_GPIO_ModeConfig(0, 9, HW_GPIO_AF_PP_H);
+        HW_GPIO_SetAFMode(0, 9, 1);
         
         // RX: PA10
-        HW_GPIO_ModeConfig(0, 10, GPIO_AF_PP_H);
-        GPIOA->AFR[1]  &= ~(0XFU<<((10-8)*4));
-        GPIOA->AFR[1]  |=  (0X1U<<((10-8)*4));  //USART_RX
+        HW_GPIO_ModeConfig(0, 10, HW_GPIO_AF_PP_H);
+        HW_GPIO_SetAFMode(0, 10, 1);
         
         break;                      
     case HW_UART_NODE1:
         // TX: PA2
-        HW_GPIO_ModeConfig(0, 2, GPIO_AF_PP_H);
-        GPIOA->AFR[0]  &= ~(0XFU<<(2*4));
-        GPIOA->AFR[0]  |=  (0X1U<<(2*4)); //USART_TX
+        HW_GPIO_ModeConfig(0, 2, HW_GPIO_AF_PP_H);
+        HW_GPIO_SetAFMode(0, 2, 1);
         
         // RX: PA3
-        HW_GPIO_ModeConfig(0, 3, GPIO_AF_PP_H);
-        GPIOA->AFR[0]  &= ~(0XFU<<(3*4));
-        GPIOA->AFR[0]  |=  (0X1U<<(3*4)); //USART_RX
+        HW_GPIO_ModeConfig(0, 3, HW_GPIO_AF_PP_H);
+        HW_GPIO_SetAFMode(0, 3, 1);
         
         break;
     default : break;

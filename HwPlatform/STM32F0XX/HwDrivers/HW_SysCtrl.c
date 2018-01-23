@@ -44,11 +44,10 @@ void HW_SystemReset(void)
 /**
   * @brief  NVIC使能
   * @param  IRQn 中断号
-  * @param  ulPreemptPrio  抢占优先级
-  * @param  ulSubPrio  响应优先级
+  * @param  ulPreemptPrio  优先级
   * @retval None
   */
-void HW_NVIC_Enable(IRQn_Type IRQn, uint32_t ulPreemptPrio, uint32_t ulSubPrio)
+void HW_NVIC_Enable(IRQn_Type IRQn, uint32_t ulPreemptPrio)
 {
     NVIC_SetPriority((IRQn), ulPreemptPrio);  
     NVIC_EnableIRQ(IRQn); 
@@ -154,5 +153,5 @@ void HW_EnterSrandby(void)
 void HW_SWJConfig(uint8_t uMode)
 {
     
-  
+    
 } 

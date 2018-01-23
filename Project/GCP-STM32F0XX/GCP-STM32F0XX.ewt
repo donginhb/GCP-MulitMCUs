@@ -2464,10 +2464,28 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_SysTick.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeComm.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeComm.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeDelay.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeDelay.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeInput.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeInput.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeOutput.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeOutput.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_Uart.c</name>
