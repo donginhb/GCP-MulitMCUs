@@ -93,6 +93,8 @@ void GCP_Init(void)
     //初始化硬件
     GCP_HwInit();
     
+    SYS_SetCmuDefCanCom();
+    
 }
 
 
@@ -103,11 +105,6 @@ void GCP_Init(void)
   */
 void GCP_MainProc(void)
 {
-#if GCP_CAN_MASTER_MODE
     //LED显示
     GCP_ShowMainWorkLed();
-    GCP_CanMainProc();
-#endif
-    
-    CAN_MainHandler(GCP_CAN_DEF_NODE);
 }

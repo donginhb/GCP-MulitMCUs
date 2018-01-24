@@ -2253,6 +2253,15 @@
       </file>
     </group>
     <group>
+      <name>RF</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\NRF24L01.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\NRF24L01.h</name>
+      </file>
+    </group>
+    <group>
       <name>TempSensor</name>
       <file>
         <name>$PROJ_DIR$\..\..\ExtPeripheral\TempSensor\Ds18b20.c</name>

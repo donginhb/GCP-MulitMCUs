@@ -145,6 +145,9 @@ void CMU_CAN_RecvHandler(void)
     COM_DATA_ID ComID = {0};
     uBit8 uRBuff[8] = {0};
     uBit32 ulLenght = 0;
+    
+    m_CanInterface.pf_CAN_RecvHandler(m_uCanNode);
+    
     if (m_CanInterface.pf_CAN_RecvPack(m_uCanNode, &ComID.ulFrameID, 
                                        uRBuff,
                                        &ulLenght) == 0)
@@ -153,22 +156,21 @@ void CMU_CAN_RecvHandler(void)
         {
         case TRANSMIT_FIRST_FRAME:  //连续数据帧的首帧数据
             m_ulCanPackNumber = *((uBit32 *)(&uRBuff[0]));  //获取总包数
-            m_ulCurCanPackIndex = 0;       //复位当前包
             
+            memset(&m_CanRecvPack, 0, sizeof(m_CanRecvPack));
+            m_ulCurCanPackIndex = 0;       //复位当前包
             m_bPackTransferStart = true;   //设置传输开始标志
             break;
         case TRANSMIT_BEING_FRAME:  //连续数据帧的中间数据帧
             
             //判断当前包序号是否正确
-            if ((m_ulCurCanPackIndex < m_ulCanPackNumber) && (m_bPackTransferStart))
+            if ((m_ulCurCanPackIndex < m_ulCanPackNumber) && (m_bPackTransferStart) && (ComID.ulCanDataID.ulFrameIndex == (m_ulCurCanPackIndex%16)))
             {
-                //校验包索引是否正确(防止出现接收到的数据包的顺序不对的情况)
-                if (ComID.ulCanDataID.ulFrameIndex == (m_ulCurCanPackIndex%16))
-                {
-                    //将参数存储到对应的位置
-                    memcpy(&m_CanRecvPack.uDataBuff[m_ulCurCanPackIndex*8], uRBuff, ulLenght);
-                    m_ulCurCanPackIndex++;
-                }
+                //将参数存储到对应的位置
+                memcpy(&m_CanRecvPack.uDataBuff[m_ulCurCanPackIndex*8], uRBuff, ulLenght);
+                m_ulCurCanPackIndex++;
+                m_CanRecvPack.ulDataLen += ulLenght;
+
             }
             else    //传输出错(丢包/错包等)
             {
@@ -180,11 +182,28 @@ void CMU_CAN_RecvHandler(void)
             }
             break;
         case TRANSMIT_VERIFY_FRAME: //连续数据帧的校验帧
-            ComID.ulComDataID.ulTransmitFrame = TRANSMIT_SELF_FRAME;    //改成独立帧
-            m_CanRecvPack.ulID = ComID.ulFrameID;
             
-            m_bPackTransferStart = false;   //清除传输开始标志
-            m_uRecvPackValidFlag = 1;
+            if (m_bPackTransferStart)
+            {
+                uBit32 ulTrueCheckSum = 0;  //实际校验和
+                
+                //计算校验值
+                for (int i = 0; i < m_CanRecvPack.ulDataLen; i++)
+                {
+                    ulTrueCheckSum += m_CanRecvPack.uDataBuff[i];
+                }
+                
+                //校验数据
+                if (ulTrueCheckSum == *((uBit32 *)(&uRBuff[0])))
+                {
+                    ComID.ulComDataID.ulTransmitFrame = TRANSMIT_SELF_FRAME;    //改成独立帧
+                    m_CanRecvPack.ulID = ComID.ulFrameID;
+                    m_uRecvPackValidFlag = 1;
+                }
+                
+                m_bPackTransferStart = false;   //清除传输开始标志
+            }
+            
             break;
         case TRANSMIT_SELF_FRAME:   //独立发送帧
             m_CanRecvPack.ulID = ComID.ulFrameID;
