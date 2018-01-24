@@ -432,7 +432,6 @@ uint32_t HW_UART_RecvBuff(uint8_t uUartNode, void *pRBuff, uint32_t ulSize)
   */
 void HW_UART_RecvHandler(uint8_t uUartNode)
 {
-    
     //假如接收到数据,则将其存储入环形缓冲区之中
     if (USART[uUartNode]->ISR & (0x1<<5))
     {

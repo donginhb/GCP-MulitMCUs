@@ -2090,6 +2090,15 @@
       <file>
         <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\NRF24L01.h</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\NRF24L01_RegDef.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\RF.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\RF\RF.h</name>
+      </file>
     </group>
     <group>
       <name>TempSensor</name>

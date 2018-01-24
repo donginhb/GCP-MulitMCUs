@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
   * @file    sl_nrf24l01.c
-  * @author  杜公子寒枫
-  * @version V1.0
+  * @author  Duhanfeng
+  * @version V1.1
   * @date    2017.04.09
   * @brief   control nrf24l01
   ******************************************************************************
@@ -13,28 +13,43 @@
   * 2.地址相同（设置TX_ADDR和RX_ADDR_P0相同）
   * 3.每次发送接收的字节数相同（如果设置了通道的有效数据宽度为n，那么每次发送的字节数也必须为n，当然，n<=32）
   * 
+  * 当触发IRQ信号,电平变化是下降沿;
   * 
-  * 
+  * V1.1------------    
+  * 修改描述: 优化程序接口
+  * 修改作者: Duhanfeng
+  * 当前版本: V1.1
+  * 修改日期: 2018.01.24
   *     
   ******************************************************************************
   */
 
 /***********************************<INCLUDES>**********************************/
 #include "NRF24L01.h"
+#include "NRF24L01_RegDef.h"
 #include <string.h>
+#include "Algorithm/RingBuff/RingBuff.h"
+
+
+/*****************************************************************************
+ * 私有成员定义及实现
+ ****************************************************************************/
 
 //外界控制接口
 static uBit8   (*SPI_NRF_RW)(uBit8 cWriteData);
 static void    (*NRF_CSN)(bool State);
 static void    (*NRF_CE)(bool State);
+static bool    (*NRF_IRQ)(void);
 static void    (*NRF_DelayUs)(uBit32 ulUs);
 
-static uBit8 NRF24L01_Flag = 0;
+//通信地址定义
+static uBit8 m_uNrfTxAddr[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};   //定义一个静态发送地址
+static uBit8 m_uNrfRxAddr[RX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};
 
-uBit8 NRF_RX_BUF[RX_PLOAD_WIDTH] = {0};     //接收数据缓存
-uBit8 NRF_TX_BUF[TX_PLOAD_WIDTH] = {0};     //发射数据缓存
-static uBit8 NRF_TX_ADDRESS[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};   //定义一个静态发送地址
-static uBit8 NRF_RX_ADDRESS[RX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};
+//环形缓冲区定义
+#define NRF_RB_SIZE    (128)
+static RINGBUFF_T m_RxRing = {0};
+static uBit8    m_uRxBuff[NRF_RB_SIZE] = {0};
 
 
 /**
@@ -159,17 +174,19 @@ static uBit8 nRF24L01_WriteBuf(uBit8 uReg ,uBit8 *pBuf, uBit8 ulBuffLenght)
 }
 
 
-/* 接口函数------------------------------------------------------ */
-
+/*****************************************************************************
+ * NRF相关控制接口
+ ****************************************************************************/
 
 /**
   * @brief  NRF24L01 硬件接口
-  * @param  无
+  * @param  None
   * @retval 0-成功 1-失败
   */
 uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
                                  void (*SetCSN)(bool bState),
                                  void (*SetCE)(bool bState),
+                                 bool (*GetIRQ)(void),
                                  void (*BitDelayUs)(uBit32 ulUs))
 {
     do 
@@ -178,12 +195,17 @@ uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
         if (SPI_ReadWriteByte == NULL)  break;
         if (SetCSN == NULL)  break;
         if (SetCE == NULL)  break;
+        if (GetIRQ == NULL) break;
         if (BitDelayUs == NULL)  break;
         
         SPI_NRF_RW = SPI_ReadWriteByte;
         NRF_CSN = SetCSN;
         NRF_CE  = SetCE;
+        NRF_IRQ = GetIRQ;
         NRF_DelayUs = BitDelayUs;
+        
+        //初始化环形FIFO
+        RingBuff_Init(&m_RxRing, m_uRxBuff, 1, NRF_RB_SIZE);
         
         return 0;
         
@@ -195,8 +217,8 @@ uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
 
 /**
   * @brief  接收模式进入
-  * @param  无
-  * @retval 无
+  * @param  None
+  * @retval None
   */
 void nRF24L01_EnterRxMode(void)
 {
@@ -207,7 +229,7 @@ void nRF24L01_EnterRxMode(void)
     uStatus=nRF24L01_ReadReg(STATUS);
     nRF24L01_WriteReg(NRF_WRITE_REG+STATUS,uStatus);                            //清除中断标志    
     
-    nRF24L01_WriteBuf(NRF_WRITE_REG+RX_ADDR_P0, NRF_RX_ADDRESS, RX_ADR_WIDTH);  //写RX节点地址 
+    nRF24L01_WriteBuf(NRF_WRITE_REG+RX_ADDR_P0, m_uNrfRxAddr, RX_ADR_WIDTH);  //写RX节点地址 
     nRF24L01_WriteReg(NRF_WRITE_REG+EN_AA, 0x01);                               //使能通道0的自动应答 
     nRF24L01_WriteReg(NRF_WRITE_REG+EN_RXADDR, 0x01);                           //使能通道0的接收地址 
     nRF24L01_WriteReg(NRF_WRITE_REG+RF_CH, CHANAL);                             //设置RF通信频率 
@@ -223,12 +245,13 @@ void nRF24L01_EnterRxMode(void)
     
     NRF_CE(1); 
     
-}    
+}
+
 
 /**
   * @brief  发送模式进入
-  * @param  无
-  * @retval 无
+  * @param  None
+  * @retval None
   */
 void nRF24L01_EnterTxMode(void)
 {  
@@ -238,8 +261,8 @@ void nRF24L01_EnterTxMode(void)
     uStatus=nRF24L01_ReadReg(STATUS);
     nRF24L01_WriteReg(NRF_WRITE_REG+STATUS,uStatus);                            //清除中断标志  
     
-    nRF24L01_WriteBuf(NRF_WRITE_REG+TX_ADDR, NRF_TX_ADDRESS, TX_ADR_WIDTH);     //写TX节点地址  
-    nRF24L01_WriteBuf(NRF_WRITE_REG+RX_ADDR_P0, NRF_RX_ADDRESS, RX_ADR_WIDTH);  //设置TX节点地址,主要为了使能ACK    
+    nRF24L01_WriteBuf(NRF_WRITE_REG+TX_ADDR, m_uNrfTxAddr, TX_ADR_WIDTH);     //写TX节点地址  
+    nRF24L01_WriteBuf(NRF_WRITE_REG+RX_ADDR_P0, m_uNrfRxAddr, RX_ADR_WIDTH);  //设置TX节点地址,主要为了使能ACK    
     nRF24L01_WriteReg(NRF_WRITE_REG+EN_AA, 0x01);                               //使能通道0的自动应答         
     nRF24L01_WriteReg(NRF_WRITE_REG+EN_RXADDR, 0x01);                           //使能通道0的接收地址     
     nRF24L01_WriteReg(NRF_WRITE_REG+SETUP_RETR, 0x15);                          //设置自动重发间隔时间:500us + 86us;最大自动重发次数:5次    
@@ -262,7 +285,7 @@ void nRF24L01_EnterTxMode(void)
 
 /**
   * @brief  NRF连接检测
-  * @param  无
+  * @param  None
   * @retval 0-成功 1-失败
   */
 uBit32 nRF24L01_CheckConnect(void)
@@ -291,11 +314,12 @@ uBit32 nRF24L01_CheckConnect(void)
 
 /**
   * @brief  NRF状态获取
-  * @param  无
-  * @retval 0-成功 1-失败
+  * @param  None
+  * @retval 实际状态
   */
 uBit32 nRF24L01_GetStatus(void)
 {
+#if 0
     uBit32 ulStatus = 0;
     
     NRF_CE(0);
@@ -329,6 +353,17 @@ uBit32 nRF24L01_GetStatus(void)
     NRF_CE(1);
     
     return NRF24L01_Flag;
+    
+#else
+    
+    NRF_CE(0);
+    
+    uBit8 uStatus = nRF24L01_ReadReg(STATUS);//读取status寄存器的值
+    
+    NRF_CE(1);
+    
+    return uStatus;
+#endif
 }
 
 
@@ -340,43 +375,118 @@ uBit32 nRF24L01_GetStatus(void)
   */
 void nRF24L01_SetAddress(uBit8 *pRFAddr)
 {
-    memcpy(NRF_TX_ADDRESS, pRFAddr, TX_ADR_WIDTH);
-    memcpy(NRF_RX_ADDRESS, pRFAddr, TX_ADR_WIDTH);
+    memcpy(m_uNrfTxAddr, pRFAddr, TX_ADR_WIDTH);
+    memcpy(m_uNrfRxAddr, pRFAddr, TX_ADR_WIDTH);
     
 }
 
 
 /**
   * @brief  数组数据发送
-  * @param  pTBuff 发送缓冲区,最大4个字节
-  * @param  ulSize 要发送的数据
+  * @param  pTBuff 发送缓冲区,最大31个字节
+  * @param  ulSize 要发送的数据字节数
   * @retval 发送结果
   * @note   值得注意的是,这个函数不能在本模块的中断里面执行
   */
-uBit8 nRF24L01_SendBuff(uBit8 *pTBuff, uBit32 ulSize)
+uBit8 nRF24L01_SendBuff(uBit8 *pTBuff, uBit8 uSize)
 {
-    if (ulSize > TX_PLOAD_WIDTH)
+    if (uSize > (TX_PLOAD_WIDTH - sizeof(uSize)))
     {
         return 0;
     }
     
     uBit8 uTxBuff[TX_PLOAD_WIDTH] = {0};
+    uBit8 uStatus = 0;
     
-    memcpy(uTxBuff, pTBuff, ulSize);
+    memcpy(&uTxBuff[0], &uSize, sizeof(uSize));    //第一个字节表示当前数据帧的实际有效数据长度
+    memcpy(&uTxBuff[1], pTBuff, uSize);
     
-    NRF24L01_Flag = 0;
+    //进入发送模式
+    nRF24L01_EnterTxMode();  
     
-    nRF24L01_EnterTxMode();  //进入发送模式
-    
+    //发送数据
     NRF_CE(0);
     nRF24L01_WriteBuf(WR_TX_PLOAD, uTxBuff, TX_PLOAD_WIDTH);
     NRF_CE(1);
     
-    //等待发送完成或超时
-    while ((NRF24L01_Flag != TX_DS) && (NRF24L01_Flag != MAX_RT));
+    //等待执行结果
+    while (1)
+    {
+        while (!NRF_IRQ());
     
+        //获取执行执行结果
+        uStatus = nRF24L01_GetStatus();
+        
+        if ((uStatus == TX_DS) || (uStatus == MAX_RT))
+        {
+            NRF_CE(0);
+            
+            //清除中断标志
+            nRF24L01_WriteReg(NRF_WRITE_REG+STATUS, uStatus);
+            
+            //清除TX FIFO寄存器
+            nRF24L01_WriteReg(FLUSH_TX,NOP);
+            
+            NRF_CE(1);
+            
+            break;
+        }
+        
+    }
+
+    //进入接收模式
     nRF24L01_EnterRxMode();
     
-    return NRF24L01_Flag;
+    return uStatus;
 }
+
+
+/**
+  * @brief  数据接收(非阻塞,实际上就是读取出接收缓冲区中的数据)
+  * @param  pRBuff 要接收的缓冲区
+  * @param  ulSize 要接收的数据长度
+  * @retval uint32_t 实际上接收到的数据长度
+  */
+uBit32 nRF24L01_RecvBuff(void *pRBuff, uBit32 ulSize)
+{
+    
+    return RingBuff_PopMult(&m_RxRing, pRBuff, ulSize);
+}
+
+
+/**
+  * @brief  接收处理
+  * @param  None
+  * @retval None
+  */
+void nRF24L01_RecvHandler(void)
+{
+    //当IRQ引脚变为低电平时,表示中断产生
+    if (!NRF_IRQ())
+    {
+       //获取执行执行结果
+        uBit8 uStatus = nRF24L01_GetStatus();
+        
+        //判断是否因为中断产生的中断
+        if(uStatus & RX_DR)
+        {
+            uBit8 uRecvBuff[RX_PLOAD_WIDTH] = {0};
+            
+            //清除中断标志 
+            nRF24L01_WriteReg(NRF_WRITE_REG+STATUS, uStatus);
+            
+            //读取数据 
+            nRF24L01_ReadBuf(RD_RX_PLOAD, uRecvBuff, RX_PLOAD_WIDTH); 
+            
+            //清除RX FIFO寄存器 
+            nRF24L01_WriteReg(FLUSH_RX, NOP);
+            
+            //将数据存储入环形缓冲区
+            RingBuff_InsertMult(&m_RxRing, &uRecvBuff[1], uRecvBuff[0]);
+        }
+        
+    }
+    
+}
+
 
