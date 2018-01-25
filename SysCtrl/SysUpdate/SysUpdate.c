@@ -442,36 +442,47 @@ static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
 
 /**
   * @brief  LED灯设置
-  * @param  None
-  * @retval None
+  * @param  ulLedPort Led端口
+  * @param  ulLedPin Led引脚
+  * @retval 0-成功 非0-失败
   */
-void SYS_UPDATE_SetMainWorkLed(uBit32 ulLedPort, uBit32 ulLedPin)
+uBit32 SYS_UPDATE_SetMainWorkLed(uBit32 ulLedPort, uBit32 ulLedPin)
 {
-    if (m_sys_pIOConfigTable->ulLedEnable)
+    uBit32 ulRet = 1;
+    
+    if (m_sys_pIOConfigTable != NULL)
     {
-        //假如FLASH之中的参数与当前要设置的LED IO不一致,则更新并存储
-        if ((m_sys_pIOConfigTable->LedIO.nPort != ulLedPort) ||
-            (m_sys_pIOConfigTable->LedIO.nPin != ulLedPin))
+        if (m_sys_pIOConfigTable->ulLedEnable)
+        {
+            //假如FLASH之中的参数与当前要设置的LED IO不一致,则更新并存储
+            if ((m_sys_pIOConfigTable->LedIO.nPort != ulLedPort) ||
+                (m_sys_pIOConfigTable->LedIO.nPin != ulLedPin))
+            {
+                //更新参数
+                m_sys_pIOConfigTable->LedIO.nPort = ulLedPort;
+                m_sys_pIOConfigTable->LedIO.nPin  = ulLedPin;
+                
+                //存储参数
+                ulRet = SYS_StoreParmToFLash();
+            }
+            else 
+            {
+                ulRet = 0;
+            }
+        }
+        else 
         {
             //更新参数
             m_sys_pIOConfigTable->LedIO.nPort = ulLedPort;
             m_sys_pIOConfigTable->LedIO.nPin  = ulLedPin;
+            m_sys_pIOConfigTable->ulLedEnable = 1;
             
             //存储参数
-            SYS_StoreParmToFLash();
+            ulRet = SYS_StoreParmToFLash();
         }
     }
-    else 
-    {
-        //更新参数
-        m_sys_pIOConfigTable->LedIO.nPort = ulLedPort;
-        m_sys_pIOConfigTable->LedIO.nPin  = ulLedPin;
-        m_sys_pIOConfigTable->ulLedEnable = 1;
-        
-        //存储参数
-        SYS_StoreParmToFLash();
-    }
     
+    return ulRet;
 }
 
 
@@ -484,7 +495,7 @@ void SYS_UPDATE_ShowMainWorkLed(void)
 {
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
-        if (m_sys_pIOConfigTable->ulLedEnable == 0)
+        if ((m_sys_pIOConfigTable->ulLedEnable == 0) || (m_sys_pIOConfigTable == NULL))
         {
             SysTime_Cancel(&m_LedCtrlTimer);
             return ;

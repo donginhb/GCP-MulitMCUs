@@ -1,5 +1,5 @@
-#ifndef  __DS_IO_DEF_H
-#define  __DS_IO_DEF_H
+#ifndef  __LC_IO_DEF_H
+#define  __LC_IO_DEF_H
 
 
 #ifdef __cplusplus
@@ -33,7 +33,7 @@ typedef enum
 
 
 //格子柜控制IO资源表
-extern GPIO_CTRL_TABLE g_IRB030_IOTable;
+extern GPIO_CTRL_TABLE g_LC_IOTable;
     
     
 
@@ -42,4 +42,4 @@ extern GPIO_CTRL_TABLE g_IRB030_IOTable;
 #endif
 
 
-#endif /* __VD_MACHINE_IO_H */
+#endif /* __LC_IO_DEF_H */

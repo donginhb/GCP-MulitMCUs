@@ -73,10 +73,11 @@ uBit32 SYS_ClearSubAppFlag(void);
 
 /**
   * @brief  LED灯设置
-  * @param  None
-  * @retval None
+  * @param  ulLedPort Led端口
+  * @param  ulLedPin Led引脚
+  * @retval 0-成功 非0-失败
   */
-void SYS_UPDATE_SetMainWorkLed(uBit32 ulLedPort, uBit32 ulLedPin);
+uBit32 SYS_UPDATE_SetMainWorkLed(uBit32 ulLedPort, uBit32 ulLedPin);
 
 
 /**

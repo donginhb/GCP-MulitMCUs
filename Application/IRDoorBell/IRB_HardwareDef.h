@@ -11,6 +11,6 @@
 //定义IO资源表
 #define g_GcpIOTable                        g_IRB030_IOTable            //IO资源表
 
-#define IRB_COM_UART_NODE                    (1)                        //用于通信的串口节点
+#define IRB_COM_UART_NODE                   (0)                         //用于通信的串口节点
 
 #endif /* __IRB_HARDWARE_DEF_H */

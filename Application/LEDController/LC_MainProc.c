@@ -16,10 +16,10 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB_MainProc.h"
-#include "IRB_HwCtrl.h"
-#include "IRB_HardwareDef.h"
-#include "IRB_RfCom.h"
+#include "LC_MainProc.h"
+#include "LC_HwCtrl.h"
+#include "LC_HardwareDef.h"
+#include "LC_RfCom.h"
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
 
@@ -35,13 +35,13 @@
   * @param  None
   * @retval None
   */
-void IRB_Init(void)
+void LC_Init(void)
 {
     //上电延时
     SysTime_DelayMs(200);
     
     //初始化硬件
-    IRB_HwInit();
+    LC_HwInit();
     
 }
 
@@ -51,10 +51,10 @@ void IRB_Init(void)
   * @param  None
   * @retval None
   */
-void IRB_MainProc(void)
+void LC_MainProc(void)
 {
     //LED显示
-    IRB_ShowMainWorkLed();
+    LC_ShowMainWorkLed();
     
     //RF接收处理
     RF_ComHandler();

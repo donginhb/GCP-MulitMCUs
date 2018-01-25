@@ -1,11 +1,11 @@
 #ifndef __CHIP_H_
 #define __CHIP_H_
 
-#if defined(STM32F030)
+#if defined(STM32F0XX)
 #include "stm32f0xx.h"
 #endif
 
-#if defined(STM32F10X_HD)
+#if defined(STM32F10X)
 #include "stm32f10x.h"
 #endif
 

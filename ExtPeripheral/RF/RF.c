@@ -3,7 +3,7 @@
   * @file    RF.c
   * @author  Duhanfneg
   * @version V1.0
-  * @date    2018.01.18
+  * @date    2018.01.25
   * @brief   Radio frequency communication application
   ******************************************************************************
   * @attention

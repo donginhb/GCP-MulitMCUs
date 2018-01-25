@@ -51,8 +51,23 @@ uBit32 HAL_ADC_Init(uBit8 uAdcNode, uBit32 ulChMask, bool bCtnConvertFlag)
   */
 uBit32 HAL_ADC_RecvValueNoBlock(uBit8 uAdcNode, uBit32 ulChannel, uBit16 *pAdcValue)
 {
+    uBit32 ulRet = 0;
     
-    return HW_ADC_RecvValueNoBlock(uAdcNode, ulChannel, pAdcValue);
+#if defined(LPC17XX)
+    ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, ulChannel, pAdcValue);
+
+#elif defined(LPC43XX)
+    
+
+#elif defined(STM32F10X)
+    ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, pAdcValue);
+    
+#elif defined(STM32F0XX)
+    ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, ulChannel, pAdcValue);
+    
+#endif
+
+    return ulRet;
 }
 
 
@@ -65,8 +80,23 @@ uBit32 HAL_ADC_RecvValueNoBlock(uBit8 uAdcNode, uBit32 ulChannel, uBit16 *pAdcVa
   */
 uBit32 HAL_ADC_RecvValueBlock(uBit8 uAdcNode, uBit32 ulChannel, uBit16 *pAdcValue)
 {
+    uBit32 ulRet = 0;
     
-    return HW_ADC_RecvValueBlock(uAdcNode, ulChannel, pAdcValue);
+#if defined(LPC17XX)
+    ulRet = HW_ADC_RecvValueBlock(uAdcNode, ulChannel, pAdcValue);
+
+#elif defined(LPC43XX)
+    
+
+#elif defined(STM32F10X)
+    ulRet = HW_ADC_RecvValueBlock(uAdcNode, pAdcValue);
+    
+#elif defined(STM32F0XX)
+    ulRet = HW_ADC_RecvValueBlock(uAdcNode, ulChannel, pAdcValue);
+    
+#endif
+
+    return ulRet;
 }
 
 

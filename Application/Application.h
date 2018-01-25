@@ -14,6 +14,9 @@
 #elif defined(MD_APP)
 #include "Application/MotorDriver/MD_MainProc.h"
 #include "Application/MotorDriver/MD_AppVersion.h"
+#elif defined(LC_APP)
+#include "Application/LEDController/LC_MainProc.h"
+#include "Application/LEDController/LC_AppVersion.h"
 #elif defined(BMC_APP)
 #include "Application/BLEMotorCtrl/BMC_MainProc.h"
 #include "Application/BLEMotorCtrl/BMC_AppVersion.h"
@@ -39,6 +42,10 @@
 #elif defined(MD_APP)
 #define APP_Init()          MD_Init()
 #define APP_MainProc()      MD_MainProc()
+
+#elif defined(LC_APP)
+#define APP_Init()          LC_Init()
+#define APP_MainProc()      LC_MainProc()
 
 #elif defined(BMC_APP)
 #define APP_Init()          BMC_Init()

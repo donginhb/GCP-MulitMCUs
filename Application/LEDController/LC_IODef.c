@@ -15,7 +15,7 @@
   */
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB030_IODef.h"
+#include "LC_IODef.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 
 
@@ -44,7 +44,7 @@ static GPIO_DATA m_OutputIOTable[] =
 
 
 //控制IO表
-GPIO_CTRL_TABLE g_IRB030_IOTable = 
+GPIO_CTRL_TABLE g_LC_IOTable = 
 {
     m_OutputIOTable,
     m_InputIOTable,

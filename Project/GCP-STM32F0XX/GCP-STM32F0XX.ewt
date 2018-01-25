@@ -2183,10 +2183,22 @@
         <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_HwCtrl.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_LEDCtrl.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_LEDCtrl.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_MainProc.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_MainProc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_RfCom.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_RfCom.h</name>
       </file>
     </group>
     <file>

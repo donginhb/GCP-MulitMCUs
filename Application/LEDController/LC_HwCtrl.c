@@ -16,9 +16,9 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB_HwCtrl.h"
-#include "IRB_HardwareDef.h"
-#include "IRB_RfCom.h"
+#include "LC_HwCtrl.h"
+#include "LC_HardwareDef.h"
+#include "LC_RfCom.h"
 
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
@@ -38,7 +38,7 @@
   * @param  None
   * @retval None
   */
-static void IRB_IOConfig(void)
+static void LC_IOConfig(void)
 {
     //设置控制IO资源表
     GPIO_SetCtrlTable(&g_GcpIOTable);
@@ -58,13 +58,13 @@ static void IRB_IOConfig(void)
   * @param  None
   * @retval None
   */
-void IRB_HwInit(void)
+void LC_HwInit(void)
 {
     //初始化IO
-    IRB_IOConfig();
+    LC_IOConfig();
     
     //初始化串口
-    UART_Init(IRB_COM_UART_NODE, 115200);
+    UART_Init(LC_COM_UART_NODE, 115200);
     
     //初始化RF通信
     RF_InitCom();
@@ -76,7 +76,7 @@ void IRB_HwInit(void)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define IRB_LED_TOGGLE_TIME             (100)           //LED翻转时间(MS)
+#define LC_LED_TOGGLE_TIME             (100)           //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
 
 /**
@@ -84,11 +84,11 @@ static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
   * @param  None
   * @retval None
   */
-void IRB_ShowMainWorkLed(void)
+void LC_ShowMainWorkLed(void)
 {
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
-        SysTime_StartOneShot(&m_LedCtrlTimer, IRB_LED_TOGGLE_TIME); //设置下一次执行的时间
+        SysTime_StartOneShot(&m_LedCtrlTimer, LC_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
     }
