@@ -40,7 +40,6 @@ static uBit8   (*SPI_NRF_RW)(uBit8 cWriteData);
 static void    (*NRF_CSN)(bool State);
 static void    (*NRF_CE)(bool State);
 static bool    (*NRF_IRQ)(void);
-static void    (*NRF_DelayUs)(uBit32 ulUs);
 
 //通信地址定义
 static uBit8 m_uNrfTxAddr[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};   //定义一个静态发送地址
@@ -50,6 +49,18 @@ static uBit8 m_uNrfRxAddr[RX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};
 #define NRF_RB_SIZE    (128)
 static RINGBUFF_T m_RxRing = {0};
 static uBit8    m_uRxBuff[NRF_RB_SIZE] = {0};
+
+
+/**
+  * @brief  简单的微秒级延时函数
+  * @param  ulDelay 延时参数,单位为微秒
+  * @retval None
+  */
+static void nRF24L01_SimpleDelayUs(uBit32 ulDelay)
+{
+    for(volatile int i = 0; i < ulDelay*15; i++);
+    
+}
 
 
 /**
@@ -141,7 +152,6 @@ static uBit8 nRF24L01_ReadBuf(uBit8 uReg,uBit8 *pBuf,uBit8 ulBuffLenght)
 }
 
 
-
 /**
   * @brief 用于向NRF的寄存器中写入一串数据
   * @param uReg: NRF的命令+寄存器地址
@@ -179,15 +189,17 @@ static uBit8 nRF24L01_WriteBuf(uBit8 uReg ,uBit8 *pBuf, uBit8 ulBuffLenght)
  ****************************************************************************/
 
 /**
-  * @brief  NRF24L01 硬件接口
-  * @param  None
-  * @retval 0-成功 1-失败
+  * @brief  NRF24L01 接口初始化
+  * @param  SPI_ReadWriteByte SPI控制接口
+  * @param  SetCSN  CSN引脚控制接口
+  * @param  SetCE  CE引脚控制接口
+  * @param  GetIRQ  IRQ引脚控制接口
+  * @retval 0-成功 非0-失败
   */
-uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
-                                 void (*SetCSN)(bool bState),
-                                 void (*SetCE)(bool bState),
-                                 bool (*GetIRQ)(void),
-                                 void (*BitDelayUs)(uBit32 ulUs))
+uBit32 nRF24L01_InitInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
+                               void (*SetCSN)(bool bState),
+                               void (*SetCE)(bool bState),
+                               bool (*GetIRQ)(void))
 {
     do 
     {
@@ -196,13 +208,11 @@ uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
         if (SetCSN == NULL)  break;
         if (SetCE == NULL)  break;
         if (GetIRQ == NULL) break;
-        if (BitDelayUs == NULL)  break;
         
         SPI_NRF_RW = SPI_ReadWriteByte;
         NRF_CSN = SetCSN;
         NRF_CE  = SetCE;
         NRF_IRQ = GetIRQ;
-        NRF_DelayUs = BitDelayUs;
         
         //初始化环形FIFO
         RingBuff_Init(&m_RxRing, m_uRxBuff, 1, NRF_RB_SIZE);
@@ -277,16 +287,15 @@ void nRF24L01_EnterTxMode(void)
     nRF24L01_WriteReg(FLUSH_RX,NOP);                                            //清除RX FIFO寄存器 
     nRF24L01_WriteReg(FLUSH_TX,NOP);                                            //清除TX FIFO寄存器 
     
-    NRF_CE(1);
-    NRF_DelayUs(20);                                                            //CE要拉高一段时间才进入发送模式，时间大于10us 
-    
+    NRF_CE(1);          
+    nRF24L01_SimpleDelayUs(20);                                                 //CE要拉高一段时间才进入发送模式，时间大于10us 
 }
 
 
 /**
   * @brief  NRF连接检测
   * @param  None
-  * @retval 0-成功 1-失败
+  * @retval 0-成功 非0-失败
   */
 uBit32 nRF24L01_CheckConnect(void)
 {

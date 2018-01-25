@@ -43,9 +43,65 @@ typedef enum
   HW_GPIO_AF_OD_H   = 0x93,   //复用开漏高速
              
   // 模拟模式
-  GPIO_ANALOG    = 0xC0,   //模拟模式    
+  HW_GPIO_ANALOG    = 0xC0,   //模拟模式    
   
-}GPIO_MODE;
+}HW_GPIO_MODE;
+
+
+//GPIO端口定义
+typedef enum
+{
+    //字母形式的端口编号
+    HW_GPIO_PORT_A = 0,
+    HW_GPIO_PORT_B,
+    HW_GPIO_PORT_C,
+    HW_GPIO_PORT_D,
+    HW_GPIO_PORT_E,
+    HW_GPIO_PORT_F,
+    HW_GPIO_PORT_G,
+    HW_GPIO_PORT_H,
+    
+}HW_GPIO_PORT;
+
+
+
+//GPIO引脚定义
+typedef enum
+{
+    HW_GPIO_PIN_0 = 0,
+    HW_GPIO_PIN_1,
+    HW_GPIO_PIN_2,
+    HW_GPIO_PIN_3,
+    HW_GPIO_PIN_4,
+    HW_GPIO_PIN_5,
+    HW_GPIO_PIN_6,
+    HW_GPIO_PIN_7,
+    HW_GPIO_PIN_8,
+    HW_GPIO_PIN_9,
+    HW_GPIO_PIN_10,
+    HW_GPIO_PIN_11,
+    HW_GPIO_PIN_12,
+    HW_GPIO_PIN_13,
+    HW_GPIO_PIN_14,
+    HW_GPIO_PIN_15,
+    HW_GPIO_PIN_16,
+    HW_GPIO_PIN_17,
+    HW_GPIO_PIN_18,
+    HW_GPIO_PIN_19,
+    HW_GPIO_PIN_20,
+    HW_GPIO_PIN_21,
+    HW_GPIO_PIN_22,
+    HW_GPIO_PIN_23,
+    HW_GPIO_PIN_24,
+    HW_GPIO_PIN_25,
+    HW_GPIO_PIN_26,
+    HW_GPIO_PIN_27,
+    HW_GPIO_PIN_28,
+    HW_GPIO_PIN_29,
+    HW_GPIO_PIN_30,
+    HW_GPIO_PIN_31,
+    
+}HW_GPIO_PIN;  
 
 
 #ifdef __cplusplus
@@ -60,7 +116,7 @@ extern "C" {
   * @param  Mode IO输入/输出模式
   * @retval None
   */
-void HW_GPIO_ModeConfig(uint16_t nPort, uint16_t nPin, GPIO_MODE Mode);
+void HW_GPIO_ModeConfig(uint16_t nPort, uint16_t nPin, HW_GPIO_MODE Mode);
 
 
 /**

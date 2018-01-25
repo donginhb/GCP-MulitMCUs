@@ -2117,6 +2117,15 @@
         <name>$PROJ_DIR$\..\..\Algorithm\Json\cJSON.h</name>
       </file>
     </group>
+    <group>
+      <name>RingBuff</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.h</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>Application</name>
@@ -2464,6 +2473,12 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_IRQHandler.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_Spi.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_Spi.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_SysCtrl.c</name>
         </file>
         <file>
@@ -2706,6 +2721,15 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\RTC\RTC.h</name>
+      </file>
+    </group>
+    <group>
+      <name>SPI</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\SPI\SPI.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\SPI\SPI.h</name>
       </file>
     </group>
     <group>

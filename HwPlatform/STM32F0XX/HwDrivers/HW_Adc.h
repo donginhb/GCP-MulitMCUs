@@ -3,7 +3,7 @@
 
 #include "chip.h"
 
-//串口节点定义
+//ADC节点定义
 #define HW_ADC_NODE_0      (0)
 
 #ifdef __cplusplus

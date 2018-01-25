@@ -39,7 +39,7 @@ typedef struct
   * @param  Mode IO输入/输出模式
   * @retval None
   */
-void HW_GPIO_ModeConfig(uint16_t nPort, uint16_t nPin, GPIO_MODE Mode)
+void HW_GPIO_ModeConfig(uint16_t nPort, uint16_t nPin, HW_GPIO_MODE Mode)
 {
     GPIO_TypeDef * const GPIOx[7] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF};
     GPIO_REG_CODE  *GpioRegCode = (GPIO_REG_CODE *)&Mode;

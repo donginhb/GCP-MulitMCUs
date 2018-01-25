@@ -23,9 +23,7 @@
 //输入IO表
 static GPIO_DATA m_InputIOTable[] = 
 {
-    //按键
-    {GPIO_PORT_A,  0},
-    //{GPIO_PORT_A,  1},
+    {GPIO_PORT_B,  1},
 
 };
 
@@ -36,13 +34,11 @@ static GPIO_DATA m_OutputIOTable[] =
     //LED灯
     {GPIO_PORT_A,  0},
     
-    {GPIO_PORT_A,  1},
-    {GPIO_PORT_A,  2},
-    {GPIO_PORT_A,  3},
+    //
     {GPIO_PORT_A,  4},
+    {GPIO_PORT_A,  3},
     
-    
- 
+
 };
 
 

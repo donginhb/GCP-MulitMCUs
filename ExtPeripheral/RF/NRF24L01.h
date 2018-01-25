@@ -21,15 +21,17 @@ extern "C" {
  ****************************************************************************/
 
 /**
-  * @brief  NRF24L01 硬件接口
-  * @param  None
-  * @retval 0-成功 1-失败
+  * @brief  NRF24L01 接口初始化
+  * @param  SPI_ReadWriteByte SPI控制接口
+  * @param  SetCSN  CSN引脚控制接口
+  * @param  SetCE  CE引脚控制接口
+  * @param  GetIRQ  IRQ引脚控制接口
+  * @retval 0-成功 非0-失败
   */
-uBit32 nRF24L01_HwCtrlInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
-                                 void (*SetCSN)(bool bState),
-                                 void (*SetCE)(bool bState),
-                                 bool (*GetIRQ)(void),
-                                 void (*BitDelayUs)(uBit32 ulUs));
+uBit32 nRF24L01_InitInterFaces(uBit8 (*SPI_ReadWriteByte)(uBit8 cWriteData),
+                               void (*SetCSN)(bool bState),
+                               void (*SetCE)(bool bState),
+                               bool (*GetIRQ)(void));
 
 
 /**
@@ -51,7 +53,7 @@ void nRF24L01_EnterTxMode(void);
 /**
   * @brief  NRF连接检测
   * @param  None
-  * @retval 0-成功 1-失败
+  * @retval 0-成功 非0-失败
   */
 uBit32 nRF24L01_CheckConnect(void);
 

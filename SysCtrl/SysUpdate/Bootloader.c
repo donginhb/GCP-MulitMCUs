@@ -67,7 +67,6 @@ static void BOOT_InitData(void)
     //清空文件校验信息
     m_nBinFileCheckSum = 0;
     m_ulBinFileLen = 0;
-    m_ulBinFileLen = 0;
     m_ulCurFileLen = 0;
     
     //清空FLASH烧录信息

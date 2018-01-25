@@ -13,7 +13,7 @@ extern "C"
 //输入IO编号
 typedef enum
 {
-    INPUT_IO_KEY1,
+    INPUT_IO_RF_IRQ,
 
 }INPUT_IO_TABLE;
 
@@ -24,10 +24,8 @@ typedef enum
     //LED指示灯 RUN1
     OUTPUT_IO_LED_RUN1 = 0,
     
-    OUTPUT_IO_MOTOR_SIGNAL_A,
-    OUTPUT_IO_MOTOR_SIGNAL_B,
-    OUTPUT_IO_MOTOR_SIGNAL_C,
-    OUTPUT_IO_MOTOR_SIGNAL_D,
+    OUTPUT_IO_RF_CE,
+    OUTPUT_IO_RF_CSN,
 
 }OUTPUT_IO_TABLE;
 

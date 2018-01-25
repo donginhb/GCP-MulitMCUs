@@ -25,7 +25,9 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/KEY/KEY.h"
+#include "SysPeripheral/SPI/SPI.h"
 
+#include "ExtPeripheral/RF/RF.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -66,13 +68,16 @@ void IRB_HwInit(void)
     //初始化串口
     UART_Init(IRB_COM_UART_NODE, 115200);
     
+    //初始化RF
+    RF_Init(SPI_NODE_0, INPUT_IO_RF_IRQ, OUTPUT_IO_RF_CSN, OUTPUT_IO_RF_CE);
+    
 }
 
 
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define IRB_LED_TOGGLE_TIME             (100)            //LED翻转时间(MS)
+#define IRB_LED_TOGGLE_TIME             (100)           //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
 
 /**
