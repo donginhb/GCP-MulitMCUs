@@ -25,8 +25,8 @@
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-#define UART_MAX_SNED_LEN       (1024)
-#define UART_MAX_RECV_LEN       (1024)
+#define UART_MAX_SNED_LEN       (64)
+#define UART_MAX_RECV_LEN       (512+128)
 
 #define FRAME_HAND              ("HCZN")            //帧头
 #define FRAME_HAND_SIZE         (4)                 //帧头长度
@@ -43,13 +43,13 @@
 typedef struct 
 {
     uBit32 ulID;
+    uBit8  uDataBuff[UART_MAX_RECV_LEN];
     uBit32 ulDataLen;
-    uBit8  uDataBuff[UART_MAX_SNED_LEN];
 }UART_DATA_PACK;
 
 static UART_DATA_PACK m_UartRecvPack = {0};         //接收的数据包缓存(已解包)
 static uBit8 m_uSendBuff[UART_MAX_SNED_LEN] = {0};  //发送缓冲区
-static uBit8 m_uRecvBuff[UART_MAX_RECV_LEN] = {0};  //接收缓冲区
+//static uBit8 m_uRecvBuff[UART_MAX_RECV_LEN] = {0};  //接收缓冲区
 static uBit8 m_uRecvPackValidFlag = 0;              //接收数据包有效标志
 
 static CMU_UART_INTERFACE m_UartInterface = {0};    //串口控制接口
@@ -140,19 +140,9 @@ uBit32 CMU_UART_Close(void)
   */
 void CMU_UART_RecvHandler(void)
 {
-    uBit32 ulPackLen = 0;
-    
     //获取数据包
-    if (CMU_UnPack(m_uRecvBuff, &ulPackLen) == 0)
+    if (CMU_UnPack((uBit8 *)&m_UartRecvPack.ulID, &m_UartRecvPack.ulDataLen) == 0)
     {
-#if 0
-        memcpy(&m_UartRecvPack, m_uRecvBuff, ulPackLen);
-#endif
-        m_UartRecvPack.ulID = *(uBit32 *)m_uRecvBuff;
-        m_UartRecvPack.ulDataLen = ulPackLen;
-        
-        memcpy(m_UartRecvPack.uDataBuff, &m_uRecvBuff[4], ulPackLen);
-        
         m_uRecvPackValidFlag = 1;
     }
     
@@ -200,6 +190,12 @@ uBit32 CMU_UART_SendPack(uBit32 ulID, uBit8* pDataBuff, uBit32 ulBuffLen)
     
     //计算帧长
     uFrameLen = FRAME_MIN_SIZE + ulBuffLen;
+    
+    //校验帧长
+    if (uFrameLen > sizeof(m_uSendBuff))
+    {
+        return 1;
+    }
     
     //打包数据
     memcpy(&m_uSendBuff[FRAME_HAND_INDEX], FRAME_HAND, FRAME_HAND_SIZE);    //帧头

@@ -83,6 +83,7 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_SYS_GetSysTickCount = SYS_GetTickCount;
     CMUFunTable.pf_SYS_GetSLCVersion = SYS_GetSLCVersion;
     CMUFunTable.pf_SYS_GetIPOVersion = SYS_GetGCPVersion;
+    CMUFunTable.pf_SYS_GetBOOTVersion = SYS_GetBOOTVersion; //获取Bootloader版本 2018.01.26 Duhanfeng
     CMUFunTable.pf_SYS_SetComType = CMU_SetComType;
     CMUFunTable.pf_SYS_Reset = CoreCtrl_ResetSystemNow;
     
@@ -109,6 +110,8 @@ static uBit32 SYS_InitCmuFunTable(void)
     CMUFunTable.pf_SYS_PostUpdateDevProc = SYS_PostUpdateDevProc;
     CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;
 #endif
+    
+    CMUFunTable.pf_SYS_UpdateBootloader = SYS_UpdateBootloader;
     
     CMUFunTable.pf_SYS_GetStateReadAddr = CNCSYS_GetStateReadAddr;
     
@@ -391,6 +394,7 @@ uBit32 SYS_InitCMU(void)
     {
         SYS_InitCmuUartInterface(SYS_CMU_DEF_UART_NODE, 
                                  SYS_CMU_DEF_UART_BAUDRATE);
+        CMU_Init(COM_TYPE_UART);
     }
     
     return 0;
@@ -404,6 +408,11 @@ uBit32 SYS_InitCMU(void)
   */
 uBit32 SYS_SetCmuCom(uBit32 ulComMode, uBit8 uComNode, uBit32 ulBaudRate)
 {
+    if (m_sys_pCmuData == NULL)
+    {
+        return 1;
+    }
+    
     //设置参数
     m_sys_pCmuData->ulComMode = ulComMode;
     m_sys_pCmuData->ComParm.CmuCanUartParm.ulComNode = uComNode;

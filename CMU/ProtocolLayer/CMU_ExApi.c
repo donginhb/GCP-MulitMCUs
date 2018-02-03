@@ -147,7 +147,7 @@ void CMU_InitExApi(void)
         m_sExternalFunTable.pf_DEV_SendUpdateAppData        =&u32Fun_u32_p8_u32        ;
 
     if (m_sExternalFunTable.pf_SYS_UpdateBootloader==0)
-        m_sExternalFunTable.pf_SYS_UpdateBootloader        =&u32Fun_p8_u32        ;
+        m_sExternalFunTable.pf_SYS_UpdateBootloader        =&u32Fun_pu8_u32        ;
 
     if (m_sExternalFunTable.pf_DEV_SendUpdateBootData==0)
         m_sExternalFunTable.pf_DEV_SendUpdateBootData        =&u32Fun_u32_p8_u32        ;
@@ -161,6 +161,9 @@ void CMU_InitExApi(void)
 
     if (m_sExternalFunTable.pf_SYS_GetIPOVersion==0)
         m_sExternalFunTable.pf_SYS_GetIPOVersion        =&u32Fun_pversion        ;
+
+    if (m_sExternalFunTable.pf_SYS_GetBOOTVersion==0)
+        m_sExternalFunTable.pf_SYS_GetBOOTVersion        =&u32Fun_pversion        ;
 
     if (m_sExternalFunTable.pf_SYS_SetComType==0)
         m_sExternalFunTable.pf_SYS_SetComType        =&u32Fun_u32        ;

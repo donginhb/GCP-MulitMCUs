@@ -2,6 +2,10 @@
 #define __APPLICATION_H
 
 
+#if defined(BOOTLOADER)
+#include "Application/Bootloader/BT_MainProc.h"
+#endif
+
 #if defined(GCP_APP)
 #include "Application/GCPTest/GCP_MainProc.h"
 #include "Application/GCPTest/GCP_AppVersion.h"
@@ -26,8 +30,11 @@
 #endif
 
 
+#if defined(BOOTLOADER)
+#define APP_Init()          BT_Init()
+#define APP_MainProc()      BT_MainProc()
 
-#if defined(GCP_APP)
+#elif defined(GCP_APP)
 #define APP_Init()          GCP_Init()
 #define APP_MainProc()      GCP_MainProc()
 

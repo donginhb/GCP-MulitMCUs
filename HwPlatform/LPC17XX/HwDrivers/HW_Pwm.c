@@ -269,7 +269,7 @@ uint16_t HW_PWM_GetOutputAutoReloadValue(uint8_t uPwmNode)
   * @param  bIsEnable PWM使能位
   * @retval None
   */
-void HW_PWM_OutputEnable(uint8_t uPwmNode, bool bIsEnable)
+void HW_PWM_EnableOutput(uint8_t uPwmNode, bool bIsEnable)
 {
     if (bIsEnable)
     {

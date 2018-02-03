@@ -291,16 +291,16 @@ void HAL_PWM_OutputEnable(uBit8 uPwmNode, bool bIsEnable)
         HW_MCPWM_EnableOutput(uPwmNodeIndex, bIsEnable);
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        HW_TIM_OutputEnable(uPwmNodeIndex, bIsEnable);
+        HW_TIM_EnableOutput(uPwmNodeIndex, bIsEnable);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
-        HW_PWM_OutputEnable(uPwmNodeIndex, bIsEnable);
+        HW_PWM_EnableOutput(uPwmNodeIndex, bIsEnable);
         break;
     case HAL_LPC17XX_RESERVER_MODULE: break;
     }
     
 #elif defined(STM32F10X)
-    HW_TIM_OutputEnable(uPwmNode, bIsEnable);
+    HW_TIM_EnableOutput(uPwmNode, bIsEnable);
 #endif
     
 }
@@ -588,26 +588,4 @@ void HAL_PWM_ClearInputCountITStatus(uBit8 uPwmNode, uBit8 uChannelNum)
 #endif
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

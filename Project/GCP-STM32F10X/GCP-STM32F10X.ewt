@@ -3485,6 +3485,18 @@
       <name>$PROJ_DIR$\..\..\HAL\HAL_SysTick.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Uart.c</name>
     </file>
     <file>
@@ -3727,6 +3739,12 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_TimeOutput.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_TimeReckon.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_TimeReckon.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Uart.c</name>

@@ -30,6 +30,15 @@ uBit32 SYS_GetSLCVersion(SOFTWARE_VERSION* pVersion);
 uBit32 SYS_GetGCPVersion(SOFTWARE_VERSION* pVersion);
 
 
+
+/**
+  * @brief  Bootloader版本获取
+  * @param  pVersion 版本结构指针
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_GetBOOTVersion(SOFTWARE_VERSION* pVersion);
+
+
 /*****************************************************************************
  * 系统时间相关控制接口
  ****************************************************************************/

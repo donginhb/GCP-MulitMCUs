@@ -79,6 +79,7 @@ uBit32 SYS_Init(void)
     SYS_UPDATE_Init();
     
 #if SYS_BOOT_USAGE
+    //跳转到APP
     SYS_UPDATE_JumToApp();
 #endif
     
@@ -121,11 +122,6 @@ void SYS_MainTaskHandler(void)
     //CNC管理
 #if SYS_CNC_USAGE
     CNCSYS_MainCtrl();
-#endif
-    
-    //Bootloader LED管理
-#if SYS_BOOT_USAGE
-    SYS_UPDATE_ShowMainWorkLed();
 #endif
     
 }

@@ -84,10 +84,10 @@ uint16_t HW_TIM_GetOutputAutoReloadValue(uint8_t uTimeNode);
 /**
   * @brief  定时器输出使能
   * @param  uTimeNode 定时器节点
-  * @param  bIsEnablle 定时器使能位
+  * @param  bIsEnable 定时器使能位
   * @retval None
   */
-void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnablle);
+void HW_TIM_EnableOutput(uint8_t uTimeNode, bool bIsEnable);
 
   
 #ifdef __cplusplus

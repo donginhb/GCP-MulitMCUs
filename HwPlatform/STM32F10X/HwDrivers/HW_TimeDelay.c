@@ -36,6 +36,7 @@
   */
 void HW_TIM_DelayInit(uint8_t uTimeNode)
 {
+    //开时钟
     HW_TIM_ClockEnable(uTimeNode);
     
     //配置工作模式

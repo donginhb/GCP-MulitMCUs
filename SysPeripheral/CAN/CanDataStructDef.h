@@ -6,7 +6,7 @@
 #include "SysCtrl/SysConfig.h"
 
 //CAN硬件参数定义
-#define CAN_NODE_COUNT                      (2)                         //CAN节点数(每个节点分配一个独立的环形缓存)
+#define CAN_NODE_COUNT                      (1)                         //CAN节点数(每个节点分配一个独立的环形缓存)
 
 
 //CAN缓冲区大小定义

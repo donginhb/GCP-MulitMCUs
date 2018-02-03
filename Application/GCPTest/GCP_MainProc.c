@@ -22,56 +22,74 @@
 #include "GCP_MotorCtrl.h"
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
-
 #include "SysCtrl/SYS_CmuConfig.h"
 
-#include "CMU/CMU_Interface.h"
-#include "CMU/CMU_DataStructDef.h"
-#include "CMU/ProtocolLayer/CMU_ExApi.h"
-
 #include "SysPeripheral/CAN/Can.h"
+#include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
+#include "SysPeripheral/IRQ/IRQ_Man.h"
+#include "SysPeripheral/PWM/PWM.h"
+#include "SysPeripheral/TIME/TimeCapture.h"
 
+#include <stdio.h>
 #include <string.h>
 
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-#define GCP_CAN_MASTER_MODE                 (1)
 
-#define GCP_CAN_COM_INTERVAL                (100)  //CAN通信间隔(MS)
+#define TIME_CAP_NODE       (PWM_NODE_3)    //捕获定时器节点
+#define TIME_CAP_CHANNEL    (0)             //捕获定时器通道
 
-void GCP_CanMainProc(void)
+static uBit32 m_ulCaptureValue = 0;         //捕获值
+static bool m_bCaptureFinishFlag = false;   //捕获完成标志
+
+
+//捕获中断回调(高电平时间捕获测试)
+//由软件导致的延迟,大约在10us左右
+static void GCP_CAP_Test(void)
 {
-    static SYS_TIME_DATA m_CanCtrlTimer       = {1};    //CAN通信定时器
+    static bool s_bCapRisingEdge = true;    //判断当前是由哪种边沿触发的捕获 true为上升沿 false为下降沿
     
-    if (SysTime_CheckExpiredState(&m_CanCtrlTimer))
+    //判断中断入口
+    if (TIME_CAP_GetCaptureIRQFlag(TIME_CAP_NODE, TIME_CAP_CHANNEL))
     {
-        static uBit8 uStatus = 0;
+        //清标志位
+        TIME_CAP_ClearCaptureIRQFlag(TIME_CAP_NODE, TIME_CAP_CHANNEL);
         
-        uBit8 uSetCmdBuff[8] = {0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00};
-        uBit8 uResetCmdBuff[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-        SysTime_StartOneShot(&m_CanCtrlTimer, GCP_CAN_COM_INTERVAL); //设置下一次执行的时间
-        
-        CAN_FRAME_T CanSendFrame = {0};
-        CanSendFrame.ulID = 0x110000C6 ;
-        CanSendFrame.uDLC = 8;
-        CanSendFrame.uType = CAN_TYPE_EXT_FRAME;
-        
-        if (uStatus)
+        if (s_bCapRisingEdge == false)
         {
-            memcpy(CanSendFrame.uData, uSetCmdBuff, 8);
+            //下降沿获取捕获值
+            m_ulCaptureValue = TIME_CAP_GetCaptureValue(TIME_CAP_NODE, TIME_CAP_CHANNEL);
+            m_bCaptureFinishFlag = true;
         }
         else 
         {
-            memcpy(CanSendFrame.uData, uResetCmdBuff, 8);
+            //上升沿复位捕获值
+            TIME_CAP_ResetCaptureValue(TIME_CAP_NODE, TIME_CAP_CHANNEL);
         }
         
-        uStatus = !uStatus;
+        //设置下次的捕获边缘
+        TIME_CAP_SetCaptureEdge(TIME_CAP_NODE, TIME_CAP_CHANNEL, 
+                                s_bCapRisingEdge ? TIM_CAP_EDGE_FALLING : TIM_CAP_EDGE_RISING);
         
-        CAN_Write(GCP_CAN_DEF_NODE, &CanSendFrame, 1, false);
+        s_bCapRisingEdge = !s_bCapRisingEdge;
     }
+    
+}
+
+
+//捕获初始化
+static void GCP_CAP_Init(void)
+{
+    //设置中断回调
+    IRQ_SetTrgCallback(GCP_CAP_Test, IRQ_TRG_TIME0);
+    
+    //初始化捕获端口
+    TIME_CAP_InitCapture(TIME_CAP_NODE, 0x1<<TIME_CAP_CHANNEL, TIM_CAP_EDGE_RISING);    //初始化捕获(捕获上升沿)
+    TIME_CAP_EnableCaptureIRQ(TIME_CAP_NODE, TIME_CAP_CHANNEL, true);                   //使能捕获中断
+    TIME_CAP_EnableCapture(TIME_CAP_NODE, true);                                        //使能捕获
     
 }
 
@@ -87,13 +105,11 @@ void GCP_CanMainProc(void)
   */
 void GCP_Init(void)
 {
-    //SYS_SetCmuCom(1, 0, 500000);
-    //SYS_SetCmuCom(4, 0, 115200);
+    //初始化定时器捕获中断回调
+    GCP_CAP_Init();
     
     //初始化硬件
     GCP_HwInit();
-    
-    SYS_SetCmuDefCanCom();
     
 }
 
@@ -107,4 +123,14 @@ void GCP_MainProc(void)
 {
     //LED显示
     GCP_ShowMainWorkLed();
+    
+    if (m_bCaptureFinishFlag)
+    {
+        m_bCaptureFinishFlag = false;
+        
+        //发送数据
+        uBit8 ulSBuff[64] = {0};
+        sprintf((char *)ulSBuff, "Cap:%d\r\n", m_ulCaptureValue);
+        UART_BlockSendStr(0, ulSBuff);
+    }
 }

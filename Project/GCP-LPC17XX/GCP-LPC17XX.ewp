@@ -1997,6 +1997,9 @@
         <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\Application\GCPTest\VD_MachineIO.c</name>
       </file>
       <file>
@@ -2040,9 +2043,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\CMU\AbstractionLayer\CMU_Unpack.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\GCPTest\GCP_StateMan.h</name>
       </file>
     </group>
     <group>
@@ -2541,6 +2541,18 @@
       <name>$PROJ_DIR$\..\..\HAL\HAL_SysTick.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Uart.c</name>
     </file>
     <file>
@@ -2818,6 +2830,9 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Can.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Config.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Exti.c</name>
         </file>
         <file>
@@ -2854,6 +2869,12 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Pwm.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Rit.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Rit.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_SysCtrl.c</name>
         </file>
         <file>
@@ -2870,12 +2891,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Uart.c</name>
@@ -3108,6 +3123,21 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\SysTimer\SysTimer.h</name>
+      </file>
+    </group>
+    <group>
+      <name>TIME</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeCapture.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeCapture.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeReckon.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeReckon.h</name>
       </file>
     </group>
     <group>

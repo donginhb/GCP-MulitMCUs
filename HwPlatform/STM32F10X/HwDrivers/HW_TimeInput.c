@@ -237,11 +237,11 @@ static void HW_TIM_InputConfig(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t 
   * @param  uInputMode 输入模式(普通/PWM输入/编码器模式)
   * @retval None
   */
-void HW_TIM_InputInit(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uInputMode)
+void HW_TIM_InitInputMode(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uInputMode)
 {
     //引脚配置
     HW_TIM_PortConfig(uTimeNode, uChannelMask, HW_TIME_PORT_INPUT);
-
+    
     //模式配置
     HW_TIM_InputConfig(uTimeNode, uChannelMask, uInputMode);
     
@@ -249,22 +249,20 @@ void HW_TIM_InputInit(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uInputMod
 
 
 /**
-  * @brief  定时器输入中断使能
+  * @brief  定时器输入使能
   * @param  uTimeNode 定时器节点
-  * @param  uChannelMask 通道掩码字
-  * @param  bIsEnable 使能位
+  * @param  bIsEnable 定时器使能位
   * @retval None
   */
-void HW_TIM_EnableInputIRQ(uint8_t uTimeNode, uint8_t uChannelMask, bool bIsEnable)
+void HW_TIM_EnableInput(uint8_t uTimeNode, bool bIsEnable)
 {
     if (bIsEnable)
     {
-        TIM[uTimeNode]->DIER |= (uChannelMask<<1); //开外设中断
-        HW_NVIC_Enable(TIM_IRQn[uTimeNode], 2, 2);//开内核中断
+        TIM[uTimeNode]->CR1 |=  TIM_CR1_CEN;  //开启定时器  
     }
     else 
     {
-        HW_NVIC_DisableIRQ(TIM_IRQn[uTimeNode]);
+        TIM[uTimeNode]->CR1 &= ~TIM_CR1_CEN;  //关闭定时器
     }
     
 }
@@ -288,18 +286,94 @@ uint16_t HW_TIM_GetInputCount(uint8_t uTimeNode)
   * @param  uChannelMask 通道掩码字
   * @retval 定时器通道捕获寄存器值
   */
-uint16_t HW_TIM_GetInputCapValue(uint8_t uTimeNode, uint8_t uChannelMask)
+uint16_t HW_TIM_GetCaptureValue(uint8_t uTimeNode, uint8_t uChannelNum)
 {
     uint16_t nCapValue = 0;
     
-    switch (uChannelMask)
+    switch (uChannelNum)
     {
-    case 1: nCapValue = TIM[uTimeNode]->CCR1; break;
-    case 2: nCapValue = TIM[uTimeNode]->CCR2; break;
-    case 4: nCapValue = TIM[uTimeNode]->CCR3; break;
-    case 8: nCapValue = TIM[uTimeNode]->CCR4; break;
+    case 0: nCapValue = TIM[uTimeNode]->CCR1; break;
+    case 1: nCapValue = TIM[uTimeNode]->CCR2; break;
+    case 2: nCapValue = TIM[uTimeNode]->CCR3; break;
+    case 3: nCapValue = TIM[uTimeNode]->CCR4; break;
     default: break; //不应该到这里
     }
     
     return nCapValue;
+}
+
+
+/*****************************************************************************
+ * 定时器捕获模式中断相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  定时器输入中断使能
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelMask 通道掩码字
+  * @param  bIsEnable 使能位
+  * @retval None
+  */
+void HW_TIM_EnableInputIRQ(uint8_t uTimeNode, uint8_t uChannelMask, bool bIsEnable)
+{
+    if (bIsEnable)
+    {
+        TIM[uTimeNode]->DIER |= (uChannelMask<<1);  //开外设中断
+        HW_NVIC_Enable(TIM_IRQn[uTimeNode], 2, 2);  //开内核中断
+    }
+    else 
+    {
+        TIM[uTimeNode]->DIER &= ~(uChannelMask<<1);  //关外设中断
+    }
+    
+}
+
+
+/**
+  * @brief  定时器捕获中断标志获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @retval None
+  */
+bool HW_TIME_GetCaptureIRQFlag(uint8_t uTimeNode, uint8_t uChannelNum)
+{
+    bool bFlag = false;
+    uint32_t ulFlagMask = 0;
+    
+    switch (uChannelNum)
+    {
+    case 0: ulFlagMask = TIM_SR_CC1IF; break;
+    case 1: ulFlagMask = TIM_SR_CC2IF; break;
+    case 2: ulFlagMask = TIM_SR_CC3IF; break;
+    case 3: ulFlagMask = TIM_SR_CC4IF; break;
+    default: break; //不应该到这里
+    }
+    
+    bFlag = (TIM[uTimeNode]->SR & ulFlagMask) ? true : false;
+    
+    return bFlag;
+}
+
+
+/**
+  * @brief  定时器捕获中断标志清除
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @retval None
+  */
+void HW_TIME_ClearCaptureIRQFlag(uint8_t uTimeNode, uint8_t uChannelNum)
+{
+    uint32_t ulFlagMask = 0;
+    
+    switch (uChannelNum)
+    {
+    case 0: ulFlagMask = TIM_SR_CC1IF; break;
+    case 1: ulFlagMask = TIM_SR_CC2IF; break;
+    case 2: ulFlagMask = TIM_SR_CC3IF; break;
+    case 3: ulFlagMask = TIM_SR_CC4IF; break;
+    default: break; //不应该到这里
+    }
+    
+    TIM[uTimeNode]->SR &= ~(ulFlagMask);
+    
 }

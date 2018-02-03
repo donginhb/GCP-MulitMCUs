@@ -97,9 +97,18 @@
 #define HW_UART_COUNT       (4)
 
 //环形缓冲区定义
-#define UART_RB_SIZE    (1024)
 static RINGBUFF_T m_RxRing[HW_UART_COUNT] = {0};
-static uint8_t    m_uRxBuff[HW_UART_COUNT][UART_RB_SIZE] = {0};
+
+//串口接收环形缓冲区大小定义
+#define HW_UART0_RB_SIZE    (1024)
+#define HW_UART1_RB_SIZE    (32)
+#define HW_UART2_RB_SIZE    (32)
+#define HW_UART3_RB_SIZE    (32)
+
+static uint8_t  m_Uart0_uRxBuff[HW_UART0_RB_SIZE] = {0};
+static uint8_t  m_Uart1_uRxBuff[HW_UART1_RB_SIZE] = {0};
+static uint8_t  m_Uart2_uRxBuff[HW_UART2_RB_SIZE] = {0};
+static uint8_t  m_Uart3_uRxBuff[HW_UART3_RB_SIZE] = {0};
 
 //串口相关变量
 static LPC_USART_T * const USART[HW_UART_COUNT] = {(LPC_USART_T *)LPC_UART0_BASE, (LPC_USART_T *)LPC_UART1_BASE, (LPC_USART_T *)LPC_UART2_BASE, (LPC_USART_T *)LPC_UART3_BASE};    //串口的基地址
@@ -189,10 +198,6 @@ static void HW_UART_IOConfig(uint8_t uUartNode)
   */
 static void HW_UART_RxItInit(uint8_t uUartNode)
 {
-    //初始化环形FIFO
-    RingBuffer_Init(&m_RxRing[uUartNode], m_uRxBuff[uUartNode], 1, UART_RB_SIZE);
-    
-    
     //使能外设中断
     Chip_UART_IntEnable(USART[uUartNode], UART_IER_RBRINT);
     
@@ -200,26 +205,42 @@ static void HW_UART_RxItInit(uint8_t uUartNode)
     NVIC_SetPriority(USART_IRQn[uUartNode], 1);
     NVIC_EnableIRQ(USART_IRQn[uUartNode]);
 
-    //设置中断回调
+    
     switch (uUartNode)
     {
     case HW_UART_NODE_0: 
         {
+            //初始化环形FIFO
+            RingBuffer_Init(&m_RxRing[uUartNode], m_Uart0_uRxBuff, sizeof(uint8_t), HW_UART0_RB_SIZE);
+            
+            //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART0_RX_IRQHandler, LPC_IRQ_TRG_UART0);
             break;
         }
     case HW_UART_NODE_1: 
         {
+            //初始化环形FIFO
+            RingBuffer_Init(&m_RxRing[uUartNode], m_Uart1_uRxBuff, sizeof(uint8_t), HW_UART1_RB_SIZE);
+            
+            //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART1_RX_IRQHandler, LPC_IRQ_TRG_UART1);
             break;
         }
     case HW_UART_NODE_2: 
         {
+            //初始化环形FIFO
+            RingBuffer_Init(&m_RxRing[uUartNode], m_Uart2_uRxBuff, sizeof(uint8_t), HW_UART2_RB_SIZE);
+            
+            //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART2_RX_IRQHandler, LPC_IRQ_TRG_UART2);
             break;
         }
     case HW_UART_NODE_3: 
         {
+            //初始化环形FIFO
+            RingBuffer_Init(&m_RxRing[uUartNode], m_Uart3_uRxBuff, sizeof(uint8_t), HW_UART3_RB_SIZE);
+            
+            //设置中断回调
             HW_IRQ_SetTrgCallback(HW_UART3_RX_IRQHandler, LPC_IRQ_TRG_UART3);
             break;
         }

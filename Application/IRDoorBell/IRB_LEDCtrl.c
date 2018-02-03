@@ -33,7 +33,7 @@
 #define IRB_LED_CTRL_MODE_FORCE_OPEN    (1)     //常开
 #define IRB_LED_CTRL_MODE_FORCE_CLOSE   (2)     //常闭
 
-static uBit8 m_irb_uLedCtrlMode = IRB_LED_CTRL_MODE_AUTO;  //LED控制模式
+uBit8 m_irb_uLedCtrlMode = IRB_LED_CTRL_MODE_AUTO;  //LED控制模式
 
 
 /*****************************************************************************

@@ -27,7 +27,7 @@
 
 #define CLOCK_TIME_MAX  (0xFFFFFFFF)    //32位,时钟变量位数
 
-static bool bUsEnableFlag = false;        
+static bool bHwUsEnableFlag = false;        
 
 /**
   * @brief  时间差获取
@@ -53,19 +53,19 @@ static uBit32 SysTime_GetTimeDiffMs(uBit32 ulStartTime, uBit32 ulFinalTime)
 /**
   * @brief  精确延时使能
   * @param  ulTickPeriod 滴答周期(单位:MS)
-  * @param  bEnableUsDelay 是否使能US级延时
+  * @param  bEnableHwUsDelay 是否使能硬件US级延时
   * @param  uUsTimeNode  用于US级延时的定时器节点号
   * @retval None
   * @note   如果使能精确的微秒级延时,则需要启用一个硬件定时器,
   *         根据实际需求来决定是否启用硬件定时器;
   */
-void SysTime_Init(uBit32 ulTickPeriod, bool bEnableUsDelay, uBit8 uUsTimeNode)
+void SysTime_Init(uBit32 ulTickPeriod, bool bEnableHwUsDelay, uBit8 uUsTimeNode)
 {
     HAL_SysTick_Init(1);
     
-    if (bEnableUsDelay)
+    if (bEnableHwUsDelay)
     {
-        bUsEnableFlag = bEnableUsDelay;
+        bHwUsEnableFlag = bEnableHwUsDelay;
         
         HAL_DelayInit(uUsTimeNode);
     }
@@ -110,7 +110,7 @@ void SysTime_SimpleDelay(uBit32 ulDelay)
   */
 void SysTime_DelayUs(uBit32 ulUsDelay)
 {
-    if (bUsEnableFlag)
+    if (bHwUsEnableFlag)
     {
         HAL_DelayUs(ulUsDelay);
     }

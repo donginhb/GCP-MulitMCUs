@@ -17,7 +17,13 @@
 /***********************************<INCLUDES>**********************************/
 #include "HAL_Delay.h"
 #include "DataType/DataType.h"
+
+
+#if (defined(LPC17XX)||defined(LPC43XX))
+#include "HwDrivers/HW_Rit.h"
+#elif defined(STM32F10X)
 #include "HwDrivers/HW_TimeDelay.h"
+#endif
 
       
 /*****************************************************************************
@@ -39,7 +45,7 @@ static uBit8 m_DelayTimeNode = 0;
 void HAL_DelayInit(uBit8 uTimeNode)
 {
 #if (defined(LPC17XX)||defined(LPC43XX))
-    HW_TIM_DelayInit();
+    HW_RIT_InitDelayMode();
 #elif defined(STM32F10X)
     m_DelayTimeNode = uTimeNode;
     HW_TIM_DelayInit(uTimeNode);
@@ -57,7 +63,7 @@ void HAL_DelayInit(uBit8 uTimeNode)
 void HAL_DelayUs(uBit32 ulUs)
 {
 #if (defined(LPC17XX)||defined(LPC43XX))
-    HW_TIM_DelayUs(ulUs);   //取值范围为: 0xFFFF FFFF/0x18 ==> 约178S
+    HW_RIT_DelayUs(ulUs);   //取值范围为: 0xFFFF FFFF/0x18 ==> 约178S
 #elif defined(STM32F10X)
     HW_TIM_DelayUs(m_DelayTimeNode, ulUs);
 #endif
@@ -66,8 +72,8 @@ void HAL_DelayUs(uBit32 ulUs)
 
 
 /**
-  * @brief  us级延时
-  * @param  要延时的us数
+  * @brief  Ms级延时
+  * @param  要延时的Ms数
   * @retval None
   * @note   调用本函数所延时的时间,会比预期的时间多3~4us,
   *         因为软件上的运算,寄存器读写等步骤占用了一定的时间
@@ -75,7 +81,7 @@ void HAL_DelayUs(uBit32 ulUs)
 void HAL_DelayMs(uBit32 ulMs)
 {
 #if (defined(LPC17XX)||defined(LPC43XX))
-    HW_TIM_DelayMs(ulMs);   //取值范围为: 0xFFFF FFFF/24000
+    HW_RIT_DelayMs(ulMs);   //取值范围为: 0xFFFF FFFF/24000
 #elif defined(STM32F10X)
     HW_TIM_DelayMs(m_DelayTimeNode, ulMs);
 #endif

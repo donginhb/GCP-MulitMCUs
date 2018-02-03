@@ -19,6 +19,7 @@
 #include "Bootloader.h"
 #include "SysCtrl/SYS_MemoryDef.h"
 #include "SysCtrl/SYS_ParmMan.h"
+#include "SysCtrl/SysConfig.h"
 #include "DataType/DataType.h"
 #include "Algorithm/CRC/CRC.h"
 #include "SysPeripheral/FLASH/Flash.h"
@@ -26,6 +27,7 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "HAL/HAL_Gpio.h"
 #include "Version/Version.h"
+#include "Version/BootVersion.h"
 #include <string.h>
 
       
@@ -33,7 +35,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 static SYS_USER_BOOTLOADER_DATE *m_sys_pUpdateData = NULL;      //系统升级相关数据
-static SYS_USER_IO_CFG_DATA     *m_sys_pIOConfigTable = NULL;   //IO配置表相关数据
+
 
 /*****************************************************************************
  * 系统Bootloader上电处理接口
@@ -51,7 +53,7 @@ static uBit32 SYS_UPDATE_CheckAppValidity(void)
     do 
     {
         //判断参数是否有效
-        if (m_sys_pUpdateData->ulParmValidFlag == 0) break;
+        if (m_sys_pUpdateData == NULL) break;
         
         //校验APP FLASH区数据
         if (m_sys_pUpdateData->ulMainAppFlag)
@@ -105,43 +107,38 @@ static uBit32 SYS_UPDATE_CheckAppValidity(void)
   */
 uBit32 SYS_UPDATE_Init(void)
 {
-    m_sys_pIOConfigTable = SYS_GetIOConfigTable();      //获取IO配置表
+    uBit32 ulRet = 0;
+    
     m_sys_pUpdateData = SYS_GetSysUpadateParm();        //获取系统升级参数
     
     //判断系统参数
-    if ((m_sys_pIOConfigTable == NULL) || (m_sys_pUpdateData == NULL))
+    if (m_sys_pUpdateData == NULL)
     {
         return 1;
     }
     
-    //初始化LED
-    if (m_sys_pIOConfigTable->ulLedEnable)
-    {
-        HAL_GPIO_ConfigOutput(m_sys_pIOConfigTable->LedIO.nPort, m_sys_pIOConfigTable->LedIO.nPin);
-    }
+#if SYS_BOOT_USAGE
     
-    //初始化配置表内的IO
-    for (int i = 0; i < m_sys_pIOConfigTable->ulActiveIOCount; i++)
+    //获取最新的Bootloader版本
+    SOFTWARE_VERSION BootloaderVersion = {0};
+    memcpy(&BootloaderVersion, BT_VER_STR, sizeof(SOFTWARE_VERSION));
+    BootloaderVersion.cSoftVer[0] = BT_VER_NO0;
+    BootloaderVersion.cSoftVer[1] = BT_VER_NO1;
+    BootloaderVersion.cPart = BT_VER_PART;
+    BootloaderVersion.cFlag = BT_VER_FLAG;
+    
+    //判断系统参数之中的Bootloader版本是否最新的,若否,则更新
+    if (memcmp(&m_sys_pUpdateData->BootloaderVersion, &BootloaderVersion, sizeof(SOFTWARE_VERSION)) != 0)
     {
-        HAL_GPIO_ConfigOutput(m_sys_pIOConfigTable->ActiveOutputIO[i].nPort, 
-                              m_sys_pIOConfigTable->ActiveOutputIO[i].nPin);
+        memcpy(&m_sys_pUpdateData->BootloaderVersion, &BootloaderVersion, sizeof(SOFTWARE_VERSION));
         
-        HAL_GPIO_SetOutputState(m_sys_pIOConfigTable->ActiveOutputIO[i].nPort,
-                                m_sys_pIOConfigTable->ActiveOutputIO[i].nPin,
-                                true);
+        //数据存储
+        ulRet = SYS_StoreParmToFLash();
     }
     
-    for (int i = 0; i < m_sys_pIOConfigTable->ulPassiveIOCount; i++)
-    {
-        HAL_GPIO_ConfigOutput(m_sys_pIOConfigTable->PassiveOutputIO[i].nPort, 
-                              m_sys_pIOConfigTable->PassiveOutputIO[i].nPin);
-        
-        HAL_GPIO_SetOutputState(m_sys_pIOConfigTable->PassiveOutputIO[i].nPort,
-                                m_sys_pIOConfigTable->PassiveOutputIO[i].nPin,
-                                false);
-    }
+#endif
     
-    return 0;
+    return ulRet;
 }
 
 
@@ -209,6 +206,11 @@ uBit32 SYS_UpdateAPP(uBit8 *pBuff, uBit32 ulSize)
     P_SYS_UPDATE_PACK_HEAD pPackHead = NULL;    //数据包头
     uBit8 *pDataPtr = NULL;                     //数据区指针
     uBit32 ulRet = BOOT_ERR_SUCCESS;            //执行结果
+    
+    if (m_sys_pUpdateData == NULL)
+    {
+        return 1;
+    }
     
     //读取数据包头
     pPackHead = (P_SYS_UPDATE_PACK_HEAD)pBuff;
@@ -289,7 +291,6 @@ uBit32 SYS_UpdateAPP(uBit8 *pBuff, uBit32 ulSize)
             
             CoreCtrl_ResetSystemDelay(1000);
         }
-        
     }
     
     return ulRet;
@@ -308,6 +309,11 @@ uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize)
     P_SYS_UPDATE_PACK_HEAD pPackHead = NULL;    //数据包头
     uBit8 *pDataPtr = NULL;                     //数据区指针
     uBit32 ulRet = BOOT_ERR_SUCCESS;            //执行结果
+    
+    if (m_sys_pUpdateData == NULL)
+    {
+        return 1;
+    }
     
     //读取数据包头
     pPackHead = (P_SYS_UPDATE_PACK_HEAD)pBuff;
@@ -394,6 +400,96 @@ uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize)
 }
 
 
+
+/**
+  * @brief  系统Bootloader更新
+  * @param  pBuff 数据缓冲区
+  * @param  ulSize 缓冲区长度
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_UpdateBootloader(uBit8 *pBuff, uBit32 ulSize)
+{
+    uBit32 ulRet = BOOT_ERR_SUCCESS;            //执行结果
+    
+#if !SYS_BOOT_USAGE
+    static uBit32 s_ulCurPackIndex = 0;         //当前升级数据包序号
+    P_SYS_UPDATE_PACK_HEAD pPackHead = NULL;    //数据包头
+    uBit8 *pDataPtr = NULL;                     //数据区指针
+    
+    //读取数据包头
+    pPackHead = (P_SYS_UPDATE_PACK_HEAD)pBuff;
+    pDataPtr  = pBuff + sizeof(SYS_UPDATE_PACK_HEAD);
+    
+    //确定是信息帧还是数据帧
+    if (pPackHead->ulPackIndex == SYS_UPDATE_PACK_INFO_INDEX)   //信息帧
+    {
+        //数据校验
+        if (pPackHead->ulDataLen != sizeof(SYS_UPDATE_FILE_INFO_PACK))
+        {
+            return BOOT_ERR_FILE_INFO;
+        }
+        
+        //初始化相关参数
+        s_ulCurPackIndex = SYS_UPDATE_PACK_INFO_INDEX;
+        
+        //获取文件信息
+        uBit32 nBinFileCheckSum = ((P_SYS_UPDATE_FILE_INFO_PACK)pDataPtr)->nPreLockCheckNum;
+        uBit32 ulBinFileLen = ((P_SYS_UPDATE_FILE_INFO_PACK)pDataPtr)->nFileLenght;
+        
+        //配置文件信息
+        ulRet = BOOT_InitFlash(FLASH_BOOT_BANK, nBinFileCheckSum, ulBinFileLen);
+        
+        //设置系统参数
+        if (ulRet == BOOT_ERR_SUCCESS)
+        {
+            //m_sys_pUpdateData->BootloaderVersion = ((P_SYS_UPDATE_FILE_INFO_PACK)pDataPtr)->sVersion;
+        }
+        
+    }
+    else    //数据帧
+    {
+        uBit32 ulFinshFlg = false;
+        
+        //判断是否最后一帧数据
+        if (pPackHead->ulPackIndex != SYS_UPDATE_PACK_END_INDEX)
+        {
+            //更新当前数据包序号
+            s_ulCurPackIndex++;
+        
+            //判断数据包是否连续
+            if (pPackHead->ulPackIndex != s_ulCurPackIndex)
+            {
+                return BOOT_ERR_DATA_LOST;
+            }
+        }
+        else 
+        {
+            ulFinshFlg = true;
+        }
+        
+        //写入数据
+        ulRet = BOOT_StoreUpdateDataToBuff(pDataPtr, pPackHead->ulDataLen, ulFinshFlg);
+        
+        //设置系统参数
+        if ((ulRet == BOOT_ERR_SUCCESS) && (ulFinshFlg == true))
+        {
+            //校验flash数据
+            ulRet = BOOT_CheckFlashLoaderFinsh();
+            
+            if (ulRet != BOOT_ERR_SUCCESS)
+            {
+                return BOOT_ERR_DATA_CHECK;
+            }
+            
+        }
+        
+    }
+#endif
+    
+    return ulRet;
+}
+
+
 /**
   * @brief  系统主APP存在标志清除
   * @param  None
@@ -401,6 +497,11 @@ uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize)
   */
 uBit32 SYS_ClearAppFlag(void)
 {
+    if (m_sys_pUpdateData == NULL)
+    {
+        return 1;
+    }
+    
     if (m_sys_pUpdateData->ulMainAppFlag)
     {
         //清除主App存在标志
@@ -421,6 +522,11 @@ uBit32 SYS_ClearAppFlag(void)
   */
 uBit32 SYS_ClearSubAppFlag(void)
 {
+    if (m_sys_pUpdateData == NULL)
+    {
+        return 1;
+    }
+    
     if (m_sys_pUpdateData->ulSubAppFlag)
     {
         //清除副App存在标志
@@ -432,82 +538,3 @@ uBit32 SYS_ClearSubAppFlag(void)
     
     return 0;
 }
-
-
-/*****************************************************************************
- * Bootloader LED显示线程接口
- ****************************************************************************/
-#define SYS_LED_TOGGLE_TIME          (500)      //LED翻转时间(MS)
-static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
-
-/**
-  * @brief  LED灯设置
-  * @param  ulLedPort Led端口
-  * @param  ulLedPin Led引脚
-  * @retval 0-成功 非0-失败
-  */
-uBit32 SYS_UPDATE_SetMainWorkLed(uBit32 ulLedPort, uBit32 ulLedPin)
-{
-    uBit32 ulRet = 1;
-    
-    if (m_sys_pIOConfigTable != NULL)
-    {
-        if (m_sys_pIOConfigTable->ulLedEnable)
-        {
-            //假如FLASH之中的参数与当前要设置的LED IO不一致,则更新并存储
-            if ((m_sys_pIOConfigTable->LedIO.nPort != ulLedPort) ||
-                (m_sys_pIOConfigTable->LedIO.nPin != ulLedPin))
-            {
-                //更新参数
-                m_sys_pIOConfigTable->LedIO.nPort = ulLedPort;
-                m_sys_pIOConfigTable->LedIO.nPin  = ulLedPin;
-                
-                //存储参数
-                ulRet = SYS_StoreParmToFLash();
-            }
-            else 
-            {
-                ulRet = 0;
-            }
-        }
-        else 
-        {
-            //更新参数
-            m_sys_pIOConfigTable->LedIO.nPort = ulLedPort;
-            m_sys_pIOConfigTable->LedIO.nPin  = ulLedPin;
-            m_sys_pIOConfigTable->ulLedEnable = 1;
-            
-            //存储参数
-            ulRet = SYS_StoreParmToFLash();
-        }
-    }
-    
-    return ulRet;
-}
-
-
-/**
-  * @brief  LED 流水灯循环
-  * @param  None
-  * @retval None
-  */
-void SYS_UPDATE_ShowMainWorkLed(void)
-{
-    if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
-    {
-        if ((m_sys_pIOConfigTable->ulLedEnable == 0) || (m_sys_pIOConfigTable == NULL))
-        {
-            SysTime_Cancel(&m_LedCtrlTimer);
-            return ;
-        }
-        
-        SysTime_StartOneShot(&m_LedCtrlTimer, SYS_LED_TOGGLE_TIME); //设置下一次执行的时间
-        
-        HAL_GPIO_SetOutputState(m_sys_pIOConfigTable->LedIO.nPort, 
-                                m_sys_pIOConfigTable->LedIO.nPin, 
-                                !HAL_GPIO_GetIOState(m_sys_pIOConfigTable->LedIO.nPort, 
-                                                     m_sys_pIOConfigTable->LedIO.nPin));
-    }
-
-}
-

@@ -990,6 +990,27 @@
   </group>
   <group>
     <name>Application</name>
+    <group>
+      <name>Bootloader</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\Bootloader\BT_HardwareDef.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\Bootloader\BT_MainProc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\Bootloader\BT_MainProc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\Bootloader\VM_IOInit.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\Bootloader\VM_IOInit.h</name>
+      </file>
+    </group>
+    <file>
+      <name>$PROJ_DIR$\..\..\Application\Application.h</name>
+    </file>
   </group>
   <group>
     <name>CMU</name>
@@ -1439,6 +1460,12 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Pwm.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Rit.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Rit.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_SysCtrl.c</name>
         </file>
         <file>
@@ -1455,12 +1482,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Tim.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_TimeDelay.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Uart.c</name>

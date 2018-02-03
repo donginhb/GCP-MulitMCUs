@@ -1956,6 +1956,12 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Mcpwm.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Rit.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Rit.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_SysCtrl.c</name>
         </file>
         <file>
@@ -1966,12 +1972,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_SysTick.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeDelay.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeDelay.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeInput.c</name>
@@ -1995,7 +1995,7 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Watchdog.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_WatchDog.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Watchdog.h</name>
         </file>
       </group>
       <group>

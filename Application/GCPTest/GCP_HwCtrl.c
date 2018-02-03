@@ -24,18 +24,10 @@
 #include "DataType/DataType.h"
 #include "SysCtrl/SysUpdate/SysUpdate.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
-#include "SysPeripheral/KEY/KEY.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/PWM/PWM.h"
-#include "SysPeripheral/PWM/PWM_MotorCtrl.h"
-#include "SysPeripheral/ADC/ADC.h"
-#include "SysPeripheral/CAN/Can.h"
-#include "MotorCtrl/MotorCtrl.h"
-
-#include "ExtPeripheral/NixieTube/NixieTube.h"
-
-#include "HwDrivers/HW_Mcpwm.h"
+#include "SysPeripheral/TIME/TimeCapture.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -74,28 +66,13 @@ void GCP_HwInit(void)
     //初始化IO
     GCP_IOConfig();
     
-    //设置Bootloader LED灯
-    SYS_UPDATE_SetMainWorkLed(g_GcpIOTable.pOutputGroup[OUTPUT_IO_LED_RUN1].nPort, 
-                              g_GcpIOTable.pOutputGroup[OUTPUT_IO_LED_RUN1].nPin);
-
-    //初始化CAN
-    CAN_Init(GCP_CAN_DEF_NODE, GCP_CAN_DEF_BAUDRATE);
+    //初始化串口
+    UART_Init(0, 115200);
     
-    //初始化
-    PWM_Init(HW_MCPWM_NODE_0, true);
-    PWM_OutputEnable(HW_MCPWM_NODE_0, true);
-    
-    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 1000);
-    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 10*1000);
-    PWM_SetOutputPwmFrq(HW_MCPWM_NODE_0, 100*1000);
-    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 20);
-    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 40);
-    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 60);
-    PWM_SetOutputPwmDutyRatio(HW_MCPWM_NODE_0, 0, 80);
-    
-    HW_MCPWM_InitInputCount(HW_MCPWM_NODE_2, 2, 1);
-    HW_MCPWM_SetMaxInputCount(HW_MCPWM_NODE_2, 0xFFFFFFFF);
-    HW_MCPWM_EnableInputCount(HW_MCPWM_NODE_2, true);
+    //初始化输出端口
+    PWM_Init(PWM_NODE_0, true);
+    PWM_OutputEnable(PWM_NODE_0, true);
+    PWM_SetOutputPwmFrq(PWM_NODE_0, 10);
     
 }
 
@@ -113,11 +90,14 @@ static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
   */
 void GCP_ShowMainWorkLed(void)
 {
+    static bool s_bLedState = false;
+    
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
-        SysTime_StartOneShot(&m_LedCtrlTimer, GCP_LED_TOGGLE_TIME); //设置下一次执行的时间
-        
+        SysTime_StartOneShot(&m_LedCtrlTimer, s_bLedState ? GCP_LED_TOGGLE_TIME : (GCP_LED_TOGGLE_TIME*5)); //设置下一次执行的时间
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
+        
+        s_bLedState = !s_bLedState;
     }
 
 }

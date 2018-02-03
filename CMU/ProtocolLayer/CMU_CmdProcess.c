@@ -115,7 +115,7 @@ uBit32 Sys_SetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
         }
         break;
     case SYS_SETCMD_UPDATE_SLCIPO_BOOT:                //SLCIPObootloader升级数据
-        ulRet = m_sExternalFunTable.pf_SYS_UpdateBootloader((Bit8*)pRcvCtrlData->pRevBuf, 
+        ulRet = m_sExternalFunTable.pf_SYS_UpdateBootloader((uBit8*)pRcvCtrlData->pRevBuf, 
                                                     pRcvCtrlData->ulRevLen);
         break;
     case SYS_SETCMD_UPDATE_DEV_BOOT:                //设备bootloader升级数据
@@ -216,6 +216,15 @@ uBit32 Sys_GetNomalCmdProcess(COM_RCV_CTRL_DATA *pRcvCtrlData)
     case SYS_GETCMD_IPO_VER:                        //获取IPO版本
         {
             ulRet = m_sExternalFunTable.pf_SYS_GetIPOVersion((SOFTWARE_VERSION*)pSendBuf);
+
+            if (ulRet==CMU_ERR_SUCCESS)
+                CMU_AddToSendCtrlData(NULL,sizeof(SOFTWARE_VERSION));
+
+            break;
+        }
+    case SYS_GETCMD_BOOT_VER:                       //获取Bootloader版本 20180126 新增 Duhanfeng
+        {
+            ulRet = m_sExternalFunTable.pf_SYS_GetBOOTVersion((SOFTWARE_VERSION*)pSendBuf);
 
             if (ulRet==CMU_ERR_SUCCESS)
                 CMU_AddToSendCtrlData(NULL,sizeof(SOFTWARE_VERSION));

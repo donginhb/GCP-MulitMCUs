@@ -20,16 +20,18 @@
 
 int main(void)
 {
-    SYS_Init(); //系统初始化
+    //系统初始化
+    SYS_Init();
     
-    APP_Init(); //APP初始化
+    //APP初始化
+    APP_Init();
 
     while(1)
     {
         //系统内部管理
         SYS_MainTaskHandler();
         
-        //应用逻辑管理
+        //APP管理
         APP_MainProc();
     }
     

@@ -12,8 +12,12 @@
 #define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
 #define SYS_CNC_USAGE                   (0)     //使用CNC模块
 #define SYS_PARM_MAN_USAGE              (1)     //使用系统参数
-#define SYS_GPIO_SCAN_GROUP             (128)   //最大支持的IO扫描组
+#define SYS_GPIO_MAN_USAGE              (0)     //使用IO管理
+
+#define SYS_GPIO_SCAN_GROUP             (64)    //最大支持的IO扫描组
 #define SYS_GPIO_OUTPUT_SCAN_USAGE      (0)     //使用输出IO扫描
+#define SYS_CAN_TX_BUFF_LEN             (16)    //设置CAN发送缓存区长度
+#define SYS_CAN_RX_BUFF_LEN             (32)    //设置CAN接收缓存区长度
 
 #else 
 
@@ -23,23 +27,26 @@
 #define SYS_SIMP_CMU_USAGE              (0)     //使用精简版本的CMU
 #define SYS_FULL_CMU_USAGE              (1)     //使用完全版本的CMU
 #define SYS_CNC_USAGE                   (0)     //使用CNC模块
-
 #define SYS_PARM_MAN_USAGE              (1)     //使用系统参数
-#define SYS_GPIO_SCAN_GROUP             (128)   //最大支持的IO扫描组
+#define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
+
+#define SYS_GPIO_SCAN_GROUP             (64)    //最大支持的IO扫描组
 #define SYS_GPIO_OUTPUT_SCAN_USAGE      (1)     //使用输出IO扫描
-#define SYS_CAN_TX_BUFF_LEN             (32)    //设置CAN发送缓存区长度
-#define SYS_CAN_RX_BUFF_LEN             (32)    //设置CAN接收缓存区长度
+#define SYS_CAN_TX_BUFF_LEN             (16)    //设置CAN发送缓存区长度
+#define SYS_CAN_RX_BUFF_LEN             (16)    //设置CAN接收缓存区长度
 
 #elif defined(LPC17XX)
 
 #define SYS_BOOT_USAGE                  (0)     //使用Bootloader
 #define SYS_SIMP_CMU_USAGE              (0)     //使用精简版本的CMU
-#define SYS_FULL_CMU_USAGE              (1)     //使用完全版本的CMU
-#define SYS_CNC_USAGE                   (1)     //使用CNC模块
-#define SYS_PARM_MAN_USAGE              (1)     //使用系统参数
-#define SYS_GPIO_SCAN_GROUP             (128)   //最大支持的IO扫描组
+#define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
+#define SYS_CNC_USAGE                   (0)     //使用CNC模块
+#define SYS_PARM_MAN_USAGE              (0)     //使用系统参数
+#define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
+
+#define SYS_GPIO_SCAN_GROUP             (64)    //最大支持的IO扫描组
 #define SYS_GPIO_OUTPUT_SCAN_USAGE      (1)     //使用输出IO扫描
-#define SYS_CAN_TX_BUFF_LEN             (16)    //设置CAN发送缓存区长度
+#define SYS_CAN_TX_BUFF_LEN             (64)    //设置CAN发送缓存区长度
 #define SYS_CAN_RX_BUFF_LEN             (16)    //设置CAN接收缓存区长度
 
 #elif defined(STM32F10X)
@@ -49,10 +56,12 @@
 #define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
 #define SYS_CNC_USAGE                   (0)     //使用CNC模块
 #define SYS_PARM_MAN_USAGE              (0)     //使用系统参数
-#define SYS_GPIO_SCAN_GROUP             (64)    //最大支持的IO扫描组
+#define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
+
+#define SYS_GPIO_SCAN_GROUP             (32)    //最大支持的IO扫描组
 #define SYS_GPIO_OUTPUT_SCAN_USAGE      (1)     //使用输出IO扫描
-#define SYS_CAN_TX_BUFF_LEN             (16)    //设置CAN发送缓存区长度
-#define SYS_CAN_RX_BUFF_LEN             (16)    //设置CAN接收缓存区长度
+#define SYS_CAN_TX_BUFF_LEN             (4)     //设置CAN发送缓存区长度
+#define SYS_CAN_RX_BUFF_LEN             (4)     //设置CAN接收缓存区长度
 
 #elif defined(STM32F0XX)
 
@@ -61,10 +70,12 @@
 #define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
 #define SYS_CNC_USAGE                   (0)     //使用CNC模块
 #define SYS_PARM_MAN_USAGE              (0)     //使用系统参数
+#define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
+
 #define SYS_GPIO_SCAN_GROUP             (32)    //最大支持的IO扫描组
-#define SYS_GPIO_OUTPUT_SCAN_USAGE      (0)     //使用输出IO扫描
-#define SYS_CAN_TX_BUFF_LEN             (2)     //设置CAN发送缓存区长度
-#define SYS_CAN_RX_BUFF_LEN             (2)     //设置CAN接收缓存区长度
+#define SYS_GPIO_OUTPUT_SCAN_USAGE      (1)     //使用输出IO扫描
+#define SYS_CAN_TX_BUFF_LEN             (4)     //设置CAN发送缓存区长度
+#define SYS_CAN_RX_BUFF_LEN             (4)     //设置CAN接收缓存区长度
 
 #endif 
 
@@ -72,58 +83,57 @@
 
 
 /*****************************************************************************
- * 默认参数定义
- ****************************************************************************/
-
-
-#ifndef SYS_PARM_MAN_USAGE
-#define SYS_PARM_MAN_USAGE              (0)         //是否使用系统参数管理
-#endif
-
-
-#ifndef SYS_GPIO_SCAN_GROUP 
-#define SYS_GPIO_SCAN_GROUP             (32)        //最大支持的IO扫描组(需是32的倍数)
-#endif
-
-
-#ifndef SYS_GPIO_OUTPUT_SCAN_USAGE
-#define SYS_GPIO_OUTPUT_SCAN_USAGE      (0)         //是否使能输出IO的信号检测
-#endif
-
-
-#ifndef SYS_KEY_SCAN_GROUP
-#define SYS_KEY_SCAN_GROUP              (4)         //最大支持扫描的按键
-#endif  
-
-#ifndef SYS_CAN_TX_BUFF_LEN
-#define SYS_CAN_TX_BUFF_LEN             (8)         //CAN发送缓存区的长度
-#endif
-
-#ifndef SYS_CAN_RX_BUFF_LEN
-#define SYS_CAN_RX_BUFF_LEN             (8)         //CAN接收缓存区的长度
-#endif
-
-
-
-/*****************************************************************************
  * 默认配置定义及配置校验
  ****************************************************************************/
 
+//功能功能模式配置
 #ifndef SYS_SIMP_CMU_USAGE
-#define SYS_SIMP_CMU_USAGE      (0)         //使用精简版本的CMU
+#define SYS_SIMP_CMU_USAGE              (0)     //使用精简版本的CMU
 #endif
 
 #ifndef SYS_FULL_CMU_USAGE
-#define SYS_FULL_CMU_USAGE      (0)         //使用完全版本的CMU
+#define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
 #endif
 
 #ifndef SYS_CNC_USAGE
-#define SYS_CNC_USAGE           (0)         //使用CNC模块
+#define SYS_CNC_USAGE                   (0)     //使用CNC模块
 #endif
 
 #ifndef SYS_BOOT_USAGE
-#define SYS_BOOT_USAGE          (0)         //使用Bootloader
+#define SYS_BOOT_USAGE                  (0)     //使用Bootloader(仅能在Bootloader时设置为1)
 #endif
+
+#ifndef SYS_PARM_MAN_USAGE
+#define SYS_PARM_MAN_USAGE              (0)     //是否使用系统参数管理
+#endif
+
+#ifndef SYS_GPIO_MAN_USAGE
+#define SYS_GPIO_MAN_USAGE              (1)     //是否使能IO管理
+#endif
+
+#ifndef SYS_GPIO_OUTPUT_SCAN_USAGE
+#define SYS_GPIO_OUTPUT_SCAN_USAGE      (0)     //是否使能输出IO的信号检测
+#endif
+
+
+//模块性能裁剪配置
+
+#ifndef SYS_GPIO_SCAN_GROUP 
+#define SYS_GPIO_SCAN_GROUP             (32)    //最大支持的IO扫描组(需是32的倍数)
+#endif
+
+#ifndef SYS_KEY_SCAN_GROUP
+#define SYS_KEY_SCAN_GROUP              (4)     //最大支持扫描的按键
+#endif  
+
+#ifndef SYS_CAN_TX_BUFF_LEN
+#define SYS_CAN_TX_BUFF_LEN             (8)     //CAN发送缓存区的长度
+#endif
+
+#ifndef SYS_CAN_RX_BUFF_LEN
+#define SYS_CAN_RX_BUFF_LEN             (8)     //CAN接收缓存区的长度
+#endif
+
 
 #if (SYS_SIMP_CMU_USAGE&&SYS_FULL_CMU_USAGE)
 #error 精简版本的指令与完全版本的CMU,只能选择一个
@@ -194,12 +204,6 @@
 
 #endif
 
-
-
 #endif //SYS_CNC_USAGE
-
-
-
-
 
 #endif /* __SYS_CONFIG_H */

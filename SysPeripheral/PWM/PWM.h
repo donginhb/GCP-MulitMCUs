@@ -2,6 +2,19 @@
 #define  __PWM_H
 
 #include "DataType/DataType.h"
+#include "HAL/HAL_Pwm.h"
+
+
+//PWM节点定义
+#define PWM_NODE_0      (HAL_PWM_NODE_0)
+#define PWM_NODE_1      (HAL_PWM_NODE_1)
+#define PWM_NODE_2      (HAL_PWM_NODE_2)
+#define PWM_NODE_3      (HAL_PWM_NODE_3)
+#define PWM_NODE_4      (HAL_PWM_NODE_4)
+#define PWM_NODE_5      (HAL_PWM_NODE_5)
+#define PWM_NODE_6      (HAL_PWM_NODE_6)
+#define PWM_NODE_7      (HAL_PWM_NODE_7)
+
 
 #ifdef __cplusplus
 extern "C"

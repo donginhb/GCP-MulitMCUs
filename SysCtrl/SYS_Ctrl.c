@@ -16,6 +16,7 @@
   
 /***********************************<INCLUDES>**********************************/
 #include "SYS_Ctrl.h"
+#include "SYS_ParmMan.h"
 #include "DataType/DataType.h"
 #include "Version/Version.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
@@ -66,6 +67,28 @@ uBit32 SYS_GetGCPVersion(SOFTWARE_VERSION* pVersion)
     return 0;
 }
 
+    
+/**
+  * @brief  Bootloader版本获取
+  * @param  pVersion 版本结构指针
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_GetBOOTVersion(SOFTWARE_VERSION* pVersion)
+{
+    SYS_USER_BOOTLOADER_DATE *pSysParm = SYS_GetSysUpadateParm();
+    
+    if (pSysParm)
+    {
+        *pVersion = pSysParm->BootloaderVersion;
+    }
+    else 
+    {
+        memset(pVersion, 0, sizeof(SOFTWARE_VERSION));
+    }
+    
+    return 0;
+}
+    
 
 /*****************************************************************************
  * 系统时间相关控制接口

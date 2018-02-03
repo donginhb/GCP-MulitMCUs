@@ -218,6 +218,7 @@ typedef union _COM_DATA_ID{
 
 //2017.12.18 新增 Duanfeng
 #define SYS_GETCMD_CNC_ALARM                (20)    //获取系统报警
+#define SYS_GETCMD_BOOT_VER                 (21)    //获取Bootloader版本
 
 /************************************************************************/
 

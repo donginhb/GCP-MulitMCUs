@@ -10,10 +10,14 @@
 #define HW_TIME_NODE_3              (3)
 
 
-//MCPWM 中断模式定义
+//定时器中断模式定义
 #define HW_TIM_INT_MATCH            (0x01)  //匹配中断
 #define HW_TIM_INT_CAPTURE          (0x02)  //捕获中断
 
+//定时器捕获边沿定义
+#define HW_TIM_CAP_EDGE_RISING      (0x01)  //上升沿捕获
+#define HW_TIM_CAP_EDGE_FALLING     (0x02)  //下降沿捕获
+#define HW_TIM_CAP_EDGE_BOTH        (0x03)  //双边沿捕获
 
 #ifdef __cplusplus
 extern "C"
@@ -108,7 +112,7 @@ uint16_t HW_TIM_GetOutputAutoReloadValue(uint8_t uTimeNode);
   * @param  bIsEnable 定时器使能位
   * @retval None
   */
-void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnable);
+void HW_TIM_EnableOutput(uint8_t uTimeNode, bool bIsEnable);
 
 
 /*****************************************************************************
@@ -149,6 +153,56 @@ void HW_TIM_SetMaxInputCount(uint8_t uTimeNode, uint8_t uChannelNum, uint32_t ul
   * @retval 当前计数值
   */
 uint32_t HW_TIM_GetCurInputCount(uint8_t uTimeNode);
+
+
+/*****************************************************************************
+ * 定时器输入捕获相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  捕获模式初始化
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @param  uTrgSource 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)
+  * @retval 0-成功 非0-失败
+  */
+void HW_TIM_InitCapture(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uTrgSource);
+
+
+/**
+  * @brief  捕获捕获边缘设置
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @param  uTrgSource 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)
+  * @retval None
+  */
+void HW_TIM_SetCaptureEdge(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uTrgSource);
+
+
+/**
+  * @brief  定时器输入使能
+  * @param  uTimeNode 定时器节点
+  * @param  bIsEnable 定时器使能位
+  * @retval None
+  */
+void HW_TIM_EnableCapture(uint8_t uTimeNode, bool bIsEnable);
+
+
+/**
+  * @brief  计数器复位
+  * @param  uTimeNode 定时器节点
+  * @retval None
+  */
+void HW_TIM_ResetCounter(uint8_t uTimeNode);
+
+
+/**
+  * @brief  定时器输入捕获值获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @retval 定时器通道捕获寄存器值
+  */
+uint32_t HW_TIM_GetCaptureValue(uint8_t uTimeNode, uint8_t uChannelNum);
 
 
 /*****************************************************************************

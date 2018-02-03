@@ -52,6 +52,15 @@ uBit32 SYS_UpdateSubAPP(uBit8 *pBuff, uBit32 ulSize);
 
 
 /**
+  * @brief  系统Bootloader更新
+  * @param  pBuff 数据缓冲区
+  * @param  ulSize 缓冲区长度
+  * @retval 0-成功 非0-失败
+  */
+uBit32 SYS_UpdateBootloader(uBit8 *pBuff, uBit32 ulSize);
+
+
+/**
   * @brief  系统主APP存在标志清除
   * @param  None
   * @retval 0-成功 非0-失败

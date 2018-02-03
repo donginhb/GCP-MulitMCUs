@@ -56,14 +56,15 @@ typedef struct _cmu_external_fun_table
 {
       //--------------------------------------------系统管理模块------------------------------------------------
     double64 (*pf_SYS_GetSysTickCount)(void);        //系统时钟计数
-    void (*pf_SYS_SetSysStatusBit)(uBit32 ulStatusBit);
+    void   (*pf_SYS_SetSysStatusBit)(uBit32 ulStatusBit);
     uBit32 (*pf_SYS_PreUpdateDevProc)(Bit8* pUpdateData, uBit32 ulDataLen);         //
     uBit32 (*pf_SYS_PostUpdateDevProc)(Bit8* pUpdateData, uBit32 ulDataLen);        //
     uBit32 (*pf_SYS_UpdateSLC)(uBit8* pUpdateData, uBit32 ulDataLen);                //更新M0程序(进入Bootloader)
     uBit32 (*pf_SYS_UpdateIPO)(uBit8* pUpdateData, uBit32 ulDataLen);                //更新M4程序(进入Bootloader)
-    uBit32 (*pf_SYS_UpdateBootloader)(Bit8* pUpdateData, uBit32 ulDataLen);    
+    uBit32 (*pf_SYS_UpdateBootloader)(uBit8* pUpdateData, uBit32 ulDataLen);    
     uBit32 (*pf_SYS_GetSLCVersion)(SOFTWARE_VERSION* pVersion);
     uBit32 (*pf_SYS_GetIPOVersion)(SOFTWARE_VERSION* pVersion);
+    uBit32 (*pf_SYS_GetBOOTVersion)(SOFTWARE_VERSION* pVersion);
     uBit32 (*pf_SYS_SetComType)(uBit32 ulComType);
     const CNSYS_STATE_DATA* (*pf_SYS_GetStateReadAddr)(void);
     //将固定循环程序代码程序写入缓冲区 iBlockNo--块序号 从0开始
@@ -85,7 +86,7 @@ typedef struct _cmu_external_fun_table
     uBit32 (*pf_SYS_IPREnable)(Bit32 iEnable);  //使能解释器
     
     //以编号的方式对IO进行控制 2017.12.01 新增 -- Duhanfeng
-    void  (*pf_GPIO_SetOutputPinState)(uBit32 uOutputNO, bool uState);
+    void   (*pf_GPIO_SetOutputPinState)(uBit32 uOutputNO, bool uState);
     bool   (*pf_GPIO_GetOutputPinState)(uBit32 ulIntputNO);
     bool   (*pf_GPIO_GetInputPinState)(uBit32 ulIntputNO);
 
