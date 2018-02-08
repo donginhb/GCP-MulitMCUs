@@ -1072,6 +1072,15 @@
       </file>
     </group>
     <group>
+      <name>PID</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\PID\pid.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Algorithm\PID\pid.h</name>
+      </file>
+    </group>
+    <group>
       <name>RingBuff</name>
       <file>
         <name>$PROJ_DIR$\..\..\Algorithm\RingBuff\RingBuff.c</name>
@@ -1105,6 +1114,12 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\CNMachine\CN_MainProc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\CNMachine\YY4357_IODef.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\CNMachine\YY4357_IODef.h</name>
       </file>
     </group>
     <file>
@@ -1597,6 +1612,12 @@
       <name>$PROJ_DIR$\..\..\HAL\HAL_Config.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Delay.c</name>
     </file>
     <file>
@@ -1649,6 +1670,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_SysTick.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Uart.c</name>
@@ -2003,6 +2036,12 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Adc.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Dac.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Dac.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Eeprom.c</name>
         </file>
         <file>
@@ -2057,16 +2096,10 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_SysTick.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeInput.c</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Tim.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeInput.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeOutput.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_TimeOutput.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Tim.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC43XX\HwDrivers\HW_Uart.c</name>
@@ -2172,10 +2205,10 @@
     <group>
       <name>CAN</name>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.c</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.h</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.c</name>
@@ -2198,6 +2231,12 @@
     </group>
     <group>
       <name>DAC</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\DAC\DAC.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\DAC\DAC.h</name>
+      </file>
     </group>
     <group>
       <name>ENET</name>

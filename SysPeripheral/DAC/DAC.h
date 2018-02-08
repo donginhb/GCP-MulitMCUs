@@ -1,0 +1,46 @@
+#ifndef  __DAC_H
+#define  __DAC_H
+
+#include "DataType/DataType.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    
+/*****************************************************************************
+ * DAC相关控制接口
+ ****************************************************************************/
+
+/**
+  * @brief  DAC初始化
+  * @param  None
+  * @retval None
+  */
+void DAC_Init(void);
+
+
+/**
+  * @brief  更新DAC输出(根据指定的数字量值)
+  * @param  ulDigitalValue DAC数字量值
+  * @retval None
+  * @note   实际DAC输出模拟量电压 = (ulDigitalValue/硬件分辨率)*参考电压
+  */
+void DAC_UpdateByDigitalValue(uBit32 ulDigitalValue);
+
+
+/**
+  * @brief  更新DAC输出(根据指定的模拟量值)
+  * @param  uDacValue DAC模拟电压值,单位：毫伏
+  * @retval None 
+  * @note   注意电压范围最高为参考电压,超过该值均视为要输出参考电压
+  */
+void DAC_UpdateByAnalogValue(uBit32 ulAnalogValue);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __DAC_H */

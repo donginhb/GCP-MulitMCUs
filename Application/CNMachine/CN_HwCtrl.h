@@ -45,15 +45,24 @@ void CN_KeyProc(void);
 
 
 /*****************************************************************************
- * 传感器数据处理线程接口
+ * 温度采集线程接口
  ****************************************************************************/
 
 /**
-  * @brief  按键处理
+  * @brief  温度数据采集
   * @param  None
   * @retval None
   */
-void CN_SensorSampleProc(void);
+void CN_SamplingTempValue(void);
+
+
+/**
+  * @brief  温度采集数据获取
+  * @param  None
+  * @retval 采集到的温度数据(原始AD值,未作转换)
+  */
+uBit32 CN_GetTempSamplingValue(void);
+
 
 
 #ifdef __cplusplus

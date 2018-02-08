@@ -209,6 +209,16 @@ void HW_IRQ_SetTrgCallback(void (*ptr)(void), uint32_t ulTrgSource)
     case LPC_IRQ_TRG_DMA_CH7: 
     case LPC_IRQ_TRG_DMA_CH8: g_IRQInterface.pf_DMA_CHx_IRQHandler[ulTrgSource - LPC_IRQ_TRG_DMA_CH1] =  ptr; break;
     
+    //EXTI
+    case LPC_IRQ_TRG_EXTI_CH0: g_IRQInterface.pf_GPIO0_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH1: g_IRQInterface.pf_GPIO1_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH2: g_IRQInterface.pf_GPIO2_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH3: g_IRQInterface.pf_GPIO3_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH4: g_IRQInterface.pf_GPIO4_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH5: g_IRQInterface.pf_GPIO5_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH6: g_IRQInterface.pf_GPIO6_IRQHandler = ptr; break;
+    case LPC_IRQ_TRG_EXTI_CH7: g_IRQInterface.pf_GPIO7_IRQHandler = ptr; break;
+    
     default: break;
     }
     
@@ -244,6 +254,16 @@ void HW_IRQ_ReleaseTrgCallback(uint32_t ulTrgSource)
     case LPC_IRQ_TRG_DMA_CH6: 
     case LPC_IRQ_TRG_DMA_CH7: 
     case LPC_IRQ_TRG_DMA_CH8: g_IRQInterface.pf_DMA_CHx_IRQHandler[ulTrgSource - LPC_IRQ_TRG_DMA_CH1] =  HW_IRQ_NullEntry; break;
+    
+    //EXTI
+    case LPC_IRQ_TRG_EXTI_CH0: g_IRQInterface.pf_GPIO0_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH1: g_IRQInterface.pf_GPIO1_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH2: g_IRQInterface.pf_GPIO2_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH3: g_IRQInterface.pf_GPIO3_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH4: g_IRQInterface.pf_GPIO4_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH5: g_IRQInterface.pf_GPIO5_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH6: g_IRQInterface.pf_GPIO6_IRQHandler = HW_IRQ_NullEntry; break;
+    case LPC_IRQ_TRG_EXTI_CH7: g_IRQInterface.pf_GPIO7_IRQHandler = HW_IRQ_NullEntry; break;
     
     default: break;
     }
@@ -287,6 +307,133 @@ void DMA_IRQHandler(void)
 }
 
 
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO0_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(0)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO0_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO1_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(1)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO1_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO2_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(2)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO2_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO3_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(3)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO3_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO4_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(4)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO4_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO5_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(5)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO5_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO6_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(6)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO6_IRQHandler();
+    
+}
+
+
+/**
+  * @brief  This function handles EXTI Handler.
+  * @param  None
+  * @retval None
+  */
+void GPIO7_IRQHandler(void)
+{
+    //清中断标志
+    Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(7)); 
+    
+    //执行回调
+    g_IRQInterface.pf_GPIO7_IRQHandler();
+    
+}
+
 
 void DAC_IRQHandler           (void){g_IRQInterface.pf_DAC_IRQHandler         ();}
 void M0APP_IRQHandler         (void){g_IRQInterface.pf_M0APP_IRQHandler       ();}
@@ -319,14 +466,6 @@ void I2S0_IRQHandler          (void){g_IRQInterface.pf_I2S0_IRQHandler        ()
 void I2S1_IRQHandler          (void){g_IRQInterface.pf_I2S1_IRQHandler        ();}
 void SPIFI_IRQHandler         (void){g_IRQInterface.pf_SPIFI_IRQHandler       ();}
 void SGPIO_IRQHandler         (void){g_IRQInterface.pf_SGPIO_IRQHandler       ();}
-void GPIO0_IRQHandler         (void){g_IRQInterface.pf_GPIO0_IRQHandler       ();}
-void GPIO1_IRQHandler         (void){g_IRQInterface.pf_GPIO1_IRQHandler       ();}
-void GPIO2_IRQHandler         (void){g_IRQInterface.pf_GPIO2_IRQHandler       ();}
-void GPIO3_IRQHandler         (void){g_IRQInterface.pf_GPIO3_IRQHandler       ();}
-void GPIO4_IRQHandler         (void){g_IRQInterface.pf_GPIO4_IRQHandler       ();}
-void GPIO5_IRQHandler         (void){g_IRQInterface.pf_GPIO5_IRQHandler       ();}
-void GPIO6_IRQHandler         (void){g_IRQInterface.pf_GPIO6_IRQHandler       ();}
-void GPIO7_IRQHandler         (void){g_IRQInterface.pf_GPIO7_IRQHandler       ();}
 void GINT0_IRQHandler         (void){g_IRQInterface.pf_GINT0_IRQHandler       ();}
 void GINT1_IRQHandler         (void){g_IRQInterface.pf_GINT1_IRQHandler       ();}
 void EVRT_IRQHandler          (void){g_IRQInterface.pf_EVRT_IRQHandler        ();}

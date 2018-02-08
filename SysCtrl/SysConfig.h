@@ -25,9 +25,9 @@
 
 #define SYS_BOOT_USAGE                  (0)     //使用Bootloader
 #define SYS_SIMP_CMU_USAGE              (0)     //使用精简版本的CMU
-#define SYS_FULL_CMU_USAGE              (1)     //使用完全版本的CMU
+#define SYS_FULL_CMU_USAGE              (0)     //使用完全版本的CMU
 #define SYS_CNC_USAGE                   (0)     //使用CNC模块
-#define SYS_PARM_MAN_USAGE              (1)     //使用系统参数
+#define SYS_PARM_MAN_USAGE              (0)     //使用系统参数
 #define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
 
 #define SYS_GPIO_SCAN_GROUP             (64)    //最大支持的IO扫描组

@@ -1,5 +1,5 @@
-#ifndef  __CN4357_IO_TABLE_H
-#define  __CN4357_IO_TABLE_H
+#ifndef  __YY4357_IO_DEF_H
+#define  __YY4357_IO_DEF_H
 
 
 #ifdef __cplusplus
@@ -28,7 +28,7 @@ typedef enum
 
 
 //格子柜控制IO资源表
-extern GPIO_CTRL_TABLE g_CN4357_IOTable;
+extern GPIO_CTRL_TABLE g_YY4357_IOTable;
     
     
 
@@ -37,4 +37,4 @@ extern GPIO_CTRL_TABLE g_CN4357_IOTable;
 #endif
 
 
-#endif /* __CN4357_IO_TABLE_H */
+#endif /* __YY4357_IO_DEF_H */

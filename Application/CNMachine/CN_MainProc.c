@@ -56,4 +56,7 @@ void CN_MainProc(void)
     //传感器采样处理
     //CN_SensorSampleProc();
     
+    //温度数据采集处理
+    CN_SamplingTempValue();
+    
 }

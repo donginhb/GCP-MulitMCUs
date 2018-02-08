@@ -31,7 +31,7 @@
  * 私有成员定义及实现
  ****************************************************************************/
 
-#if defined(LPC17XX)
+#if (defined(LPC17XX)||defined(LPC43XX))
 //LPC17XX PWM模块定义
 #define HAL_LPC17XX_MCPWM_NODE_COUNT        (3)
 #define HAL_LPC17XX_TIMER_NODE_COUNT        (4)
@@ -58,22 +58,22 @@
   */
 static uBit8 HAL_PWM_GetNodeIndex(uBit8 uTimeNode)
 {
-    uBit8 uPwmNodeIndex = 0;
+    uBit8 uTimeNodeIndex = 0;
     
     if (uTimeNode < HAL_LPC17XX_MCPWM_NODE_COUNT)
     {
-        uPwmNodeIndex = uTimeNode;
+        uTimeNodeIndex = uTimeNode;
     }
     else if (uTimeNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT))
     {
-        uPwmNodeIndex = (uTimeNode - HAL_LPC17XX_MCPWM_NODE_COUNT);
+        uTimeNodeIndex = (uTimeNode - HAL_LPC17XX_MCPWM_NODE_COUNT);
     }
     else if (uTimeNode < (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT + HAL_LPC17XX_PWM_NODE_COUNT))
     {
-        uPwmNodeIndex = (uTimeNode - (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT));
+        uTimeNodeIndex = (uTimeNode - (HAL_LPC17XX_MCPWM_NODE_COUNT + HAL_LPC17XX_TIMER_NODE_COUNT));
     }
     
-    return uPwmNodeIndex;
+    return uTimeNodeIndex;
 }
 
 
@@ -125,7 +125,7 @@ uBit32 HAL_TIME_InitCapture(uBit8 uTimeNode, uBit8 uChannelMask, uBit8 uTrgSourc
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     uBit8 uChannelNum = 0;
     
     switch (uModuleIndex)
@@ -144,7 +144,7 @@ uBit32 HAL_TIME_InitCapture(uBit8 uTimeNode, uBit8 uChannelMask, uBit8 uTrgSourc
             }
         }
         
-        HW_TIM_InitCapture(uPwmNodeIndex, uChannelNum, uTrgSource);
+        HW_TIM_InitCapture(uTimeNodeIndex, uChannelNum, uTrgSource);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -174,7 +174,7 @@ void HAL_TIME_SetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum, uBit8 uTrgSourc
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -183,7 +183,7 @@ void HAL_TIME_SetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum, uBit8 uTrgSourc
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
         
-        HW_TIM_SetCaptureEdge(uPwmNodeIndex, uChannelNum, uTrgSource);
+        HW_TIM_SetCaptureEdge(uTimeNodeIndex, uChannelNum, uTrgSource);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -215,7 +215,7 @@ void HAL_TIME_EnableCapture(uBit8 uTimeNode, bool bIsEnable)
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -223,7 +223,7 @@ void HAL_TIME_EnableCapture(uBit8 uTimeNode, bool bIsEnable)
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        HW_TIM_EnableCapture(uPwmNodeIndex, bIsEnable);
+        HW_TIM_EnableCapture(uTimeNodeIndex, bIsEnable);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -251,7 +251,7 @@ void HAL_TIME_ResetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum)
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -259,7 +259,7 @@ void HAL_TIME_ResetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum)
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        HW_TIM_ResetCounter(uPwmNodeIndex);
+        HW_TIM_ResetCounter(uTimeNodeIndex);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -289,7 +289,7 @@ uBit32 HAL_TIME_GetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum)
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -297,7 +297,7 @@ uBit32 HAL_TIME_GetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum)
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        ulCaptureValue = HW_TIM_GetCaptureValue(uPwmNodeIndex, uChannelNum);
+        ulCaptureValue = HW_TIM_GetCaptureValue(uTimeNodeIndex, uChannelNum);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -331,7 +331,7 @@ void HAL_TIME_EnableCaptureIRQ(uBit8 uTimeNode, uBit8 uChannelNum, bool bIsEnabl
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -339,7 +339,7 @@ void HAL_TIME_EnableCaptureIRQ(uBit8 uTimeNode, uBit8 uChannelNum, bool bIsEnabl
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        HW_TIM_EnableIRQ(uPwmNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE, bIsEnable);
+        HW_TIM_EnableIRQ(uTimeNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE, bIsEnable);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -368,7 +368,7 @@ bool HAL_TIME_GetCaptureIRQFlag(uBit8 uTimeNode, uBit8 uChannelNum)
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -376,7 +376,7 @@ bool HAL_TIME_GetCaptureIRQFlag(uBit8 uTimeNode, uBit8 uChannelNum)
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        bFlag = HW_TIM_GetITStatus(uPwmNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE);
+        bFlag = HW_TIM_GetITStatus(uTimeNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         
@@ -405,7 +405,7 @@ void HAL_TIME_ClearCaptureIRQFlag(uBit8 uTimeNode, uBit8 uChannelNum)
     
     //获取索引
     uBit8 uModuleIndex = HAL_PWM_GetModuleIndex(uTimeNode);
-    uBit8 uPwmNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
+    uBit8 uTimeNodeIndex = HAL_PWM_GetNodeIndex(uTimeNode);
     
     switch (uModuleIndex)
     {
@@ -413,7 +413,7 @@ void HAL_TIME_ClearCaptureIRQFlag(uBit8 uTimeNode, uBit8 uChannelNum)
         
         break;
     case HAL_LPC17XX_TIMER_MODULE: 
-        HW_TIM_ClearITStatus(uPwmNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE);
+        HW_TIM_ClearITStatus(uTimeNodeIndex, uChannelNum, HW_TIM_INT_CAPTURE);
         break;
     case HAL_LPC17XX_PWM_MODULE: 
         

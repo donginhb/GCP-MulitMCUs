@@ -25,6 +25,7 @@ extern "C"
   */
 uBit32 EXTI_Init(uBit32 ulIntputNO, uBit8 uTrgSource);
 
+
 #ifdef __cplusplus
 }
 #endif

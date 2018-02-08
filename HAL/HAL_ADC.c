@@ -57,7 +57,7 @@ uBit32 HAL_ADC_RecvValueNoBlock(uBit8 uAdcNode, uBit32 ulChannel, uBit16 *pAdcVa
     ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, ulChannel, pAdcValue);
 
 #elif defined(LPC43XX)
-    
+    ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, ulChannel, pAdcValue);
 
 #elif defined(STM32F10X)
     ulRet = HW_ADC_RecvValueNoBlock(uAdcNode, pAdcValue);
@@ -86,7 +86,7 @@ uBit32 HAL_ADC_RecvValueBlock(uBit8 uAdcNode, uBit32 ulChannel, uBit16 *pAdcValu
     ulRet = HW_ADC_RecvValueBlock(uAdcNode, ulChannel, pAdcValue);
 
 #elif defined(LPC43XX)
-    
+    ulRet = HW_ADC_RecvValueBlock(uAdcNode, ulChannel, pAdcValue);
 
 #elif defined(STM32F10X)
     ulRet = HW_ADC_RecvValueBlock(uAdcNode, pAdcValue);

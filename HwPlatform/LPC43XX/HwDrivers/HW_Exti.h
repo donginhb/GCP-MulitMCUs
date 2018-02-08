@@ -4,8 +4,9 @@
 #include "chip.h"
 
 //中断触发源触发
-#define HW_EXTI_TRG_RISING         (1) //上升沿触发
-#define HW_EXTI_TRG_FALLING        (2) //下降沿触发
+#define HW_EXTI_TRG_RISING          (1) //上升沿触发
+#define HW_EXTI_TRG_FALLING         (2) //下降沿触发
+#define HW_EXTI_TRG_BOTH            (3) //双边沿触发
 
 #ifdef __cplusplus
 extern "C"

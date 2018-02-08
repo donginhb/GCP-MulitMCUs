@@ -172,6 +172,18 @@ uBit32 GPIO_InitIOTable(GPIO_CTRL_TABLE *pTable)
 }
 
 
+/**
+  * @brief  IO配置表地址获取
+  * @param  None
+  * @retval IO配置表地址
+  */
+GPIO_CTRL_TABLE *GPIO_GetCtrlTableAddr(void)
+{
+  
+    return &m_GpioCtrlTable;
+}
+
+
 /*****************************************************************************
  * 基本IO控制接口
  ****************************************************************************/

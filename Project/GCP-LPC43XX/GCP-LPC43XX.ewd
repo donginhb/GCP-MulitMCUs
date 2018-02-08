@@ -45,7 +45,7 @@
         </option>
         <option>
           <name>MemFile</name>
-          <state>$TOOLKIT_DIR$\CONFIG\debugger\NXP\LPC1768.ddf</state>
+          <state>$TOOLKIT_DIR$\CONFIG\debugger\NXP\LPC4357_M4.ddf</state>
         </option>
         <option>
           <name>RunToEnable</name>
@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OCDownloadVerifyAll</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCProductVersion</name>
@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>UseFlashLoader</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CLowLevel</name>
@@ -117,7 +117,7 @@
         </option>
         <option>
           <name>FlashLoadersV3</name>
-          <state>$TOOLKIT_DIR$\config\flashloader\NXP\FlashNXPLPC512K_Cortex.board</state>
+          <state>$TOOLKIT_DIR$\config\flashloader\NXP\FlashNXPLPC18xx_1024K.board</state>
         </option>
         <option>
           <name>OCImagesSuppressCheck1</name>
@@ -145,7 +145,7 @@
         </option>
         <option>
           <name>OverrideDefFlashBoard</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCImagesOffset1</name>

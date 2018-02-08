@@ -2324,7 +2324,7 @@
     <group>
       <name>IPO</name>
       <file>
-        <name>$PROJ_DIR$\..\..\CNC\IPO\IPO-LIB-17XX.a</name>
+        <name>$PROJ_DIR$\..\..\CNC\IPO\IPO-LIB-17xx.a</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\CNC\IPO\IPO_DataStructDefPte.h</name>
@@ -2485,6 +2485,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Config.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Delay.c</name>
@@ -2830,7 +2836,10 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Can.h</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Config.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Dac.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Dac.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\LPC17XX\HwDrivers\HW_Exti.c</name>
@@ -2999,10 +3008,10 @@
     <group>
       <name>CAN</name>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.c</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.h</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.c</name>
@@ -3025,6 +3034,12 @@
     </group>
     <group>
       <name>DAC</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\DAC\DAC.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\DAC\DAC.h</name>
+      </file>
     </group>
     <group>
       <name>ENET</name>

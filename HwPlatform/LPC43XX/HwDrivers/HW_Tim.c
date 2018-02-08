@@ -9,26 +9,39 @@
   * @attention
   * 
   * 引脚,
-  *     CAP0[0] --- P1[26]  FUNC3
-  *     CAP0[1] --- P1[27]  FUNC3
-  *     CAP1[0] --- P1[18]  FUNC3
-  *     CAP1[1] --- P1[19]  FUNC3
-  *     CAP2[0] --- P0[ 4]  FUNC3
-  *     CAP2[1] --- P0[ 5]  FUNC3
-  *     CAP3[0] --- P0[23]  FUNC3
-  *     CAP3[1] --- P0[24]  FUNC3
+  *     CAP0[0] --- P1[13] F4   P8[4]  F7  
+  *     CAP0[1] --- P1[12] F4   P8[5]  F7
+  *     CAP0[2] --- P1[20] F4   P8[6]  F7
+  *     CAP0[3] --- P1[17] F4   P8[7]  F7
+  *     CAP1[0] --- P5[0]  F5
+  *     CAP1[1] --- P5[1]  F5
+  *     CAP1[2] --- P5[2]  F5
+  *     CAP1[3] --- P5[3]  F5
+  *     CAP2[0] --- P6[1]  F5
+  *     CAP2[1] --- P6[2]  F5
+  *     CAP2[2] --- P6[3]  F5
+  *     CAP2[3] --- P6[6]  F5
+  *     CAP3[0] --- P2[0]  F6   PC[1]  F6
+  *     CAP3[1] --- P2[1]  F6   PC[4]  F6
+  *     CAP3[2] --- P2[2]  F6   PC[5]  F6
+  *     CAP3[3] --- P2[6]  F6   PC[6]  F6
   *             --- 
-  *     MAT0[0] --- P1[28]  FUNC3
-  *     MAT0[1] --- P1[29]  FUNC3
-  *     MAT1[0] --- P1[22]  FUNC3
-  *     MAT1[1] --- P1[25]  FUNC2
-  *     MAT2[0] --- P4[28]  FUNC2
-  *     MAT2[1] --- P4[29]  FUNC2
-  *     MAT2[2] --- P0[ 8]  FUNC3
-  *     MAT2[3] --- P0[ 9]  FUNC3
-  *     MAT3[0] --- P0[10]  FUNC3
-  *     MAT3[1] --- P0[11]  FUNC3
-  * 
+  *     MAT0[0] --- P1[16] F4   P8[0]  F7  
+  *     MAT0[1] --- P1[15] F4   P8[1]  F7
+  *     MAT0[2] --- P1[14] F4   P8[2]  F7
+  *     MAT0[3] --- P1[18] F4   P8[3]  F7
+  *     MAT1[0] --- P5[4]  F5
+  *     MAT1[1] --- P5[5]  F5
+  *     MAT1[2] --- P5[6]  F5
+  *     MAT1[3] --- P5[7]  F5
+  *     MAT2[0] --- P6[7]  F5
+  *     MAT2[1] --- P6[8]  F5
+  *     MAT2[2] --- P6[9]  F5
+  *     MAT2[3] --- P6[11] F5
+  *     MAT3[0] --- P2[3]  F6   PC[7]  F6
+  *     MAT3[1] --- P2[4]  F6   PC[8]  F6
+  *     MAT3[2] --- P2[5]  F6   PC[9]  F6
+  *     MAT3[3] --- P2[7]  F6   PC[10] F6
   * 
   ******************************************************************************
   */
@@ -50,8 +63,8 @@
 #define HW_TIME_OUT_CH_COUNT        (4)             //输出通道数量
 #define HW_TIME_OUT_CH_MASK(n)      ((n)&0xF)       //输出通道掩码
 
-#define HW_TIME_IN_CH_COUNT         (2)             //输入通道数量
-#define HW_TIME_IN_CH_MASK(n)       ((n)&0x3)       //输入通道掩码
+#define HW_TIME_IN_CH_COUNT         (4)             //输入通道数量
+#define HW_TIME_IN_CH_MASK(n)       ((n)&0xF)       //输入通道掩码
 
 #define HW_TIME_DEF_COUNT_RANG      (2)             //默认定时器计数范围
 
@@ -66,31 +79,57 @@ static const IRQn_Type TIM_IRQn[HW_TIME_COUNT] = {TIMER0_IRQn, TIMER1_IRQn, TIME
 //TIM输出IO引脚定义
 static const PINMUX_GRP_T m_TimeOutputPinMux[HW_TIME_COUNT][HW_TIME_OUT_CH_COUNT] = 
 {
-    //TIME0
+#if 1
+    //TIM0
     {
-        {0x01, 28,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x01, 29,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x01, 16, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 15, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 14, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 18, SCU_MODE_INACT | SCU_MODE_FUNC4},
+    },
+#else 
+    //TIM0
+    {
+        {0x08,  0, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  1, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  2, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  3, SCU_MODE_INACT | SCU_MODE_FUNC7},
+    },
+#endif
+    
+    //TIM1
+    {
+        {0x05,  4, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  5, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  6, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  7, SCU_MODE_INACT | SCU_MODE_FUNC5},
     },
     
-    //TIME1
+    //TIM2
     {
-        {0x01, 22,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x01, 25,  IOCON_MODE_INACT | IOCON_FUNC2},
+        {0x06,  7, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06,  8, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06,  9, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06, 11, SCU_MODE_INACT | SCU_MODE_FUNC5},
     },
     
-    //TIME2
+#if 1
+    //TIM3
     {
-        {0x04, 28,  IOCON_MODE_INACT | IOCON_FUNC2},
-        {0x04, 29,  IOCON_MODE_INACT | IOCON_FUNC2},
-        {0x00,  8,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x00,  9,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x02,  3, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  4, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  5, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  7, SCU_MODE_INACT | SCU_MODE_FUNC6},
     },
-    
-    //TIME3
+#else 
+    //TIM3
     {
-        {0x00, 10,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x00, 11,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x0C,  7, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C,  8, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C,  9, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C, 10, SCU_MODE_INACT | SCU_MODE_FUNC6},
     },
+#endif
 
 };
 
@@ -98,29 +137,57 @@ static const PINMUX_GRP_T m_TimeOutputPinMux[HW_TIME_COUNT][HW_TIME_OUT_CH_COUNT
 //TIM输入IO引脚定义
 static const PINMUX_GRP_T m_TimeInputPinMux[HW_TIME_COUNT][HW_TIME_IN_CH_COUNT] = 
 {
-    //TIME0
+#if 1
+    //TIM0
     {
-        {0x01, 26,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x01, 27,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x01, 13, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 12, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 20, SCU_MODE_INACT | SCU_MODE_FUNC4},
+        {0x01, 17, SCU_MODE_INACT | SCU_MODE_FUNC4},
+    },
+#else 
+    //TIM0
+    {
+        {0x08,  4, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  5, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  6, SCU_MODE_INACT | SCU_MODE_FUNC7},
+        {0x08,  7, SCU_MODE_INACT | SCU_MODE_FUNC7},
+    },
+#endif
+    
+    //TIM1
+    {
+        {0x05,  0, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  1, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  2, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x05,  3, SCU_MODE_INACT | SCU_MODE_FUNC5},
     },
     
-    //TIME1
+    //TIM2
     {
-        {0x01, 18,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x01, 19,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x06,  1, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06,  2, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06,  3, SCU_MODE_INACT | SCU_MODE_FUNC5},
+        {0x06,  6, SCU_MODE_INACT | SCU_MODE_FUNC5},
     },
     
-    //TIME2
+#if 1
+    //TIM3
     {
-        {0x00,  4,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x00,  5,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x02,  0, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  1, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  2, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x02,  6, SCU_MODE_INACT | SCU_MODE_FUNC6},
     },
-    
-    //TIME3
+#else 
+    //TIM3
     {
-        {0x00, 23,  IOCON_MODE_INACT | IOCON_FUNC3},
-        {0x00, 24,  IOCON_MODE_INACT | IOCON_FUNC3},
+        {0x0C,  1, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C,  4, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C,  5, SCU_MODE_INACT | SCU_MODE_FUNC6},
+        {0x0C,  6, SCU_MODE_INACT | SCU_MODE_FUNC6},
     },
+#endif
 
 };
 
@@ -137,7 +204,8 @@ static void HW_TIM_ConfigOutputIO(uint8_t uTimeNode, uint8_t uChannelMask)
     {
         if (HW_TIME_OUT_CH_MASK(uChannelMask) & (0x1<<i))
         {
-            Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimeOutputPinMux[uTimeNode][i].pingrp, m_TimeOutputPinMux[uTimeNode][i].pinnum, m_TimeOutputPinMux[uTimeNode][i].modefunc);
+            //初始化引脚
+            Chip_SCU_SetPinMuxing(&m_TimeOutputPinMux[uTimeNode][i], 1);
         }
     }
 
@@ -156,7 +224,8 @@ static void HW_TIM_ConfigInputIO(uint8_t uTimeNode, uint8_t uChannelMask)
     {
         if (HW_TIME_IN_CH_MASK(uChannelMask) & (0x1<<i))
         {
-            Chip_IOCON_PinMuxSet(LPC_IOCON, m_TimeInputPinMux[uTimeNode][i].pingrp, m_TimeInputPinMux[uTimeNode][i].pinnum, m_TimeInputPinMux[uTimeNode][i].modefunc);
+            //初始化引脚
+            Chip_SCU_SetPinMuxing(&m_TimeInputPinMux[uTimeNode][i], 1);
         }
     }
 
@@ -174,10 +243,10 @@ static uint32_t HW_TIM_GetPeripheralClock(uint8_t uTimeNode)
     
     switch (uTimeNode)
     {
-    case HW_TIME_NODE_0: ulTimeClock = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_TIMER0); break;
-    case HW_TIME_NODE_1: ulTimeClock = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_TIMER1); break;
-    case HW_TIME_NODE_2: ulTimeClock = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_TIMER2); break;
-    case HW_TIME_NODE_3: ulTimeClock = Chip_Clock_GetPeripheralClockRate(SYSCTL_PCLK_TIMER3); break;
+    case HW_TIME_NODE_0: ulTimeClock = Chip_Clock_GetRate(CLK_MX_TIMER0); break;
+    case HW_TIME_NODE_1: ulTimeClock = Chip_Clock_GetRate(CLK_MX_TIMER1); break;
+    case HW_TIME_NODE_2: ulTimeClock = Chip_Clock_GetRate(CLK_MX_TIMER2); break;
+    case HW_TIME_NODE_3: ulTimeClock = Chip_Clock_GetRate(CLK_MX_TIMER3); break;
     default: break; //不应该到这里
     }
     

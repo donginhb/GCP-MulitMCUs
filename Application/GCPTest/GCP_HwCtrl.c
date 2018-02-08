@@ -29,6 +29,8 @@
 #include "SysPeripheral/PWM/PWM.h"
 #include "SysPeripheral/TIME/TimeCapture.h"
 
+#include "HwDrivers/HW_Dac.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -69,10 +71,11 @@ void GCP_HwInit(void)
     //初始化串口
     UART_Init(0, 115200);
     
-    //初始化输出端口
-    PWM_Init(PWM_NODE_0, true);
-    PWM_OutputEnable(PWM_NODE_0, true);
-    PWM_SetOutputPwmFrq(PWM_NODE_0, 10);
+    //初始化DAC
+    HW_DAC_Init();
+    HW_DAC_UpdateByAnalogValue(1000);
+    HW_DAC_UpdateByAnalogValue(2000);
+    HW_DAC_UpdateByAnalogValue(3000);
     
 }
 

@@ -143,6 +143,14 @@ uBit32 GPIO_InitIOGroup(GPIO_DATA *pIOGroup, uBit32 ulGroupLen, GPIO_CFG_MODE Cf
   */
 uBit32 GPIO_InitIOTable(GPIO_CTRL_TABLE *pTable);
 
+      
+/**
+  * @brief  IO配置表地址获取
+  * @param  None
+  * @retval IO配置表地址
+  */
+GPIO_CTRL_TABLE *GPIO_GetCtrlTableAddr(void);
+
 
 /*****************************************************************************
  * 基本IO控制接口
