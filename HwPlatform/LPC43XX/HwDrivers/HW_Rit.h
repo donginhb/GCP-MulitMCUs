@@ -79,7 +79,7 @@ uint32_t HW_RIT_GetReckonValue(void);
   * @param  None
   * @retval None
   */
-void HW_RIT_ClearRecvkonvalue(void);
+void HW_RIT_ClearRecvkonValue(void);
 
 
 

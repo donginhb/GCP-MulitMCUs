@@ -8,7 +8,12 @@
   ******************************************************************************
   * @attention
   * 
-  * 当前版本: GC10_0_16_D
+  * 当前版本: GC10_0_17_D
+  * 
+  * 系统版本: GC10_0_17_D
+  * 修改时间: 2018.02.22
+  * 修改描述: 1.完善LPC43XX FLASH操作接口;
+  *           2.增加硬件抽象层中LPC43XX的PWM输出支持;
   * 
   * 系统版本: GC10_0_16_D
   * 修改时间: 2018.02.07
@@ -17,7 +22,7 @@
   *           3.增加LPC43XX EXTI驱动;
   *           4.增加LPC17XX和LPC43XX的DAC驱动接口;
   *           5.增加PID算法;
-  *           6.完善LPC43XX MCPWM/TIM的启用接口;
+  *           6.完善LPC43XX MCPWM/TIM的驱动接口;
   * 
   * 系统版本: GC10_0_15_D
   * 修改时间: 2018.02.03
@@ -117,7 +122,7 @@
 //APP版本定义
 #define GCP_VER_STR                     "GC10XXXX"      //项目版本
 #define GCP_VER_NO0                     (0)             //大版本号
-#define GCP_VER_NO1                     (16)            //小版本号
+#define GCP_VER_NO1                     (17)            //小版本号
 #define GCP_VER_PART                    (0)             //组件号(预留)
 #define GCP_VER_FLAG                    'D'             //版本标示
 

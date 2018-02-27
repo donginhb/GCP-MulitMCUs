@@ -248,7 +248,7 @@ uint32_t HW_FLASH_Write(uint32_t ulFlashAddr, void *pWriteBuff, uint32_t ulByteS
     uint8_t uRetCode = 0xFF;
     
     //校验FLASH地址
-    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize)))
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize -1)))
     {
         return 0xFF;
     }
@@ -328,7 +328,7 @@ uint32_t HW_FLASH_Read(uint32_t ulFlashAddr, void *pRecvBuff, uint32_t ulByteSiz
     uint8_t *pRecvPtr = pRecvBuff;
     
     //校验FLASH地址
-    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize)))
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize - 1)))
     {
         return 0;
     }
@@ -361,7 +361,7 @@ uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_
     volatile uint8_t *pFlashAddr = (uint8_t *)ulFlashAddr; 
     
     //校验FLASH地址
-    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize)))
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize - 1)))
     {
         return 0;
     }

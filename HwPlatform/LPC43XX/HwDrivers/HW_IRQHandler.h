@@ -35,6 +35,17 @@ typedef enum
     LPC_IRQ_TRG_EXTI_CH6,
     LPC_IRQ_TRG_EXTI_CH7,
     
+    //定时器
+    LPC_IRQ_TRG_TIME0,
+    LPC_IRQ_TRG_TIME1,
+    LPC_IRQ_TRG_TIME2,
+    LPC_IRQ_TRG_TIME3,
+    
+    //MCPWM
+    LPC_IRQ_TRG_MCPWM0,
+    LPC_IRQ_TRG_MCPWM1,
+    LPC_IRQ_TRG_MCPWM2,
+    
 }LPC_IRQ_TRIGGER_SOURCE;
 
 

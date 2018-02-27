@@ -7,6 +7,12 @@
 extern "C" {
 #endif
 
+
+//硬件FLASH块定义
+#define HW_FLASH_M4_BANK        (0)     //M4 FLASH块定义
+#define HW_FLASH_M0_BANK        (1)     //M0 FLASH块定义
+
+
 /*****************************************************************************
  * FALSH相关操作接口函数
  ****************************************************************************/
@@ -16,7 +22,15 @@ extern "C" {
   * @param  None
   * @retval Flash操作结果
   */
-int32_t HW_FLASH_Init(void);
+uint32_t HW_FLASH_Init(void);
+
+
+/**
+  * @brief  FLASH最小写入字节获取
+  * @param  None
+  * @retval 最小写入的字节
+  */
+uint32_t HW_FLASH_GetMinWriteByte(void);
 
 
 /**
@@ -24,18 +38,18 @@ int32_t HW_FLASH_Init(void);
   * @param  ulFlashAddr Flash地址
   * @retval 扇区号,-1表示无效结果
   */
-int32_t HW_FLASH_GetSector(uint32_t ulFlashAddr);
+uint32_t HW_FLASH_GetSector(uint32_t ulFlashAddr);
 
 
 /**
   * @brief  FLASH擦除
-  * @param  ulFlashBank   FLASH块
+  * @param  ulFlashBank   FLASH块 0-M4_FLASH  1-M0_FLASH
   * @param  ulStartSector 开始扇区
   * @param  ulEndSector   结束扇区
   * @retval Flash操作结果
   * @note   当擦除一个扇区时,开始扇区等于结束扇区
   */
-int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ulEndSector);
+uint32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ulEndSector);
 
 
 /**
@@ -46,7 +60,7 @@ int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ul
   * @retval Flash操作结果
   * @note   写入的数据的字节数应当为 256, 512, 1024 或 4096
   */
-int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByteSize);
+uint32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByteSize);
 
 
 /**
@@ -54,9 +68,19 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
   * @param  ulFlashAddr Flash地址
   * @param  pRecvBuff 读取缓冲区的指针
   * @param  ulByteSize 字节数
-  * @retval 读取的字节数,-1为读取失败(flash地址无效)
+  * @retval 实际读取到的字节数
   */
-int32_t HW_FLASH_Read(uint32_t ulFlashAddr, uint8_t *pRecvBuff, uint32_t ulByteSize);
+uint32_t HW_FLASH_Read(uint32_t ulFlashAddr, void *pRecvBuff, uint32_t ulByteSize);
+
+
+/**
+  * @brief  FLASH校验
+  * @param  ulFlashAddr Flash地址
+  * @param  ulByteSize 字节数
+  * @param  ulCheckSize 校验位数
+  * @retval 实际的校验值
+  */
+uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_t ulCheckSize);
 
 
 #ifdef __cplusplus

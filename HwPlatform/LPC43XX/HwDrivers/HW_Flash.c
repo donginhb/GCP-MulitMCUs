@@ -34,10 +34,14 @@
 #define FLASH_BANK_B_END                    (0x1B07FFFF)
 
 //定义LCP43XX系列各型号MCU的扇区数
+#define LPC43XX_FLASH_MAX_SECTOR                    (30)    //最大扇区数
 #define LPC43XX_FLASH_SMALL_CAPACITY_SECTOR         (8)     //小容量扇区数
 #define LPC43X3_FLASH_BIG_CAPACITY_SECTOR           (11 - LPC43XX_FLASH_SMALL_CAPACITY_SECTOR)
 #define LPC43X5_FLASH_BIG_CAPACITY_SECTOR           (13 - LPC43XX_FLASH_SMALL_CAPACITY_SECTOR)
 #define LPC43X7_FLASH_BIG_CAPACITY_SECTOR           (15 - LPC43XX_FLASH_SMALL_CAPACITY_SECTOR)
+
+
+#define LPC43XX_FLASH_MIN_WRITE_BYTE                (512)   //写操作最小的字节数
 
 
 //定义flash内存尺寸
@@ -74,6 +78,37 @@ static const FlashLayout m_FlashLayout[] =
 #define FLASH_OPERA_RETRY_NUM   (20)            //失败重试的次数
 
 /**
+  * @brief  简单的延时函数
+  * @param  None
+  * @retval None
+  * @note   在96MHz的系统中测试,入参10,大概延时1us.误差小于+5%;
+  *         在204MHz的系统中测试,入参10,大概延时1us.误差小于+5%;
+  */
+static void HW_FLASH_SimpleDelay(void)
+{
+    for(volatile int i = 0; i < 10000; i++);
+    
+}
+
+
+/**
+  * @brief  Flash 地址检测
+  * @param  ulFlashAddr Flash地址
+  * @retval 0-成功 非0-失败
+  */
+static uint32_t HW_FLASH_CheckAddr(uint32_t ulFlashAddr)
+{
+    if (((ulFlashAddr >= FLASH_BANK_A_START) && (ulFlashAddr <= FLASH_BANK_A_END)) ||
+        ((ulFlashAddr >= FLASH_BANK_B_START) && (ulFlashAddr <= FLASH_BANK_B_END)))
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+
+/**
   * @brief  Flash
   * @param  ulFlashAddr Flash地址
   * @retval 当前地址的地址块,0xFF表示无效地址
@@ -96,7 +131,6 @@ static uint32_t HW_FLASH_GetFlashBank(uint32_t ulFlashAddr)
 }
 
 
-
 /*****************************************************************************
  * FALSH相关操作接口函数
  ****************************************************************************/
@@ -106,10 +140,22 @@ static uint32_t HW_FLASH_GetFlashBank(uint32_t ulFlashAddr)
   * @param  None
   * @retval Flash操作结果
   */
-int32_t HW_FLASH_Init(void)
+uint32_t HW_FLASH_Init(void)
 {
     
     return Chip_IAP_Init();
+}
+
+
+/**
+  * @brief  FLASH最小写入字节获取
+  * @param  None
+  * @retval 最小写入的字节
+  */
+uint32_t HW_FLASH_GetMinWriteByte(void)
+{
+    
+    return LPC43XX_FLASH_MIN_WRITE_BYTE;
 }
 
 
@@ -118,12 +164,12 @@ int32_t HW_FLASH_Init(void)
   * @param  ulFlashAddr Flash地址
   * @retval 扇区号,-1表示无效结果
   */
-int32_t HW_FLASH_GetSector(uint32_t ulFlashAddr)
+uint32_t HW_FLASH_GetSector(uint32_t ulFlashAddr)
 {
     uint32_t ulCurFlashAddr = 0;    //当前计算的FLASH地址
     uint32_t ulBaseFlashAddr = 0;   //当前地址的FALSH基地址
     uint32_t ulRelFlashAddr = 0;    //当前地址于基地址的相对地址
-    uint32_t ulFalshBank = 0;
+    uint32_t ulFalshBank = 0;       //FLASH操作块
     
     //计算基地址
     ulFalshBank = HW_FLASH_GetFlashBank(ulFlashAddr);
@@ -138,7 +184,7 @@ int32_t HW_FLASH_GetSector(uint32_t ulFlashAddr)
     }
     else
     {
-        return -1;
+        return 0xFF;
     }
     
     //获取相对地址
@@ -172,26 +218,26 @@ int32_t HW_FLASH_GetSector(uint32_t ulFlashAddr)
         }
     }
     
-    return -1;  //非法的地址返回-1
+    return 0xFF;  //非法的地址返回0xFF
 }
 
 
 /**
   * @brief  FLASH擦除
-  * @param  ulFlashBank   FLASH块
+  * @param  ulFlashBank   FLASH块 0-M4_FLASH  1-M0_FLASH
   * @param  ulStartSector 开始扇区
   * @param  ulEndSector   结束扇区
   * @retval Flash操作结果
   * @note   当擦除一个扇区时,开始扇区等于结束扇区
   */
-int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ulEndSector)
+uint32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ulEndSector)
 {
     uint8_t uRetCode = 0xFF;
     
-    //FLASH地址校验
+    //校验FLASH地址
     if (ulStartSector > ulEndSector)
     {
-        return -1;
+        return 0xFF;
     }
     
     //禁止中断
@@ -206,6 +252,9 @@ int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ul
         {
             break;
         }
+        
+        //若失败,则延时一小段时间再进行失败重试
+        HW_FLASH_SimpleDelay();
     }
     
     //擦除扇区
@@ -217,6 +266,9 @@ int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ul
         {
             break;
         }
+        
+        //若失败,则延时一小段时间再进行失败重试
+        HW_FLASH_SimpleDelay();
     }
     
     //使能中断
@@ -234,22 +286,28 @@ int32_t HW_FLASH_Erase(uint32_t ulFlashBank, uint32_t ulStartSector, uint32_t ul
   * @retval Flash操作结果
   * @note   写入的数据的字节数应当为 256, 512, 1024 或 4096
   */
-int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByteSize)
+uint32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByteSize)
 {
     uint8_t uRetCode = 0xFF;
+    
+    //校验FLASH地址
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize -1)))
+    {
+        return 0xFF;
+    }
     
     //校验FLASH地址边界对齐
     //flash地址以256为边界,严禁对非256字节对齐的地址进行写操作
     if (ulFlashAddr & 0xFF)
     {
-        return -1;
+        return 0xFF;
     }
     
     //校验数据写入量
     //flash操作中,一次操作的字节数只能是以下几个之一
-    if ((ulByteSize != 256) && (ulByteSize != 512) && (ulByteSize != 1024) && (ulByteSize != 4096))
+    if ((ulByteSize != 512) && (ulByteSize != 1024) && (ulByteSize != 4096))
     {
-        return -1;
+        return 0xFF;
     }
     
     //获取FLASH块
@@ -258,7 +316,7 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
     //校验FLASH块
     if (ulFlashBank == 0xFF)
     {
-        return -1;
+        return 0xFF;
     }
     
     //获取扇区
@@ -268,7 +326,7 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
     //扇区校验
     if ((ulStartSector == -1) || (ulEndSector == -1))
     {
-        return -1;
+        return 0xFF;
     }
     
     //禁止中断
@@ -283,6 +341,9 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
         {
             break;
         }
+        
+        //若失败,则延时一小段时间再进行失败重试
+        HW_FLASH_SimpleDelay();
     }
     
     //将数据写入Flash
@@ -294,6 +355,9 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
         {
             break;
         }
+        
+        //若失败,则延时一小段时间再进行失败重试
+        HW_FLASH_SimpleDelay();
     }
     
     //使能中断
@@ -308,19 +372,18 @@ int32_t HW_FLASH_Write(uint32_t ulFlashAddr, uint8_t *pWriteBuff, uint32_t ulByt
   * @param  ulFlashAddr Flash地址
   * @param  pRecvBuff 读取缓冲区的指针
   * @param  ulByteSize 字节数
-  * @retval 读取的字节数,-1为读取失败(flash地址无效)
+  * @retval 实际读取到的字节数
   */
-int32_t HW_FLASH_Read(uint32_t ulFlashAddr, uint8_t *pRecvBuff, uint32_t ulByteSize)
+uint32_t HW_FLASH_Read(uint32_t ulFlashAddr, void *pRecvBuff, uint32_t ulByteSize)
 {
     volatile uint8_t *pFlashAddr = (uint8_t *)ulFlashAddr; 
+    uint8_t *pRecvPtr = pRecvBuff;
     
-#if 0
     //校验FLASH地址
-    if (ulFlashAddr > FLASH_MAX_ADDR)
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize - 1)))
     {
-        return -1;
+        return 0;
     }
-#endif
     
     //禁止中断
     __disable_irq();
@@ -328,7 +391,7 @@ int32_t HW_FLASH_Read(uint32_t ulFlashAddr, uint8_t *pRecvBuff, uint32_t ulByteS
     //数据读取
     for (int i = 0; i < ulByteSize; i++)
     {
-        pRecvBuff[i] = pFlashAddr[i];
+        pRecvPtr[i] = pFlashAddr[i];
     }
     
     //使能中断
@@ -337,3 +400,62 @@ int32_t HW_FLASH_Read(uint32_t ulFlashAddr, uint8_t *pRecvBuff, uint32_t ulByteS
     return ulByteSize;
 }
 
+
+/**
+  * @brief  FLASH校验
+  * @param  ulFlashAddr Flash地址
+  * @param  ulByteSize 字节数
+  * @param  ulCheckSize 校验位数
+  * @retval 实际的校验值
+  */
+uint32_t HW_FLASH_GetCheckSum(uint32_t ulFlashAddr, uint32_t ulByteSize, uint32_t ulCheckSize)
+{
+    volatile uint8_t *pFlashAddr = (uint8_t *)ulFlashAddr; 
+    
+    //校验FLASH地址
+    if ((HW_FLASH_CheckAddr(ulFlashAddr)) || (HW_FLASH_CheckAddr(ulFlashAddr + ulByteSize - 1)))
+    {
+        return 0;
+    }
+    
+    switch (ulCheckSize)
+    {
+    case sizeof(uint8_t): 
+        {
+            uint8_t uCheckSum = 0;
+            
+            for (uint32_t i = 0; i < ulByteSize; i++)
+            {
+                uCheckSum += pFlashAddr[i];
+            }
+            
+            return uCheckSum;
+        }
+    case sizeof(uint16_t):
+        {
+            uint16_t nCheckSum = 0;
+            
+            for (uint32_t i = 0; i < ulByteSize; i++)
+            {
+                nCheckSum += pFlashAddr[i];
+            }
+            
+            return nCheckSum;
+        }
+    case sizeof(uint32_t):
+        {
+            uint32_t ulCheckSum = 0;
+            
+            for (uint32_t i = 0; i < ulByteSize; i++)
+            {
+                ulCheckSum += pFlashAddr[i];
+            }
+            
+            return ulCheckSum;
+            
+        }
+    default: return 0;
+    
+    }
+    
+}

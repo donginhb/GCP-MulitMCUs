@@ -45,7 +45,7 @@ void HAL_SystemReset(void)
   */
 void HAL_JumToApp(void)
 {
-#if defined(LPC17XX)
+#if (defined(LPC17XX)||defined(LPC43XX))
     HW_JumToApp();
 #endif
     

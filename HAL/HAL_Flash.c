@@ -21,6 +21,27 @@
 
 
 /*****************************************************************************
+ * 私有成员定义及实现
+ ****************************************************************************/
+
+#ifndef FLASH_BOOT_BANK
+#define FLASH_BOOT_BANK                 (0)                 //BootloaderFLASH块
+#endif
+
+#ifndef FLASH_USER_BANK
+#define FLASH_USER_BANK                 (1)                 //用户数据区FLASH块
+#endif
+
+#ifndef FLASH_APP_BANK
+#define FLASH_APP_BANK                  (2)                 //应用程序FLASH块
+#endif
+
+#ifndef FLASH_SUB_APP_BANK
+#define FLASH_SUB_APP_BANK              (3)                 //副应用程序FLASH块
+#endif
+
+
+/*****************************************************************************
  * FALSH相关控制接口
  ****************************************************************************/
 
@@ -58,10 +79,29 @@ uBit32 HAL_FLASH_GetSector(uBit32 ulFlashAddr)
   */
 uBit32 HAL_FLASH_Erase(uBit32 ulFlashBank, uBit32 ulStartSector, uBit32 ulEndSector)
 {
-    uBit32 ulRet = 0;
+    uBit32 ulRet = 1;
     
 #if defined(LPC17XX)
     ulRet = HW_FLASH_Erase(ulStartSector, ulEndSector);
+    
+#elif defined(LPC43XX)
+    
+    //计算实际硬件FLASH块
+    uBit32 ulHwFlashBank = HW_FLASH_M4_BANK;
+    
+    switch (ulFlashBank)
+    {
+    case FLASH_BOOT_BANK:    ulHwFlashBank = HW_FLASH_M4_BANK; break;
+    case FLASH_USER_BANK:    ulHwFlashBank = HW_FLASH_M4_BANK; break;
+    case FLASH_APP_BANK:     ulHwFlashBank = HW_FLASH_M4_BANK; break;
+    case FLASH_SUB_APP_BANK: ulHwFlashBank = HW_FLASH_M0_BANK; break;
+    default: break;
+    }
+    
+    ulRet = HW_FLASH_Erase(ulHwFlashBank, ulStartSector, ulEndSector);
+    
+#elif (defined(STM32F10X)||defined(STM32F0XX))
+    
 #endif
     
     return ulRet;
