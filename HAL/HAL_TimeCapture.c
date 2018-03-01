@@ -173,7 +173,7 @@ uBit32 HAL_TIME_InitCapture(uBit8 uTimeNode, uBit8 uChannelMask, uBit8 uTrgSourc
 
 
 /**
-  * @brief  捕获模式初始化
+  * @brief  捕获源设置
   * @param  uTimeNode 定时器节点
   * @param  uChannelNum 通道编号(从0算起)
   * @param  uTrgSource 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)

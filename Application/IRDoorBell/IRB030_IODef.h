@@ -19,6 +19,13 @@ typedef enum
 }INPUT_IO_TABLE;
 #endif
 
+//输入IO编号
+typedef enum
+{
+    INPUT_IO_HUMAN_DETECT,
+
+}INPUT_IO_TABLE;
+
 
 //输出IO编号
 typedef enum

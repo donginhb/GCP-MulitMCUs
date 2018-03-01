@@ -238,11 +238,6 @@ typedef enum
     IRQ_TRG_SYSTICK_UPDATE = 0,
     IRQ_TRG_SYSTICK_OS,
     
-    IRQ_TRG_PVD,
-    IRQ_TRG_RTC,
-    IRQ_TRG_FLASH,
-    IRQ_TRG_RCC,
-    
     //外部中断
     IRQ_TRG_EXTI0,
     IRQ_TRG_EXTI1,
@@ -261,6 +256,11 @@ typedef enum
     IRQ_TRG_EXTI14,
     IRQ_TRG_EXTI15,
     
+    IRQ_TRG_WWDG,
+    IRQ_TRG_PVD,
+    IRQ_TRG_RTC,
+    IRQ_TRG_FLASH,
+    IRQ_TRG_RCC,
     IRQ_TRG_TS,
     IRQ_TRG_DMA1_Channel1,
     IRQ_TRG_DMA1_Channel2_3,
@@ -281,6 +281,7 @@ typedef enum
     IRQ_TRG_SPI2,
     IRQ_TRG_USART1,
     IRQ_TRG_USART2,
+    IRQ_TRG_CEC,
     
 }IRQ_TRIGGER_SOURCE;
 

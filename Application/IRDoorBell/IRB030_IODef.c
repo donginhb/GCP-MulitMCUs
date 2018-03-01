@@ -23,7 +23,7 @@
 //输入IO表
 static GPIO_DATA m_InputIOTable[] = 
 {
-    {GPIO_PORT_B,  1},
+    {GPIO_PORT_A,  7},
 
 };
 
@@ -55,6 +55,6 @@ GPIO_CTRL_TABLE g_IRB030_IOTable =
     m_OutputIOTable,
     m_InputIOTable,
     sizeof(m_OutputIOTable)/sizeof(GPIO_DATA),
-    0,
+    sizeof(m_InputIOTable)/sizeof(GPIO_DATA),
     
 };

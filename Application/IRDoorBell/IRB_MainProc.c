@@ -56,5 +56,10 @@ void IRB_MainProc(void)
     //LED显示
     IRB_ShowMainWorkLed();
     
-    
+    //人体检测处理
+    IRB_HumanDetectHandler();
+
+    //红外遥控接收处理
+    IRB_IRHandler();
+
 }

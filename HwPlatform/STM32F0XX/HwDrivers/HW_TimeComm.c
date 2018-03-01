@@ -128,7 +128,7 @@ void HW_TIM_PortConfig(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uPortDir
             if (uChannelMask & (0X1<<0))
             {
                 HW_GPIO_ModeConfig(0, 6, HW_GPIO_AF_PP_H);
-                HW_GPIO_SetAFMode(0, 11, 1);
+                HW_GPIO_SetAFMode(0, 6, 1);
             }
             if (uChannelMask & (0X1<<1))
             {

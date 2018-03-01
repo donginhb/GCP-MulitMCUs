@@ -17,7 +17,12 @@
 /***********************************<INCLUDES>**********************************/
 #include "HAL_Dac.h"
 #include "DataType/DataType.h"
+
+#if (defined(LPC17XX)||defined(LPC43XX))
 #include "HwDrivers/HW_Dac.h"
+#elif (defined(STM32F10X)||defined(STM32F0XX))
+    
+#endif
 
 
 /*****************************************************************************

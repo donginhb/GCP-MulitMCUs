@@ -33,15 +33,34 @@ void IRB_ShowMainWorkLed(void);
 
 
 /*****************************************************************************
- * 按键扫描线程接口
+ * 人体红外探测线程接口
  ****************************************************************************/
 
 /**
-  * @brief  按键处理
+  * @brief  人体检测线程
   * @param  None
   * @retval None
   */
-void IRB_KeyProc(void);
+void IRB_HumanDetectHandler(void);
+
+/*****************************************************************************
+ * 红外遥控接收线程接口
+ ****************************************************************************/
+
+/**
+  * @brief  红外遥控接收初始化
+  * @param  None
+  * @retval None
+  */
+void IRB_InitIR(void);
+
+
+/**
+  * @brief  红外遥控接收处理
+  * @param  None
+  * @retval None
+  */
+void IRB_IRHandler(void);
 
 
 #ifdef __cplusplus

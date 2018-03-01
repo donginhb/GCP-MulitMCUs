@@ -2068,6 +2068,15 @@
       </file>
     </group>
     <group>
+      <name>IR</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\IR\IR.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\IR\IR.h</name>
+      </file>
+    </group>
+    <group>
       <name>LCD</name>
       <file>
         <name>$PROJ_DIR$\..\..\ExtPeripheral\LCD\LCD.c</name>
@@ -2164,6 +2173,12 @@
       <name>$PROJ_DIR$\..\..\HAL\HAL_Config.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_Dac.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Delay.c</name>
     </file>
     <file>
@@ -2216,6 +2231,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_SysTick.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeCapture.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\HAL\HAL_TimeReckon.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\HAL\HAL_Uart.c</name>
@@ -2355,6 +2382,12 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeOutput.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeReckon.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_TimeReckon.h</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F0XX\HwDrivers\HW_Uart.c</name>
@@ -2572,6 +2605,21 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\SysTimer\SysTimer.h</name>
+      </file>
+    </group>
+    <group>
+      <name>TIME</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeCapture.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeCapture.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeReckon.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\TIME\TimeReckon.h</name>
       </file>
     </group>
     <group>
