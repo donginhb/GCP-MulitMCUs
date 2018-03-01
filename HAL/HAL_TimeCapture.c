@@ -353,7 +353,7 @@ void HAL_TIME_EnableCaptureIRQ(uBit8 uTimeNode, uBit8 uChannelNum, bool bIsEnabl
     }
     
 #elif (defined(STM32F10X)||defined(STM32F0XX))
-    HW_TIM_EnableInputIRQ(uTimeNode, uChannelMask, bIsEnable);
+    HW_TIM_EnableInputIRQ(uTimeNode, 0x1 << uChannelNum, bIsEnable);
 #endif
     
 }

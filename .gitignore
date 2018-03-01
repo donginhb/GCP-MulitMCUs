@@ -21,3 +21,6 @@
 *.dep
 *.map
 *.i
+*.s
+*.lst
+*.sim

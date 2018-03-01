@@ -31,6 +31,7 @@ static GPIO_DATA m_InputIOTable[] =
 //输出IO表
 static GPIO_DATA m_OutputIOTable[] = 
 {
+#if 0
     //LED灯
     {GPIO_PORT_A,  0},
     
@@ -39,6 +40,11 @@ static GPIO_DATA m_OutputIOTable[] =
     {GPIO_PORT_A,  3},
     
     {GPIO_PORT_A,  1},
+#endif
+    
+    {GPIO_PORT_A,  3},
+    {GPIO_PORT_A,  2},
+    {GPIO_PORT_B,  1},
     
 };
 
@@ -49,6 +55,6 @@ GPIO_CTRL_TABLE g_IRB030_IOTable =
     m_OutputIOTable,
     m_InputIOTable,
     sizeof(m_OutputIOTable)/sizeof(GPIO_DATA),
-    sizeof(m_InputIOTable)/sizeof(GPIO_DATA),
+    0,
     
 };

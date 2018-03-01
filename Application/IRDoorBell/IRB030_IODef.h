@@ -10,24 +10,32 @@ extern "C"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 
 
+#if 0
 //输入IO编号
 typedef enum
 {
     INPUT_IO_RF_IRQ,
 
 }INPUT_IO_TABLE;
+#endif
 
 
 //输出IO编号
 typedef enum
 {
-    //LED指示灯 RUN1
+#if 0
+    //LED指示灯
     OUTPUT_IO_LED_RUN1 = 0,
     
     OUTPUT_IO_RF_CE,
     OUTPUT_IO_RF_CSN,
     
     OUTPUT_IO_LED,
+#endif
+    
+    OUTPUT_IO_LED_RUN1 = 0,
+    OUTPUT_IO_BEEP,
+    OUTPUT_IO_OUT,
 
 }OUTPUT_IO_TABLE;
 

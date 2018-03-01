@@ -198,7 +198,7 @@
         </option>
         <option>
           <name>CCListCFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCListCMnemonics</name>
@@ -210,7 +210,7 @@
         </option>
         <option>
           <name>CCListAssFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCListAssSource</name>
@@ -243,7 +243,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>10010100</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -336,7 +336,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -345,7 +345,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1971,7 +1971,7 @@
         <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_ComMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_Comman.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_ComMan.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HardwareDef.h</name>
@@ -2023,12 +2023,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_MainProc.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_RfCom.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_RfCom.h</name>
       </file>
     </group>
     <file>
@@ -2419,9 +2413,6 @@
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_CncConfig.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\SysCtrl\SYS_Config.h</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\SysCtrl\SYS_Ctrl.c</name>
     </file>
     <file>
@@ -2451,10 +2442,10 @@
     <group>
       <name>CAN</name>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.c</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\Can.h</name>
+        <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CAN.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\SysPeripheral\CAN\CanBuff.c</name>

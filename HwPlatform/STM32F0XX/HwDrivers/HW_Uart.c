@@ -449,9 +449,9 @@ void HW_UART_RecvHandler(uint8_t uUartNode)
 //链表结构
 typedef struct Usart_Tx_Node
 {
-      struct Usart_Tx_Node *pNext;  //下一个节点的地址(若为节点尾,则定义为NULL)
-      uint32_t  ulLen;              //数据长度
-      uint8_t   uBuff[];            //空数组
+    struct Usart_Tx_Node *pNext;  //下一个节点的地址(若为节点尾,则定义为NULL)
+    uint32_t  ulLen;              //数据长度
+    uint8_t   uBuff[];            //空数组
 }UART_TX_NODE;
 
 

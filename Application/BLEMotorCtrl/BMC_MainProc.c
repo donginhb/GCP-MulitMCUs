@@ -41,15 +41,12 @@ void BMC_Init(void)
     //上电延时
     SysTime_DelayMs(200);
     
-    //配置JTAG引脚
-    CoreCtrl_JTAGConfig();
-    
     //初始化硬件
     BMC_HwInit();
     
     //电机控制
-    BMC_EnableMotor(0);
-    BMC_SetMotorSpeed(7);
+    BMC_EnableMotor(false);
+    BMC_SetMotorSpeed(0);
     BMC_SetMotorDirect(BMC_MOTOR_DIRECT_CW);
     
 }

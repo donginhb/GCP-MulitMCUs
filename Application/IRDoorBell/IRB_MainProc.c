@@ -56,7 +56,5 @@ void IRB_MainProc(void)
     //LED显示
     IRB_ShowMainWorkLed();
     
-    //RF接收处理
-    RF_ComHandler();
     
 }

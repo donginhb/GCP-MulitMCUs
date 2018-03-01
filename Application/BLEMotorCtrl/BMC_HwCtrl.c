@@ -70,7 +70,7 @@ void BMC_HwInit(void)
 #endif
     
     //初始化串口
-    UART_Init(BMC_COM_UART_NODE, 115200);
+    UART_Init(BMC_COM_UART_NODE, 9600);
     
 }
 

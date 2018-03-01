@@ -64,11 +64,12 @@ void IRB_HwInit(void)
     IRB_IOConfig();
     
     //初始化串口
-    UART_Init(IRB_COM_UART_NODE, 115200);
+    //UART_Init(IRB_COM_UART_NODE, 115200);
     
+#if 0
     //初始化RF通信
     RF_InitCom();
-    
+#endif
     
 }
 
@@ -76,7 +77,7 @@ void IRB_HwInit(void)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define IRB_LED_TOGGLE_TIME             (100)           //LED翻转时间(MS)
+#define IRB_LED_TOGGLE_TIME             (500)           //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
 
 /**
@@ -91,6 +92,8 @@ void IRB_ShowMainWorkLed(void)
         SysTime_StartOneShot(&m_LedCtrlTimer, IRB_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
+        GPIO_ToggleOutputState(OUTPUT_IO_BEEP);
+        GPIO_ToggleOutputState(OUTPUT_IO_OUT);
     }
 
 }

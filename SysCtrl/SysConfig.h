@@ -72,10 +72,10 @@
 #define SYS_PARM_MAN_USAGE              (0)     //使用系统参数
 #define SYS_GPIO_MAN_USAGE              (1)     //使用IO管理
 
-#define SYS_GPIO_SCAN_GROUP             (32)    //最大支持的IO扫描组
-#define SYS_GPIO_OUTPUT_SCAN_USAGE      (1)     //使用输出IO扫描
-#define SYS_CAN_TX_BUFF_LEN             (4)     //设置CAN发送缓存区长度
-#define SYS_CAN_RX_BUFF_LEN             (4)     //设置CAN接收缓存区长度
+#define SYS_GPIO_SCAN_GROUP             (8)     //最大支持的IO扫描组
+#define SYS_GPIO_OUTPUT_SCAN_USAGE      (0)     //使用输出IO扫描
+#define SYS_CAN_TX_BUFF_LEN             (1)     //设置CAN发送缓存区长度
+#define SYS_CAN_RX_BUFF_LEN             (1)     //设置CAN接收缓存区长度
 
 #endif 
 

@@ -29,7 +29,7 @@
  * 电机相关控制接口
  ****************************************************************************/
 static  SYS_TIME_DATA m_MotorCtrlTimer = {1};   //电机控制定时器
-static uBit32 m_md_ulMotorSpeedGroup[] = {4, 6, 8, 10, 15, 20, 40, 60};//电机速度组
+static uBit32 m_md_ulMotorSpeedGroup[] = {2, 4, 6};//电机速度组
 static uBit32 m_md_ulSpeedIndex = 5;            //电机速度索引
 static uBit32 m_md_ulMotorDir = 1;              //电机方向控制
 static uBit32 m_md_ulMotorEnable = 0;           //电机使能

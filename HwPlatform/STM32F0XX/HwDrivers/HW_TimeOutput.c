@@ -251,7 +251,7 @@ void HW_TIM_InitOutput(uint8_t uTimeNode, uint8_t uChannelMask, uint8_t uOutputM
     HW_TIM_SetOutputPwmDutyRatio(uTimeNode, uChannelMask, 50);
     
     //开启定时器
-    HW_TIM_OutputEnable(uTimeNode, 1);
+    HW_TIM_EnableOutput(uTimeNode, 1);
     
 }
 
@@ -357,7 +357,7 @@ uint16_t HW_TIM_GetOutputAutoReloadValue(uint8_t uTimeNode)
   * @param  bIsEnablle 定时器使能位
   * @retval None
   */
-void HW_TIM_OutputEnable(uint8_t uTimeNode, bool bIsEnablle)
+void HW_TIM_EnableOutput(uint8_t uTimeNode, bool bIsEnablle)
 {
     if (bIsEnablle)
     {
