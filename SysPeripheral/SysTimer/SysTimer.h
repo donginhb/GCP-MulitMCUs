@@ -25,15 +25,22 @@ extern "C"
  ****************************************************************************/
 
 /**
-  * @brief  精确延时使能
+  * @brief  系统时钟初始化
   * @param  ulTickPeriod 滴答周期(单位:MS)
-  * @param  bEnableHwUsDelay 是否使能硬件US级延时
+  * @retval None
+  */
+void SysTime_Init(uBit32 ulTickPeriod);
+
+
+/**
+  * @brief  系统硬件定时器初始化
   * @param  uUsTimeNode  用于US级延时的定时器节点号
+  * @param  bEnableHwUsDelay 是否使能硬件US级延时
   * @retval None
   * @note   如果使能精确的微秒级延时,则需要启用一个硬件定时器,
   *         根据实际需求来决定是否启用硬件定时器;
   */
-void SysTime_Init(uBit32 ulTickPeriod, bool bEnableHwUsDelay, uBit8 uUsTimeNode);
+void  SysTime_InitHwTimer(uBit8 uUsTimeNode, bool bEnableHwUsDelay);
 
 
 /*****************************************************************************

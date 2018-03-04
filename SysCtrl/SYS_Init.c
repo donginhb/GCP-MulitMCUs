@@ -70,7 +70,7 @@ uBit32 SYS_Init(void)
     CoreCtrl_EnableIRQ();
     
     //初始化系统时钟
-    SysTime_Init(1, false, 0);
+    SysTime_Init(1);
     
     //初始化系统参数
     SYS_InitSysParm();

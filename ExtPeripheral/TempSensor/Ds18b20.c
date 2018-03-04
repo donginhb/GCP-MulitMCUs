@@ -258,8 +258,14 @@ float DS18B20_GetTempVal(void)
     /* 获取温度数据 */
     nTmpNum = DS18B20_ReadSP();
     
+    
+    
     /* 转换为温度值 */
-    if (!(nTmpNum & (1<<15)))         //正温度
+    if (nTmpNum == 0xFFFF)
+    {
+        fTempVal = 0;
+    }
+    else if (!(nTmpNum & (1<<15)))         //正温度
     {
         fTempVal = nTmpNum * 0.0625;
         
