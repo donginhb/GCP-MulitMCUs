@@ -119,6 +119,43 @@ void BS08M_MainWorkLedShow(void)
 
 
 /*****************************************************************************
+ * 蜂鸣器线程接口
+ ****************************************************************************/
+static SYS_TIME_DATA m_BeepCtrlTimer  = {1};     //BEEP控制定时器
+
+
+/**
+  * @brief  蜂鸣器使能
+  * @param  ulKeepTime 保持时间
+  * @retval None
+  */
+void BS08M_EnableBeep(uBit32 ulKeepTime)
+{
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_BEEP_EN, true);
+    
+    SysTime_StartOneShot(&m_BeepCtrlTimer, ulKeepTime); //设置下一次执行的时间
+    
+}
+
+
+
+/**
+  * @brief  蜂鸣器线程接口
+  * @param  None
+  * @retval None
+  */
+void BS08M_BeepHanlder(void)
+{
+    if (SysTime_CheckExpiredState(&m_BeepCtrlTimer))
+    {
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_BEEP_EN, false);
+        
+    }
+
+}
+
+
+/*****************************************************************************
  * 温度控制接口接口
  ****************************************************************************/
 #define BS08M_MAX_TEMP_VALUE        (6000)  //60度(放大因子:100)
@@ -141,10 +178,12 @@ uBit32 BS08M_SetTempValue(uBit32 ulTempValue)
     
     if (ulTempValue >= BS08M_MAX_TEMP_VALUE)
     {
+        BS08M_EnableBeep(2000);
         LCD_WriteStr(1, 0, "Status: Over!");
     }
     else 
     {
+        BS08M_EnableBeep(500);
         LCD_WriteStr(1, 0, "Status: Normal");
     }
     

@@ -36,6 +36,8 @@ typedef enum
     OUTPUT_IO_LCD_RW,
     OUTPUT_IO_LCD_RS,
     
+    OUTPUT_IO_BEEP_EN,
+    
 }OUTPUT_IO_TABLE;
 
 

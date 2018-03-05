@@ -55,6 +55,9 @@ void BS08M_MainProc(void)
     //LED显示
     BS08M_MainWorkLedShow();
     
+    //蜂鸣器控制
+    BS08M_BeepHanlder();
+    
     //通信管理
     BS08M_ComHandler();
     

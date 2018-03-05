@@ -47,6 +47,9 @@ static GPIO_DATA m_OutputIOTable[] =
     {GPIO_PORT_B,  5},  //RW
     {GPIO_PORT_B,  6},  //RS
     
+    //蜂鸣器
+    {GPIO_PORT_B, 11},  //BEEP,
+    
 };
 
 
