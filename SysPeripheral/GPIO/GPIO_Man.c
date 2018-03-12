@@ -39,8 +39,8 @@ static GPIO_CTRL_TABLE  m_GpioCtrlTable = {0};          //IO资源配置表
 
 #if SYS_GPIO_MAN_USAGE
      
-#define IO_FILTER_TIME          (50)    //滤波时间(MS)
-#define IO_SAMP_INTERVAL        (10)    //采样间隔(MS)
+#define IO_FILTER_TIME          (20)    //滤波时间(MS)
+#define IO_SAMP_INTERVAL        (5)     //采样间隔(MS)
 #define IO_FILTER_COUNT         (IO_FILTER_TIME/IO_SAMP_INTERVAL)   //滤波次数
 
 

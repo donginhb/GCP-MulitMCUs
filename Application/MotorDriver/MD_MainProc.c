@@ -42,7 +42,7 @@ void MD_Init(void)
     SysTime_DelayMs(200);
     
     //配置JTAG引脚
-    CoreCtrl_JTAGConfig();
+    CoreCtrl_JTAGConfig(1);
     
     //初始化硬件
     MD_HwInit();

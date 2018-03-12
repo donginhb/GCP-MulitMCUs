@@ -16,10 +16,10 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "BS08M_MainProc.h"
-#include "BS08M_HwCtrl.h"
-#include "BS08M_HardwareDef.h"
-#include "BS08M_ComMan.h"
+#include "WB01_MainProc.h"
+#include "WB01_HwCtrl.h"
+#include "WB01_HardwareDef.h"
+#include "WB01_ComMan.h"
 #include "DataType/DataType.h"
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
@@ -31,16 +31,16 @@
   * @param  None
   * @retval None
   */
-void BS08M_Init(void)
+void WB01_Init(void)
 {
     //上电延时
     SysTime_DelayMs(200);
     
-    //配置JTAG引脚
-    CoreCtrl_JTAGConfig(1);
+    //配置JTAG引脚(关闭调试引脚)
+    CoreCtrl_JTAGConfig(2);
     
     //硬件初始化
-    BS08M_HwInit();
+    WB01_HwInit();
     
 }
 
@@ -50,15 +50,21 @@ void BS08M_Init(void)
   * @param  None
   * @retval None
   */
-void BS08M_MainProc(void)
+void WB01_MainProc(void)
 {
     //LED显示
-    BS08M_MainWorkLedShow();
+    WB01_MainWorkLedShow();
     
-    //蜂鸣器控制
-    BS08M_BeepHanlder();
+    //霍尔传感器识别
+    WB01_HallSensorProc();
     
-    //通信管理
-    BS08M_ComHandler();
+    //出货流程处理
+    WB01_OutGoodsHandler();
+    
+    //测试处理
+    WB01_TestHandler();
+    
+    //通信设置
+    WB01_ComHandler();
     
 }

@@ -1,0 +1,628 @@
+/**
+  ******************************************************************************
+  * @file    GCIOCtrl.c
+  * @author  Duhanfneg
+  * @version V1.0
+  * @date    2017.10.20
+  * @brief   
+  ******************************************************************************
+  * @attention
+  * 
+  * 
+  * 
+  * 
+  ******************************************************************************
+  */
+   
+   
+/***********************************<INCLUDES>**********************************/
+#include "WB01_HwCtrl.h"
+#include "WB01_HardwareDef.h"
+
+#include "DataType/DataType.h"
+#include "SysPeripheral/GPIO/GPIO_Man.h"
+#include "SysPeripheral/SysTimer/SysTimer.h"
+#include "SysPeripheral/UART/UART.h"
+#include "SysPeripheral/KEY/KEY.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#define WB01_DEBUG
+
+#ifdef WB01_DEBUG
+#define DEBUF_PRINT(x)      UART_SendStr(WB01_DEBUG_UART_NODE, x)
+//#define DEBUF_PRINT(x)      UART_SendStr(WB01_COM_UART_NODE, x)
+#else 
+#define DEBUF_PRINT(x)   
+#endif
+
+
+#define WB01_TEST_01  (0)
+#define WB01_TEST_02  (0)
+#define WB01_TEST_03  (0)
+#define WB01_TEST_04  (0)
+
+#if ((WB01_TEST_01 + WB01_TEST_02 + WB01_TEST_03 + WB01_TEST_04) > 1)
+#error "错误"
+#endif
+
+/*****************************************************************************
+ * 私有成员定义及实现
+ ****************************************************************************/
+
+/**
+  * @brief  IO初始化
+  * @param  None
+  * @retval None
+  */
+static void WB01_IOConfig(void)
+{
+    //设置控制IO资源表
+    GPIO_SetCtrlTable(&g_GcpIOTable);
+    
+    //初始化资源表内的IO
+    GPIO_InitIOTable(&g_GcpIOTable);
+    
+    //设置IO逻辑翻转
+    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_HALL_SENSOR, true);
+    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_IN_DOOR_OPEN_LIMIT, true);
+    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_IN_DOOR_CLOSE_LIMIT, true);
+    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_OUT_DOOR_OPEN_LIMIT, true);
+    GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_OUT_DOOR_CLOSE_LIMIT, true);
+    
+    //初始化电机的默认电平
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_EN, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_S, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_TRANSF_MOTOR, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_IN_DOOR_DIR, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_IN_DOOR_EN, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT_DOOR_DIR, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT_DOOR_EN, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_SCK, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_RCK, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_G, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_SI, false);
+    
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_LIGHT_POWER, true);    //直接打开光栅供电
+    
+}
+
+
+/*****************************************************************************
+ * 硬件配置接口
+ ****************************************************************************/
+
+/**
+  * @brief  系统硬件初始化
+  * @param  None
+  * @retval None
+  */
+void WB01_HwInit(void)
+{
+    //初始化IO
+    WB01_IOConfig();
+    
+    //初始化串口
+    UART_Init(WB01_COM_UART_NODE, 115200);      //上位机通信串口
+    UART_Init(WB01_DEBUG_UART_NODE, 115200);    //下位机调试串口
+    
+    //初始化按键识别功能(霍尔传感器)
+    uBit32 ulKeyPinGourp[] = {INPUT_IO_HALL_SENSOR};
+    KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
+    
+}
+
+
+/*****************************************************************************
+ * LED显示线程接口
+ ****************************************************************************/
+#define WB01_LED_TOGGLE_TIME          (100)     //LED翻转时间(MS)
+static SYS_TIME_DATA m_LedCtrlTimer  = {1};     //LED控定时器
+
+/**
+  * @brief  LED 流水灯循环
+  * @param  None
+  * @retval None
+  */
+void WB01_MainWorkLedShow(void)
+{
+    if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
+    {
+        SysTime_StartOneShot(&m_LedCtrlTimer, WB01_LED_TOGGLE_TIME); //设置下一次执行的时间
+        
+#if !WB01_TEST_02
+        GPIO_ToggleOutputState(OUTPUT_IO_LED0);
+#endif
+    }
+
+}
+
+
+/*****************************************************************************
+ * 主轴电机线程接口
+ ****************************************************************************/
+
+//主轴电机运行状态定义
+#define WB01_MOTOR_STATUS_STOP      (0) //停止
+#define WB01_MOTOR_STATUS_CW        (1) //正转
+#define WB01_MOTOR_STATUS_ACW       (2) //反转
+#define WB01_MOTOR_STATUS_ESTOP     (3) //刹车
+
+//主轴电机当前运动方向定义
+#define WB01_MOTOR_DIR_CW           (0) //正转方向
+#define WB01_MOTOR_DIR_ACW          (1) //正转方向
+
+#define MAIN_AXIS_GRID_TIMEROVER    (3000)      //单格超时时间
+
+static uBit8 m_uCurMotorDir = WB01_MOTOR_DIR_CW;    //当前电机运动方向 0-正转 1-逆转
+static uBit8 m_uCurMotorStatus = 0; //当前主轴电机状态
+
+
+/**
+  * @brief  主轴电机状态设置
+  * @param  uMotorStatus:
+  *     @arg WB01_MOTOR_STATUS_STOP   停止
+  *     @arg WB01_MOTOR_STATUS_CW     正转
+  *     @arg WB01_MOTOR_STATUS_ACW    反转
+  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
+  * @retval None
+  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
+  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
+  *         际改变后才执行一下步的操作,以避免这种情况出现;
+  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
+  */
+void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
+{
+    switch (uMotorStatus)
+    {
+    case WB01_MOTOR_STATUS_STOP:
+        m_uCurMotorStatus = uMotorStatus;
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+        break;
+    case WB01_MOTOR_STATUS_CW: 
+        m_uCurMotorDir = WB01_MOTOR_DIR_CW;
+        m_uCurMotorStatus = uMotorStatus;
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+        break;
+    case WB01_MOTOR_STATUS_ACW: 
+        m_uCurMotorDir = WB01_MOTOR_DIR_ACW;
+        m_uCurMotorStatus = uMotorStatus;
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != true);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+        break;
+    case WB01_MOTOR_STATUS_ESTOP: 
+        m_uCurMotorStatus = uMotorStatus;
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != true);
+        break;
+        
+    default: break;
+    }
+    
+}
+
+
+/**
+  * @brief  主轴电机状态获取
+  * @param  uMotorStatus: 0-停止 1-正转 2-反转 3-刹车
+  * @retval 电机状态
+  *     @arg WB01_MOTOR_STATUS_STOP   停止
+  *     @arg WB01_MOTOR_STATUS_CW     正转
+  *     @arg WB01_MOTOR_STATUS_ACW    反转
+  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
+  */
+uBit8 WB01_GetMainAxisMotorStatus(void)
+{
+    
+    return m_uCurMotorStatus;
+}
+
+
+/*****************************************************************************
+ * 出货流程线程接口
+ ****************************************************************************/
+
+#define WB01_OUTGOODS_PROC_TIME     (100)           //出货流程监控时间(MS)
+static SYS_TIME_DATA m_OutGoodsCtrlTimer = {1};     //出货流程控制定时器
+
+Bit32 g_lMaxGridCount = 25;        //最大的格子数
+Bit32 g_lCurGridNumber = 0;         //当前转过的格子
+Bit32 g_lObjGridNumber = 0;         //要出货的格子数(目标格子数)
+
+bool g_bMainAxisMotorRunningFlag = false;   //主轴电机运行状态
+
+
+/**
+  * @brief  目标柜号设置
+  * @param  None
+  * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号
+  */
+uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
+{
+    uBit32 ulRet = 1;
+    
+    if (ulGridNumber >= g_lMaxGridCount)
+    {
+        return 2;
+    }
+    
+    if (!g_bMainAxisMotorRunningFlag)
+    {
+        //设置主轴电机运行标志
+        g_bMainAxisMotorRunningFlag = true;
+        
+        //设置目标柜号
+        g_lObjGridNumber = ulGridNumber;
+        
+        ulRet = 0;
+    }
+    
+    return ulRet;
+}
+
+
+/**
+  * @brief  出货流程处理
+  * @param  None
+  * @retval None
+  */
+void WB01_OutGoodsHandler(void)
+{
+    static uBit32 s_ulTmpValue = 0;
+    
+    if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
+    {
+        SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME); //设置下一次执行的时间
+        
+        if (g_bMainAxisMotorRunningFlag)
+        {
+            //假如当前柜号小于目标柜号,则电机正转
+            if (g_lCurGridNumber < g_lObjGridNumber)
+            {
+                //获取主轴电机状态
+                uBit8 uMotorStatus = WB01_GetMainAxisMotorStatus();
+                
+                switch (uMotorStatus)
+                {
+                case WB01_MOTOR_STATUS_STOP : 
+                    //若停止电机2S以上,则开始正转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is stop , cw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
+                    }
+                    break;
+                case WB01_MOTOR_STATUS_CW   : break;
+                case WB01_MOTOR_STATUS_ACW  : 
+                    //假如当前在逆转,则急停电机
+                    s_ulTmpValue = 0;
+                    DEBUF_PRINT("motor: current is acw , estop\r\n");
+                    WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                    break;
+                case WB01_MOTOR_STATUS_ESTOP: 
+                    //若急停电机2S以上,则开始正转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is estop , cw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
+                    }
+                    break;
+                }
+                    
+            }
+            //假如当前柜号大于目标柜号,则电机逆转
+            else if (g_lCurGridNumber > g_lObjGridNumber)
+            {
+                //获取主轴电机状态
+                uBit8 uMotorStatus = WB01_GetMainAxisMotorStatus();
+                
+                switch (uMotorStatus)
+                {
+                case WB01_MOTOR_STATUS_STOP : 
+                    //若停止电机2S以上,则开始逆转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is stop , acw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+                    }
+                    break;
+                case WB01_MOTOR_STATUS_CW   : 
+                    //假如当前在正转,则急停电机
+                    s_ulTmpValue = 0;
+                    DEBUF_PRINT("motor: current is cw , estop\r\n");
+                    WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                case WB01_MOTOR_STATUS_ACW  : 
+                    break;
+                case WB01_MOTOR_STATUS_ESTOP: 
+                    //若急停电机2S以上,则开始逆转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is estop , acw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+                    }
+                    break;
+                }
+                
+            }
+            //假如当前柜号和目标柜号相同,则停止电机
+            else if (g_lCurGridNumber == g_lObjGridNumber)
+            {
+                DEBUF_PRINT("g_lCurGridNumber == g_lObjGridNumber, estop!\r\n");
+                
+                //刹车
+                WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                
+                //清除运行状态
+                g_bMainAxisMotorRunningFlag = false;
+            }
+            
+        }
+    }
+
+}
+
+
+/*****************************************************************************
+ * 霍尔传感器监控线程接口
+ ****************************************************************************/
+#define WB01_KEY_SCAN_INTERVAL       (20)       //按键扫描间隔(MS)
+static  SYS_TIME_DATA m_KeyScanTimer = {1};     //扫描定时器
+
+/**
+  * @brief  霍尔传感器处理
+  * @param  None
+  * @retval None
+  */
+void WB01_HallSensorProc(void)
+{
+    if (SysTime_CheckExpiredState(&m_KeyScanTimer))
+    {
+        SysTime_StartOneShot(&m_KeyScanTimer, WB01_KEY_SCAN_INTERVAL);   //设置下一次执行的时间
+        
+        uBit32 ulKeyVlue = 0;
+        uBit32 ulCurTrg = KEY_Scan(&ulKeyVlue);
+        
+        //识别到磁场变化
+        if (ulCurTrg == 1)
+        {
+            DEBUF_PRINT("Detect Hall Sensor Trigger\r\n");
+            if (m_uCurMotorDir == WB01_MOTOR_DIR_CW)
+            {
+                g_lCurGridNumber++;
+                
+                if (g_lCurGridNumber >= g_lMaxGridCount)
+                {
+                    
+                    //报警
+                }
+                
+            }
+            else if (m_uCurMotorDir == WB01_MOTOR_DIR_ACW)
+            {
+                g_lCurGridNumber--;
+                
+                if (g_lCurGridNumber < 0)
+                {
+                    g_lCurGridNumber = 0;
+                    
+                    //报警
+                }
+                
+            }
+            
+            //打印当前柜号
+            uBit8 uDisplayBuff[128] = {0};
+            sprintf((char *)uDisplayBuff, "Cur Grid is %d\r\n", g_lCurGridNumber);
+            DEBUF_PRINT(uDisplayBuff);
+            
+#if WB01_TEST_02
+            GPIO_ToggleOutputState(OUTPUT_IO_LED0);
+#endif
+        }
+    }
+      
+}
+
+
+/*****************************************************************************
+ * 测试线程接口
+ ****************************************************************************/
+
+#define WB01_TEST_INTERVAL       (1000)     //按键扫描间隔(MS)
+static  SYS_TIME_DATA m_TestTimer = {1};    //测试定时器
+
+
+/**
+  * @brief  测试处理
+  * @param  None
+  * @retval None
+  */
+void WB01_TestHandler(void)
+{
+    static uBit32 s_ulTempValue = 0;
+    (void)s_ulTempValue;
+    
+    if (SysTime_CheckExpiredState(&m_TestTimer))
+    {
+        SysTime_StartOneShot(&m_TestTimer, WB01_TEST_INTERVAL);   //设置下一次执行的时间
+
+#if WB01_TEST_01
+        switch (s_ulTempValue%30)
+        {
+        case 0:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
+            break;
+        case 10: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
+            break;
+        case 15: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
+            break;
+        case 25: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_ESTOP\r\n");
+            break;
+        }
+#endif
+        
+#if WB01_TEST_03
+        if (s_ulTempValue == 10)
+        {
+            WB01_SetObjGridNumber(5);
+            DEBUF_PRINT("Start to 5 grid\r\n");
+        }
+#endif
+        
+#if WB01_TEST_04
+        
+        switch (s_ulTempValue%45)
+        {
+        case 10:
+            WB01_SetObjGridNumber(10);
+            DEBUF_PRINT("ID: 10 \r\n");
+            break;
+        case 20:
+            WB01_SetObjGridNumber(15);
+            DEBUF_PRINT("ID: 15 \r\n");
+            break;
+        case 30: 
+            WB01_SetObjGridNumber(0);
+            DEBUF_PRINT("Main Axis Motor Reset To ID:0\r\n");
+            break;
+        }
+        
+#endif
+        
+        s_ulTempValue++;
+        
+    }
+    
+}
+
+
+
+/*****************************************************************************
+ * 进货门出货门电机控制线程接口
+ ****************************************************************************/
+
+//主轴电机运行状态定义
+#define WB01_MOTOR_STATUS_STOP      (0) //停止
+#define WB01_MOTOR_STATUS_CW        (1) //正转
+#define WB01_MOTOR_STATUS_ACW       (2) //反转
+
+
+/**
+  * @brief  主轴电机状态设置
+  * @param  uMotorStatus:
+  *     @arg WB01_MOTOR_STATUS_STOP   停止
+  *     @arg WB01_MOTOR_STATUS_CW     正转
+  *     @arg WB01_MOTOR_STATUS_ACW    反转
+  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
+  * @retval None
+  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
+  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
+  *         际改变后才执行一下步的操作,以避免这种情况出现;
+  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
+  */
+void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
+{
+    switch (uMotorStatus)
+    {
+    case WB01_MOTOR_STATUS_STOP:
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != false);
+        break;
+    case WB01_MOTOR_STATUS_CW: 
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_EN) != true);
+        break;
+    case WB01_MOTOR_STATUS_ACW: 
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != true);
+        GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_EN) != true);
+        break;
+        
+    default: break;
+    }
+    
+}
+
+
+
+/**
+  * @brief  主轴电机状态设置
+  * @param  uMotorStatus:
+  *     @arg WB01_MOTOR_STATUS_STOP   停止
+  *     @arg WB01_MOTOR_STATUS_CW     正转
+  *     @arg WB01_MOTOR_STATUS_ACW    反转
+  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
+  * @retval None
+  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
+  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
+  *         际改变后才执行一下步的操作,以避免这种情况出现;
+  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
+  */
+void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
+{
+    switch (uMotorStatus)
+    {
+    case WB01_MOTOR_STATUS_STOP:
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != false);
+        break;
+    case WB01_MOTOR_STATUS_CW: 
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_EN) != true);
+        break;
+    case WB01_MOTOR_STATUS_ACW: 
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != true);
+        GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_EN) != true);
+        break;
+        
+    default: break;
+    }
+    
+}
+

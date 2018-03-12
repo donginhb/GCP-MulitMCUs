@@ -33,7 +33,12 @@
 #elif defined(BS08S_APP)
 #include "Application/BS08S/BS08S_MainProc.h"
 #include "Application/BS08S/BS08S_AppVersion.h"
+#elif defined(WB01_APP)
+#include "Application/WB01/WB01_MainProc.h"
+#include "Application/WB01/WB01_AppVersion.h"
 #endif
+
+
 
 
 #if defined(BOOTLOADER)
@@ -75,6 +80,10 @@
 #elif defined(BS08S_APP)
 #define APP_Init()          BS08S_Init()
 #define APP_MainProc()      BS08S_MainProc()
+
+#elif defined(WB01_APP)
+#define APP_Init()          WB01_Init()
+#define APP_MainProc()      WB01_MainProc()
 
 #else 
 #define APP_Init()   

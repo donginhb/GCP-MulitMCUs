@@ -81,11 +81,11 @@ void CoreCtrl_DisableIRQ(void);
  ****************************************************************************/
 
 /**
-  * @brief  JTAG引脚配置
-  * @param  None
+  * @brief  JTAG模式设置,用于设置JTAG的模式
+  * @param  mode:jtag,swd模式设置; 0-全使能;1-使能SWD;2-全关闭;
   * @retval None
   */
-void CoreCtrl_JTAGConfig(void);
+void CoreCtrl_JTAGConfig(uBit8 uMode);
 
 
 #ifdef __cplusplus

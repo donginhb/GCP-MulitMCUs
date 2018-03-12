@@ -153,13 +153,21 @@ void HW_EnterSrandby(void)
 
 /**
   * @brief  JTAG模式设置,用于设置JTAG的模式
-  * @param  mode:jtag,swd模式设置;00,全使能;01,使能SWD;10,全关闭;
+  * @param  mode:jtag,swd模式设置; 0-全使能;1-使能SWD;2-全关闭;
   * @retval None
   */
 void HW_SWJConfig(uint8_t uMode)
 {
     RCC->APB2ENR |= RCC_APB2ENR_AFIOEN; //开启辅助时钟       
     AFIO->MAPR &= ~AFIO_MAPR_SWJ_CFG;
-    AFIO->MAPR |=  uMode;
+    
+    switch (uMode)
+    {
+    case 0: break;
+    case 1: AFIO->MAPR |= (0x2<<24); break;
+    case 2: AFIO->MAPR |= (0x4<<24); break;
+    default: break;
+        
+    }
   
 } 
