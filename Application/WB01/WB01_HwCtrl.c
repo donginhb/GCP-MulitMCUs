@@ -161,7 +161,7 @@ void WB01_MainWorkLedShow(void)
 #define MAIN_AXIS_GRID_TIMEROVER    (3000)      //单格超时时间
 
 static uBit8 m_uCurMotorDir = WB01_MOTOR_DIR_CW;    //当前电机运动方向 0-正转 1-逆转
-static uBit8 m_uCurMotorStatus = 0; //当前主轴电机状态
+static uBit8 m_uCurAxisMotorStatus = 0; //当前主轴电机状态
 
 
 /**
@@ -182,7 +182,7 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
     switch (uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
-        m_uCurMotorStatus = uMotorStatus;
+        m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
@@ -192,7 +192,7 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
         break;
     case WB01_MOTOR_STATUS_CW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_CW;
-        m_uCurMotorStatus = uMotorStatus;
+        m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
@@ -202,7 +202,7 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
         break;
     case WB01_MOTOR_STATUS_ACW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_ACW;
-        m_uCurMotorStatus = uMotorStatus;
+        m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != true);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
@@ -211,7 +211,7 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
         break;
     case WB01_MOTOR_STATUS_ESTOP: 
-        m_uCurMotorStatus = uMotorStatus;
+        m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
@@ -238,7 +238,7 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
 uBit8 WB01_GetMainAxisMotorStatus(void)
 {
     
-    return m_uCurMotorStatus;
+    return m_uCurAxisMotorStatus;
 }
 
 
@@ -249,7 +249,7 @@ uBit8 WB01_GetMainAxisMotorStatus(void)
 #define WB01_OUTGOODS_PROC_TIME     (100)           //出货流程监控时间(MS)
 static SYS_TIME_DATA m_OutGoodsCtrlTimer = {1};     //出货流程控制定时器
 
-Bit32 g_lMaxGridCount = 25;        //最大的格子数
+Bit32 g_lMaxGridCount = 25;         //最大的格子数
 Bit32 g_lCurGridNumber = 0;         //当前转过的格子
 Bit32 g_lObjGridNumber = 0;         //要出货的格子数(目标格子数)
 
@@ -537,9 +537,29 @@ void WB01_TestHandler(void)
  ****************************************************************************/
 
 //主轴电机运行状态定义
-#define WB01_MOTOR_STATUS_STOP      (0) //停止
-#define WB01_MOTOR_STATUS_CW        (1) //正转
-#define WB01_MOTOR_STATUS_ACW       (2) //反转
+#define WB01_MOTOR_STATUS_STOP      (0)     //停止
+#define WB01_MOTOR_STATUS_CW        (1)     //正转
+#define WB01_MOTOR_STATUS_ACW       (2)     //反转
+
+
+//入货门电机控制错误码定义
+#define MOTOR_ERR_SUCCESS           (1)     //成功
+#define MOTOR_ERR_TIMEOVER          (2)     //超时
+#define MOTOR_ERR_DECT_OPEN         (3)     //关闭的过程之中检测到物体,已重新打开
+#define MOTOR_ERR_DECT_OPEN_FAIL    (4)     //关闭的过程之中检测到物体,但是重新打开失败
+
+
+//门工作状态定义
+#define DOOR_WORK_STATUS_IDLE       (0)     //空闲
+#define DOOR_WORK_STATUS_OPEN       (1)     //开门操作
+#define DOOR_WORK_STATUS_CLOSE      (2)     //关门操作
+
+
+static uBit8 m_uCurIndoorMotorStatus = 0;   //当前进货门电机状态
+static uBit8 m_uCurOutdoorMotorStatus = 0;  //当前出货门电机状态
+
+static uBit8 m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;    //当前进货门工作状态
+static uBit8 m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;   //当前出货门工作状态
 
 
 /**
@@ -555,18 +575,21 @@ void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
     switch (uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
+        m_uCurIndoorMotorStatus = WB01_MOTOR_STATUS_STOP;
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != false);
         break;
     case WB01_MOTOR_STATUS_CW: 
+        m_uCurIndoorMotorStatus = WB01_MOTOR_STATUS_CW;
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_EN) != true);
         break;
     case WB01_MOTOR_STATUS_ACW: 
+        m_uCurIndoorMotorStatus = WB01_MOTOR_STATUS_ACW;
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_DIR, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_IN_DOOR_DIR) != true);
         GPIO_SetOutputState(OUTPUT_IO_IN_DOOR_EN, true); 
@@ -577,7 +600,6 @@ void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
     }
     
 }
-
 
 
 /**
@@ -593,18 +615,21 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
     switch (uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
+        m_uCurOutdoorMotorStatus = WB01_MOTOR_STATUS_STOP;
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != false);
         break;
     case WB01_MOTOR_STATUS_CW: 
+        m_uCurOutdoorMotorStatus = WB01_MOTOR_STATUS_CW;
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_EN) != true);
         break;
     case WB01_MOTOR_STATUS_ACW: 
+        m_uCurOutdoorMotorStatus = WB01_MOTOR_STATUS_ACW;
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_DIR, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_OUT_DOOR_DIR) != true);
         GPIO_SetOutputState(OUTPUT_IO_OUT_DOOR_EN, true); 
@@ -619,37 +644,6 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
 
 /**
   * @brief  入货门电机控制
-  * @param  None
-  * @retval None
-  */
-void WB01_IndoorHandler(void)
-{
-    
-    
-    
-    
-    
-    
-}
-
-
-//入货门电机控制错误码定义
-#define MOTOR_ERR_SUCCESS           (1)     //成功
-#define MOTOR_ERR_TIMEOVER          (2)     //超时
-#define MOTOR_ERR_DECT_OPEN         (3)     //关闭的过程之中检测到物体,已重新打开
-#define MOTOR_ERR_DECT_OPEN_FAIL    (4)     //关闭的过程之中检测到物体,但是重新打开失败
-
-//电机运行状态定义
-#define MOTOR_STATUS_IDLE           (0)     //空闲
-#define MOTOR_STATUS_CW             (1)     //正转
-#define MOTOR_STATUS_ACW            (2)     //逆转
-
-
-static uBit8 m_ulCurInDoorMotorStatus = 0;      //当前入货门电机状态
-
-
-/**
-  * @brief  入货门电机控制
   * @param  bIsOpen 0-关门  1-开门
   * @retval None
   */
@@ -657,20 +651,206 @@ void WB01_SetIndoorStatus(bool bIsOpen)
 {
     if (bIsOpen)
     {
-        m_ulCurInDoorMotorStatus = MOTOR_STATUS_CW;
+        m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_OPEN;
     }
     else 
     {
-        m_ulCurInDoorMotorStatus = MOTOR_STATUS_ACW;
+        m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_CLOSE;
     }
+}
+
+
+/**
+  * @brief  入货门电机控制
+  * @param  None
+  * @retval None
+  */
+void WB01_IndoorHandler(void)
+{
+    static uBit32 s_ulTmpValue = 0;
     
-    
+    switch (m_uCurIndoorWorkStatus)
+    {
+    case DOOR_WORK_STATUS_IDLE:
+        
+        break;
+    case DOOR_WORK_STATUS_OPEN:
+        
+        //判断当前限位状态,若在限位处,则停止电机并退出
+        if (GPIO_MAN_GetInputPinState(INPUT_IO_IN_DOOR_OPEN_LIMIT))
+        {
+            //设置当前工作步骤
+            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            
+            //停止电机
+            WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            break;
+        }
+        
+        //判断当前电机工作状态
+        switch (m_uCurIndoorMotorStatus)
+        {
+        case WB01_MOTOR_STATUS_STOP: 
+            //若停止电机2S以上,则开始正转
+            s_ulTmpValue++;
+            if (s_ulTmpValue >= 20)
+            {
+                
+                WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_CW);
+            }
+            break;
+            
+            break;
+        case WB01_MOTOR_STATUS_CW  :
+            break;
+        case WB01_MOTOR_STATUS_ACW :
+            //如果当前电机是以相反的方向转动,则停止电机
+            s_ulTmpValue = 0;
+            WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            break;
+        }
+        
+        break;
+    case DOOR_WORK_STATUS_CLOSE:
+        
+        //判断当前限位状态,若在限位处,则停止电机并退出
+        if (GPIO_MAN_GetInputPinState(INPUT_IO_IN_DOOR_CLOSE_LIMIT))
+        {
+            //设置当前工作步骤
+            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            
+            //停止电机
+            WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            break;
+        }
+        
+        //判断当前电机工作状态
+        switch (m_uCurIndoorMotorStatus)
+        {
+        case WB01_MOTOR_STATUS_STOP: 
+            //若停止电机2S以上,则开始正转
+            s_ulTmpValue++;
+            if (s_ulTmpValue >= 20)
+            {
+                
+                WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_ACW);
+            }
+            break;
+        case WB01_MOTOR_STATUS_CW  : 
+            //如果当前电机是以相反的方向转动,则停止电机
+            s_ulTmpValue = 0;
+            WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            break;
+        case WB01_MOTOR_STATUS_ACW :
+            break;
+        }
+        
+        break;
+    }
     
 }
 
 
 
-
+/**
+  * @brief  出货门电机控制
+  * @param  None
+  * @retval None
+  */
+void WB01_OutdoorHandler(void)
+{
+    static uBit32 s_ulTmpValue = 0;
+    
+    switch (m_uCurOutdoorWorkStatus)
+    {
+    case DOOR_WORK_STATUS_IDLE:
+        
+        break;
+    case DOOR_WORK_STATUS_OPEN:
+        
+        //判断当前限位状态,若在限位处,则停止电机并退出
+        if (GPIO_MAN_GetInputPinState(INPUT_IO_OUT_DOOR_OPEN_LIMIT))
+        {
+            //设置当前工作步骤
+            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            
+            //停止电机
+            WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            break;
+        }
+        
+        //判断当前电机工作状态
+        switch (m_uCurOutdoorMotorStatus)
+        {
+        case WB01_MOTOR_STATUS_STOP: 
+            //若停止电机2S以上,则开始正转
+            s_ulTmpValue++;
+            if (s_ulTmpValue >= 20)
+            {
+                s_ulTmpValue = 0;
+                WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_CW);
+            }
+            break;
+            
+            break;
+        case WB01_MOTOR_STATUS_CW  :
+            break;
+        case WB01_MOTOR_STATUS_ACW :
+            //如果当前电机是以相反的方向转动,则停止电机
+            s_ulTmpValue = 0;
+            WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            break;
+        }
+        
+        break;
+    case DOOR_WORK_STATUS_CLOSE:
+        
+        //判断当前限位状态,若在限位处,则停止电机并退出
+        if (GPIO_MAN_GetInputPinState(INPUT_IO_OUT_DOOR_CLOSE_LIMIT))
+        {
+            //设置当前工作步骤
+            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            
+            //停止电机
+            WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            break;
+        }
+        
+        //判断红外检测信号,若在关门的过程中,检测到有货物,则停止关门并重新开门
+        if (GPIO_MAN_GetInputPinState(INPUT_IO_GOODS_DECTECT))
+        {
+            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_OPEN;
+        }
+        
+        //判断当前电机工作状态
+        switch (m_uCurOutdoorMotorStatus)
+        {
+        case WB01_MOTOR_STATUS_STOP: 
+            //若停止电机2S以上,则开始正转
+            s_ulTmpValue++;
+            if (s_ulTmpValue >= 20)
+            {
+                s_ulTmpValue = 0;
+                WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_ACW);
+            }
+            break;
+        case WB01_MOTOR_STATUS_CW  : 
+            //如果当前电机是以相反的方向转动,则停止电机
+            s_ulTmpValue = 0;
+            WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            break;
+        case WB01_MOTOR_STATUS_ACW :
+            break;
+        }
+        
+        break;
+    }
+    
+}
 
 
 
