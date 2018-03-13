@@ -643,7 +643,7 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
 
 
 /**
-  * @brief  入货门电机控制
+  * @brief  入货门状态控制
   * @param  bIsOpen 0-关门  1-开门
   * @retval None
   */
@@ -657,6 +657,7 @@ void WB01_SetIndoorStatus(bool bIsOpen)
     {
         m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_CLOSE;
     }
+    
 }
 
 
@@ -753,6 +754,24 @@ void WB01_IndoorHandler(void)
 }
 
 
+/**
+  * @brief  出货门状态控制
+  * @param  bIsOpen 0-关门  1-开门
+  * @retval None
+  */
+void WB01_SetOutdoorStatus(bool bIsOpen)
+{
+    if (bIsOpen)
+    {
+        m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_OPEN;
+    }
+    else 
+    {
+        m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_CLOSE;
+    }
+    
+}
+
 
 /**
   * @brief  出货门电机控制
@@ -824,6 +843,8 @@ void WB01_OutdoorHandler(void)
         if (GPIO_MAN_GetInputPinState(INPUT_IO_GOODS_DECTECT))
         {
             m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_OPEN;
+            
+            break;
         }
         
         //判断当前电机工作状态

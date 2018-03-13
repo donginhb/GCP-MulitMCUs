@@ -6581,6 +6581,21 @@
       </file>
     </group>
     <group>
+      <name>LogicIC</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\LogicIC\HC595.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\LogicIC\HC595.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\LogicIC\LogicIC.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\LogicIC\LogicIC.h</name>
+      </file>
+    </group>
+    <group>
       <name>NixieTube</name>
       <file>
         <name>$PROJ_DIR$\..\..\ExtPeripheral\NixieTube\NixieTube.c</name>
