@@ -543,17 +543,12 @@ void WB01_TestHandler(void)
 
 
 /**
-  * @brief  主轴电机状态设置
+  * @brief  进货门电机控制
   * @param  uMotorStatus:
   *     @arg WB01_MOTOR_STATUS_STOP   停止
   *     @arg WB01_MOTOR_STATUS_CW     正转
   *     @arg WB01_MOTOR_STATUS_ACW    反转
-  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
   * @retval None
-  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
-  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
-  *         际改变后才执行一下步的操作,以避免这种情况出现;
-  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
   */
 void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
 {
@@ -586,17 +581,12 @@ void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
 
 
 /**
-  * @brief  主轴电机状态设置
+  * @brief  出货门电机控制
   * @param  uMotorStatus:
   *     @arg WB01_MOTOR_STATUS_STOP   停止
   *     @arg WB01_MOTOR_STATUS_CW     正转
   *     @arg WB01_MOTOR_STATUS_ACW    反转
-  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
   * @retval None
-  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
-  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
-  *         际改变后才执行一下步的操作,以避免这种情况出现;
-  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
   */
 void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
 {
@@ -625,4 +615,77 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
     }
     
 }
+
+
+/**
+  * @brief  入货门电机控制
+  * @param  None
+  * @retval None
+  */
+void WB01_IndoorHandler(void)
+{
+    
+    
+    
+    
+    
+    
+}
+
+
+//入货门电机控制错误码定义
+#define MOTOR_ERR_SUCCESS           (1)     //成功
+#define MOTOR_ERR_TIMEOVER          (2)     //超时
+#define MOTOR_ERR_DECT_OPEN         (3)     //关闭的过程之中检测到物体,已重新打开
+#define MOTOR_ERR_DECT_OPEN_FAIL    (4)     //关闭的过程之中检测到物体,但是重新打开失败
+
+//电机运行状态定义
+#define MOTOR_STATUS_IDLE           (0)     //空闲
+#define MOTOR_STATUS_CW             (1)     //正转
+#define MOTOR_STATUS_ACW            (2)     //逆转
+
+
+static uBit8 m_ulCurInDoorMotorStatus = 0;      //当前入货门电机状态
+
+
+/**
+  * @brief  入货门电机控制
+  * @param  bIsOpen 0-关门  1-开门
+  * @retval None
+  */
+void WB01_SetIndoorStatus(bool bIsOpen)
+{
+    if (bIsOpen)
+    {
+        m_ulCurInDoorMotorStatus = MOTOR_STATUS_CW;
+    }
+    else 
+    {
+        m_ulCurInDoorMotorStatus = MOTOR_STATUS_ACW;
+    }
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
