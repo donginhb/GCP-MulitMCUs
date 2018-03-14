@@ -48,8 +48,8 @@ typedef enum
     OUTPUT_IO_LED0 = 0,         //LED
     
     //主轴电机控制
-    OUTPUT_IO_MAIN_AXIS_EN,      //正转
-    OUTPUT_IO_MAIN_AXIS_DIR,      //反转
+    OUTPUT_IO_MAIN_AXIS_EN,     //正转
+    OUTPUT_IO_MAIN_AXIS_DIR,    //反转
     OUTPUT_IO_MAIN_AXIS_S,      //刹车
     
     //传输皮带电机
@@ -66,7 +66,7 @@ typedef enum
     //货道电机控制(74HC595)
     OUTPUT_IO_HC595_SCK,
     OUTPUT_IO_HC595_RCK,
-    OUTPUT_IO_HC595_G,
+    OUTPUT_IO_HC595_OE,
     OUTPUT_IO_HC595_SI,
     
     //光栅供电开关

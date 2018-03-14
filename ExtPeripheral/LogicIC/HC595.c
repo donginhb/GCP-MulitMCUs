@@ -30,25 +30,25 @@ static uBit32 m_ulSTCPNO = 0;
 static uBit32 m_ulDATANO = 0;
 
 
-static void    (HC595_SetSHCP) (void *pData, uBit8 uState)
+static void (HC595_SetSHCP) (void *pData, uBit8 uState)
 {
     GPIO_SetOutputState(m_ulSHCPNO, uState);
     
 }
 
-static void    (HC595_SetSTCP) (void *pData, uBit8 uState)
+static void (HC595_SetSTCP) (void *pData, uBit8 uState)
 {
     GPIO_SetOutputState(m_ulSTCPNO, uState);
     
 }
 
-static void    (HC595_SetDATA) (void *pData, uBit8 uState)
+static void (HC595_SetDATA) (void *pData, uBit8 uState)
 {
     GPIO_SetOutputState(m_ulDATANO, uState);
     
 }
 
-static void    (HC595_DelayUs) (uBit32 Us)
+static void (HC595_DelayUs) (uBit32 Us)
 {
     SysTime_DelayUs(Us);
 }
@@ -60,7 +60,10 @@ static void    (HC595_DelayUs) (uBit32 Us)
 
 /**
   * @brief  HC595初始化
-  * @param  None
+  * @param  ulSHCPNO SHCP IO 编号
+  * @param  ulSTCPNO STCP IO 编号
+  * @param  ulDATANO DATA IO 编号
+  * @param  uParBitNum 并行位数
   * @retval None
   */
 void HC595_Init(uBit32 ulSHCPNO, uBit32 ulSTCPNO, uBit32 ulDATANO, uBit8 uParBitNum)
@@ -70,4 +73,14 @@ void HC595_Init(uBit32 ulSHCPNO, uBit32 ulSTCPNO, uBit32 ulDATANO, uBit8 uParBit
 }
 
 
+/**
+  * @brief  HC595初始化
+  * @param  ulData 要输出的并行数据
+  * @retval None
+  */
+void HC595_SetData(uBit32 ulData)
+{
+    HC595_OutputParallelData(ulData);
+    
+}
 

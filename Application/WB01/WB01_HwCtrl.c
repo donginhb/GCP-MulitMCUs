@@ -25,6 +25,8 @@
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/KEY/KEY.h"
 
+#include "ExtPeripheral/LogicIC/HC595.h"
+      
 #include <stdio.h>
 #include <string.h>
 
@@ -86,7 +88,7 @@ static void WB01_IOConfig(void)
     
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_SCK, false);
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_RCK, false);
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_G, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_OE, false);
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_HC595_SI, false);
     
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_LIGHT_POWER, true);    //直接打开光栅供电
@@ -115,6 +117,11 @@ void WB01_HwInit(void)
     //初始化按键识别功能(霍尔传感器)
     uBit32 ulKeyPinGourp[] = {INPUT_IO_HALL_SENSOR};
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
+    
+    //初始化步进电机PWM输出通道
+    
+    //初始化HC595
+    HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
     
 }
 
@@ -874,8 +881,9 @@ void WB01_OutdoorHandler(void)
 }
 
 
-
-
+/*****************************************************************************
+ * 货道电机控制线程接口
+ ****************************************************************************/
 
 
 

@@ -76,7 +76,7 @@ static GPIO_DATA m_OutputIOTable[] =
     //货道电机控制(74HC595)
     {GPIO_PORT_C,  8},  //HC_SCK
     {GPIO_PORT_C,  9},  //HC_RCK
-    {GPIO_PORT_C, 10},  //HC_G
+    {GPIO_PORT_C, 10},  //HC_OE
     {GPIO_PORT_C, 11},  //HC_SI
     
     //光栅供电开关
