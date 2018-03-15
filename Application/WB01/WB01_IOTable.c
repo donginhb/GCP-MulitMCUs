@@ -58,9 +58,14 @@ static GPIO_DATA m_OutputIOTable[] =
     {GPIO_PORT_A,  8},
     
     //主轴电机控制
+#if 0
     {GPIO_PORT_B,  8},  //正转
     {GPIO_PORT_B,  9},  //反转
     {GPIO_PORT_B, 15},  //刹车
+#else 
+    {GPIO_PORT_B,  9},  //步进电机方向信号
+    {GPIO_PORT_B, 15},  //脱机信号
+#endif
     
     //传输皮带电机
     {GPIO_PORT_B, 13},  

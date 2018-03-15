@@ -48,9 +48,14 @@ typedef enum
     OUTPUT_IO_LED0 = 0,         //LED
     
     //主轴电机控制
+#if 0
     OUTPUT_IO_MAIN_AXIS_EN,     //正转
     OUTPUT_IO_MAIN_AXIS_DIR,    //反转
     OUTPUT_IO_MAIN_AXIS_S,      //刹车
+#else
+    OUTPUT_IO_MAIN_AXIS_DIR,    //方向信号
+    OUTPUT_IO_MAIN_AXIS_EN,     //使能信号
+#endif 
     
     //传输皮带电机
     OUTPUT_IO_TRANSF_MOTOR,

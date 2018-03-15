@@ -24,6 +24,7 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/KEY/KEY.h"
+#include "SysPeripheral/PWM/PWM.h"
 
 #include "ExtPeripheral/LogicIC/HC595.h"
       
@@ -44,8 +45,9 @@
 #define WB01_TEST_02  (0)
 #define WB01_TEST_03  (0)
 #define WB01_TEST_04  (0)
+#define WB01_TEST_05  (1)
 
-#if ((WB01_TEST_01 + WB01_TEST_02 + WB01_TEST_03 + WB01_TEST_04) > 1)
+#if ((WB01_TEST_01 + WB01_TEST_02 + WB01_TEST_03 + WB01_TEST_04 + WB01_TEST_05) > 1)
 #error "错误"
 #endif
 
@@ -74,9 +76,9 @@ static void WB01_IOConfig(void)
     GPIO_MAN_SetInputPinLogicToggle(INPUT_IO_OUT_DOOR_CLOSE_LIMIT, true);
     
     //初始化电机的默认电平
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_EN, false);
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_EN, true);
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
-    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_S, false);
+    //GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_S, false);
     
     GPIO_MAN_SetOutputPinState(OUTPUT_IO_TRANSF_MOTOR, false);
     
@@ -119,6 +121,10 @@ void WB01_HwInit(void)
     KEY_SetScanPinGroup(ulKeyPinGourp, sizeof(ulKeyPinGourp)/sizeof(ulKeyPinGourp[0]));
     
     //初始化步进电机PWM输出通道
+    PWM_Init(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK);
+    PWM_SetOutputPwmDutyRatio(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK, 50);
+    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 1000);
+    PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
     
     //初始化HC595
     HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
@@ -159,7 +165,7 @@ void WB01_MainWorkLedShow(void)
 #define WB01_MOTOR_STATUS_STOP      (0) //停止
 #define WB01_MOTOR_STATUS_CW        (1) //正转
 #define WB01_MOTOR_STATUS_ACW       (2) //反转
-#define WB01_MOTOR_STATUS_ESTOP     (3) //刹车
+//#define WB01_MOTOR_STATUS_ESTOP     (3) //刹车
 
 //主轴电机当前运动方向定义
 #define WB01_MOTOR_DIR_CW           (0) //正转方向
@@ -190,41 +196,57 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+#else 
+        PWM_OutputEnable(WB01_MOTOR_PWM_NODE, false);
+#endif
         break;
     case WB01_MOTOR_STATUS_CW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_CW;
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+#else 
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, true);
+        PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+#endif
         break;
     case WB01_MOTOR_STATUS_ACW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_ACW;
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != true);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+#else 
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
+        PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+#endif
         break;
     case WB01_MOTOR_STATUS_ESTOP: 
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
         while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
         GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, true); 
-        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != true);
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != true); 
+#endif
         break;
         
     default: break;
@@ -526,6 +548,43 @@ void WB01_TestHandler(void)
         case 30: 
             WB01_SetObjGridNumber(0);
             DEBUF_PRINT("Main Axis Motor Reset To ID:0\r\n");
+            break;
+        }
+        
+#endif
+        
+        switch (s_ulTempValue%45)
+        {
+        case 10:
+            
+            DEBUF_PRINT("ID: 10 \r\n");
+            break;
+        case 20:
+            
+            DEBUF_PRINT("ID: 15 \r\n");
+            break;
+        case 30: 
+            
+            DEBUF_PRINT("Main Axis Motor Reset To ID:0\r\n");
+            break;
+        }
+        
+        
+#if WB01_TEST_05
+        
+        switch (s_ulTempValue%25)
+        {
+        case 0:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
+            break;
+        case 10: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
+            break;
+        case 15: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
             break;
         }
         
@@ -881,15 +940,346 @@ void WB01_OutdoorHandler(void)
 }
 
 
+
 /*****************************************************************************
- * 货道电机控制线程接口
+ * 货道限位IO检测线程接口
  ****************************************************************************/
 
+//定义货道电机资源
+#define WB01_AISLE_MAX_ROW                      (10)            //货道最大行数
+#define WB01_AISLE_MAX_COL                      (10)            //货道最大列数
+
+//货道电机限位信号电平状态
+#define WB01_AISLE_INDEX_SIGNAL_VALID           (true)          //限位信号有效信号
+#define WB01_AISLE_INDEX_SIGNAL_INVALID         (false)         //限位信号无效信号
+
+//货道电机时间参数定义
+#define WB01_AISLE_MOTOR_DELAY_TIME             (500)           //货道电机检测延时时间(MS)
+#define WB01_AISLE_MOTOR_FAST_TIME              (1500)          //货道电机快进时间
+#define WB01_AISLE_MOTOR_SLOW_TIME              (10)            //货道电机慢进时间
+#define WB01_AISLE_MOTOR_SLOW_STOP_TIME         (20)            //货道电机缓冲时间
+#define WB01_AISLE_MOTOR_OVER_TIME              (10000)         //货道电机超时时间
+#define WB01_AISLE_MOTOR_VERIFY_TIME            (200)           //货道电机信号确认时间(当货道电机遇到正确的限位信号时,
+                                                                //先停止,然后经过一定时间后再次确认是否是真的检测到了限位)
+
+//货道电机运行状态定义
+typedef enum 
+{
+    WB01_AISLE_MOTOR_STATUS_IDLE     = 0,                       //货道电机空闲
+    WB01_AISLE_MOTOR_STATUS_RUNNING  ,                          //货道电机运行中
+    WB01_AISLE_MOTOR_STATUS_OVER     ,                          //超时
+    WB01_AISLE_MOTOR_STATUS_POS_ERR  ,                          //限位信号异常
+    
+}WB01_AISLE_MOTOR_STATUS;
 
 
 
+//货道电机运行步骤定义
+typedef enum 
+{
+    WB01_AISLE_MOTOR_WORK_IDLE = 0,                             //空闲
+    WB01_AISLE_MOTOR_WORK_FAST,                                 //快进
+    WB01_AISLE_MOTOR_WORK_FAST_STOP,                            //快进停止
+    WB01_AISLE_MOTOR_WORK_SLOW_STOP,                            //慢进缓冲
+    WB01_AISLE_MOTOR_WORK_SLOW,                                 //慢进
+    WB01_AISLE_MOTOR_WORK_SIGNAL_VERIFY,                        //信号确认
+    WB01_AISLE_MOTOR_WORK_FINISH,                               //结束处理
+    
+}WB01_AISLE_MOTOR_WORK_STEP;
 
 
+static SYS_TIME_DATA m_AisleDelayTimer = {0};                   //货道电机检测延时定时器
+static SYS_TIME_DATA m_AisleFastTimer = {0};                    //货道电机快进计时定时器
+static SYS_TIME_DATA m_AisleSlowTimer = {0};                    //货道电机慢进计时定时器
+static SYS_TIME_DATA m_AisleSlowStopTimer = {0};                //货道电机慢进缓冲计时定时器
+static SYS_TIME_DATA m_AisleOverTimer = {0};                    //货道电机超时计时定时器
+static SYS_TIME_DATA m_AisleVerifyTimer = {0};                  //货道电机信号确认计时定时器
+
+static uBit32 m_vm_ulCurRow = 0xFF;                             //当前行
+static uBit32 m_vm_ulCurCol = 0xFF;                             //当前列
+
+static WB01_AISLE_MOTOR_STATUS m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_IDLE; //货道电机运行状态
+static WB01_AISLE_MOTOR_WORK_STEP m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_IDLE; //当前货道电机工作步骤
+
+
+/**
+  * @brief  货道电机行信号设置
+  * @param  ulRow 行号,从0算起
+  * @param  bState 信号状态
+  * @retval None
+  */
+static void WB01_SetAisleRowSignal(uBit32 ulRow, bool bState)
+{
+    
+    
+}
+
+
+/**
+  * @brief  货道电机列信号设置
+  * @param  ulCol 列号 ,从0算起
+  * @param  bState 信号状态
+  * @retval None
+  */
+static void WB01_SetAisleColSignal(uBit32 ulCol, bool bState)
+{
+    
+    
+}
+
+
+/**
+  * @brief  货道电机行限位信号获取
+  * @param  ulRow 行号,从0算起
+  * @retval 信号状态
+  */
+static bool WB01_GetAisleIndexSignal(uBit32 ulRow)
+{
+    
+    return true;
+}
+
+
+/**
+  * @brief  货道电机启动
+  * @param  ulRow 行号,从0算起
+  * @param  ulCol 列号,从0算起
+  * @retval 0-成功 1-参数范围错误 2-货道电机正在运行
+  */
+uBit32 WB01_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
+{
+    //校验入参参数
+    if ((ulRow >= WB01_AISLE_MAX_ROW) || (ulCol >= WB01_AISLE_MAX_COL))
+    {
+        return 1;
+    }
+    
+    //判断电机是否在运行
+    if (m_vm_AisleMotorRunningStatus == WB01_AISLE_MOTOR_STATUS_RUNNING)
+    {
+        return 2;
+    }
+    
+    m_vm_ulCurRow = ulRow;  //行
+    m_vm_ulCurCol = ulCol;  //列
+    
+    //使能货道电机行信号
+    WB01_SetAisleRowSignal(m_vm_ulCurRow, true);
+    
+    //设置电机运行标志位
+    m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_RUNNING;
+    
+    //启动检测延时定时器
+    SysTime_StartOneShot(&m_AisleDelayTimer, WB01_AISLE_MOTOR_DELAY_TIME);
+    
+    //设置工作步骤
+    m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FAST;
+
+    return 0;
+}
+     
+
+/**
+  * @brief  货道电机运行状态获取
+  * @param  None
+  * @retval 货道电机运行状态
+  *   @arg  WB01_AISLE_MOTOR_STATUS_IDLE     货道电机空闲
+  *         WB01_AISLE_MOTOR_STATUS_RUNNING  货道电机运行中
+  *         WB01_AISLE_MOTOR_STATUS_OVER     超时
+  *         WB01_AISLE_MOTOR_STATUS_POS_ERR  限位信号异常
+  */
+uBit32 WB01_GetAisleMotorRunningState(void)
+{
+    
+    return m_vm_AisleMotorRunningStatus;
+}
+
+
+/**
+  * @brief  货道电机管理
+  * @param  None
+  * @retval None
+  */
+void WB01_AisleMotorHandler(void)
+{
+    switch (m_vm_CurAisleMotorStep)
+    {
+    case WB01_AISLE_MOTOR_WORK_IDLE:
+        break;
+        
+    case WB01_AISLE_MOTOR_WORK_FAST:  //判断限位,若正常则启动电机快进
+        
+        //延时时间到达判断
+        if (SysTime_CheckExpiredState(&m_AisleDelayTimer))
+        {
+            //获取限位信号状态
+            bool bCurLimitSignal = WB01_GetAisleIndexSignal(m_vm_ulCurRow);
+            
+            if (bCurLimitSignal == WB01_AISLE_INDEX_SIGNAL_VALID)    //电机启动前在限位信号上
+            {
+                //使能货道电机列信号(运行)
+                WB01_SetAisleColSignal(m_vm_ulCurCol, true);
+                
+                //设置电机运行标志位
+                m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_RUNNING;
+                
+                //启动快进计时
+                SysTime_StartOneShot(&m_AisleFastTimer, WB01_AISLE_MOTOR_FAST_TIME);
+                
+                //跳转到一下步
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FAST_STOP;
+                
+            }
+            else    //电机启动前不在限位信号上,则报警
+            {
+                //设置货道电机状态
+                m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_POS_ERR;
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FINISH;
+            }
+            
+        }
+        
+        break;
+        
+    case WB01_AISLE_MOTOR_WORK_FAST_STOP: //快进停止,当电机运行足够快进时间后,停止,然后进入慢进状态
+        
+        //当结束了快进时间后,先停止货道电机
+        if (SysTime_CheckExpiredState(&m_AisleFastTimer))
+        {
+            //停止货道电机
+            WB01_SetAisleColSignal(m_vm_ulCurCol, false);
+            
+            //启动慢进缓冲计时
+            SysTime_StartOneShot(&m_AisleSlowStopTimer, WB01_AISLE_MOTOR_SLOW_STOP_TIME);
+            
+            //启动超时计时
+            SysTime_StartOneShot(&m_AisleOverTimer, WB01_AISLE_MOTOR_OVER_TIME);
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_SLOW_STOP;
+        }
+        
+        break;
+    case WB01_AISLE_MOTOR_WORK_SLOW_STOP: //慢进缓冲,此时电机已经停止,但由于惯性原因,仍在逐渐减速运行
+        
+        //判断当时是否在限位上,在的话结束,否则的话重新启动
+        if (SysTime_CheckExpiredState(&m_AisleSlowStopTimer))
+        {
+
+            //货道限位检测
+            bool bCurLimitSignal = WB01_GetAisleIndexSignal(m_vm_ulCurRow);
+                
+            if (bCurLimitSignal == WB01_AISLE_INDEX_SIGNAL_VALID)   //检测到正确的触发边沿
+            {
+                //停止货道电机
+                WB01_SetAisleColSignal(m_vm_ulCurCol, false);
+                
+                //启动信号确认计时定时器
+                SysTime_StartOneShot(&m_AisleVerifyTimer, WB01_AISLE_MOTOR_VERIFY_TIME);
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_SIGNAL_VERIFY;  //信号状态确认
+                
+            }
+            else 
+            {
+                //启动货道电机
+                WB01_SetAisleColSignal(m_vm_ulCurCol, true);
+                
+                //启动慢进计时
+                SysTime_StartOneShot(&m_AisleSlowTimer, WB01_AISLE_MOTOR_SLOW_TIME);
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_SLOW;
+            }
+            
+        }
+        
+        //超时判断
+        if (SysTime_CheckExpiredState(&m_AisleOverTimer))
+        {
+            //设置货道电机状态
+            m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_OVER;
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FINISH;
+        }
+        
+        break;
+        
+    case WB01_AISLE_MOTOR_WORK_SLOW:  //慢进,此时电机运行一定时间后,然后停止
+        
+        //当到达慢进时间后,停止货道电机,并回到步骤3进行校验
+        if (SysTime_CheckExpiredState(&m_AisleSlowTimer))
+        {
+            //停止货道电机
+            WB01_SetAisleColSignal(m_vm_ulCurCol, false);
+            
+            //设置慢进缓冲时间
+            SysTime_StartOneShot(&m_AisleSlowStopTimer, WB01_AISLE_MOTOR_SLOW_STOP_TIME);
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_SLOW_STOP;
+        }
+        
+        break;
+    case WB01_AISLE_MOTOR_WORK_SIGNAL_VERIFY:     //信号确认
+        
+        if (SysTime_CheckExpiredState(&m_AisleVerifyTimer))
+        {
+            //再次确认货道电机限位信号状态
+            bool bCurLimitSignal = WB01_GetAisleIndexSignal(m_vm_ulCurRow);
+            
+            //若检测到正确的触发边沿,则完成处理,否则则重新开始慢进
+            if (bCurLimitSignal == WB01_AISLE_INDEX_SIGNAL_VALID)   
+            {
+                //设置货道电机状态
+                m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_IDLE;
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FINISH;
+                
+            }
+            else 
+            {
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_SLOW;
+                
+                //启动慢进计时
+                SysTime_StartOneShot(&m_AisleSlowTimer, WB01_AISLE_MOTOR_SLOW_TIME);
+                
+            }
+            
+        }
+        
+        break;
+    case WB01_AISLE_MOTOR_WORK_FINISH:    //结束处理,无论是否运行正确,都停止电机,并复位所有的状态
+        
+        //若到达限位信号,关闭货道电机输出
+        WB01_SetAisleRowSignal(m_vm_ulCurRow, false);
+        WB01_SetAisleColSignal(m_vm_ulCurCol, false);
+        
+        //初始化行列号
+        m_vm_ulCurRow = 0xFF;
+        m_vm_ulCurCol = 0xFF;
+        
+        //关闭超时定时器
+        SysTime_Cancel(&m_AisleDelayTimer);
+        SysTime_Cancel(&m_AisleOverTimer);
+        SysTime_Cancel(&m_AisleFastTimer);
+        SysTime_Cancel(&m_AisleSlowTimer);
+        SysTime_Cancel(&m_AisleSlowStopTimer);
+        SysTime_Cancel(&m_AisleVerifyTimer);
+        
+        //设置货道电机工作步骤
+        m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_IDLE;
+        
+        break;
+    }
+    
+}
 
 
 

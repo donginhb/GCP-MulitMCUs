@@ -1,0 +1,340 @@
+
+/*****************************************************************************
+ * 货道限位IO检测线程接口
+ ****************************************************************************/
+
+//定义货道电机资源
+#define VM_AISLE_MAX_ROW                      (10)            //货道最大行数
+#define VM_AISLE_MAX_COL                      (10)            //货道最大列数
+
+//货道电机限位信号电平状态
+#define VM_AISLE_INDEX_SIGNAL_VALID           (true)          //限位信号有效信号
+#define VM_AISLE_INDEX_SIGNAL_INVALID         (false)         //限位信号无效信号
+
+//货道电机时间参数定义
+#define VM_AISLE_MOTOR_DELAY_TIME             (500)           //货道电机检测延时时间(MS)
+#define VM_AISLE_MOTOR_FAST_TIME              (1500)          //货道电机快进时间
+#define VM_AISLE_MOTOR_SLOW_TIME              (8)             //货道电机慢进时间
+#define VM_AISLE_MOTOR_SLOW_STOP_TIME         (100)           //货道电机缓冲时间
+#define VM_AISLE_MOTOR_OVER_TIME              (10000)         //货道电机超时时间
+#define VM_AISLE_MOTOR_VERIFY_TIME            (200)           //货道电机信号确认时间(当货道电机遇到正确的限位信号时,
+                                                                //先停止,然后经过一定时间后再次确认是否是真的检测到了限位)
+
+//货道电机运行状态定义
+typedef enum 
+{
+    VM_AISLE_MOTOR_STATUS_IDLE     = 0,                       //货道电机空闲
+    VM_AISLE_MOTOR_STATUS_RUNNING  ,                          //货道电机运行中
+    VM_AISLE_MOTOR_STATUS_OVER     ,                          //超时
+    VM_AISLE_MOTOR_STATUS_POS_ERR  ,                          //限位信号异常
+    
+}VM_AISLE_MOTOR_STATUS;
+
+
+
+//货道电机运行步骤定义
+typedef enum 
+{
+    VM_AISLE_MOTOR_WORK_IDLE = 0,                             //空闲
+    VM_AISLE_MOTOR_WORK_FAST,                                 //快进
+    VM_AISLE_MOTOR_WORK_FAST_STOP,                            //快进停止
+    VM_AISLE_MOTOR_WORK_SLOW_STOP,                            //慢进缓冲
+    VM_AISLE_MOTOR_WORK_SLOW,                                 //慢进
+    VM_AISLE_MOTOR_WORK_SIGNAL_VERIFY,                        //信号确认
+    VM_AISLE_MOTOR_WORK_FINISH,                               //结束处理
+    
+}VM_AISLE_MOTOR_WORK_STEP;
+
+
+static SYS_TIME_DATA m_AisleDelayTimer = {0};                   //货道电机检测延时定时器
+static SYS_TIME_DATA m_AisleFastTimer = {0};                    //货道电机快进计时定时器
+static SYS_TIME_DATA m_AisleSlowTimer = {0};                    //货道电机慢进计时定时器
+static SYS_TIME_DATA m_AisleSlowStopTimer = {0};                //货道电机慢进缓冲计时定时器
+static SYS_TIME_DATA m_AisleOverTimer = {0};                    //货道电机超时计时定时器
+static SYS_TIME_DATA m_AisleVerifyTimer = {0};                  //货道电机信号确认计时定时器
+
+static uBit32 m_vm_ulCurRow = 0xFF;                             //当前行
+static uBit32 m_vm_ulCurCol = 0xFF;                             //当前列
+
+static VM_AISLE_MOTOR_STATUS m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_IDLE; //货道电机运行状态
+static VM_AISLE_MOTOR_WORK_STEP m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_IDLE; //当前货道电机工作步骤
+
+
+/**
+  * @brief  货道电机行信号设置
+  * @param  ulRow 行号,从0算起
+  * @param  bState 信号状态
+  * @retval None
+  */
+static void VM_SetAisleRowSignal(uBit32 ulRow, bool bState)
+{
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_ROW_OUTPUT1 + ulRow, bState);
+    
+}
+
+
+/**
+  * @brief  货道电机列信号设置
+  * @param  ulCol 列号 ,从0算起
+  * @param  bState 信号状态
+  * @retval None
+  */
+static void VM_SetAisleColSignal(uBit32 ulCol, bool bState)
+{
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTRO_COL_OUTPUT11 + ulCol, bState);
+    
+}
+
+
+/**
+  * @brief  货道电机行限位信号获取
+  * @param  ulRow 行号,从0算起
+  * @retval 信号状态
+  */
+static bool VM_GetAisleIndexSignal(uBit32 ulRow)
+{
+    
+    return GPIO_MAN_GetInputPinState(INPUT_IO_MOTRO_INDEX_INPUT1 + ulRow);
+}
+
+
+/**
+  * @brief  货道电机启动
+  * @param  ulRow 行号,从0算起
+  * @param  ulCol 列号,从0算起
+  * @retval 0-成功 1-参数范围错误 2-货道电机正在运行
+  */
+uBit32 VM_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
+{
+    //校验入参参数
+    if ((ulRow >= VM_AISLE_MAX_ROW) || (ulCol >= VM_AISLE_MAX_COL))
+    {
+        return 1;
+    }
+    
+    //判断电机是否在运行
+    if (m_vm_AisleMotorRunningStatus == VM_AISLE_MOTOR_STATUS_RUNNING)
+    {
+        return 2;
+    }
+    
+    m_vm_ulCurRow = ulRow;  //行
+    m_vm_ulCurCol = ulCol;  //列
+    
+    //使能货道电机行信号
+    VM_SetAisleRowSignal(m_vm_ulCurRow, true);
+    
+    //设置电机运行标志位
+    m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_RUNNING;
+    
+    //启动检测延时定时器
+    SysTime_StartOneShot(&m_AisleDelayTimer, VM_AISLE_MOTOR_DELAY_TIME);
+    
+    //设置工作步骤
+    m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_FAST;
+
+    return 0;
+}
+     
+
+/**
+  * @brief  货道电机运行状态获取
+  * @param  None
+  * @retval 货道电机运行状态
+  *   @arg  VM_AISLE_MOTOR_STATUS_IDLE     货道电机空闲
+  *         VM_AISLE_MOTOR_STATUS_RUNNING  货道电机运行中
+  *         VM_AISLE_MOTOR_STATUS_OVER     超时
+  *         VM_AISLE_MOTOR_STATUS_POS_ERR  限位信号异常
+  */
+uBit32 VM_GetAisleMotorRunningState(void)
+{
+    
+    return m_vm_AisleMotorRunningStatus;
+}
+
+
+/**
+  * @brief  货道电机管理
+  * @param  None
+  * @retval None
+  */
+void VM_AisleMotorHandler(void)
+{
+    switch (m_vm_CurAisleMotorStep)
+    {
+    case VM_AISLE_MOTOR_WORK_IDLE:
+        break;
+        
+    case VM_AISLE_MOTOR_WORK_FAST:  //判断限位,若正常则启动电机快进
+        
+        //延时时间到达判断
+        if (SysTime_CheckExpiredState(&m_AisleDelayTimer))
+        {
+            //获取限位信号状态
+            bool bCurLimitSignal = VM_GetAisleIndexSignal(m_vm_ulCurRow);
+            
+            if (bCurLimitSignal == VM_AISLE_INDEX_SIGNAL_VALID)    //电机启动前在限位信号上
+            {
+                //使能货道电机列信号(运行)
+                VM_SetAisleColSignal(m_vm_ulCurCol, true);
+                
+                //设置电机运行标志位
+                m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_RUNNING;
+                
+                //启动快进计时
+                SysTime_StartOneShot(&m_AisleFastTimer, VM_AISLE_MOTOR_FAST_TIME);
+                
+                //跳转到一下步
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_FAST_STOP;
+                
+            }
+            else    //电机启动前不在限位信号上,则报警
+            {
+                //设置货道电机状态
+                m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_POS_ERR;
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_FINISH;
+            }
+            
+        }
+        
+        break;
+        
+    case VM_AISLE_MOTOR_WORK_FAST_STOP: //快进停止,当电机运行足够快进时间后,停止,然后进入慢进状态
+        
+        //当结束了快进时间后,先停止货道电机
+        if (SysTime_CheckExpiredState(&m_AisleFastTimer))
+        {
+            //停止货道电机
+            VM_SetAisleColSignal(m_vm_ulCurCol, false);
+            
+            //启动慢进缓冲计时
+            SysTime_StartOneShot(&m_AisleSlowStopTimer, VM_AISLE_MOTOR_SLOW_STOP_TIME);
+            
+            //启动超时计时
+            SysTime_StartOneShot(&m_AisleOverTimer, VM_AISLE_MOTOR_OVER_TIME);
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_SLOW_STOP;
+        }
+        
+        break;
+    case VM_AISLE_MOTOR_WORK_SLOW_STOP: //慢进缓冲,此时电机已经停止,但由于惯性原因,仍在逐渐减速运行
+        
+        //判断当时是否在限位上,在的话结束,否则的话重新启动
+        if (SysTime_CheckExpiredState(&m_AisleSlowStopTimer))
+        {
+
+            //货道限位检测
+            bool bCurLimitSignal = VM_GetAisleIndexSignal(m_vm_ulCurRow);
+                
+            if (bCurLimitSignal == VM_AISLE_INDEX_SIGNAL_VALID)   //检测到正确的触发边沿
+            {
+                //停止货道电机
+                VM_SetAisleColSignal(m_vm_ulCurCol, false);
+                
+                //启动信号确认计时定时器
+                SysTime_StartOneShot(&m_AisleVerifyTimer, VM_AISLE_MOTOR_VERIFY_TIME);
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_SIGNAL_VERIFY;  //信号状态确认
+                
+            }
+            else 
+            {
+                //启动货道电机
+                VM_SetAisleColSignal(m_vm_ulCurCol, true);
+                
+                //启动慢进计时
+                SysTime_StartOneShot(&m_AisleSlowTimer, VM_AISLE_MOTOR_SLOW_TIME);
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_SLOW;
+            }
+            
+        }
+        
+        //超时判断
+        if (SysTime_CheckExpiredState(&m_AisleOverTimer))
+        {
+            //设置货道电机状态
+            m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_OVER;
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_FINISH;
+        }
+        
+        break;
+        
+    case VM_AISLE_MOTOR_WORK_SLOW:  //慢进,此时电机运行一定时间后,然后停止
+        
+        //当到达慢进时间后,停止货道电机,并回到步骤3进行校验
+        if (SysTime_CheckExpiredState(&m_AisleSlowTimer))
+        {
+            //停止货道电机
+            VM_SetAisleColSignal(m_vm_ulCurCol, false);
+            
+            //设置慢进缓冲时间
+            SysTime_StartOneShot(&m_AisleSlowStopTimer, VM_AISLE_MOTOR_SLOW_STOP_TIME);
+            
+            //设置货道电机工作步骤
+            m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_SLOW_STOP;
+        }
+        
+        break;
+    case VM_AISLE_MOTOR_WORK_SIGNAL_VERIFY:     //信号确认
+        
+        if (SysTime_CheckExpiredState(&m_AisleVerifyTimer))
+        {
+            //再次确认货道电机限位信号状态
+            bool bCurLimitSignal = VM_GetAisleIndexSignal(m_vm_ulCurRow);
+            
+            //若检测到正确的触发边沿,则完成处理,否则则重新开始慢进
+            if (bCurLimitSignal == VM_AISLE_INDEX_SIGNAL_VALID)   
+            {
+                //设置货道电机状态
+                m_vm_AisleMotorRunningStatus = VM_AISLE_MOTOR_STATUS_IDLE;
+                
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_FINISH;
+                
+            }
+            else 
+            {
+                //设置货道电机工作步骤
+                m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_SLOW;
+                
+                //启动慢进计时
+                SysTime_StartOneShot(&m_AisleSlowTimer, VM_AISLE_MOTOR_SLOW_TIME);
+                
+            }
+            
+        }
+        
+        break;
+    case VM_AISLE_MOTOR_WORK_FINISH:    //结束处理,无论是否运行正确,都停止电机,并复位所有的状态
+        
+        //若到达限位信号,关闭货道电机输出
+        VM_SetAisleRowSignal(m_vm_ulCurRow, false);
+        VM_SetAisleColSignal(m_vm_ulCurCol, false);
+        
+        //初始化行列号
+        m_vm_ulCurRow = 0xFF;
+        m_vm_ulCurCol = 0xFF;
+        
+        //关闭超时定时器
+        SysTime_Cancel(&m_AisleDelayTimer);
+        SysTime_Cancel(&m_AisleOverTimer);
+        SysTime_Cancel(&m_AisleFastTimer);
+        SysTime_Cancel(&m_AisleSlowTimer);
+        SysTime_Cancel(&m_AisleSlowStopTimer);
+        SysTime_Cancel(&m_AisleVerifyTimer);
+        
+        //设置货道电机工作步骤
+        m_vm_CurAisleMotorStep = VM_AISLE_MOTOR_WORK_IDLE;
+        
+        break;
+    }
+    
+}
