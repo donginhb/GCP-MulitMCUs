@@ -5944,7 +5944,7 @@
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_Comman.h</name>
+        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HardwareDef.h</name>
@@ -6062,6 +6062,21 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\ExtPeripheral\Ammeter\Ammeter_Spm91.h</name>
+      </file>
+    </group>
+    <group>
+      <name>DAC</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\DAC\TLC5615.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\DAC\TLC5615.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\DAC\TLC5615_APP.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\ExtPeripheral\DAC\TLC5615_APP.h</name>
       </file>
     </group>
     <group>
@@ -6516,7 +6531,7 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_WatchDog.h</name>
         </file>
       </group>
       <group>
