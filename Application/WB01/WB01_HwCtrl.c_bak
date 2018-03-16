@@ -196,19 +196,57 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+#else 
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, false);
+#endif
         break;
     case WB01_MOTOR_STATUS_CW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_CW;
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+#else 
         GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, true);
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+#endif
         break;
     case WB01_MOTOR_STATUS_ACW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_ACW;
         m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != true);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != true);
+#else 
         GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+#endif
+        break;
+    case WB01_MOTOR_STATUS_ESTOP: 
+        m_uCurAxisMotorStatus = uMotorStatus;
+#if 0
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_EN, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_EN) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_DIR, false); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_DIR) != false);
+        GPIO_SetOutputState(OUTPUT_IO_MAIN_AXIS_S, true); 
+        while (GPIO_GetOutputState(OUTPUT_IO_MAIN_AXIS_S) != true); 
+#endif
         break;
         
     default: break;
@@ -276,7 +314,6 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
 }
 
 
-#if 0
 /**
   * @brief  出货流程处理
   * @param  None
@@ -292,7 +329,6 @@ void WB01_OutGoodsHandler(void)
         
         if (g_bMainAxisMotorRunningFlag)
         {
-
             //假如当前柜号小于目标柜号,则电机正转
             if (g_lCurGridNumber < g_lObjGridNumber)
             {
@@ -376,13 +412,11 @@ void WB01_OutGoodsHandler(void)
                 //清除运行状态
                 g_bMainAxisMotorRunningFlag = false;
             }
-
             
         }
     }
 
 }
-#endif
 
 
 /*****************************************************************************

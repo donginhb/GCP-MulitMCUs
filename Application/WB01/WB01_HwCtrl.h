@@ -39,8 +39,6 @@ void WB01_MainWorkLedShow(void);
 #define WB01_MOTOR_STATUS_STOP      (0) //停止
 #define WB01_MOTOR_STATUS_CW        (1) //正转
 #define WB01_MOTOR_STATUS_ACW       (2) //反转
-#define WB01_MOTOR_STATUS_ESTOP     (3) //刹车
-
 #define MAIN_AXIS_GRID_TIMEROVER    (3000)      //单格超时时间
 
 
