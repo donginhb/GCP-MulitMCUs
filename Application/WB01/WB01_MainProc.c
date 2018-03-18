@@ -52,6 +52,7 @@ void WB01_Init(void)
   */
 void WB01_MainProc(void)
 {
+#if 0
     //LED显示
     WB01_MainWorkLedShow();
     
@@ -63,7 +64,7 @@ void WB01_MainProc(void)
     
     //测试处理
     WB01_TestHandler();
-    
+#endif
     //通信设置
     WB01_ComHandler();
     

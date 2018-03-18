@@ -22,6 +22,7 @@
 #include "WB01_ComMan.h"
 #include "WB01_HardwareDef.h"
 #include "WB01_HwCtrl.h"
+#include "WB01_CmdUnpack.h"
 
 #include "DataType/DataType.h"
 #include "SysPeripheral/UART/UART.h"
@@ -34,12 +35,289 @@
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
-#define WB01_CMD_BUFF_LEN     (64)
+#define WB01_CMD_BUFF_LEN                   (64)
 
-#define WB01_CMD_SET_GRID_VALUE          "ID:"
+static uBit8 uRecvCmdBuff[WB01_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
+static uBit8 uSendCmdBuff[WB01_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
+static uBit32 m_ulRecvLen = 0;
+static uBit32 m_ulSendLen = 0;
 
-static uBit8 uCmdBuff[WB01_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
-     
+typedef struct
+{
+    uBit8 uCmdType;
+    uBit8 uCmd;
+    uBit8 uData[];
+    
+}CMD_RECV_DATA;
+
+typedef struct
+{
+    uBit8 uCmdType;
+    uBit8 uCmd;
+    uBit8 uErrCode;
+    uBit8 uData[];
+    
+}CMD_SEND_DATA;
+
+/*****************************************************************************
+ * 指令执行
+ ****************************************************************************/
+
+//指令类型定义
+#define WB01_CMD_TYPE_SET                       (0) //设置指令
+#define WB01_CMD_TYPE_GET                       (1) //查询指令
+    
+//设置指令定义    
+#define WB01_SET_CMD_INDOOR                     (1) //进货门控制
+#define WB01_SET_CMD_OUTDOOR                    (2) //取货门控制
+#define WB01_SET_CMD_OUTGOOS                    (3) //出货控制
+#define WB01_SET_CMD_AISLE                      (4) //货道控制
+#define WB01_SET_CMD_GRID_LEARN                 (5) //柜号学习(检测当前总柜号)
+
+//查询指令定义
+#define WB01_GET_CMD_INDOOR_STATUS              (1) //进货门状态查询
+#define WB01_GET_CMD_OUTDOOR_STATUS             (2) //取货门状态查询
+#define WB01_GET_CMD_MAIN_AXIS_MOTOR_STATUS     (3) //主轴电机运行状态查询
+#define WB01_GET_CMD_OUTGOODS_GRID              (4) //当前出货柜号查询
+#define WB01_GET_CMD_GRID_LEARN_STATUS          (5) //总柜数自学习状态查询
+#define WB01_GET_CMD_TOTAL_GRID                 (6) //总柜数查询
+#define WB01_GET_CMD_AISLE_MOTOR_STATUS         (7) //货道电机状态查询
+#define WB01_GET_CMD_LIGHT_STATUS               (8) //光栅状态查询
+
+
+//错误码定义
+#define WB01_CMD_ERR_SUCCESS                    (0) //成功
+#define WB01_CMD_ERR_PARM_LENGTH                (1) //参数长度错误
+#define WB01_CMD_ERR_PARM_RANGE                 (2) //参数范围错误(超过约定的范围)
+#define WB01_CMD_ERR_DEV_BUS                    (3) //设备忙
+#define WB01_CMD_ERR_INVALID                    (4) //无效指令
+
+/**
+  * @brief  指令处理
+  * @param  None
+  * @retval None
+  */
+uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
+{
+    CMD_RECV_DATA *pRecvData = (CMD_RECV_DATA *)pRcvBuf;
+    CMD_SEND_DATA *pSendData = (CMD_SEND_DATA *)uSendCmdBuff;
+    
+    uBit32 ulDataLen = ulRcvLen - 2;
+    uBit32 ulRet = 0;
+    
+    //清空发送数据缓冲区
+    memset(uSendCmdBuff, 0, sizeof(uSendCmdBuff));
+    
+    //设置指令参数
+    pSendData->uCmdType = pRecvData->uCmdType;
+    pSendData->uCmd = pRecvData->uCmd;
+    
+    switch (pRecvData->uCmdType)
+    {
+    case WB01_CMD_TYPE_SET:     //设置指令
+        
+        switch (pRecvData->uCmd)
+        {
+        case WB01_SET_CMD_INDOOR     : //进货门控制
+            
+            //参数长度校验
+            if (ulDataLen != sizeof(uBit8))
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_OUTDOOR    : //取货门控制
+            
+            //参数长度校验
+            if (ulDataLen != sizeof(uBit8))
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_OUTGOOS    : //出货控制
+            
+            //参数长度校验
+            if (ulDataLen != sizeof(uBit8))
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_AISLE      : //货道控制
+            
+            //参数长度校验
+            if (ulDataLen != sizeof(uBit8))
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_GRID_LEARN : //柜号学习(检测当前总柜号)
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        default:
+            pSendData->uErrCode = WB01_CMD_ERR_INVALID;
+            
+            //设置回发数据
+            m_ulSendLen = 0;
+            
+            break;
+        }
+        
+        break;
+        
+        
+    case WB01_CMD_TYPE_GET:     //查询指令
+        
+        switch (pRecvData->uCmd)
+        {
+        case WB01_GET_CMD_INDOOR_STATUS           : //进货门状态查询   
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_OUTDOOR_STATUS          : //取货门状态查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_MAIN_AXIS_MOTOR_STATUS  : //主轴电机运行状态查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_OUTGOODS_GRID           : //当前出货柜号查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_GRID_LEARN_STATUS       : //总柜数自学习状态查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_TOTAL_GRID              : //总柜数查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_AISLE_MOTOR_STATUS      : //货道电机状态查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_GET_CMD_LIGHT_STATUS            : //光栅状态查询
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+            
+        default:
+            pSendData->uErrCode = WB01_CMD_ERR_INVALID;
+            
+            //设置回发数据
+            m_ulSendLen = 0;
+            
+            break;
+        }
+        
+        break;
+        
+    default:
+        pSendData->uErrCode = WB01_CMD_ERR_INVALID;
+        
+        //设置回发数据
+        m_ulSendLen = 0;
+        
+        break;
+    }
+    
+    
+    //数据回发
+    WB01_Pack((uBit8 *)pSendData, sizeof(pSendData) + m_ulSendLen);
+    
+    return ulRet;
+}
+
 
 /*****************************************************************************
  * 通信管理相关控制接口
@@ -52,51 +330,10 @@ static uBit8 uCmdBuff[WB01_CMD_BUFF_LEN] = {0};   //定义指令缓冲区
   */
 void WB01_ComHandler(void)
 {
-    static uBit32 ulRxIndex = 0;
-    
-    //如果成功接收到数据
-    if (UART_RecvBuff(WB01_COM_UART_NODE, &uCmdBuff[ulRxIndex], 1))
+    if (WB01_UnPack(uRecvCmdBuff, &m_ulRecvLen) == 0)
     {
-        //如果已经接收到结束符,则进行指令处理
-        if (uCmdBuff[ulRxIndex] == '.')
-        {
-            uBit32 ulCmdLen = strlen(WB01_CMD_SET_GRID_VALUE);
-            
-            //设置要旋转的柜号
-            if (memcmp(uCmdBuff, WB01_CMD_SET_GRID_VALUE, ulCmdLen) == 0)
-            {
-                uBit8 uDataBuff[16] = {0};
-                uBit32 ulTempValue = 0;
-                
-                //获取具体柜号ID
-                for (int i = 0; i < (ulRxIndex - ulCmdLen); i++)
-                {
-                    uDataBuff[i] = uCmdBuff[ulCmdLen + i];
-                }
-                
-                ulTempValue = atoi((const char *)uDataBuff);
-                
-                uBit32 ulRet = WB01_SetObjGridNumber(ulTempValue);
-                
-                //返回应答
-                switch (ulRet)
-                {
-                case 0: UART_SendStr(WB01_COM_UART_NODE, "OK."); break;
-                case 1: UART_SendStr(WB01_COM_UART_NODE, "ERR1."); break;
-                case 2: UART_SendStr(WB01_COM_UART_NODE, "ERR2."); break;
-                }
-                
-                //清空数据
-                memset(uCmdBuff, 0, sizeof(uCmdBuff));
-                
-            }
-            
-            ulRxIndex = 0;
-            return;
-        }
+        WB01_CmdProcesser(uRecvCmdBuff, m_ulRecvLen);
         
-        ulRxIndex++;
     }
-    
     
 }

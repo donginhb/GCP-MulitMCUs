@@ -109,6 +109,7 @@ static void WB01_IOConfig(void)
   */
 void WB01_HwInit(void)
 {
+#if 0
     //初始化IO
     WB01_IOConfig();
     
@@ -128,6 +129,11 @@ void WB01_HwInit(void)
     
     //初始化HC595
     HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
+    
+#else 
+    UART_Init(WB01_COM_UART_NODE, 115200);      //上位机通信串口
+    
+#endif
     
 }
 

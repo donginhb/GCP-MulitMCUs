@@ -7964,6 +7964,12 @@
         <name>$PROJ_DIR$\..\..\Application\WB01\WB01_AppVersion.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\Application\WB01\WB01_CmdUnpack.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\WB01\WB01_CmdUnpack.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\Application\WB01\WB01_ComMan.c</name>
       </file>
       <file>
