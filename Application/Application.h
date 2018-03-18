@@ -27,6 +27,15 @@
 #elif defined(IRB_APP)
 #include "Application/IRDoorBell/IRB_MainProc.h"
 #include "Application/IRDoorBell/IRB_AppVersion.h"
+#elif defined(BS04_APP)
+#include "Application/BS04/BS04_MainProc.h"
+#include "Application/BS04/BS04_AppVersion.h"
+#elif defined(BS05M_APP)
+#include "Application/BS05M/BS05M_MainProc.h"
+#include "Application/BS05M/BS05M_AppVersion.h"
+#elif defined(BS05S_APP)
+#include "Application/BS05S/BS05S_MainProc.h"
+#include "Application/BS05S/BS05S_AppVersion.h"
 #elif defined(BS08M_APP)
 #include "Application/BS08M/BS08M_MainProc.h"
 #include "Application/BS08M/BS08M_AppVersion.h"
@@ -72,6 +81,18 @@
 #elif defined(IRB_APP)
 #define APP_Init()          IRB_Init()
 #define APP_MainProc()      IRB_MainProc()
+
+#elif defined(BS04_APP)
+#define APP_Init()          BS04_Init()
+#define APP_MainProc()      BS04_MainProc()
+
+#elif defined(BS05M_APP)
+#define APP_Init()          BS05M_Init()
+#define APP_MainProc()      BS05M_MainProc()
+
+#elif defined(BS05S_APP)
+#define APP_Init()          BS05S_Init()
+#define APP_MainProc()      BS05S_MainProc()
 
 #elif defined(BS08M_APP)
 #define APP_Init()          BS08M_Init()

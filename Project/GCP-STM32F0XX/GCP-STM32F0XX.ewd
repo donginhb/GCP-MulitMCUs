@@ -1514,7 +1514,7 @@
     </debuggerPlugins>
   </configuration>
   <configuration>
-    <name>STM32F030X4-IRB APP</name>
+    <name>STM32F030X4-BS04</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>

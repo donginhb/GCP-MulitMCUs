@@ -1,5 +1,5 @@
-#ifndef __IRB_MAIN_PROC_H
-#define __IRB_MAIN_PROC_H
+#ifndef __BS04_MAIN_PROC_H
+#define __BS04_MAIN_PROC_H
 
 #include "DataType/DataType.h"
 
@@ -17,7 +17,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void IRB_Init(void);
+void BS04_Init(void);
 
 
 /**
@@ -25,7 +25,7 @@ void IRB_Init(void);
   * @param  None
   * @retval None
   */
-void IRB_MainProc(void);
+void BS04_MainProc(void);
 
 
 #ifdef __cplusplus
@@ -33,4 +33,4 @@ void IRB_MainProc(void);
 #endif
 
 
-#endif /* __IRB_MAIN_PROC_H */
+#endif /* __BS04_MAIN_PROC_H */

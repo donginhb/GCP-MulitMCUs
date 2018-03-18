@@ -1,5 +1,5 @@
-#ifndef  __IRB_HW_CFG_H
-#define  __IRB_HW_CFG_H
+#ifndef  __BS05S_HW_CFG_H
+#define  __BS05S_HW_CFG_H
 
 #include "DataType/DataType.h"
 
@@ -16,7 +16,7 @@ extern "C" {
   * @param  None
   * @retval None
   */
-void IRB_HwInit(void);
+void BS05S_HwInit(void);
 
 
 /*****************************************************************************
@@ -28,39 +28,20 @@ void IRB_HwInit(void);
   * @param  None
   * @retval None
   */
-void IRB_ShowMainWorkLed(void);
+void BS05S_MainWorkLedShow(void);
 
 
 
 /*****************************************************************************
- * 人体红外探测线程接口
+ * 按键扫描线程接口
  ****************************************************************************/
 
 /**
-  * @brief  人体检测线程
+  * @brief  按键检测处理
   * @param  None
   * @retval None
   */
-void IRB_HumanDetectHandler(void);
-
-/*****************************************************************************
- * 红外遥控接收线程接口
- ****************************************************************************/
-
-/**
-  * @brief  红外遥控接收初始化
-  * @param  None
-  * @retval None
-  */
-void IRB_InitIR(void);
-
-
-/**
-  * @brief  红外遥控接收处理
-  * @param  None
-  * @retval None
-  */
-void IRB_IRHandler(void);
+void BS05S_KeyProc(void);
 
 
 #ifdef __cplusplus
@@ -68,4 +49,4 @@ void IRB_IRHandler(void);
 #endif
 
 
-#endif /* __IRB_HW_CFG_H */
+#endif /* __BS05S_HW_CFG_H */

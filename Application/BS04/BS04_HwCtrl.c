@@ -16,9 +16,9 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB_HwCtrl.h"
-#include "IRB_HardwareDef.h"
-#include "IRB_RfCom.h"
+#include "BS04_HwCtrl.h"
+#include "BS04_HardwareDef.h"
+//#include "BS04_RfCom.h"
 
 #include "DataType/DataType.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
@@ -40,7 +40,7 @@
   * @param  None
   * @retval None
   */
-static void IRB_IOConfig(void)
+static void BS04_IOConfig(void)
 {
     //设置控制IO资源表
     GPIO_SetCtrlTable(&g_GcpIOTable);
@@ -64,13 +64,10 @@ static void IRB_IOConfig(void)
   * @param  None
   * @retval None
   */
-void IRB_HwInit(void)
+void BS04_HwInit(void)
 {
     //初始化IO
-    IRB_IOConfig();
-    
-    //初始化串口
-    //UART_Init(IRB_COM_UART_NODE, 115200);
+    BS04_IOConfig();
     
 #if 0
     //初始化RF通信
@@ -78,7 +75,7 @@ void IRB_HwInit(void)
 #endif
     
     //使能IR捕获
-    IRB_InitIR();
+    BS04_InitIR();
     
     
 }
@@ -87,7 +84,7 @@ void IRB_HwInit(void)
 /*****************************************************************************
  * LED显示线程接口
  ****************************************************************************/
-#define IRB_LED_TOGGLE_TIME             (500)           //LED翻转时间(MS)
+#define BS04_LED_TOGGLE_TIME             (500)           //LED翻转时间(MS)
 static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
 
 /**
@@ -95,18 +92,14 @@ static SYS_TIME_DATA m_LedCtrlTimer = {1};              //LED控定时器
   * @param  None
   * @retval None
   */
-void IRB_ShowMainWorkLed(void)
+void BS04_ShowMainWorkLed(void)
 {
     //static bool s_bBeepStatus = false;
     if (SysTime_CheckExpiredState(&m_LedCtrlTimer))
     {
-        SysTime_StartOneShot(&m_LedCtrlTimer, IRB_LED_TOGGLE_TIME); //设置下一次执行的时间
+        SysTime_StartOneShot(&m_LedCtrlTimer, BS04_LED_TOGGLE_TIME); //设置下一次执行的时间
         
         GPIO_ToggleOutputState(OUTPUT_IO_LED_RUN1);
-        //GPIO_ToggleOutputState(OUTPUT_IO_BEEP);
-        //GPIO_MAN_SetOutputPinState(OUTPUT_IO_BEEP, s_bBeepStatus);
-        //s_bBeepStatus = !s_bBeepStatus;
-        //GPIO_ToggleOutputState(OUTPUT_IO_OUT);
     }
 
 }
@@ -115,19 +108,19 @@ void IRB_ShowMainWorkLed(void)
  * 人体红外探测线程接口
  ****************************************************************************/
 
-#define IRB_HD_TOGGLE_TIME             (100)           //LED翻转时间(MS)
-static SYS_TIME_DATA m_HumanDetectCtrlTimer = {1};              //LED控定时器
+#define BS04_HD_TOGGLE_TIME             (100)               //LED翻转时间(MS)
+static SYS_TIME_DATA m_HumanDetectCtrlTimer = {1};          //LED控定时器
 
 /**
   * @brief  人体检测线程
   * @param  None
   * @retval None
   */
-void IRB_HumanDetectHandler(void)
+void BS04_HumanDetectHandler(void)
 {
-        if (SysTime_CheckExpiredState(&m_HumanDetectCtrlTimer))
+    if (SysTime_CheckExpiredState(&m_HumanDetectCtrlTimer))
     {
-        SysTime_StartOneShot(&m_HumanDetectCtrlTimer, IRB_HD_TOGGLE_TIME); //设置下一次执行的时间
+        SysTime_StartOneShot(&m_HumanDetectCtrlTimer, BS04_HD_TOGGLE_TIME); //设置下一次执行的时间
         
         if (GPIO_MAN_GetInputPinState(INPUT_IO_HUMAN_DETECT))
         {
@@ -157,7 +150,7 @@ static bool m_bCaptureFinishFlag = false;   //捕获完成标志
 
 //捕获中断回调(高电平时间捕获测试)
 //由软件导致的延迟,大约在10us左右
-static void IRB_CAP_CallbackHandler(void)
+static void BS04_CAP_CallbackHandler(void)
 {
     static bool s_bCapRisingEdge = true;    //判断当前是由哪种边沿触发的捕获 true为上升沿 false为下降沿
     
@@ -194,10 +187,10 @@ static void IRB_CAP_CallbackHandler(void)
   * @param  None
   * @retval None
   */
-void IRB_InitIR(void)
+void BS04_InitIR(void)
 {
     //设置中断回调
-    IRQ_SetTrgCallback(IRB_CAP_CallbackHandler, IRQ_TRG_TIM3);
+    IRQ_SetTrgCallback(BS04_CAP_CallbackHandler, IRQ_TRG_TIM3);
     
     //初始化捕获端口
     TIME_CAP_InitCapture(TIME_CAP_NODE, 0x1<<TIME_CAP_CHANNEL, TIM_CAP_EDGE_RISING);    //初始化捕获(捕获上升沿)
@@ -212,7 +205,7 @@ void IRB_InitIR(void)
   * @param  None
   * @retval None
   */
-void IRB_IRHandler(void)
+void BS04_IRHandler(void)
 {
     if (m_bCaptureFinishFlag)
     {

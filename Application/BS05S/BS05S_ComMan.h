@@ -1,5 +1,5 @@
-#ifndef  __IRB_COM_MAN_H
-#define  __IRB_COM_MAN_H
+#ifndef  __BS05S_COM_MAN_H
+#define  __BS05S_COM_MAN_H
 
 #include "DataType/DataType.h"
 
@@ -17,11 +17,11 @@ extern "C"
   * @param  None
   * @retval None
   */
-void IRB_ComHandler(void);
+void BS05S_ComHandler(void);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __IRB_COM_MAN_H */
+#endif /* __BS05S_COM_MAN_H */

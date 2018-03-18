@@ -1,5 +1,5 @@
-#ifndef  __IRB_LED_CTRL_H
-#define  __IRB_LED_CTRL_H
+#ifndef  __BS04_LED_CTRL_H
+#define  __BS04_LED_CTRL_H
 
 #include "DataType/DataType.h"
 
@@ -14,4 +14,4 @@ extern "C"
 }
 #endif
 
-#endif /* __IRB_LED_CTRL_H */
+#endif /* __BS04_LED_CTRL_H */

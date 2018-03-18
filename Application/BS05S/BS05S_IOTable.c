@@ -15,7 +15,7 @@
   */
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB030_IODef.h"
+#include "BS05S_IOTable.h"
 #include "SysPeripheral/GPIO/GPIO_Man.h"
 
 
@@ -23,34 +23,23 @@
 //输入IO表
 static GPIO_DATA m_InputIOTable[] = 
 {
-    {GPIO_PORT_A,  7},
-
+    //按键
+    {GPIO_PORT_A, 0},
+    {GPIO_PORT_A, 3},
 };
 
 
 //输出IO表
 static GPIO_DATA m_OutputIOTable[] = 
 {
-#if 0
     //LED灯
-    {GPIO_PORT_A,  0},
-    
-    //
-    {GPIO_PORT_A,  4},
-    {GPIO_PORT_A,  3},
-    
-    {GPIO_PORT_A,  1},
-#endif
-    
-    {GPIO_PORT_A,  3},
-    {GPIO_PORT_A,  2},
-    {GPIO_PORT_B,  1},
-    
+    {GPIO_PORT_C, 13},
+
 };
 
 
 //控制IO表
-GPIO_CTRL_TABLE g_IRB030_IOTable = 
+GPIO_CTRL_TABLE g_BS05S_IOTable = 
 {
     m_OutputIOTable,
     m_InputIOTable,

@@ -964,7 +964,7 @@
     </settings>
   </configuration>
   <configuration>
-    <name>STM32F030X4-IRB APP</name>
+    <name>STM32F030X4-BS04</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -978,15 +978,15 @@
         <debug>0</debug>
         <option>
           <name>ExePath</name>
-          <state>STM32F030X4-IRB APP\Exe</state>
+          <state>STM32F030X4-BS04\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>STM32F030X4-IRB APP\Obj</state>
+          <state>STM32F030X4-BS04\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>STM32F030X4-IRB APP\List</state>
+          <state>STM32F030X4-BS04\List</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1143,7 +1143,7 @@
         <option>
           <name>CCDefines</name>
           <state>STM32F0XX</state>
-          <state>IRB_APP</state>
+          <state>BS04_APP</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1996,33 +1996,36 @@
       </file>
     </group>
     <group>
-      <name>IRDoorBell</name>
+      <name>BS04</name>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB030_IODef.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_AppVersion.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB030_IODef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_HardwareDef.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_HardwareDef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_HwCtrl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_HwCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_HwCtrl.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_HwCtrl.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_IOTable.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_LEDCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_IOTable.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_LEDCtrl.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_LEDCtrl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_MainProc.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_LEDCtrl.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\IRDoorBell\IRB_MainProc.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_MainProc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\BS04\BS04_MainProc.h</name>
       </file>
     </group>
     <file>

@@ -16,10 +16,10 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "IRB_MainProc.h"
-#include "IRB_HwCtrl.h"
-#include "IRB_HardwareDef.h"
-#include "IRB_RfCom.h"
+#include "BS04_MainProc.h"
+#include "BS04_HwCtrl.h"
+#include "BS04_HardwareDef.h"
+//#include "BS04_RfCom.h"
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
 
@@ -35,13 +35,13 @@
   * @param  None
   * @retval None
   */
-void IRB_Init(void)
+void BS04_Init(void)
 {
     //上电延时
     SysTime_DelayMs(200);
     
     //初始化硬件
-    IRB_HwInit();
+    BS04_HwInit();
     
 }
 
@@ -51,15 +51,15 @@ void IRB_Init(void)
   * @param  None
   * @retval None
   */
-void IRB_MainProc(void)
+void BS04_MainProc(void)
 {
     //LED显示
-    IRB_ShowMainWorkLed();
+    BS04_ShowMainWorkLed();
     
     //人体检测处理
-    IRB_HumanDetectHandler();
+    BS04_HumanDetectHandler();
 
     //红外遥控接收处理
-    IRB_IRHandler();
+    BS04_IRHandler();
 
 }

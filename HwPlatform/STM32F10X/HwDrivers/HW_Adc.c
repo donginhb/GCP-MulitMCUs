@@ -117,56 +117,69 @@ static void HW_ADC_SetConvertSequence(uint8_t uChNumber, uint8_t uSequence)
 static void HW_ADC_ConfigMode(uint8_t uAdcNode, uint32_t ulChMask, bool bScanModeFlag)
 {
     //开ADC1时钟 
-    RCC->APB2ENR |= (0X1<<9);   //ADC1
+    RCC->APB2ENR |= (0x1<<9);   //ADC1
     
     //时钟分频 
-    RCC->CFGR &= ~(0X3<<14);
-    RCC->CFGR |=  (0X2<<14);    //6分频(ADC的时钟频率不得超过14M,此分频后为12M)
+    RCC->CFGR &= ~(0x3<<14);
+    RCC->CFGR |=  (0x2<<14);    //6分频(ADC的时钟频率不得超过14M,此分频后为12M)
     
     //配置工作模式 
-    ADC1->CR1 &= ~(0X1<<23);    //规则组:关闭模拟看门狗
-    ADC1->CR1 &= ~(0X1<<22);    //注入组:关闭模拟看门狗
-    ADC1->CR1 &= ~(0XF<<16);   
-    ADC1->CR1 |=  (0X0<<16);    //独立模式(常用)
+    ADC1->CR1 &= ~(0x1<<23);    //规则组:关闭模拟看门狗
+    ADC1->CR1 &= ~(0x1<<22);    //注入组:关闭模拟看门狗
+    ADC1->CR1 &= ~(0xF<<16);   
+    ADC1->CR1 |=  (0x0<<16);    //独立模式(常用)
     
-    ADC1->CR1 &= ~(0X1<<12);    //注入组:禁用间断模式
-    ADC1->CR1 &= ~(0X1<<11);    //规则组:禁用间断模式
-    ADC1->CR1 &= ~(0X1<<10);    //关闭注入组自动转换
+    ADC1->CR1 &= ~(0x1<<12);    //注入组:禁用间断模式
+    ADC1->CR1 &= ~(0x1<<11);    //规则组:禁用间断模式
+    ADC1->CR1 &= ~(0x1<<10);    //关闭注入组自动转换
     
+#if 0
     if (bScanModeFlag)
     {
-        ADC1->CR1 |=  (0X1<<8); //开启扫描模式 (如果有多个通道或者外部事件触发, 必须要开启)
+        ADC1->CR1 |=  (0x1<<8); //开启扫描模式 (如果有多个通道或者外部事件触发, 必须要开启)
     }
     else 
     {
-        ADC1->CR1 &= ~(0X1<<8); //关闭扫描模式
+        ADC1->CR1 &= ~(0x1<<8); //关闭扫描模式
     }
+#else 
+    ADC1->CR1 &= ~(0x1<<8); //关闭扫描模式
+#endif
     
 #if 0
-    ADC1->CR1 &= ~(0X1<<7);
-    ADC1->CR1 &= ~(0X1<<6);
-    ADC1->CR1 |=  (0X1<<5);     //开中断
+    ADC1->CR1 &= ~(0x1<<7);
+    ADC1->CR1 &= ~(0x1<<6);
+    ADC1->CR1 |=  (0x1<<5);     //开中断
 #else   
-    ADC1->CR1 &= ~(0X1<<7);
-    ADC1->CR1 &= ~(0X1<<6);
-    ADC1->CR1 &= ~(0X1<<5);     //关中断
+    ADC1->CR1 &= ~(0x1<<7);
+    ADC1->CR1 &= ~(0x1<<6);
+    ADC1->CR1 &= ~(0x1<<5);     //关中断
 #endif  
         
-    ADC1->CR2 &= ~(0X1<<23);    //禁止温度传感器和V_REFINT
+    ADC1->CR2 &= ~(0x1<<23);    //禁止温度传感器和V_REFINT
         
 #if 0   
-    ADC1->CR2 |=  (0X1<<20);    //规则组:使用外部触发转换模式
-    ADC1->CR2 &= ~(0X7<<17);    
-    ADC1->CR2 |=  (0X5<<17);    //规则组:TIM4的CC4事件触发
+    ADC1->CR2 |=  (0x1<<20);    //规则组:使用外部触发转换模式
+    ADC1->CR2 &= ~(0x7<<17);    
+    ADC1->CR2 |=  (0x5<<17);    //规则组:TIM4的CC4事件触发
 #else   
-    ADC1->CR2 &= ~(0X1<<20);    //规则组:关闭外部条件出发
-    ADC1->CR2 &= ~(0X7<<17);    
-    ADC1->CR2 |=  (0X7<<17);    //规则组:软件触发
+    ADC1->CR2 &= ~(0x1<<20);    //规则组:关闭外部条件出发
+    ADC1->CR2 &= ~(0x7<<17);    
+    ADC1->CR2 |=  (0x7<<17);    //规则组:软件触发
 #endif  
         
-    ADC1->CR2 &= ~(0X1<<11);    //数据右对齐
-    ADC1->CR2 &= ~(0X1<<8);     //不使用DMA模式
-    ADC1->CR2 &= ~(0X1<<1);     //ADC1单次转换模式
+    ADC1->CR2 &= ~(0x1<<11);    //数据右对齐
+    ADC1->CR2 &= ~(0x1<<8);     //不使用DMA模式
+    //ADC1->CR2 &= ~(0x1<<1);     //ADC1单次转换模式
+    
+    if (bScanModeFlag)
+    {
+        ADC1->CR2 |=  (0x1<<1); //开启扫描模式 (如果有多个通道或者外部事件触发, 必须要开启)
+    }
+    else 
+    {
+        ADC1->CR2 &= ~(0x1<<1); //关闭扫描模式
+    }
     
     //配置采样时间 
     ADC1->SMPR1 = 0x00FFFFFF;   //通道0-17: 采样时间为239.5个周期
@@ -196,7 +209,7 @@ static void HW_ADC_ConfigMode(uint8_t uAdcNode, uint32_t ulChMask, bool bScanMod
     }
     
     //配置通道数量
-    ADC1->SQR1 &= ~(0XF<<20);
+    ADC1->SQR1 &= ~(0xF<<20);
     ADC1->SQR1 |=  ((uCurSequence-1)<<20);  //配置通道数量
     
 #if 0
@@ -207,18 +220,18 @@ static void HW_ADC_ConfigMode(uint8_t uAdcNode, uint32_t ulChMask, bool bScanMod
 #endif
     
     //唤醒ADC 
-    ADC1->CR2 |=  (0X1<<0);         //0-->1  唤醒ADC1
+    ADC1->CR2 |=  (0x1<<0);         //0-->1  唤醒ADC1
     HW_SimpleDelayUs(10);           //至少1us的稳定时间
     
     //初始化/校准 
-    ADC1->CR2 |=  (0X1<<3);
+    ADC1->CR2 |=  (0x1<<3);
     while (ADC1->CR2 & (1<<3));     //复位校准
     
-    ADC1->CR2 |=  (0X1<<2);
+    ADC1->CR2 |=  (0x1<<2);
     while (ADC1->CR2 & (1<<2));     //AD校准
     
     //启动ADC1
-    ADC1->CR2 |=  (0X1<<0);         //1-->1  启动ADC1
+    ADC1->CR2 |=  (0x1<<0);         //1-->1  启动ADC1
     
 }
 
@@ -263,7 +276,7 @@ uint32_t HW_ADC_RecvValueNoBlock(uint8_t uAdcNode, uint16_t *pAdcValue)
     //假如转换完成,则将数据出参,并返回0,否则返回1
     if (ADC1->SR & (0x1<<1))    //转换完成
     {
-        ADC1->SR &= ~(0X1<<1);  //清标志位
+        ADC1->SR &= ~(0x1<<1);  //清标志位
         
         *pAdcValue = ADC1->DR & 0xFFF;
         
@@ -286,7 +299,7 @@ uint32_t HW_ADC_RecvValueBlock(uint8_t uAdcNode, uint16_t *pAdcValue)
     while (!(ADC1->SR & (0x1<<1)));
     
     //清标志位
-    ADC1->SR &= ~(0X1<<1); 
+    ADC1->SR &= ~(0x1<<1); 
     
     //读取采样结果
     *pAdcValue = ADC1->DR & 0xFFF;
@@ -303,6 +316,6 @@ uint32_t HW_ADC_RecvValueBlock(uint8_t uAdcNode, uint16_t *pAdcValue)
   */
 void HW_ADC_Start(uint8_t uAdcNode)
 {
-    ADC1->CR2 |= (0X1<<22);  //软件触发
+    ADC1->CR2 |= (0x1<<22);  //软件触发
     
 }

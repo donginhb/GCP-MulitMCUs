@@ -123,7 +123,7 @@ void WB01_HwInit(void)
     //初始化步进电机PWM输出通道
     PWM_Init(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK);
     PWM_SetOutputPwmDutyRatio(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK, 50);
-    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 1);
+    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 1000);
     PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
     
     //初始化HC595
@@ -382,6 +382,24 @@ void WB01_OutGoodsHandler(void)
     }
 
 }
+#else 
+
+/**
+  * @brief  出货流程处理
+  * @param  None
+  * @retval None
+  */
+void WB01_OutGoodsHandler(void)
+{
+    if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
+    {
+        SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME); //设置下一次执行的时间
+        
+    }
+    
+}
+
+
 #endif
 
 
@@ -521,7 +539,7 @@ void WB01_TestHandler(void)
         
 #if WB01_TEST_05
         
-        switch (s_ulTempValue%25)
+        switch (s_ulTempValue%30)
         {
         case 0:
             WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
@@ -535,6 +553,9 @@ void WB01_TestHandler(void)
             WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
             DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
             break;
+        case 25:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
         }
         
 #endif
