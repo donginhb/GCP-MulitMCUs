@@ -109,7 +109,6 @@ static void WB01_IOConfig(void)
   */
 void WB01_HwInit(void)
 {
-#if 1
     //初始化IO
     WB01_IOConfig();
     
@@ -129,11 +128,6 @@ void WB01_HwInit(void)
     
     //初始化HC595
     HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
-    
-#else 
-    UART_Init(WB01_COM_UART_NODE, 115200);      //上位机通信串口
-    
-#endif
     
 }
 
@@ -155,9 +149,7 @@ void WB01_MainWorkLedShow(void)
     {
         SysTime_StartOneShot(&m_LedCtrlTimer, WB01_LED_TOGGLE_TIME); //设置下一次执行的时间
         
-#if !WB01_TEST_02
         GPIO_ToggleOutputState(OUTPUT_IO_LED0);
-#endif
     }
 
 }
@@ -480,150 +472,50 @@ void WB01_HallSensorProc(void)
                 
             }
             
-            //打印当前柜号
-            uBit8 uDisplayBuff[128] = {0};
-            sprintf((char *)uDisplayBuff, "Cur Grid is %d\r\n", g_lCurGridNumber);
-            DEBUF_PRINT(uDisplayBuff);
-            
-#if WB01_TEST_02
-            GPIO_ToggleOutputState(OUTPUT_IO_LED0);
-#endif
         }
     }
       
 }
 
 
-/*****************************************************************************
- * 测试线程接口
- ****************************************************************************/
-
-#define WB01_TEST_INTERVAL       (1000)     //按键扫描间隔(MS)
-static  SYS_TIME_DATA m_TestTimer = {1};    //测试定时器
-
-
-/**
-  * @brief  测试处理
-  * @param  None
-  * @retval None
-  */
-void WB01_TestHandler(void)
-{
-    static uBit32 s_ulTempValue = 0;
-    (void)s_ulTempValue;
-    
-    if (SysTime_CheckExpiredState(&m_TestTimer))
-    {
-        SysTime_StartOneShot(&m_TestTimer, WB01_TEST_INTERVAL);   //设置下一次执行的时间
-
-#if WB01_TEST_01
-        switch (s_ulTempValue%30)
-        {
-        case 0:
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
-            break;
-        case 10: 
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
-            break;
-        case 15: 
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
-            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
-            break;
-        case 25: 
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_ESTOP\r\n");
-            break;
-        }
-#endif
-        
-#if WB01_TEST_03
-        if (s_ulTempValue == 10)
-        {
-            WB01_SetObjGridNumber(5);
-            DEBUF_PRINT("Start to 5 grid\r\n");
-        }
-#endif
-        
-#if WB01_TEST_04
-        
-        switch (s_ulTempValue%45)
-        {
-        case 10:
-            WB01_SetObjGridNumber(10);
-            DEBUF_PRINT("ID: 10 \r\n");
-            break;
-        case 20:
-            WB01_SetObjGridNumber(15);
-            DEBUF_PRINT("ID: 15 \r\n");
-            break;
-        case 30: 
-            WB01_SetObjGridNumber(0);
-            DEBUF_PRINT("Main Axis Motor Reset To ID:0\r\n");
-            break;
-        }
-        
-#endif
-        
-#if WB01_TEST_05
-        
-        switch (s_ulTempValue%30)
-        {
-        case 0:
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
-            break;
-        case 10: 
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
-            break;
-        case 15: 
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
-            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
-            break;
-        case 25:
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
-            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
-        }
-        
-#endif
-        
-        s_ulTempValue++;
-        
-    }
-    
-}
-
 
 /*****************************************************************************
  * 进货门出货门电机控制线程接口
  ****************************************************************************/
 
-//主轴电机运行状态定义
-#define WB01_MOTOR_STATUS_STOP      (0)     //停止
-#define WB01_MOTOR_STATUS_CW        (1)     //正转
-#define WB01_MOTOR_STATUS_ACW       (2)     //反转
+#define WB01_INDOOR_USAGE                       (1)
+#define WB01_OUTDOOR_USAGE                      (1)
 
-
-//入货门电机控制错误码定义
-#define MOTOR_ERR_SUCCESS           (1)     //成功
-#define MOTOR_ERR_TIMEOVER          (2)     //超时
-#define MOTOR_ERR_DECT_OPEN         (3)     //关闭的过程之中检测到物体,已重新打开
-#define MOTOR_ERR_DECT_OPEN_FAIL    (4)     //关闭的过程之中检测到物体,但是重新打开失败
-
+//电机运行状态定义
+#define WB01_MOTOR_STATUS_STOP                  (0)     //停止
+#define WB01_MOTOR_STATUS_CW                    (1)     //正转
+#define WB01_MOTOR_STATUS_ACW                   (2)     //反转
 
 //门工作状态定义
-#define DOOR_WORK_STATUS_IDLE       (0)     //空闲
-#define DOOR_WORK_STATUS_OPEN       (1)     //开门操作
-#define DOOR_WORK_STATUS_CLOSE      (2)     //关门操作
+#define DOOR_WORK_STATUS_STOP                   (0)     //空闲
+#define DOOR_WORK_STATUS_OPEN                   (1)     //开门操作
+#define DOOR_WORK_STATUS_CLOSE                  (2)     //关门操作
 
+//电机当前运动状态定义
+#define MOTOR_CUR_STATUS_UNKNOW                 (0)     //未知(中间位置/超时导致的位置异常/信号异常导致的位置异常等)
+#define MOTOR_CUR_STATUS_RUNNING                (1)     //运行中
+#define MOTOR_CUR_STATUS_OPEN_LIMIT             (2)     //在开门限位
+#define MOTOR_CUR_STATUS_CLOSE_LIMIT            (3)     //在关门限位
 
-static uBit8 m_uCurIndoorMotorStatus = 0;   //当前进货门电机状态
-static uBit8 m_uCurOutdoorMotorStatus = 0;  //当前出货门电机状态
+#define WB01_DOOR_OVER_TIME                     (10*1000)   //超时时间
 
-static uBit8 m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;    //当前进货门工作状态
-static uBit8 m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;   //当前出货门工作状态
+static uBit8 m_uCurIndoorMotorStatus = 0;                       //当前进货门电机状态
+static uBit8 m_uCurOutdoorMotorStatus = 0;                      //当前出货门电机状态
+
+static uBit8 m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_STOP;    //当前进货门工作状态
+static uBit8 m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_STOP;   //当前出货门工作状态
+
+static uBit8 m_uCurIndoorStatus = MOTOR_CUR_STATUS_UNKNOW;      //当前进货门执行状态
+static uBit8 m_uCurOutdoorStatus = MOTOR_CUR_STATUS_UNKNOW;     //当前出货门执行状态
+
+static SYS_TIME_DATA m_IndoorOverlTimer  = {1};                 //入货门超时定时器
+static SYS_TIME_DATA m_OutdoorOverlTimer  = {1};                //入货门超时定时器
+
 
 
 /**
@@ -636,6 +528,7 @@ static uBit8 m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;   //当前出货�
   */
 void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
 {
+#if WB01_INDOOR_USAGE
     switch (uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
@@ -662,7 +555,7 @@ void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
         
     default: break;
     }
-    
+#endif
 }
 
 
@@ -676,6 +569,7 @@ void WB01_SetIndoorMotorStatus(uBit8 uMotorStatus)
   */
 void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
 {
+#if WB01_OUTDOOR_USAGE
     switch (uMotorStatus)
     {
     case WB01_MOTOR_STATUS_STOP:
@@ -702,6 +596,7 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
         
     default: break;
     }
+#endif
     
 }
 
@@ -713,6 +608,7 @@ void WB01_SetOutdoorMotorStatus(uBit8 uMotorStatus)
   */
 void WB01_SetIndoorStatus(bool bIsOpen)
 {
+#if WB01_INDOOR_USAGE
     if (bIsOpen)
     {
         m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_OPEN;
@@ -722,19 +618,32 @@ void WB01_SetIndoorStatus(bool bIsOpen)
         m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_CLOSE;
     }
     
+    //设置当前状态
+    m_uCurIndoorStatus = MOTOR_CUR_STATUS_RUNNING;
+    
+    //设置超时报警定时器
+    SysTime_StartOneShot(&m_IndoorOverlTimer, WB01_DOOR_OVER_TIME);
+#endif
+    
 }
 
 
 /**
   * @brief  入货门状态获取
   * @param  None
-  * @retval None
+  * @retval 入货门状态
+  *   @arg  MOTOR_CUR_STATUS_UNKNOW         //未知(中间位置,或超时/信号异常导致的位置异常等)
+  *   @arg  MOTOR_CUR_STATUS_RUNNING        //运行中
+  *   @arg  MOTOR_CUR_STATUS_OPEN_LIMIT     //在开门限位
+  *   @arg  MOTOR_CUR_STATUS_CLOSE_LIMIT    //在关门限位
   */
 uBit8 WB01_GetIndoorStatus(void)
 {
-    
-    
-    return 0;
+#if WB01_INDOOR_USAGE
+    return m_uCurIndoorStatus;
+#else 
+    return MOTOR_CUR_STATUS_UNKNOW;
+#endif
 }
 
 
@@ -745,11 +654,12 @@ uBit8 WB01_GetIndoorStatus(void)
   */
 void WB01_IndoorHandler(void)
 {
+#if WB01_INDOOR_USAGE
     static uBit32 s_ulTmpValue = 0;
     
     switch (m_uCurIndoorWorkStatus)
     {
-    case DOOR_WORK_STATUS_IDLE:
+    case DOOR_WORK_STATUS_STOP:
         
         break;
     case DOOR_WORK_STATUS_OPEN:
@@ -757,8 +667,11 @@ void WB01_IndoorHandler(void)
         //判断当前限位状态,若在限位处,则停止电机并退出
         if (GPIO_MAN_GetInputPinState(INPUT_IO_IN_DOOR_OPEN_LIMIT))
         {
+            //设置当前状态
+            m_uCurIndoorStatus = MOTOR_CUR_STATUS_OPEN_LIMIT;
+            
             //设置当前工作步骤
-            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_STOP;
             
             //停止电机
             WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
@@ -774,7 +687,6 @@ void WB01_IndoorHandler(void)
             s_ulTmpValue++;
             if (s_ulTmpValue >= 20)
             {
-                
                 WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_CW);
             }
             break;
@@ -796,10 +708,13 @@ void WB01_IndoorHandler(void)
         if (GPIO_MAN_GetInputPinState(INPUT_IO_IN_DOOR_CLOSE_LIMIT))
         {
             //设置当前工作步骤
-            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_STOP;
             
             //停止电机
             WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            //设置当前状态
+            m_uCurIndoorStatus = MOTOR_CUR_STATUS_CLOSE_LIMIT;
             
             break;
         }
@@ -828,6 +743,18 @@ void WB01_IndoorHandler(void)
         break;
     }
     
+    //超时处理
+    if (SysTime_CheckExpiredState(&m_IndoorOverlTimer))
+    {
+        //设置相关状态
+        m_uCurIndoorWorkStatus = DOOR_WORK_STATUS_STOP;
+        m_uCurIndoorStatus = MOTOR_CUR_STATUS_UNKNOW;
+        
+        //停止电机
+        WB01_SetIndoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+    }
+    
+#endif
 }
 
 
@@ -838,6 +765,8 @@ void WB01_IndoorHandler(void)
   */
 void WB01_SetOutdoorStatus(bool bIsOpen)
 {
+#if WB01_OUTDOOR_USAGE
+    
     if (bIsOpen)
     {
         m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_OPEN;
@@ -847,19 +776,32 @@ void WB01_SetOutdoorStatus(bool bIsOpen)
         m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_CLOSE;
     }
     
+    //设置当前状态
+    m_uCurOutdoorStatus = MOTOR_CUR_STATUS_RUNNING;
+    
+    //设置超时报警定时器
+    SysTime_StartOneShot(&m_OutdoorOverlTimer, WB01_DOOR_OVER_TIME);
+#endif
+    
 }
 
 
 /**
   * @brief  出货门状态获取
   * @param  None
-  * @retval None
+  * @retval 出货门状态
+  *   @arg  MOTOR_CUR_STATUS_UNKNOW         //未知(中间位置,或超时/信号异常导致的位置异常等)
+  *   @arg  MOTOR_CUR_STATUS_RUNNING        //运行中
+  *   @arg  MOTOR_CUR_STATUS_OPEN_LIMIT     //在开门限位
+  *   @arg  MOTOR_CUR_STATUS_CLOSE_LIMIT    //在关门限位
   */
 uBit8 WB01_GetOutdoorStatus(void)
 {
-    
-    
-    return 0;
+#if WB01_OUTDOOR_USAGE
+    return m_uCurOutdoorStatus;
+#else 
+    return MOTOR_CUR_STATUS_UNKNOW;
+#endif
 }
 
 
@@ -870,11 +812,12 @@ uBit8 WB01_GetOutdoorStatus(void)
   */
 void WB01_OutdoorHandler(void)
 {
+#if WB01_OUTDOOR_USAGE
     static uBit32 s_ulTmpValue = 0;
     
     switch (m_uCurOutdoorWorkStatus)
     {
-    case DOOR_WORK_STATUS_IDLE:
+    case DOOR_WORK_STATUS_STOP:
         
         break;
     case DOOR_WORK_STATUS_OPEN:
@@ -882,8 +825,11 @@ void WB01_OutdoorHandler(void)
         //判断当前限位状态,若在限位处,则停止电机并退出
         if (GPIO_MAN_GetInputPinState(INPUT_IO_OUT_DOOR_OPEN_LIMIT))
         {
+            //设置当前状态
+            m_uCurOutdoorStatus = MOTOR_CUR_STATUS_OPEN_LIMIT;
+            
             //设置当前工作步骤
-            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_STOP;
             
             //停止电机
             WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
@@ -921,10 +867,13 @@ void WB01_OutdoorHandler(void)
         if (GPIO_MAN_GetInputPinState(INPUT_IO_OUT_DOOR_CLOSE_LIMIT))
         {
             //设置当前工作步骤
-            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_IDLE;
+            m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_STOP;
             
             //停止电机
             WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+            
+            //设置当前状态
+            m_uCurOutdoorStatus = MOTOR_CUR_STATUS_CLOSE_LIMIT;
             
             break;
         }
@@ -933,6 +882,9 @@ void WB01_OutdoorHandler(void)
         if (GPIO_MAN_GetInputPinState(INPUT_IO_GOODS_DECTECT))
         {
             m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_OPEN;
+            
+            //重新进行超时计时
+            SysTime_StartOneShot(&m_OutdoorOverlTimer, WB01_DOOR_OVER_TIME);
             
             break;
         }
@@ -961,6 +913,18 @@ void WB01_OutdoorHandler(void)
         break;
     }
     
+    //超时处理
+    if (SysTime_CheckExpiredState(&m_OutdoorOverlTimer))
+    {
+        //设置相关状态
+        m_uCurOutdoorWorkStatus = DOOR_WORK_STATUS_STOP;
+        m_uCurOutdoorStatus = MOTOR_CUR_STATUS_UNKNOW;
+        
+        //停止电机
+        WB01_SetOutdoorMotorStatus(WB01_MOTOR_STATUS_STOP);
+    }
+#endif
+    
 }
 
 
@@ -968,53 +932,38 @@ void WB01_OutdoorHandler(void)
  * 货道限位IO检测线程接口
  ****************************************************************************/
 
+#if 0
+
+MH1，MH2，MH3，MV1以及B1
+
+H低电平而V高电平时,启动货道电机
+当限位信号变成下降沿时,到达限位
+
+#endif
+
 //定义货道电机资源
 #define WB01_AISLE_MAX_ROW                      (1)             //货道最大行数
 #define WB01_AISLE_MAX_COL                      (3)             //货道最大列数
 
 //货道电机限位信号电平状态
-#define WB01_AISLE_INDEX_SIGNAL_VALID           (true)          //限位信号有效信号
-#define WB01_AISLE_INDEX_SIGNAL_INVALID         (false)         //限位信号无效信号
+#define WB01_AISLE_INDEX_SIGNAL_VALID           (false)         //限位信号有效信号
+#define WB01_AISLE_INDEX_SIGNAL_INVALID         (true)          //限位信号无效信号
 
 //货道电机时间参数定义
-#define WB01_AISLE_MOTOR_DELAY_TIME             (500)           //货道电机检测延时时间(MS)
+#define WB01_AISLE_MOTOR_DELAY_TIME             (1500)          //货道电机检测延时时间(MS)
 #define WB01_AISLE_MOTOR_OVER_TIME              (4000)          //货道电机超时时间
 
-
-//货道电机运行步骤定义
-typedef enum 
-{
-    WB01_AISLE_MOTOR_WORK_IDLE = 0,                             //空闲
-    WB01_AISLE_MOTOR_WORK_FAST,                                 //快进
-    WB01_AISLE_MOTOR_WORK_FAST_STOP,                            //快进停止
-    WB01_AISLE_MOTOR_WORK_SLOW_STOP,                            //慢进缓冲
-    WB01_AISLE_MOTOR_WORK_SLOW,                                 //慢进
-    WB01_AISLE_MOTOR_WORK_SIGNAL_VERIFY,                        //信号确认
-    WB01_AISLE_MOTOR_WORK_FINISH,                               //结束处理
-    
-}WB01_AISLE_MOTOR_WORK_STEP;
-
-
 static SYS_TIME_DATA m_AisleDelayTimer = {0};                   //货道电机检测延时定时器
-static SYS_TIME_DATA m_AisleFastTimer = {0};                    //货道电机快进计时定时器
-static SYS_TIME_DATA m_AisleSlowTimer = {0};                    //货道电机慢进计时定时器
-static SYS_TIME_DATA m_AisleSlowStopTimer = {0};                //货道电机慢进缓冲计时定时器
-static SYS_TIME_DATA m_AisleOverTimer = {0};                    //货道电机超时计时定时器
-static SYS_TIME_DATA m_AisleVerifyTimer = {0};                  //货道电机信号确认计时定时器
+static SYS_TIME_DATA m_AisleOverTimer = {0};                    //货道电机超时定时器
 
 static uBit32 m_ulCurRow = 0xFF;                                //当前行
 static uBit32 m_ulCurCol = 0xFF;                                //当前列
-static uBit32 m_ulCurOutputValue = 0;                           //当前输出值(高6位是行信号,低10位是列信号.而行信号为低电平,而列信号为高电平时货道电机旋转)
+static bool m_bIndexInvalidFlag = false;                        //限位信号无效标志
 
 static WB01_AISLE_MOTOR_STATUS m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_IDLE; //货道电机运行状态
-static WB01_AISLE_MOTOR_WORK_STEP m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_IDLE; //当前货道电机工作步骤
-
 
 static uBit16 SaleAinStart[6] = {0x003e, 0x003d, 0x003b, 0x0037, 0x002f, 0x001f}; //层数 L0-L5
 static uBit16 MotorNumStart[10] = {0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000, 0x0040, 0x0080}; //电机m0-m9
-
-static uBit16 SaleAinStop[6] = {0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020};  //层数 L0-L5
-static uBit16 MotorNumStop[10] = {0xfe00, 0xfd00, 0xfb00, 0xf700, 0xef00, 0xdf00, 0xbf00, 0x7f00, 0x00bf, 0x007f}; //电机m0-m9
 
 
 /**
@@ -1026,6 +975,11 @@ static uBit16 MotorNumStop[10] = {0xfe00, 0xfd00, 0xfb00, 0xf700, 0xef00, 0xdf00
 static void WB01_SetAsileMotor(uBit32 ulRow, uBit32 ulCol, bool bState)
 {
     uBit16 nTmpVlue = 0;
+    
+    if ((ulRow >= WB01_AISLE_MAX_ROW) || (ulCol >= WB01_AISLE_MAX_COL))
+    {
+        return;
+    }
     
     if (bState)
     {
@@ -1075,6 +1029,7 @@ uBit32 WB01_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
     
     m_ulCurRow = ulRow;  //行
     m_ulCurCol = ulCol;  //列
+    m_bIndexInvalidFlag = false;
     
     //使能货道电机行信号
     WB01_SetAsileMotor(ulRow, ulCol, true);
@@ -1083,11 +1038,11 @@ uBit32 WB01_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
     m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_RUNNING;
     
     //启动检测延时定时器
-    SysTime_StartOneShot(&m_AisleDelayTimer, WB01_AISLE_MOTOR_DELAY_TIME);
+    SysTime_Start(&m_AisleDelayTimer, WB01_AISLE_MOTOR_DELAY_TIME);
     
-    //设置工作步骤
-    m_vm_CurAisleMotorStep = WB01_AISLE_MOTOR_WORK_FAST;
-
+    //设置超时报警定时器
+    SysTime_StartOneShot(&m_AisleOverTimer, WB01_AISLE_MOTOR_OVER_TIME);
+    
     return 0;
 }
      
@@ -1106,6 +1061,7 @@ uBit32 WB01_GetAisleMotorRunningState(void)
     
     return m_vm_AisleMotorRunningStatus;
 }
+    
 
 
 /**
@@ -1115,32 +1071,111 @@ uBit32 WB01_GetAisleMotorRunningState(void)
   */
 void WB01_AisleMotorHandler(void)
 {
-    
     if (m_vm_AisleMotorRunningStatus == WB01_AISLE_MOTOR_STATUS_RUNNING)
     {
-        //等待延时事件到达
+        //限位信号延时检测
         if (SysTime_CheckExpiredState(&m_AisleDelayTimer))
         {
-            SysTime_StartOneShot(&m_AisleDelayTimer, WB01_AISLE_MOTOR_DELAY_TIME);
-            
-            //检测到限位信号
+            //检测限位信号
             if (WB01_GetAisleIndexSignal(m_ulCurRow) == WB01_AISLE_INDEX_SIGNAL_VALID)
             {
-                
+                if (m_bIndexInvalidFlag)
+                {
+                    //关闭货道电机输出
+                    WB01_SetAsileMotor(m_ulCurRow, m_ulCurCol, 0);
+                    
+                    //初始化行列号
+                    m_ulCurRow = 0xFF;
+                    m_ulCurCol = 0xFF;
+                    m_bIndexInvalidFlag = false;
+                    
+                    //关闭定时器
+                    SysTime_Cancel(&m_AisleDelayTimer);
+                    SysTime_Cancel(&m_AisleOverTimer);
+                    
+                    m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_IDLE;
+                }
+            }
+            else 
+            {
+                m_bIndexInvalidFlag = true;
             }
             
         }
         
+        //超时报警检测
+        if (SysTime_CheckExpiredState(&m_AisleOverTimer))
+        {
+            //关闭货道电机输出
+            WB01_SetAsileMotor(m_ulCurRow, m_ulCurCol, 0);
+            
+            //初始化行列号
+            m_ulCurRow = 0xFF;
+            m_ulCurCol = 0xFF;
+            m_bIndexInvalidFlag = false;
+            
+            //关闭定时器
+            SysTime_Cancel(&m_AisleDelayTimer);
+            SysTime_Cancel(&m_AisleOverTimer);
+            
+            m_vm_AisleMotorRunningStatus = WB01_AISLE_MOTOR_STATUS_OVER;
+        }
         
     }
-    
-    
-    
-    
+
 }
 
 
+/*****************************************************************************
+ * 测试线程接口
+ ****************************************************************************/
 
+#define WB01_TEST_INTERVAL       (1000)     //按键扫描间隔(MS)
+static  SYS_TIME_DATA m_TestTimer = {1};    //测试定时器
+
+
+/**
+  * @brief  测试处理
+  * @param  None
+  * @retval None
+  */
+void WB01_TestHandler(void)
+{
+    static uBit32 s_ulTempValue = 0;
+    (void)s_ulTempValue;
+    
+    if (SysTime_CheckExpiredState(&m_TestTimer))
+    {
+        SysTime_StartOneShot(&m_TestTimer, WB01_TEST_INTERVAL);   //设置下一次执行的时间
+
+#if WB01_TEST_05
+        
+        switch (s_ulTempValue%30)
+        {
+        case 0:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
+            break;
+        case 10: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
+            break;
+        case 15: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
+            break;
+        case 25:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
+        }
+        
+#endif
+        
+        s_ulTempValue++;
+        
+    }
+    
+}
 
 
 

@@ -147,7 +147,7 @@ void WB01_TestHandler(void);
 
 
 //门工作状态定义
-#define DOOR_WORK_STATUS_IDLE       (0)     //空闲
+#define DOOR_WORK_STATUS_STOP       (0)     //空闲
 #define DOOR_WORK_STATUS_OPEN       (1)     //开门操作
 #define DOOR_WORK_STATUS_CLOSE      (2)     //关门操作
 
@@ -208,14 +208,6 @@ void WB01_OutdoorHandler(void);
 #define WB01_AISLE_MAX_ROW                      (1)             //货道最大行数
 #define WB01_AISLE_MAX_COL                      (3)             //货道最大列数
 
-//货道电机限位信号电平状态
-#define WB01_AISLE_INDEX_SIGNAL_VALID           (true)          //限位信号有效信号
-#define WB01_AISLE_INDEX_SIGNAL_INVALID         (false)         //限位信号无效信号
-
-//货道电机时间参数定义
-#define WB01_AISLE_MOTOR_DELAY_TIME             (500)           //货道电机检测延时时间(MS)
-#define WB01_AISLE_MOTOR_OVER_TIME              (4000)          //货道电机超时时间
-
 //货道电机运行状态定义
 typedef enum 
 {
@@ -255,7 +247,6 @@ uBit32 WB01_GetAisleMotorRunningState(void);
   * @retval None
   */
 void WB01_AisleMotorHandler(void);
-
 
 
 
