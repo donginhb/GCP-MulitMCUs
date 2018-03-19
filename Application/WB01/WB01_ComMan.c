@@ -126,7 +126,11 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
                 pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
             }
             
+            //执行指令
+            WB01_SetIndoorStatus(pRecvData->uData[0]);
+            
             //设置回发数据
+            pSendData->uData[0] = 0;    //成功
             m_ulSendLen = sizeof(uBit8);
             
             break;
@@ -138,7 +142,11 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
                 pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
             }
             
+            //执行指令
+            WB01_SetOutdoorStatus(pRecvData->uData[0]);
+            
             //设置回发数据
+            pSendData->uData[0] = 0;    //成功
             m_ulSendLen = sizeof(uBit8);
             
             break;
@@ -150,7 +158,20 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
                 pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
             }
             
+            //执行指令
+            ulRet = WB01_SetObjGridNumber(pRecvData->uData[0]);
+            
+            if (ulRet == 2)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_RANGE;
+            }
+            else if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUS;
+            }
+            
             //设置回发数据
+            pSendData->uData[0] = (ulRet & 0xFF);
             m_ulSendLen = sizeof(uBit8);
             
             break;
@@ -162,7 +183,20 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
                 pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
             }
             
+            //执行指令
+            ulRet = WB01_EnableAisleMotor(pRecvData->uData[0]/10, pRecvData->uData[0]%10);
+            
+            if (ulRet == 2)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_RANGE;
+            }
+            else if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUS;
+            }
+            
             //设置回发数据
+            pSendData->uData[0] = (ulRet & 0xFF);
             m_ulSendLen = sizeof(uBit8);
             
             break;
@@ -176,6 +210,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = (ulRet & 0xFF);
             
             break;
         default:
@@ -204,6 +239,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetIndoorStatus();
             
             break;
         case WB01_GET_CMD_OUTDOOR_STATUS          : //取货门状态查询
@@ -216,6 +252,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetOutdoorStatus();
             
             break;
         case WB01_GET_CMD_MAIN_AXIS_MOTOR_STATUS  : //主轴电机运行状态查询
@@ -228,6 +265,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetMainAxisMotorStatus();
             
             break;
         case WB01_GET_CMD_OUTGOODS_GRID           : //当前出货柜号查询
@@ -240,6 +278,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetObjGridNumber();
             
             break;
         case WB01_GET_CMD_GRID_LEARN_STATUS       : //总柜数自学习状态查询
@@ -264,6 +303,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetMaxGridCount();
             
             break;
         case WB01_GET_CMD_AISLE_MOTOR_STATUS      : //货道电机状态查询
@@ -276,6 +316,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = WB01_GetAisleMotorRunningState();
             
             break;
         case WB01_GET_CMD_LIGHT_STATUS            : //光栅状态查询
@@ -288,6 +329,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = GPIO_MAN_GetInputPinState(INPUT_IO_GOODS_DECTECT);
             
             break;
             

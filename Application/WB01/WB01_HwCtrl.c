@@ -109,7 +109,7 @@ static void WB01_IOConfig(void)
   */
 void WB01_HwInit(void)
 {
-#if 0
+#if 1
     //初始化IO
     WB01_IOConfig();
     
@@ -124,7 +124,7 @@ void WB01_HwInit(void)
     //初始化步进电机PWM输出通道
     PWM_Init(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK);
     PWM_SetOutputPwmDutyRatio(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK, 50);
-    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 1000);
+    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 2000);
     PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
     
     //初始化HC595
@@ -255,7 +255,7 @@ bool g_bMainAxisMotorRunningFlag = false;   //主轴电机运行状态
 
 /**
   * @brief  目标柜号设置
-  * @param  None
+  * @param  ulGridNumber 目标柜号
   * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号
   */
 uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
@@ -279,6 +279,29 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
     }
     
     return ulRet;
+}
+
+/**
+  * @brief  目标柜号获取
+  * @param  None
+  * @retval 目标柜号
+  */
+uBit32 WB01_GetObjGridNumber(void)
+{
+    
+    return g_lObjGridNumber;
+}
+
+
+/**
+  * @brief  总柜数获取
+  * @param  None
+  * @retval 总柜数
+  */
+uBit32 WB01_GetMaxGridCount(void)
+{
+    
+    return g_lMaxGridCount;
 }
 
 
@@ -703,6 +726,19 @@ void WB01_SetIndoorStatus(bool bIsOpen)
 
 
 /**
+  * @brief  入货门状态获取
+  * @param  None
+  * @retval None
+  */
+uBit8 WB01_GetIndoorStatus(void)
+{
+    
+    
+    return 0;
+}
+
+
+/**
   * @brief  入货门电机控制
   * @param  None
   * @retval None
@@ -815,6 +851,19 @@ void WB01_SetOutdoorStatus(bool bIsOpen)
 
 
 /**
+  * @brief  出货门状态获取
+  * @param  None
+  * @retval None
+  */
+uBit8 WB01_GetOutdoorStatus(void)
+{
+    
+    
+    return 0;
+}
+
+
+/**
   * @brief  出货门电机控制
   * @param  None
   * @retval None
@@ -920,8 +969,8 @@ void WB01_OutdoorHandler(void)
  ****************************************************************************/
 
 //定义货道电机资源
-#define WB01_AISLE_MAX_ROW                      (10)            //货道最大行数
-#define WB01_AISLE_MAX_COL                      (10)            //货道最大列数
+#define WB01_AISLE_MAX_ROW                      (1)             //货道最大行数
+#define WB01_AISLE_MAX_COL                      (3)             //货道最大列数
 
 //货道电机限位信号电平状态
 #define WB01_AISLE_INDEX_SIGNAL_VALID           (true)          //限位信号有效信号
@@ -930,17 +979,6 @@ void WB01_OutdoorHandler(void)
 //货道电机时间参数定义
 #define WB01_AISLE_MOTOR_DELAY_TIME             (500)           //货道电机检测延时时间(MS)
 #define WB01_AISLE_MOTOR_OVER_TIME              (4000)          //货道电机超时时间
-
-//货道电机运行状态定义
-typedef enum 
-{
-    WB01_AISLE_MOTOR_STATUS_IDLE     = 0,                       //货道电机空闲
-    WB01_AISLE_MOTOR_STATUS_RUNNING  ,                          //货道电机运行中
-    WB01_AISLE_MOTOR_STATUS_OVER     ,                          //超时
-    WB01_AISLE_MOTOR_STATUS_POS_ERR  ,                          //限位信号异常
-    
-}WB01_AISLE_MOTOR_STATUS;
-
 
 
 //货道电机运行步骤定义
@@ -1019,20 +1057,20 @@ static bool WB01_GetAisleIndexSignal(uBit32 ulRow)
   * @brief  货道电机启动
   * @param  ulRow 行号,从0算起
   * @param  ulCol 列号,从0算起
-  * @retval 0-成功 1-参数范围错误 2-货道电机正在运行
+  * @retval 0-成功 1-货道电机正在运行 2-参数范围错误
   */
 uBit32 WB01_EnableAisleMotor(uBit32 ulRow, uBit32 ulCol)
 {
     //校验入参参数
     if ((ulRow >= WB01_AISLE_MAX_ROW) || (ulCol >= WB01_AISLE_MAX_COL))
     {
-        return 1;
+        return 2;
     }
     
     //判断电机是否在运行
     if (m_vm_AisleMotorRunningStatus == WB01_AISLE_MOTOR_STATUS_RUNNING)
     {
-        return 2;
+        return 1;
     }
     
     m_ulCurRow = ulRow;  //行
@@ -1091,7 +1129,6 @@ void WB01_AisleMotorHandler(void)
                 
             }
             
-            m_vm_CurAisleMotorStep++;
         }
         
         

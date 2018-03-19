@@ -52,7 +52,7 @@ void WB01_Init(void)
   */
 void WB01_MainProc(void)
 {
-#if 0
+#if 1
     //LED显示
     WB01_MainWorkLedShow();
     
