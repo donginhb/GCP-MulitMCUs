@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define WB01_DEBUG
+//#define WB01_DEBUG
 
 #ifdef WB01_DEBUG
 #define DEBUF_PRINT(x)      UART_SendStr(WB01_DEBUG_UART_NODE, x)
@@ -40,16 +40,6 @@
 #define DEBUF_PRINT(x)   
 #endif
 
-
-#define WB01_TEST_01  (0)
-#define WB01_TEST_02  (0)
-#define WB01_TEST_03  (0)
-#define WB01_TEST_04  (0)
-#define WB01_TEST_05  (1)
-
-#if ((WB01_TEST_01 + WB01_TEST_02 + WB01_TEST_03 + WB01_TEST_04 + WB01_TEST_05) > 1)
-#error "错误"
-#endif
 
 /*****************************************************************************
  * 私有成员定义及实现
@@ -129,6 +119,9 @@ void WB01_HwInit(void)
     //初始化HC595
     HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
     
+    //关闭货道电机
+    WB01_SetAsileMotor(0, 0, 0);
+    
 }
 
 
@@ -160,19 +153,22 @@ void WB01_MainWorkLedShow(void)
  ****************************************************************************/
 
 //主轴电机运行状态定义
-#define WB01_MOTOR_STATUS_STOP      (0) //停止
-#define WB01_MOTOR_STATUS_CW        (1) //正转
-#define WB01_MOTOR_STATUS_ACW       (2) //反转
-//#define WB01_MOTOR_STATUS_ESTOP     (3) //刹车
+#define WB01_MOTOR_STATUS_STOP              (0) //停止
+#define WB01_MOTOR_STATUS_CW                (1) //正转
+#define WB01_MOTOR_STATUS_ACW               (2) //反转
 
 //主轴电机当前运动方向定义
-#define WB01_MOTOR_DIR_CW           (0) //正转方向
-#define WB01_MOTOR_DIR_ACW          (1) //正转方向
+#define WB01_MOTOR_DIR_CW                   (0) //正转方向
+#define WB01_MOTOR_DIR_ACW                  (1) //逆转方向
 
-#define MAIN_AXIS_GRID_TIMEROVER    (3000)      //单格超时时间
+//#define WB01_MAIN_AXIS_GRID_TIMEROVER       (3000)  //单格超时时间
+
+#define WB01_MAIN_START_SPEED               (200)   //启动速度
+#define WB01_MAIN_FAST_SPEED                (1000)  //快进速度
+#define WB01_MAIN_SLOW_SPEED                (500)   //慢进速度
 
 static uBit8 m_uCurMotorDir = WB01_MOTOR_DIR_CW;    //当前电机运动方向 0-正转 1-逆转
-static uBit8 m_uCurAxisMotorStatus = 0; //当前主轴电机状态
+static uBit8 m_uCurAxisMotorStatus = 0;             //当前主轴电机状态 0-停止 1-正转 2-反转
 
 
 /**
@@ -208,7 +204,6 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
         GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
         break;
-        
     default: break;
     }
     
@@ -242,9 +237,10 @@ Bit32 g_lMaxGridCount = 25;         //最大的格子数
 Bit32 g_lCurGridNumber = 0;         //当前转过的格子
 Bit32 g_lObjGridNumber = 0;         //要出货的格子数(目标格子数)
 
-bool g_bMainAxisMotorRunningFlag = false;   //主轴电机运行状态
+//bool g_bMainAxisMotorRunningFlag = false;   //主轴电机运行状态
 
 
+#if 0
 /**
   * @brief  目标柜号设置
   * @param  ulGridNumber 目标柜号
@@ -272,6 +268,8 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
     
     return ulRet;
 }
+#endif
+
 
 /**
   * @brief  目标柜号获取
@@ -405,6 +403,59 @@ void WB01_OutGoodsHandler(void)
 }
 #else 
 
+
+#define WB01_MAIN_START_SPEED               (200)   //启动速度
+#define WB01_MAIN_FAST_SPEED                (1000)  //快进速度
+#define WB01_MAIN_SLOW_SPEED                (500)   //慢进速度
+
+
+typedef enum
+{
+    WB01_OUTGOODS_STEP_STOP = 0,        //停止
+    WB01_OUTGOODS_STEP_START,           //启动
+    WB01_OUTGOODS_STEP_SPEED_UP,        //加速
+    WB01_OUTGOODS_STEP_FAST_KEEP,       //快进速度保持
+    WB01_OUTGOODS_STEP_SPEED_DOWN,      //减速
+    WB01_OUTGOODS_STEP_SLOW_KEEP,       //慢进速度保持
+    WB01_OUTGOODS_STEP_FINISH,          //结束处理
+    
+}WB01_OUTGOODS_STEP;
+
+
+static WB01_OUTGOODS_STEP m_OutGoodsStep = 0;
+
+
+/**
+  * @brief  目标柜号设置
+  * @param  ulGridNumber 目标柜号
+  * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号
+  */
+uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
+{
+    uBit32 ulRet = 0;
+    
+    //校验柜号是否有效
+    if (ulGridNumber >= g_lMaxGridCount)
+    {
+        return 2;
+    }
+    
+    //校验当前设备是否在忙
+    if (m_OutGoodsStep != WB01_OUTGOODS_STEP_STOP)
+    {
+        return 1;
+    }
+    
+    //设置目标柜号
+    g_lObjGridNumber = ulGridNumber;
+    
+    //设置当前工作步骤
+    m_OutGoodsStep = WB01_OUTGOODS_STEP_START;
+    
+    return ulRet;
+}
+
+
 /**
   * @brief  出货流程处理
   * @param  None
@@ -412,14 +463,26 @@ void WB01_OutGoodsHandler(void)
   */
 void WB01_OutGoodsHandler(void)
 {
-    if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
+    switch (m_OutGoodsStep)
     {
-        SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME); //设置下一次执行的时间
-        
+    case WB01_OUTGOODS_STEP_STOP       : //停止            
+        break;
+    case WB01_OUTGOODS_STEP_START      : //启动            
+        break;
+    case WB01_OUTGOODS_STEP_SPEED_UP   : //加速            
+        break;
+    case WB01_OUTGOODS_STEP_FAST_KEEP  : //快进速度保持    
+        break;
+    case WB01_OUTGOODS_STEP_SPEED_DOWN : //减速            
+        break;
+    case WB01_OUTGOODS_STEP_SLOW_KEEP  : //慢进速度保持    
+        break;
+    case WB01_OUTGOODS_STEP_FINISH     : //结束处理        
+        break;
+    default: break;
     }
     
 }
-
 
 #endif
 
@@ -478,7 +541,6 @@ void WB01_HallSensorProc(void)
 }
 
 
-
 /*****************************************************************************
  * 进货门出货门电机控制线程接口
  ****************************************************************************/
@@ -487,9 +549,9 @@ void WB01_HallSensorProc(void)
 #define WB01_OUTDOOR_USAGE                      (1)
 
 //电机运行状态定义
-#define WB01_MOTOR_STATUS_STOP                  (0)     //停止
-#define WB01_MOTOR_STATUS_CW                    (1)     //正转
-#define WB01_MOTOR_STATUS_ACW                   (2)     //反转
+//#define WB01_MOTOR_STATUS_STOP                  (0)     //停止
+//#define WB01_MOTOR_STATUS_CW                    (1)     //正转
+//#define WB01_MOTOR_STATUS_ACW                   (2)     //反转
 
 //门工作状态定义
 #define DOOR_WORK_STATUS_STOP                   (0)     //空闲
@@ -972,7 +1034,7 @@ static uBit16 MotorNumStart[10] = {0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x200
   * @param  bState 信号状态
   * @retval None
   */
-static void WB01_SetAsileMotor(uBit32 ulRow, uBit32 ulCol, bool bState)
+void WB01_SetAsileMotor(uBit32 ulRow, uBit32 ulCol, bool bState)
 {
     uBit16 nTmpVlue = 0;
     
