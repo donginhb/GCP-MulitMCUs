@@ -52,7 +52,6 @@ void WB01_Init(void)
   */
 void WB01_MainProc(void)
 {
-#if 1
     //LED显示
     WB01_MainWorkLedShow();
     
@@ -62,10 +61,13 @@ void WB01_MainProc(void)
     //出货流程处理
     WB01_OutGoodsHandler();
     
-    //测试处理
-    WB01_TestHandler();
-#endif
     //通信设置
     WB01_ComHandler();
+    
+    //货道电机管理
+    WB01_AisleMotorHandler();
+    
+    //测试处理
+    WB01_TestHandler();
     
 }

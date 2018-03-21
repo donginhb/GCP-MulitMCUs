@@ -30,8 +30,6 @@
       
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
-#include <stdlib.h>
 
 //#define WB01_DEBUG
 
@@ -115,8 +113,8 @@ void WB01_HwInit(void)
     //初始化步进电机PWM输出通道
     PWM_Init(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK);
     PWM_SetOutputPwmDutyRatio(WB01_MOTOR_PWM_NODE, WB01_MOTOR_PWM_CH_MASK, 50);
-    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 200);
-    PWM_OutputEnable(WB01_MOTOR_PWM_NODE, false);
+    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, 2000);
+    PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
     
     //初始化HC595
     HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
@@ -163,6 +161,12 @@ void WB01_MainWorkLedShow(void)
 #define WB01_MOTOR_DIR_CW                   (0) //正转方向
 #define WB01_MOTOR_DIR_ACW                  (1) //逆转方向
 
+//#define WB01_MAIN_AXIS_GRID_TIMEROVER       (3000)  //单格超时时间
+
+#define WB01_MAIN_START_SPEED               (200)   //启动速度
+#define WB01_MAIN_FAST_SPEED                (1000)  //快进速度
+#define WB01_MAIN_SLOW_SPEED                (500)   //慢进速度
+
 static uBit8 m_uCurMotorDir = WB01_MOTOR_DIR_CW;    //当前电机运动方向 0-正转 1-逆转
 static uBit8 m_uCurAxisMotorStatus = 0;             //当前主轴电机状态 0-停止 1-正转 2-反转
 
@@ -173,7 +177,12 @@ static uBit8 m_uCurAxisMotorStatus = 0;             //当前主轴电机状态 0
   *     @arg WB01_MOTOR_STATUS_STOP   停止
   *     @arg WB01_MOTOR_STATUS_CW     正转
   *     @arg WB01_MOTOR_STATUS_ACW    反转
+  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
   * @retval None
+  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
+  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
+  *         际改变后才执行一下步的操作,以避免这种情况出现;
+  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
   */
 void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
 {
@@ -202,18 +211,6 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
 
 
 /**
-  * @brief  主轴电机速度设置
-  * @param  ulSpeed PWM的输出频率
-  * @retval None
-  */
-void WB01_SetMainAxisMotorSpeed(uBit32 ulSpeed)
-{
-    PWM_SetOutputPwmFrq(WB01_MOTOR_PWM_NODE, ulSpeed);
-    
-}
-
-
-/**
   * @brief  主轴电机状态获取
   * @param  uMotorStatus: 0-停止 1-正转 2-反转 3-刹车
   * @retval 电机状态
@@ -233,18 +230,184 @@ uBit8 WB01_GetMainAxisMotorStatus(void)
  * 出货流程线程接口
  ****************************************************************************/
 
-//主轴电机出货流程速度定义
-#define WB01_OUTGOODS_START_SPEED           (2*100)   //启动速度
-#define WB01_OUTGOODS_FAST_SPEED            (10*1000)  //快进速度
-#define WB01_OUTGOODS_SLOW_SPEED            (2*1000)  //慢进速度
+#define WB01_OUTGOODS_PROC_TIME     (100)           //出货流程监控时间(MS)
+static SYS_TIME_DATA m_OutGoodsCtrlTimer = {1};     //出货流程控制定时器
 
-#define WB01_OUTGOODS_ACC_SPEED             (2000)  //加速度(单位:Hz/S)
+Bit32 g_lMaxGridCount = 25;         //最大的格子数
+Bit32 g_lCurGridNumber = 0;         //当前转过的格子
+Bit32 g_lObjGridNumber = 0;         //要出货的格子数(目标格子数)
 
-#define WB01_OUTGOODS_SLOW_GRID_COUNT       (1)     //慢进的格子数
+//bool g_bMainAxisMotorRunningFlag = false;   //主轴电机运行状态
 
-#define WB01_OUTGOODS_GRID_TIMEROVER        (3000)  //单格超时时间
 
-#define WB01_OUTGOODS_PROC_TIME             (20)    //出货流程监控间隔(MS)
+#if 0
+/**
+  * @brief  目标柜号设置
+  * @param  ulGridNumber 目标柜号
+  * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号
+  */
+uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
+{
+    uBit32 ulRet = 1;
+    
+    if (ulGridNumber >= g_lMaxGridCount)
+    {
+        return 2;
+    }
+    
+    if (!g_bMainAxisMotorRunningFlag)
+    {
+        //设置主轴电机运行标志
+        g_bMainAxisMotorRunningFlag = true;
+        
+        //设置目标柜号
+        g_lObjGridNumber = ulGridNumber;
+        
+        ulRet = 0;
+    }
+    
+    return ulRet;
+}
+#endif
+
+
+/**
+  * @brief  目标柜号获取
+  * @param  None
+  * @retval 目标柜号
+  */
+uBit32 WB01_GetObjGridNumber(void)
+{
+    
+    return g_lObjGridNumber;
+}
+
+
+/**
+  * @brief  总柜数获取
+  * @param  None
+  * @retval 总柜数
+  */
+uBit32 WB01_GetMaxGridCount(void)
+{
+    
+    return g_lMaxGridCount;
+}
+
+
+#if 0
+/**
+  * @brief  出货流程处理
+  * @param  None
+  * @retval None
+  */
+void WB01_OutGoodsHandler(void)
+{
+    static uBit32 s_ulTmpValue = 0;
+    
+    if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
+    {
+        SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME); //设置下一次执行的时间
+        
+        if (g_bMainAxisMotorRunningFlag)
+        {
+
+            //假如当前柜号小于目标柜号,则电机正转
+            if (g_lCurGridNumber < g_lObjGridNumber)
+            {
+                //获取主轴电机状态
+                uBit8 uMotorStatus = WB01_GetMainAxisMotorStatus();
+                
+                switch (uMotorStatus)
+                {
+                case WB01_MOTOR_STATUS_STOP : 
+                    //若停止电机2S以上,则开始正转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is stop , cw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
+                    }
+                    break;
+                case WB01_MOTOR_STATUS_CW   : break;
+                case WB01_MOTOR_STATUS_ACW  : 
+                    //假如当前在逆转,则急停电机
+                    s_ulTmpValue = 0;
+                    DEBUF_PRINT("motor: current is acw , estop\r\n");
+                    WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                    break;
+                case WB01_MOTOR_STATUS_ESTOP: 
+                    //若急停电机2S以上,则开始正转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is estop , cw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
+                    }
+                    break;
+                }
+                    
+            }
+            //假如当前柜号大于目标柜号,则电机逆转
+            else if (g_lCurGridNumber > g_lObjGridNumber)
+            {
+                //获取主轴电机状态
+                uBit8 uMotorStatus = WB01_GetMainAxisMotorStatus();
+                
+                switch (uMotorStatus)
+                {
+                case WB01_MOTOR_STATUS_STOP : 
+                    //若停止电机2S以上,则开始逆转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is stop , acw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+                    }
+                    break;
+                case WB01_MOTOR_STATUS_CW   : 
+                    //假如当前在正转,则急停电机
+                    s_ulTmpValue = 0;
+                    DEBUF_PRINT("motor: current is cw , estop\r\n");
+                    WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                case WB01_MOTOR_STATUS_ACW  : 
+                    break;
+                case WB01_MOTOR_STATUS_ESTOP: 
+                    //若急停电机2S以上,则开始逆转
+                    s_ulTmpValue++;
+                    if (s_ulTmpValue >= 20)
+                    {
+                        DEBUF_PRINT("motor: current is estop , acw\r\n");
+                        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+                    }
+                    break;
+                }
+                
+            }
+            //假如当前柜号和目标柜号相同,则停止电机
+            else if (g_lCurGridNumber == g_lObjGridNumber)
+            {
+                DEBUF_PRINT("g_lCurGridNumber == g_lObjGridNumber, estop!\r\n");
+                
+                //刹车
+                WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ESTOP);
+                
+                //清除运行状态
+                g_bMainAxisMotorRunningFlag = false;
+            }
+
+            
+        }
+    }
+
+}
+#else 
+
+
+#define WB01_MAIN_START_SPEED               (200)   //启动速度
+#define WB01_MAIN_FAST_SPEED                (1000)  //快进速度
+#define WB01_MAIN_SLOW_SPEED                (500)   //慢进速度
+
 
 typedef enum
 {
@@ -259,50 +422,7 @@ typedef enum
 }WB01_OUTGOODS_STEP;
 
 
-static SYS_TIME_DATA m_OutGoodsCtrlTimer = {1};     //出货流程控制定时器
-
-static Bit32 m_lMaxGridCount = 25;         //最大的格子数
-static Bit32 m_lCurGridNumber = 0;         //当前转过的格子
-static Bit32 m_lObjGridNumber = 0;         //要出货的格子数(目标格子数)
-
-static WB01_OUTGOODS_STEP m_CurOutGoodsStep = WB01_OUTGOODS_STEP_STOP;    //当前出货流程
-static uBit32 ulCurOutGoodsSpeed = 0;               //当前出货速度
-
-/**
-  * @brief  目标柜号获取
-  * @param  None
-  * @retval 目标柜号
-  */
-uBit32 WB01_GetObjGridNumber(void)
-{
-    
-    return m_lObjGridNumber;
-}
-
-
-/**
-  * @brief  总柜数获取
-  * @param  None
-  * @retval 总柜数
-  */
-uBit32 WB01_GetMaxGridCount(void)
-{
-    
-    return m_lMaxGridCount;
-}
-
-
-/**
-  * @brief  出货复位任务开始
-  * @param  None
-  * @retval 0-成功 1-忙
-  */
-uBit32 WB01_StartOutGoodsResetTask(void)
-{
-    
-    return 0;
-}
-
+static WB01_OUTGOODS_STEP m_OutGoodsStep = 0;
 
 
 /**
@@ -315,22 +435,22 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
     uBit32 ulRet = 0;
     
     //校验柜号是否有效
-    if (ulGridNumber >= m_lMaxGridCount)
+    if (ulGridNumber >= g_lMaxGridCount)
     {
         return 2;
     }
     
     //校验当前设备是否在忙
-    if (m_CurOutGoodsStep != WB01_OUTGOODS_STEP_STOP)
+    if (m_OutGoodsStep != WB01_OUTGOODS_STEP_STOP)
     {
         return 1;
     }
     
     //设置目标柜号
-    m_lObjGridNumber = ulGridNumber;
+    g_lObjGridNumber = ulGridNumber;
     
     //设置当前工作步骤
-    m_CurOutGoodsStep = WB01_OUTGOODS_STEP_START;
+    m_OutGoodsStep = WB01_OUTGOODS_STEP_START;
     
     return ulRet;
 }
@@ -343,156 +463,31 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
   */
 void WB01_OutGoodsHandler(void)
 {
-    switch (m_CurOutGoodsStep)
+    switch (m_OutGoodsStep)
     {
     case WB01_OUTGOODS_STEP_STOP       : //停止
         break;
     case WB01_OUTGOODS_STEP_START      : //启动
         
-        //设置启动速度
-        ulCurOutGoodsSpeed = WB01_OUTGOODS_START_SPEED;
-        WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
-        
         //启动电机
-        if (m_lCurGridNumber < m_lObjGridNumber)
-        {
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
-        }
-        else if (m_lCurGridNumber > m_lObjGridNumber)
-        {
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
-        }
-        else 
-        {
-            m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FINISH;
-            break;
-        }
-        
-        //设置控制定时器
-        SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME);
         
         break;
     case WB01_OUTGOODS_STEP_SPEED_UP   : //加速
-        
-        if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
-        {
-            SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME);
-            
-            if (abs(m_lCurGridNumber - m_lObjGridNumber) == 0)
-            {
-                //假如当前位置为目标位置,则紧急停止电机,并执行相应的处理
-                m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FINISH;
-                ulCurOutGoodsSpeed = 0;
-                WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP);
-            }
-            else if (abs(m_lCurGridNumber - m_lObjGridNumber) <= WB01_OUTGOODS_SLOW_GRID_COUNT)
-            {
-                //假如当前格子跟目标格子相差小于风雨2格,则加速到慢进速度
-                if (ulCurOutGoodsSpeed < WB01_OUTGOODS_SLOW_SPEED)
-                {
-                    ulCurOutGoodsSpeed += WB01_OUTGOODS_ACC_SPEED*WB01_OUTGOODS_PROC_TIME/1000;
-                    WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
-                }
-                else 
-                {
-                    //考虑到存在速度大于慢进速度而小于快进速度时,走到目标格子数的2格以内的情况
-                    //跳转到减速操作,而保证在最后2格是以慢进速度运行
-                    m_CurOutGoodsStep = WB01_OUTGOODS_STEP_SPEED_DOWN;
-                }
-            }
-            else 
-            {
-                //假如当前格子跟目标格子相差大于2格,则加速到快进速度
-                if (ulCurOutGoodsSpeed < WB01_OUTGOODS_FAST_SPEED)
-                {
-                    ulCurOutGoodsSpeed += WB01_OUTGOODS_ACC_SPEED*WB01_OUTGOODS_PROC_TIME/1000;
-                    WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
-                }
-                else 
-                {
-                    m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FAST_KEEP;
-                }
-            }
-        }
-        
         break;
     case WB01_OUTGOODS_STEP_FAST_KEEP  : //快进速度保持
-        
-        if (abs(m_lCurGridNumber - m_lObjGridNumber) == 0)
-        {
-            //假如当前位置为目标位置,则紧急停止电机,并执行相应的处理
-            m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FINISH;
-            ulCurOutGoodsSpeed = 0;
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP);
-        }
-        else if (abs(m_lCurGridNumber - m_lObjGridNumber) <= WB01_OUTGOODS_SLOW_GRID_COUNT)
-        {
-            //假如当前格子跟目标格子相差小于风雨2格,则到达减速步骤
-            m_CurOutGoodsStep = WB01_OUTGOODS_STEP_SPEED_DOWN;
-            
-            //设置控制间隔定时器
-            SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME);
-        }
-        
         break;
     case WB01_OUTGOODS_STEP_SPEED_DOWN : //减速
-        
-        if (SysTime_CheckExpiredState(&m_OutGoodsCtrlTimer))
-        {
-            SysTime_StartOneShot(&m_OutGoodsCtrlTimer, WB01_OUTGOODS_PROC_TIME);
-            
-            if (abs(m_lCurGridNumber - m_lObjGridNumber) == 0)
-            {
-                //假如当前位置为目标位置,则紧急停止电机,并执行相应的处理
-                m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FINISH;
-                ulCurOutGoodsSpeed = 0;
-                WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP);
-            }
-            else if (abs(m_lCurGridNumber - m_lObjGridNumber) <= WB01_OUTGOODS_SLOW_GRID_COUNT)
-            {
-                //假如当前格子跟目标格子相差小于风雨2格,则加速到慢进速度
-                if (ulCurOutGoodsSpeed > WB01_OUTGOODS_SLOW_SPEED)
-                {
-                    ulCurOutGoodsSpeed -= WB01_OUTGOODS_ACC_SPEED*WB01_OUTGOODS_PROC_TIME/1000;
-                    WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
-                }
-                else 
-                {
-                    m_CurOutGoodsStep = WB01_OUTGOODS_STEP_SLOW_KEEP;
-                }
-            }
-        }
-        
         break;
     case WB01_OUTGOODS_STEP_SLOW_KEEP  : //慢进速度保持
-        
-        //此步骤中,一直检测是否达到目标柜号,若到达,则停止
-        if (abs(m_lCurGridNumber - m_lObjGridNumber) == 0)
-        {
-            m_CurOutGoodsStep = WB01_OUTGOODS_STEP_FINISH;
-            ulCurOutGoodsSpeed = 0;
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP);
-        }
-        
         break;
     case WB01_OUTGOODS_STEP_FINISH     : //结束处理
-        
-        //清空相关变量
-        m_lObjGridNumber = 0;
-        m_CurOutGoodsStep = WB01_OUTGOODS_STEP_STOP;
-        ulCurOutGoodsSpeed = 0;
-        
-        //清除定时器
-        SysTime_Cancel(&m_OutGoodsCtrlTimer);
-        
-        //停止电机
-        WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP);
-        
         break;
     default: break;
     }
     
 }
+
+#endif
 
 
 /*****************************************************************************
@@ -521,9 +516,9 @@ void WB01_HallSensorProc(void)
             DEBUF_PRINT("Detect Hall Sensor Trigger\r\n");
             if (m_uCurMotorDir == WB01_MOTOR_DIR_CW)
             {
-                m_lCurGridNumber++;
+                g_lCurGridNumber++;
                 
-                if (m_lCurGridNumber >= m_lMaxGridCount)
+                if (g_lCurGridNumber >= g_lMaxGridCount)
                 {
                     
                     //报警
@@ -532,15 +527,17 @@ void WB01_HallSensorProc(void)
             }
             else if (m_uCurMotorDir == WB01_MOTOR_DIR_ACW)
             {
-                m_lCurGridNumber--;
+                g_lCurGridNumber--;
                 
-                if (m_lCurGridNumber < 0)
+                if (g_lCurGridNumber < 0)
                 {
-                    m_lCurGridNumber = 0;
+                    g_lCurGridNumber = 0;
                     
                     //报警
                 }
+                
             }
+            
         }
     }
       
@@ -1129,6 +1126,7 @@ uBit32 WB01_GetAisleMotorRunningState(void)
     
     return m_vm_AisleMotorRunningStatus;
 }
+    
 
 
 /**
@@ -1208,17 +1206,38 @@ static  SYS_TIME_DATA m_TestTimer = {1};    //测试定时器
   */
 void WB01_TestHandler(void)
 {
+    static uBit32 s_ulTempValue = 0;
+    (void)s_ulTempValue;
+    
     if (SysTime_CheckExpiredState(&m_TestTimer))
     {
         SysTime_StartOneShot(&m_TestTimer, WB01_TEST_INTERVAL);   //设置下一次执行的时间
+
+#if WB01_TEST_05
         
-        if (ulCurOutGoodsSpeed < 36*1000)
+        switch (s_ulTempValue%30)
         {
-            //设置启动速度
-            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
-            ulCurOutGoodsSpeed += 200;
-            WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
+        case 0:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_CW\r\n");
+            break;
+        case 10: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
+            break;
+        case 15: 
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_ACW);
+            DEBUF_PRINT("WB01_MOTOR_STATUS_ACW\r\n");
+            break;
+        case 25:
+            WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_STOP); 
+            DEBUF_PRINT("WB01_MOTOR_STATUS_STOP\r\n");
         }
+        
+#endif
+        
+        s_ulTempValue++;
+        
     }
     
 }
