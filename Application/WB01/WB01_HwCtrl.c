@@ -33,11 +33,11 @@
 #include <math.h>
 #include <stdlib.h>
 
-//#define WB01_DEBUG
+#define WB01_DEBUG
 
 #ifdef WB01_DEBUG
-#define DEBUF_PRINT(x)      UART_SendStr(WB01_DEBUG_UART_NODE, x)
-//#define DEBUF_PRINT(x)      UART_SendStr(WB01_COM_UART_NODE, x)
+//#define DEBUF_PRINT(x)      UART_SendStr(WB01_DEBUG_UART_NODE, x)
+#define DEBUF_PRINT(x)      UART_SendStr(WB01_COM_UART_NODE, x)
 #else 
 #define DEBUF_PRINT(x)   
 #endif
@@ -1197,7 +1197,7 @@ void WB01_AisleMotorHandler(void)
  * 测试线程接口
  ****************************************************************************/
 
-#define WB01_TEST_INTERVAL       (1000)     //按键扫描间隔(MS)
+#define WB01_TEST_INTERVAL       (2000)     //按键扫描间隔(MS)
 static  SYS_TIME_DATA m_TestTimer = {1};    //测试定时器
 
 
@@ -1218,6 +1218,11 @@ void WB01_TestHandler(void)
             WB01_SetMainAxisMotorStatus(WB01_MOTOR_STATUS_CW);
             ulCurOutGoodsSpeed += 200;
             WB01_SetMainAxisMotorSpeed(ulCurOutGoodsSpeed);
+            
+            //打印输出信息
+            uBit8 uDisBuff[64] = {0};
+            sprintf((char *)uDisBuff, "Cur Frequency: %d\r\n", ulCurOutGoodsSpeed);
+            DEBUF_PRINT(uDisBuff);
         }
     }
     

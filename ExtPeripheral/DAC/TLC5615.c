@@ -128,7 +128,7 @@ static void TLC5615_SetData(uBit32 ulWriteData)
  ****************************************************************************/
 
 /**
-  * @brief  TM1617 接口初始化
+  * @brief  TLC5615接口初始化
   * @param  pf_SetDIO 数据引脚控制接口
   * @param  pf_SetCLK 时钟引脚控制接口
   * @param  pf_SetCS 片选引脚控制接口
