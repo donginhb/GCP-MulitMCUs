@@ -48,6 +48,9 @@ static GPIO_DATA m_InputIOTable[] =
     //货道电机限位检测
     {GPIO_PORT_C,  0},
     
+    //光感检测
+    {GPIO_PORT_A, 14},
+    
 };
 
 
@@ -71,8 +74,8 @@ static GPIO_DATA m_OutputIOTable[] =
     {GPIO_PORT_B, 13},  
     
     //进货门电机
-    {GPIO_PORT_B,  7},
-    {GPIO_PORT_B,  6},
+    {GPIO_PORT_A,  7},
+    {GPIO_PORT_A,  6},
     
     //出货门电机
     {GPIO_PORT_B,  5},

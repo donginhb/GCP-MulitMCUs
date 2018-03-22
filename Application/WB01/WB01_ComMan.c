@@ -73,6 +73,7 @@ typedef struct
 #define WB01_SET_CMD_OUTGOOS                    (3) //出货控制
 #define WB01_SET_CMD_AISLE                      (4) //货道控制
 #define WB01_SET_CMD_GRID_LEARN                 (5) //柜号学习(检测当前总柜号)
+#define WB01_SET_CMD_OUTGOODS_RESET             (6) //出货复位
 
 //查询指令定义
 #define WB01_GET_CMD_INDOOR_STATUS              (1) //进货门状态查询
@@ -83,13 +84,14 @@ typedef struct
 #define WB01_GET_CMD_TOTAL_GRID                 (6) //总柜数查询
 #define WB01_GET_CMD_AISLE_MOTOR_STATUS         (7) //货道电机状态查询
 #define WB01_GET_CMD_LIGHT_STATUS               (8) //光栅状态查询
-
+#define WB01_GET_CMD_LIGHT_REACTION_STATUS      (9) //光感状态查询
+#define WB01_GET_CMD_IN_IO_STATUS               (10)//输入IO状态查询
 
 //错误码定义
 #define WB01_CMD_ERR_SUCCESS                    (0) //成功
 #define WB01_CMD_ERR_PARM_LENGTH                (1) //参数长度错误
 #define WB01_CMD_ERR_PARM_RANGE                 (2) //参数范围错误(超过约定的范围)
-#define WB01_CMD_ERR_DEV_BUS                    (3) //设备忙
+#define WB01_CMD_ERR_DEV_BUSY                   (3) //设备忙
 #define WB01_CMD_ERR_INVALID                    (4) //无效指令
 
 /**
@@ -167,7 +169,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             }
             else if (ulRet == 1)
             {
-                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUS;
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
             }
             
             //设置回发数据
@@ -192,7 +194,7 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             }
             else if (ulRet == 1)
             {
-                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUS;
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
             }
             
             //设置回发数据
@@ -208,9 +210,38 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
                 pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
             }
             
+            //执行指令
+            ulRet = WB01_StartSelfLearn();
+            
+            if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
+            }
+                
             //设置回发数据
             m_ulSendLen = sizeof(uBit8);
             pSendData->uData[0] = (ulRet & 0xFF);
+            
+            break;
+        case WB01_SET_CMD_OUTGOODS_RESET:
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //执行指令
+            ulRet = WB01_StartOutGoodsResetTask();
+            
+            if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
+            }
+            
+            //设置回发数据
+            pSendData->uData[0] = (ulRet & 0xFF);
+            m_ulSendLen = sizeof(uBit8);
             
             break;
         default:
@@ -333,6 +364,33 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             break;
             
+        case WB01_GET_CMD_LIGHT_REACTION_STATUS:
+            
+            //参数长度校验
+            if (ulDataLen != 0)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = GPIO_MAN_GetInputPinState(INPUT_IO_LIGHT_REACTION);
+            
+            break;
+            
+        case WB01_GET_CMD_IN_IO_STATUS:
+            
+            //参数长度校验
+            if (ulDataLen != 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //设置回发数据
+            m_ulSendLen = sizeof(uBit8);
+            pSendData->uData[0] = GPIO_GetInputState(pRecvData->uData[0]);
+            
+            break;
         default:
             pSendData->uErrCode = WB01_CMD_ERR_INVALID;
             

@@ -38,6 +38,9 @@ typedef enum
     //货道电机限位检测
     INPUT_IO_CH_MOTOR_LIMIT,    //0-触发 1-空闲
     
+    //光感检测
+    INPUT_IO_LIGHT_REACTION,    //0-触发 1-空闲
+    
 }INPUT_IO_TABLE;
 
 
@@ -58,7 +61,7 @@ typedef enum
 #endif 
     
     //传输皮带电机
-    OUTPUT_IO_TRANSF_MOTOR,
+    OUTPUT_IO_TRANSF_MOTOR,     //高电平动作
     
     //进货门电机
     OUTPUT_IO_IN_DOOR_DIR,      //入货门电机方向控制 0-正转 1-反转

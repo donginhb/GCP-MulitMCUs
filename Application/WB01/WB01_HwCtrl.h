@@ -67,6 +67,38 @@ uBit8 WB01_GetMainAxisMotorStatus(void);
  ****************************************************************************/
 
 /**
+  * @brief  自学习开始
+  * @param  None
+  * @retval 0-成功 1-忙
+  */
+uBit32 WB01_StartSelfLearn(void);
+
+
+/**
+  * @brief  自学习任务处理
+  * @param  None
+  * @retval None
+  */
+void WB01_SelfLearnHandler(void);
+
+
+
+/**
+  * @brief  出货复位任务开始
+  * @param  None
+  * @retval 0-成功 1-忙
+  */
+uBit32 WB01_StartOutGoodsResetTask(void);
+
+/**
+  * @brief  出货复位任务
+  * @param  None
+  * @retval None
+  */
+void WB01_OutGoodsResetHandler(void);
+
+
+/**
   * @brief  目标柜号设置
   * @param  ulGridNumber 目标柜号
   * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号

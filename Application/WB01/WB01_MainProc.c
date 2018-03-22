@@ -25,7 +25,6 @@
 #include "SysPeripheral/CoreCtrl/CoreCtrl.h"
 
 
-
 /**
   * @brief  相关资源初始化
   * @param  None
@@ -42,6 +41,9 @@ void WB01_Init(void)
     //硬件初始化
     WB01_HwInit();
     
+    //上电复位
+    //WB01_StartOutGoodsResetTask();
+    
 }
 
 
@@ -55,17 +57,29 @@ void WB01_MainProc(void)
     //LED显示
     WB01_MainWorkLedShow();
     
-    //霍尔传感器识别
+    //霍尔识别管理
     WB01_HallSensorProc();
     
-    //出货流程处理
+    //出货复位管理
+    WB01_OutGoodsResetHandler();
+    
+    //自学习管理
+    WB01_SelfLearnHandler();
+    
+    //出货流程管理
     WB01_OutGoodsHandler();
     
-    //通信设置
+    //通信管理
     WB01_ComHandler();
     
     //货道电机管理
     WB01_AisleMotorHandler();
+    
+    //入货门电机管理
+    WB01_IndoorHandler();
+    
+    //出货门电机管理
+    WB01_OutdoorHandler();
     
     //测试处理
     WB01_TestHandler();
