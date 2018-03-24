@@ -12,21 +12,15 @@
 #elif defined(CN_APP)
 #include "Application/CNMachine/CN_MainProc.h"
 #include "Application/CNMachine/CN_AppVersion.h"
-#elif defined(WFC_APP)
-#include "Application/WIFIClock/WFC_MainProc.h"
-#include "Application/WIFIClock/WFC_AppVersion.h"
-#elif defined(MD_APP)
-#include "Application/MotorDriver/MD_MainProc.h"
-#include "Application/MotorDriver/MD_AppVersion.h"
-#elif defined(LC_APP)
-#include "Application/LEDController/LC_MainProc.h"
-#include "Application/LEDController/LC_AppVersion.h"
-#elif defined(BMC_APP)
-#include "Application/BLEMotorCtrl/BMC_MainProc.h"
-#include "Application/BLEMotorCtrl/BMC_AppVersion.h"
-#elif defined(IRB_APP)
-#include "Application/IRDoorBell/IRB_MainProc.h"
-#include "Application/IRDoorBell/IRB_AppVersion.h"
+#elif defined(BS01_APP)
+#include "Application/BS01/BS01_MainProc.h"
+#include "Application/BS01/BS01_AppVersion.h"
+#elif defined(BS02_APP)
+#include "Application/BS02/BS02_MainProc.h"
+#include "Application/BS02/BS02_AppVersion.h"
+#elif defined(BS03_APP)
+#include "Application/BS03/BS03_MainProc.h"
+#include "Application/BS03/BS03_AppVersion.h"
 #elif defined(BS04_APP)
 #include "Application/BS04/BS04_MainProc.h"
 #include "Application/BS04/BS04_AppVersion.h"
@@ -81,6 +75,18 @@
 #elif defined(IRB_APP)
 #define APP_Init()          IRB_Init()
 #define APP_MainProc()      IRB_MainProc()
+
+#elif defined(BS01_APP)
+#define APP_Init()          BS01_Init()
+#define APP_MainProc()      BS01_MainProc()
+
+#elif defined(BS02_APP)
+#define APP_Init()          BS02_Init()
+#define APP_MainProc()      BS02_MainProc()
+
+#elif defined(BS03_APP)
+#define APP_Init()          BS03_Init()
+#define APP_MainProc()      BS03_MainProc()
 
 #elif defined(BS04_APP)
 #define APP_Init()          BS04_Init()

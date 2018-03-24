@@ -32,7 +32,27 @@
  * 系统版本相关控制接口
  ****************************************************************************/
 
-#if !defined(BOOTLOADER)
+#ifndef APP_VER_STR 
+#define APP_VER_STR             "GC00XXXD"          //项目版本
+#endif
+
+#ifndef APP_VER_NO0 
+#define APP_VER_NO0             (0)                 //大版本号
+#endif
+
+#ifndef APP_VER_NO1 
+#define APP_VER_NO1             (0)                 //小版本号
+#endif
+
+#ifndef APP_VER_PART 
+#define APP_VER_PART            (0)                 //组件号(预留)
+#endif
+
+#ifndef APP_VER_FLAG 
+#define APP_VER_FLAG            'R'                 //版本标示
+#endif
+
+
 /**
   * @brief  系统逻辑控制版本获取
   * @param  pVersion 版本结构指针
@@ -48,7 +68,6 @@ uBit32 SYS_GetSLCVersion(SOFTWARE_VERSION* pVersion)
     
     return 0;
 }
-#endif 
 
 
 /**

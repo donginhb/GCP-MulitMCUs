@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>STM32F030X4-BMC APP</name>
+    <name>STM32F030X4-BS04</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -1049,7 +1049,7 @@
     </settings>
   </configuration>
   <configuration>
-    <name>STM32F030X4-BS04</name>
+    <name>STM32F030X4-BS03</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -2130,39 +2130,42 @@
   <group>
     <name>Application</name>
     <group>
-      <name>BLEMotorCtrl</name>
+      <name>BS03</name>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC030_IODef.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_AppVersion.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC030_IODef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_ComMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_ComMan.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_ComMan.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_ComMan.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_HardwareDef.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HardwareDef.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_HwCtrl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HwCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_HwCtrl.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_HwCtrl.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_IOTable.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MainProc.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_IOTable.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MainProc.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_MainProc.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MotorCtrl.c</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_MainProc.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\BLEMotorCtrl\BMC_MotorCtrl.h</name>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_MotorCtrl.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\BS03\BS03_MotorCtrl.h</name>
       </file>
     </group>
     <group>
