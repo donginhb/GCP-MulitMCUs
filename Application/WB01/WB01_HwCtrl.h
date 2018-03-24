@@ -41,12 +41,7 @@ void WB01_MainWorkLedShow(void);
   *     @arg WB01_MOTOR_STATUS_STOP   停止
   *     @arg WB01_MOTOR_STATUS_CW     正转
   *     @arg WB01_MOTOR_STATUS_ACW    反转
-  *     @arg WB01_MOTOR_STATUS_ESTOP  刹车
   * @retval None
-  * @Note   禁止在同一时间内,出现A/B都为高的情况.由于IO操作的异步性(设置IO寄存器后,
-  *         需要一定时间才会发生电平变化),所以在改变IO电平后,需要等待其电平发生实
-  *         际改变后才执行一下步的操作,以避免这种情况出现;
-  *         除此之外,必须先执行拉低电平的操作,再执行拉高电平的操作;
   */
 void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus);
 
@@ -62,49 +57,10 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus);
 uBit8 WB01_GetMainAxisMotorStatus(void);
 
 
+
 /*****************************************************************************
  * 出货流程线程接口
  ****************************************************************************/
-
-/**
-  * @brief  自学习开始
-  * @param  None
-  * @retval 0-成功 1-忙
-  */
-uBit32 WB01_StartSelfLearn(void);
-
-
-/**
-  * @brief  自学习任务处理
-  * @param  None
-  * @retval None
-  */
-void WB01_SelfLearnHandler(void);
-
-
-
-/**
-  * @brief  出货复位任务开始
-  * @param  None
-  * @retval 0-成功 1-忙
-  */
-uBit32 WB01_StartOutGoodsResetTask(void);
-
-/**
-  * @brief  出货复位任务
-  * @param  None
-  * @retval None
-  */
-void WB01_OutGoodsResetHandler(void);
-
-
-/**
-  * @brief  目标柜号设置
-  * @param  ulGridNumber 目标柜号
-  * @retval 0-成功  1-正在运行,设置失败  2-设置指超过最大柜号
-  */
-uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber);
-
 
 /**
   * @brief  目标柜号获取
@@ -120,6 +76,62 @@ uBit32 WB01_GetObjGridNumber(void);
   * @retval 总柜数
   */
 uBit32 WB01_GetMaxGridCount(void);
+
+
+/**
+  * @brief  自学习开始
+  * @param  None
+  * @retval 0-成功 1-忙
+  */
+uBit32 WB01_StartSelfLearn(void);
+
+
+/**
+  * @brief  自学习运行状态获取
+  * @param  None
+  * @retval 0-成功 1-忙
+  */
+uBit32 WB01_GetSelfLearnStep(void);
+
+
+/**
+  * @brief  自学习任务处理
+  * @param  None
+  * @retval None
+  */
+void WB01_SelfLearnHandler(void);
+
+
+/**
+  * @brief  出货复位任务开始
+  * @param  None
+  * @retval 0-成功 1-忙
+  */
+uBit32 WB01_StartOutGoodsResetTask(void);
+
+
+/**
+  * @brief  出货复位任务
+  * @param  None
+  * @retval None
+  */
+void WB01_OutGoodsResetHandler(void);
+
+
+/**
+  * @brief  目标柜号设置
+  * @param  ulGridNumber 目标柜号
+  * @retval 0-成功 1-正在运行,设置失败  2-设置指超过最大柜号 3-人体感应信号触发,指令无效
+  */
+uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber);
+
+
+/**
+  * @brief  出货流程步骤获取
+  * @param  None
+  * @retval 0-完成 1-进行中 2-暂停(因为人体红外检测的原因)
+  */
+uBit32 WB01_GetOutGoodsStep(void);
 
 
 /**

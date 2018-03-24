@@ -57,7 +57,7 @@ typedef enum
     OUTPUT_IO_MAIN_AXIS_S,      //刹车
 #else
     OUTPUT_IO_MAIN_AXIS_DIR,    //方向信号
-    OUTPUT_IO_MAIN_AXIS_EN,     //使能信号
+    OUTPUT_IO_MAIN_AXIS_EN,     //使能信号 0-使能 1-断使能
 #endif 
     
     //传输皮带电机

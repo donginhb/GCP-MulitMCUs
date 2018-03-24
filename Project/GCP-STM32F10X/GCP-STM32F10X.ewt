@@ -8582,7 +8582,7 @@
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_ComMan.h</name>
+        <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_Comman.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\MotorDriver\MD_HardwareDef.h</name>
@@ -8610,6 +8610,12 @@
       <name>WB01</name>
       <file>
         <name>$PROJ_DIR$\..\..\Application\WB01\WB01_AppVersion.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\WB01\WB01_CD4094.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\Application\WB01\WB01_CD4094.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\Application\WB01\WB01_CmdUnpack.c</name>
@@ -9175,7 +9181,7 @@
           <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_WatchDog.h</name>
+          <name>$PROJ_DIR$\..\..\HwPlatform\STM32F10X\HwDrivers\HW_Watchdog.h</name>
         </file>
       </group>
       <group>
