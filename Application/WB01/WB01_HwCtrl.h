@@ -62,6 +62,12 @@ uBit8 WB01_GetMainAxisMotorStatus(void);
  * 出货流程线程接口
  ****************************************************************************/
 
+extern uBit32 WB01_OUTGOODS_START_SPEED;    //启动速度
+extern uBit32 WB01_OUTGOODS_FAST_SPEED ;    //快进速度
+extern uBit32 WB01_OUTGOODS_SLOW_SPEED ;    //慢进速度
+extern uBit32 WB01_OUTGOODS_RESET_SPEED;    //复位速度
+
+
 /**
   * @brief  目标柜号获取
   * @param  None

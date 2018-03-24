@@ -126,7 +126,7 @@ void WB01_HwInit(void)
     PWM_OutputEnable(WB01_MOTOR_PWM_NODE, false);
     
     //初始化HC595
-    HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
+    //HC595_Init(OUTPUT_IO_HC595_SCK, OUTPUT_IO_HC595_RCK, OUTPUT_IO_HC595_SI, 16);
     
     //关闭货道电机
     WB01_SetAsileMotor(0, 0, 0);
@@ -245,21 +245,13 @@ uBit8 WB01_GetMainAxisMotorStatus(void)
  * 出货流程线程接口
  ****************************************************************************/
 
-//主轴电机出货流程速度定义
-#define WB01_OUTGOODS_START_SPEED           (200)   //启动速度
-#define WB01_OUTGOODS_FAST_SPEED            (800)   //快进速度
-#define WB01_OUTGOODS_SLOW_SPEED            (200)   //慢进速度
-//#define WB01_OUTGOODS_APPROX_SPEED          (200)   //逼近速度
-#define WB01_OUTGOODS_RESET_SPEED           (400)   //复位速度
-
-#define WB01_OUTGOODS_ACC_SPEED             (200)   //加速度(单位:Hz/S)
-
-#define WB01_OUTGOODS_SLOW_GRID_COUNT       (2)     //慢进的格子数
-
-#define WB01_OUTGOODS_GRID_TIMEROVER        (3000)  //单格超时时间
-
-#define WB01_OUTGOODS_PROC_TIME             (20)    //出货流程监控间隔(MS)
-#define WB01_OUTGOODS_RESET_LIMIT_STOP_TIME (1000)  //出货复位流程限位间隔(MS)
+#define WB01_OUTGOODS_ACC_SPEED                     (200)   //加速度(单位:Hz/S)
+#define WB01_OUTGOODS_SLOW_GRID_COUNT               (4)     //慢进的格子数
+#define WB01_OUTGOODS_GRID_TIMEROVER                (3000)  //单格超时时间
+#define WB01_OUTGOODS_PROC_TIME                     (20)    //出货流程监控间隔(MS)
+#define WB01_OUTGOODS_RESET_LIMIT_STOP_TIME         (1000)  //出货复位流程限位间隔(MS)
+#define WB01_OUTGOODS_HALL_START_MIN_TRIGGER_TIME   (2000)  //霍尔启动最小触发间隔
+#define WB01_OUTGOODS_HALL_RUN_MIN_TRIGGER_TIME     (1000)  //霍尔启动最小触发间隔
 
 typedef enum
 {
@@ -286,9 +278,18 @@ typedef enum
     
 }WB01_OUTGOODS_RESET_STEP;
 
+//主轴电机出货流程速度定义
+uBit32 WB01_OUTGOODS_START_SPEED    =      (200);   //启动速度
+uBit32 WB01_OUTGOODS_FAST_SPEED     =      (600);   //快进速度
+uBit32 WB01_OUTGOODS_SLOW_SPEED     =      (200);   //慢进速度
+uBit32 WB01_OUTGOODS_RESET_SPEED    =      (400);   //复位速度
+
 static SYS_TIME_DATA m_OutGoodsCtrlTimer = {0};         //出货流程控制定时器
 static SYS_TIME_DATA m_SelfLearnCtrlTimer = {0};        //自学习流程控制定时器
 static SYS_TIME_DATA m_OutGoodsResetCtrlTimer = {0};    //出货复位流程控制定时器
+#if 0
+static SYS_TIME_DATA m_OutGoodsHallCtrlTimer = {0};     //出货流程霍尔计时定时器
+#endif
 
 static Bit32 m_lMaxGridCount = 25;          //最大的格子数
 static Bit32 m_lCurGridNumber = 0;          //当前转过的格子
@@ -459,7 +460,7 @@ void WB01_SelfLearnHandler(void)
         //若柜号有效,则记录柜号
         if (m_lCurGridNumber)
         {
-            m_lMaxGridCount = m_lCurGridNumber + 1;
+            m_lMaxGridCount = m_lCurGridNumber;
         }
         
         ulCurOutGoodsSpeed = 0;
@@ -577,6 +578,11 @@ uBit32 WB01_SetObjGridNumber(uBit32 ulGridNumber)
     
     //设置当前工作步骤
     m_CurOutGoodsStep = WB01_OUTGOODS_STEP_START;
+    
+#if 0
+    //开始霍尔检测计时
+    SysTime_StartOneShot(&m_OutGoodsHallCtrlTimer, WB01_OUTGOODS_HALL_START_MIN_TRIGGER_TIME);
+#endif
     
     DEBUF_PRINT("WB01_SetObjGridNumber: Success!\r\n");
     
@@ -841,6 +847,42 @@ void WB01_HallSensorProc(void)
         {
             if (m_SelfLearnStep == WB01_SELF_LEARN_STEP_STOP)
             {
+#if 0
+                if (m_CurOutGoodsStep == WB01_OUTGOODS_STEP_STOP)
+                {
+                    return ;
+                }
+                
+                if (SysTime_CheckExpiredState(&m_OutGoodsHallCtrlTimer))
+                {
+                    if (m_uCurMotorDir == WB01_MOTOR_DIR_CW)
+                    {
+                        m_lCurGridNumber++;
+                        
+                        if (m_lCurGridNumber >= m_lMaxGridCount)
+                        {
+                            
+                            //报警
+                        }
+                        
+                    }
+                    else if (m_uCurMotorDir == WB01_MOTOR_DIR_ACW)
+                    {
+                        m_lCurGridNumber--;
+                        
+                        if (m_lCurGridNumber < 0)
+                        {
+                            m_lCurGridNumber = 0;
+                            
+                            //报警
+                        }
+                    }
+                    
+                }
+                
+                SysTime_StartOneShot(&m_OutGoodsHallCtrlTimer, WB01_OUTGOODS_HALL_RUN_MIN_TRIGGER_TIME);
+#else 
+                
                 if (m_uCurMotorDir == WB01_MOTOR_DIR_CW)
                 {
                     m_lCurGridNumber++;
@@ -864,6 +906,9 @@ void WB01_HallSensorProc(void)
                     }
                 }
                 
+#endif
+                
+                
             }
             else 
             {
@@ -877,6 +922,8 @@ void WB01_HallSensorProc(void)
             }
             
         }
+        
+#if 0
         //当按下按键"停止"限位,停止步进电机,并将电机出货流程停止
         else if (ulCurTrg == 2)
         {
@@ -884,6 +931,7 @@ void WB01_HallSensorProc(void)
             
             m_CurOutGoodsStep = WB01_OUTGOODS_STEP_STOP;
         }
+#endif
     }
       
 }
@@ -1638,8 +1686,5 @@ void WB01_TestHandler(void)
     }
     
 }
-
-
-
 
 

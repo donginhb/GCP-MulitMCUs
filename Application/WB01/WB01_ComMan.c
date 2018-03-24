@@ -32,9 +32,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ExtPeripheral/LogicIC/HC595.h"
-      
-
 /*****************************************************************************
  * 私有成员定义及实现
  ****************************************************************************/
@@ -62,6 +59,11 @@ typedef struct
     
 }CMD_SEND_DATA;
 
+extern uBit32 WB01_OUTGOODS_FAST_SPEED ;    //快进速度
+extern uBit32 WB01_OUTGOODS_SLOW_SPEED ;    //慢进速度
+extern uBit32 WB01_OUTGOODS_RESET_SPEED;    //复位速度
+    
+    
 /*****************************************************************************
  * 指令执行
  ****************************************************************************/
@@ -77,6 +79,10 @@ typedef struct
 #define WB01_SET_CMD_AISLE                      (4) //货道控制
 #define WB01_SET_CMD_GRID_LEARN                 (5) //柜号学习(检测当前总柜号)
 #define WB01_SET_CMD_OUTGOODS_RESET             (6) //出货复位
+#define WB01_SET_CMD_OUTGOODS_FAST_SPEED        (7) //快进速度
+#define WB01_SET_CMD_OUTGOODS_SLOW_SPEED        (8) //快进速度
+#define WB01_SET_CMD_OUTGOODS_RESET_SPEED       (9) //复位速度
+
 
 //查询指令定义
 #define WB01_GET_CMD_INDOOR_STATUS              (1) //进货门状态查询
@@ -248,6 +254,69 @@ uBit32 WB01_CmdProcesser(uBit8* pRcvBuf, uBit32 ulRcvLen)
             
             break;
             
+        case WB01_SET_CMD_OUTGOODS_FAST_SPEED  :        //设置快进速度
+            
+            //参数长度校验
+            if (ulDataLen != 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //执行指令
+            WB01_OUTGOODS_FAST_SPEED = pRecvData->uData[0] * 100;
+            
+            if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
+            }
+            
+            //设置回发数据
+            pSendData->uData[0] = 0;
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_OUTGOODS_SLOW_SPEED  :        //设置慢进速度
+            
+            //参数长度校验
+            if (ulDataLen != 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //执行指令
+            WB01_OUTGOODS_SLOW_SPEED = pRecvData->uData[0] * 100;
+            
+            if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
+            }
+            
+            //设置回发数据
+            pSendData->uData[0] = 0;
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
+        case WB01_SET_CMD_OUTGOODS_RESET_SPEED :        //设置复位速度
+            
+            //参数长度校验
+            if (ulDataLen != 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_PARM_LENGTH;
+            }
+            
+            //执行指令
+            WB01_OUTGOODS_RESET_SPEED = pRecvData->uData[0] * 100;
+            
+            if (ulRet == 1)
+            {
+                pSendData->uErrCode = WB01_CMD_ERR_DEV_BUSY;
+            }
+            
+            //设置回发数据
+            pSendData->uData[0] = 0;
+            m_ulSendLen = sizeof(uBit8);
+            
+            break;
         default:
             pSendData->uErrCode = WB01_CMD_ERR_INVALID;
             
