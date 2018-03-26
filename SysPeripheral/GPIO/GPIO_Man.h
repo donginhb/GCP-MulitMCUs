@@ -24,9 +24,11 @@ typedef struct
 //GPIO配置模式
 typedef enum
 {
-    GOIO_MODE_INPUT,
-    GPIO_MODE_OUPUT,
-    GPIO_MODE_OD   ,
+    GOIO_MODE_INPUT_FLOAT,      //下拉输入
+    GOIO_MODE_INPUT_PUSH_UP,    //上拉输入
+    GOIO_MODE_INPUT_PUSH_DOWN,  //下拉输入
+    GPIO_MODE_OUPUT,            //推挽输出
+    GPIO_MODE_OD   ,            //开漏输出
     
 }GPIO_CFG_MODE;
 

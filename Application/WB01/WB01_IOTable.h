@@ -80,6 +80,9 @@ typedef enum
     //光栅供电开关
     OUTPUT_IO_LIGHT_POWER,
     
+    //电磁锁
+    OUTPUT_IO_MOTOR_LOCK,
+    
 }OUTPUT_IO_TABLE;
 
 

@@ -16,10 +16,10 @@
    
    
 /***********************************<INCLUDES>**********************************/
-#include "BS04_MainProc.h"
-#include "BS04_HwCtrl.h"
-#include "BS04_HardwareDef.h"
-//#include "BS04_RfCom.h"
+#include "BS09_MainProc.h"
+#include "BS09_HwCtrl.h"
+#include "BS09_HardwareDef.h"
+#include "BS09_ComMan.h"
 #include "DataType/DataType.h"
 #include "SysCtrl/SysConfig.h"
 
@@ -35,13 +35,16 @@
   * @param  None
   * @retval None
   */
-void BS04_Init(void)
+void BS09_Init(void)
 {
     //上电延时
     SysTime_DelayMs(200);
     
+    //关闭JTAG接口
+    CoreCtrl_JTAGConfig(1);
+    
     //初始化硬件
-    BS04_HwInit();
+    BS09_HwInit();
     
 }
 
@@ -51,18 +54,15 @@ void BS04_Init(void)
   * @param  None
   * @retval None
   */
-void BS04_MainProc(void)
+void BS09_MainProc(void)
 {
     //LED显示
-    BS04_ShowMainWorkLed();
+    BS09_ShowMainWorkLed();
     
-    //蜂鸣器管理
-    BS04_Handler();
+    //按键扫描
+    BS09_KeyProc();
     
-    //人体检测处理
-    BS04_HumanDetectHandler();
-
-    //红外遥控接收处理
-    BS04_IRHandler();
-
+    //通信管理
+    BS09_ComHandler();
+    
 }

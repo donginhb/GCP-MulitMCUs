@@ -25,8 +25,10 @@
 #include "SysPeripheral/SysTimer/SysTimer.h"
 #include "SysPeripheral/UART/UART.h"
 #include "SysPeripheral/KEY/KEY.h"
-#include "SysPeripheral/TIME/TimeCapture.h"
+#include "SysPeripheral/TIME/TimeReckon.h"
 #include "SysPeripheral/IRQ/IRQ_Man.h"
+#include "SysPeripheral/EXTI/EXTI.h"
+
 
 #include <stdio.h>
 #include <string.h>
@@ -108,8 +110,8 @@ void BS04_ShowMainWorkLed(void)
  * 人体红外探测线程接口
  ****************************************************************************/
 
-#define BS04_HD_TOGGLE_TIME             (100)               //LED翻转时间(MS)
-static SYS_TIME_DATA m_HumanDetectCtrlTimer = {1};          //LED控定时器
+#define BS04_HD_OVER_TIME               (10000)             //人体红外超时时间
+static SYS_TIME_DATA m_HumanDetectCtrlTimer = {1};          //人体红外检测定时器
 
 /**
   * @brief  人体检测线程
@@ -118,21 +120,68 @@ static SYS_TIME_DATA m_HumanDetectCtrlTimer = {1};          //LED控定时器
   */
 void BS04_HumanDetectHandler(void)
 {
-    if (SysTime_CheckExpiredState(&m_HumanDetectCtrlTimer))
+    
+    if (GPIO_MAN_GetInputPinState(INPUT_IO_HUMAN_DETECT))
     {
-        SysTime_StartOneShot(&m_HumanDetectCtrlTimer, BS04_HD_TOGGLE_TIME); //设置下一次执行的时间
-        
-        if (GPIO_MAN_GetInputPinState(INPUT_IO_HUMAN_DETECT))
+        //在定时器尚未启动的时候启动计时
+        if (!m_HumanDetectCtrlTimer.ulEnable)
         {
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT, true);
+            SysTime_StartOneShot(&m_HumanDetectCtrlTimer, BS04_HD_OVER_TIME); //设置下一次执行的时间
         }
-        else 
-        {
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT, false);
-        }
-        
+    }
+    else 
+    {
+        //低电平清除定时器
+        SysTime_Cancel(&m_HumanDetectCtrlTimer);
     }
     
+    if (SysTime_CheckExpiredState(&m_HumanDetectCtrlTimer))
+    {
+        //启动定时器
+        BS04_BeepEnable();
+        
+        //清除定时器
+        SysTime_Cancel(&m_HumanDetectCtrlTimer);
+    }
+    
+}
+
+
+/*****************************************************************************
+ * 蜂鸣器管理线程接口
+ ****************************************************************************/
+
+#define BS04_BEEP_OVER_TIME               (3000)            //蜂鸣器超时时间
+static SYS_TIME_DATA m_BeepCtrlTimer = {0};                 //蜂鸣器检测定时器
+
+
+/**
+  * @brief  蜂鸣器使能
+  * @param  None
+  * @retval None
+  */
+void BS04_BeepEnable(void)
+{
+    //使能蜂鸣器
+    GPIO_MAN_SetOutputPinState(OUTPUT_IO_BEEP, true);
+    
+    //启动超时定时器
+    SysTime_StartOneShot(&m_BeepCtrlTimer, BS04_BEEP_OVER_TIME); 
+    
+}
+
+
+/**
+  * @brief  蜂鸣器管理
+  * @param  None
+  * @retval None
+  */
+void BS04_Handler(void)
+{
+    if (SysTime_CheckExpiredState(&m_BeepCtrlTimer))
+    {
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_BEEP, false);
+    }
     
 }
 
@@ -141,8 +190,7 @@ void BS04_HumanDetectHandler(void)
  * 红外遥控接收线程接口
  ****************************************************************************/
 
-#define TIME_CAP_NODE       (2)             //捕获定时器节点
-#define TIME_CAP_CHANNEL    (0)             //捕获定时器通道
+#define TIME_REK_NODE       (1)             //捕获定时器节点
 
 //红外编码逻辑
 #define GUIDANCE_CODE       (4500)          //引导码:4.50ms高电平
@@ -150,8 +198,6 @@ void BS04_HumanDetectHandler(void)
 #define LOGIC_0             ( 560)          //逻辑0: 0.56ms高电平
 #define CONTINUOUS_CODE     (2200)          //连发码:2.20ms高电平
 
-//static uBit32 m_ulCaptureValue = 0;         //捕获值
-//static bool m_bCaptureFinishFlag = false;   //捕获完成标志
 
 static struct
 {
@@ -162,7 +208,7 @@ static struct
 
 //捕获中断回调(高电平时间捕获测试)
 //由软件导致的延迟,大约在10us左右
-static void BS04_CAP_CallbackHandler(void)
+static void BS04_EXTI_CallbackHandler(void)
 {
     static bool s_bCapRisingEdge = true;    //判断当前是由哪种边沿触发的捕获 true为上升沿 false为下降沿
     
@@ -171,66 +217,54 @@ static void BS04_CAP_CallbackHandler(void)
     static uBit32 iIrRmtCode = 0; //数据: 数据位+数据反码+地址位+地址反码
     uBit16 nIrTime = 0;
     
-    //判断中断入口
-    if (TIME_CAP_GetCaptureIRQFlag(TIME_CAP_NODE, TIME_CAP_CHANNEL))
+    //获取当前的IO状态
+    s_bCapRisingEdge = GPIO_GetInputState(INPUT_IO_IR_DETECT) ? true : false;
+    
+    if (s_bCapRisingEdge == false)
     {
-        //清标志位
-        TIME_CAP_ClearCaptureIRQFlag(TIME_CAP_NODE, TIME_CAP_CHANNEL);
+        //下降沿停止计时
+        TIME_REK_Stop(TIME_REK_NODE);
+        nIrTime = TIME_REK_GetValue(TIME_REK_NODE);
+        TIME_REK_ClearValue(TIME_REK_NODE);
         
-        if (s_bCapRisingEdge == false)
+        //是否引导码
+        if ((nIrTime > GUIDANCE_CODE-500) && (nIrTime < GUIDANCE_CODE+500))
         {
-            //下降沿获取捕获值
-            nIrTime = TIME_CAP_GetCaptureValue(TIME_CAP_NODE, TIME_CAP_CHANNEL) / 10;
-            //m_bCaptureFinishFlag = true;
-            
-#if 0
-            //是否引导码
-            if ((nIrTime > GUIDANCE_CODE-500) && (nIrTime < GUIDANCE_CODE+500))
-            {
-                cIrRmtSta = 0xAA;
-                
-            }
-            else
-            {
-                if (cIrRmtSta == 0xAA)  //已接收到引导码
-                {
-                    if ((nIrTime > LOGIC_1-300) && (nIrTime < LOGIC_1+300)) //逻辑1
-                    {
-                        iIrRmtCode |= (0x1<<(cCodeCount));
-                        cCodeCount++;
-                    }
-                    else if ((nIrTime > LOGIC_0-300) && (nIrTime < LOGIC_0+300))  //逻辑0
-                    {
-                        iIrRmtCode &= ~(0x1<<(cCodeCount));
-                        cCodeCount++;
-                    }
-                    else ;
-                    
-                }
-                
-                if (cCodeCount == 32)
-                {
-                    cIrRmtSta = 0;
-                    cCodeCount = 0;
-                    
-                    IrRemote.m_Status = 1;
-                    IrRemote.m_Code = (iIrRmtCode>>16) & 0x00FF;
-                }
-            }
-#endif
+            cIrRmtSta = 0xAA;
             
         }
-        else 
+        else
         {
-            //上升沿复位捕获值
-            TIME_CAP_ResetCaptureValue(TIME_CAP_NODE, TIME_CAP_CHANNEL);
+            if (cIrRmtSta == 0xAA)  //已接收到引导码
+            {
+                if ((nIrTime > LOGIC_1-300) && (nIrTime < LOGIC_1+300)) //逻辑1
+                {
+                    iIrRmtCode |= (0x1<<(cCodeCount));
+                    cCodeCount++;
+                }
+                else if ((nIrTime > LOGIC_0-300) && (nIrTime < LOGIC_0+300))  //逻辑0
+                {
+                    iIrRmtCode &= ~(0x1<<(cCodeCount));
+                    cCodeCount++;
+                }
+                else ;
+            }
+            
+            if (cCodeCount == 32)
+            {
+                cIrRmtSta = 0;
+                cCodeCount = 0;
+                
+                IrRemote.m_Status = 1;
+                IrRemote.m_Code = (iIrRmtCode>>16) & 0x00FF;
+            }
         }
         
-        //设置下次的捕获边缘
-        TIME_CAP_SetCaptureEdge(TIME_CAP_NODE, TIME_CAP_CHANNEL, 
-                                s_bCapRisingEdge ? TIM_CAP_EDGE_FALLING : TIM_CAP_EDGE_RISING);
-        
-        s_bCapRisingEdge = !s_bCapRisingEdge;
+    }
+    else 
+    {
+        //上升沿开始计时
+        TIME_REK_Start(TIME_REK_NODE);
     }
     
 }
@@ -244,12 +278,13 @@ static void BS04_CAP_CallbackHandler(void)
 void BS04_InitIR(void)
 {
     //设置中断回调
-    IRQ_SetTrgCallback(BS04_CAP_CallbackHandler, IRQ_TRG_TIM3);
+    IRQ_SetTrgCallback(BS04_EXTI_CallbackHandler, IRQ_TRG_EXTI6);
     
-    //初始化捕获端口
-    TIME_CAP_InitCapture(TIME_CAP_NODE, 0x1<<TIME_CAP_CHANNEL, TIM_CAP_EDGE_RISING);    //初始化捕获(捕获上升沿)
-    TIME_CAP_EnableCaptureIRQ(TIME_CAP_NODE, TIME_CAP_CHANNEL, true);                   //使能捕获中断
-    TIME_CAP_EnableCapture(TIME_CAP_NODE, true);                                        //使能捕获
+    //设置中断捕获模式
+    EXTI_Init(INPUT_IO_IR_DETECT, EXTI_TRG_RISING|EXTI_TRG_FALLING);
+    
+    //设置计时定时器
+    TIME_REK_Init(TIME_REK_NODE);
     
 }
 
@@ -267,11 +302,8 @@ void BS04_IRHandler(void)
         
         switch (IrRemote.m_Code)
         {
-        case 0:
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT, false);
-            break;
-        case 1:
-            GPIO_MAN_SetOutputPinState(OUTPUT_IO_OUT, true);
+        case 64:    //开灯/关灯
+            GPIO_ToggleOutputState(OUTPUT_IO_OUT);
             break;
         default: break;
         }

@@ -22,9 +22,10 @@ void HAL_GPIO_ConfigOD(uBit16 nPort, uBit16 nPin);
   * @brief  输入IO配置
   * @param  nPort IO端口号
   * @param  nPin  IO引脚号
+  * @param  uMode  0-浮空 1-上拉 2-下拉
   * @retval None
   */
-void HAL_GPIO_ConfigInput(uBit16 nPort, uBit16 nPin);
+void HAL_GPIO_ConfigInput(uBit16 nPort, uBit16 nPin, uBit8 uMode);
 
 
 /**

@@ -157,6 +157,24 @@ void HW_GPIO_ConfigInput(uint16_t nPort, uint16_t nPin);
 
 
 /**
+  * @brief  输入IO配置(上拉)
+  * @param  nPort IO端口号
+  * @param  nPin  IO引脚号
+  * @retval None
+  */
+void HW_GPIO_ConfigInputPushUp(uint16_t nPort, uint16_t nPin);
+
+
+/**
+  * @brief  输入IO配置(下拉)
+  * @param  nPort IO端口号
+  * @param  nPin  IO引脚号
+  * @retval None
+  */
+void HW_GPIO_ConfigInputPushDown(uint16_t nPort, uint16_t nPin);
+
+
+/**
   * @brief  输出IO配置
   * @param  nPort IO端口号
   * @param  nPin  IO引脚号

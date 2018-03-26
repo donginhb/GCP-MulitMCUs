@@ -66,6 +66,15 @@ void HAL_TIME_ResetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum);
 uBit32 HAL_TIME_GetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum);
 
 
+/**
+  * @brief  捕获源获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起) 
+  * @retval 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)
+  */
+uBit8 HAL_TIME_GetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum);
+
+
 /*****************************************************************************
  * 定时器捕获模式中断相关控制接口
  ****************************************************************************/

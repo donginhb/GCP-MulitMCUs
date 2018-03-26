@@ -20,6 +20,14 @@ uBit32 LCD_Init(uBit32 *pDataNoGroup, uBit32 ulENNo, uBit32 ulRWNo, uBit32 ulRSN
 
 
 /**
+  * @brief  屏幕清除
+  * @param  None
+  * @retval None
+  */
+void LCD_Clear(void);
+
+
+/**
   * @brief  字符串输入
   * @param  uRowIndex 显示行索引
   * @param  uColIndex 显示列索引

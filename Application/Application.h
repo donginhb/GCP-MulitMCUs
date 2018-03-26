@@ -36,6 +36,9 @@
 #elif defined(BS08S_APP)
 #include "Application/BS08S/BS08S_MainProc.h"
 #include "Application/BS08S/BS08S_AppVersion.h"
+#elif defined(BS09_APP)
+#include "Application/BS09/BS09_MainProc.h"
+#include "Application/BS09/BS09_AppVersion.h"
 #elif defined(WB01_APP)
 #include "Application/WB01/WB01_MainProc.h"
 #include "Application/WB01/WB01_AppVersion.h"
@@ -107,6 +110,10 @@
 #elif defined(BS08S_APP)
 #define APP_Init()          BS08S_Init()
 #define APP_MainProc()      BS08S_MainProc()
+
+#elif defined(BS09_APP)
+#define APP_Init()          BS09_Init()
+#define APP_MainProc()      BS09_MainProc()
 
 #elif defined(WB01_APP)
 #define APP_Init()          WB01_Init()

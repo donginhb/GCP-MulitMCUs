@@ -194,18 +194,21 @@ void WB01_SetMainAxisMotorStatus(uBit8 uMotorStatus)
     case WB01_MOTOR_STATUS_STOP:
         m_uCurAxisMotorStatus = uMotorStatus;
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, false);
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTOR_LOCK, true);
         break;
     case WB01_MOTOR_STATUS_CW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_CW;
         m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, true);
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTOR_LOCK, false);
         break;
     case WB01_MOTOR_STATUS_ACW: 
         m_uCurMotorDir = WB01_MOTOR_DIR_ACW;
         m_uCurAxisMotorStatus = uMotorStatus;
         GPIO_MAN_SetOutputPinState(OUTPUT_IO_MAIN_AXIS_DIR, false);
         PWM_OutputEnable(WB01_MOTOR_PWM_NODE, true);
+        GPIO_MAN_SetOutputPinState(OUTPUT_IO_MOTOR_LOCK, false);
         break;
     default: break;
     }

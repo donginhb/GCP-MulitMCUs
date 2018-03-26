@@ -166,6 +166,15 @@ uBit32 HAL_TIME_InitCapture(uBit8 uTimeNode, uBit8 uChannelMask, uBit8 uTrgSourc
     
 #elif (defined(STM32F10X)||defined(STM32F0XX))
     HW_TIM_InitInputMode(uTimeNode, uChannelMask, TIM_INPUT_MODE_NORMAL);
+    
+    for (int i = 0; i < 4; i++)
+    {
+        if (uChannelMask & (0x1<<i))
+        {
+            HW_TIME_SetCaptureEdge(uTimeNode, i, uTrgSource);
+        }
+    }
+    
 #endif
     
     return 0;
@@ -202,11 +211,23 @@ void HAL_TIME_SetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum, uBit8 uTrgSourc
     case HAL_LPC_RESERVER_MODULE: break;
     }
     
-    
 #elif (defined(STM32F10X)||defined(STM32F0XX))
-    
+    HW_TIME_SetCaptureEdge(uTimeNode, uChannelNum, uTrgSource);
 #endif
     
+}
+
+
+/**
+  * @brief  捕获源获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起) 
+  * @retval 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)
+  */
+uBit8 HAL_TIME_GetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum)
+{
+    
+    return HW_TIME_GetCaptureEdge(uTimeNode, uChannelNum);
 }
 
 
@@ -274,7 +295,7 @@ void HAL_TIME_ResetCaptureValue(uBit8 uTimeNode, uBit8 uChannelNum)
     }
     
 #elif (defined(STM32F10X)||defined(STM32F0XX))
-
+    
 #endif
     
 }

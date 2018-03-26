@@ -15,6 +15,8 @@ extern "C"
 typedef enum
 {
     INPUT_IO_HUMAN_DETECT,
+    
+    INPUT_IO_IR_DETECT,
 
 }INPUT_IO_TABLE;
 

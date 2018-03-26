@@ -103,11 +103,29 @@ uBit32 GPIO_InitIOGroup(GPIO_DATA *pIOGroup, uBit32 ulGroupLen, GPIO_CFG_MODE Cf
 {
     switch (CfgMode)
     {
-    case GOIO_MODE_INPUT:
+    case GOIO_MODE_INPUT_FLOAT:
         {
             for (int i = 0; i < ulGroupLen; i++)
             {
-                HAL_GPIO_ConfigInput(pIOGroup[i].nPort, pIOGroup[i].nPin);
+                HAL_GPIO_ConfigInput(pIOGroup[i].nPort, pIOGroup[i].nPin, 0);
+            }
+            
+            break;
+        }
+    case GOIO_MODE_INPUT_PUSH_UP : 
+        {
+            for (int i = 0; i < ulGroupLen; i++)
+            {
+                HAL_GPIO_ConfigInput(pIOGroup[i].nPort, pIOGroup[i].nPin, 1);
+            }
+            
+            break;
+        }
+    case GOIO_MODE_INPUT_PUSH_DOWN :
+        {
+            for (int i = 0; i < ulGroupLen; i++)
+            {
+                HAL_GPIO_ConfigInput(pIOGroup[i].nPort, pIOGroup[i].nPin, 2);
             }
             
             break;
@@ -161,7 +179,7 @@ uBit32 GPIO_InitIOTable(GPIO_CTRL_TABLE *pTable)
     //配置输入IO
     for (int i = 0; i < pTable->ulInputGroupLen; i++)
     {
-        HAL_GPIO_ConfigInput(pTable->pInputGroup[i].nPort, pTable->pInputGroup[i].nPin);
+        HAL_GPIO_ConfigInput(pTable->pInputGroup[i].nPort, pTable->pInputGroup[i].nPin, 0);
     }
     
 #if SYS_GPIO_MAN_USAGE

@@ -90,6 +90,9 @@ static GPIO_DATA m_OutputIOTable[] =
     //光栅供电开关
     {GPIO_PORT_C, 13},
     
+    //电磁锁开关
+    {GPIO_PORT_B, 12},  
+    
 };
 
 

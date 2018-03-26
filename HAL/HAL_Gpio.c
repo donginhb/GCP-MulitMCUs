@@ -45,11 +45,23 @@ void HAL_GPIO_ConfigOD(uBit16 nPort, uBit16 nPin)
   * @brief  输入IO配置
   * @param  nPort IO端口号
   * @param  nPin  IO引脚号
+  * @param  uMode  0-浮空 1-上拉 2-下拉
   * @retval None
   */
-void HAL_GPIO_ConfigInput(uBit16 nPort, uBit16 nPin)
+void HAL_GPIO_ConfigInput(uBit16 nPort, uBit16 nPin, uBit8 uMode)
 {
+#if (defined(LPC17XX)||defined(LPC43XX))
     HW_GPIO_ConfigInput(nPort, nPin);
+#elif (defined(STM32F10X)||defined(STM32F0XX))
+    
+    switch (uMode)
+    {
+    case 0: HW_GPIO_ConfigInput(nPort, nPin);         break;
+    case 1: HW_GPIO_ConfigInputPushUp(nPort, nPin);   break;
+    case 2: HW_GPIO_ConfigInputPushDown(nPort, nPin); break;
+    }
+    
+#endif
     
 }
 

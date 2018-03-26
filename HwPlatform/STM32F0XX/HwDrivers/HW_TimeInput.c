@@ -253,6 +253,47 @@ uint16_t HW_TIM_GetInputCount(uint8_t uTimeNode)
 
 
 /**
+  * @brief  捕获源设置
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起)
+  * @param  uTrgSource 触发源(1-上升沿捕获 2-下降沿捕获)
+  * @retval None
+  */
+void HW_TIME_SetCaptureEdge(uint8_t uTimeNode, uint8_t uChannelNum, uint8_t uTrgSource)
+{
+    if (uTrgSource & 0x01)
+    {
+        TIM[uTimeNode]->CCER  &= ~(0x1<<(4*uChannelNum + 1)); //捕获上升沿
+    }
+    else if (uTrgSource & 0x02)
+    {
+        TIM[uTimeNode]->CCER  |=  (0x1<<(4*uChannelNum + 1)); //捕获下降沿
+    }
+    
+}
+
+
+/**
+  * @brief  捕获源获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起) 
+  * @retval 触发源(1-上升沿捕获 2-下降沿捕获)
+  */
+uint8_t HW_TIME_GetCaptureEdge(uint8_t uTimeNode, uint8_t uChannelNum)
+{
+    if (TIM[uTimeNode]->CCER  & (0x1<<(4*uChannelNum + 1)))
+    {
+        return 2;
+    }
+    else 
+    {
+        return 1;
+    }
+    
+}
+
+
+/**
   * @brief  定时器输入捕获值获取
   * @param  uTimeNode 定时器节点
   * @param  uChannelMask 通道掩码字

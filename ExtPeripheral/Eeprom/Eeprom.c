@@ -121,7 +121,7 @@ uBit32 EEPROM_Init(uBit32 ulDataPinNO, uBit32 ulClockPinNO)
      m_ulDataPinNo  = ulDataPinNO ;
      m_ulClockPinNo = ulClockPinNO;
      
-     AT24Cxx_InitInterface(NULL, SET_SDA, SET_SCL, GET_SDA, GET_SCL, I2C_Delay, AT24C02_PAGE_SIZE);
+     AT24Cxx_InitInterface(NULL, SET_SDA, SET_SCL, GET_SDA, GET_SCL, I2C_Delay, AT24C08_PAGE_SIZE);
      
      return EEPROM_CheckRW();
 }

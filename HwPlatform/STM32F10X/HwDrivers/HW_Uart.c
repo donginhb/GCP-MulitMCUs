@@ -200,19 +200,18 @@ static void HW_UART_IOConfig(uint8_t uUartNode)
         HW_GPIO_ModeConfig(0, 9,  HW_GPIO_AF_PP_H);   // TX: PA9
         HW_GPIO_ModeConfig(0, 10, HW_GPIO_PUSH_UP);   // RX: PA10
         
-        break;                      
+        break;
     case HW_UART_NODE1:
         HW_GPIO_ModeConfig(0, 2, HW_GPIO_AF_PP_H);    // TX: PA2
         HW_GPIO_ModeConfig(0, 3, HW_GPIO_PUSH_UP);    // RX: PA3
-        
+        break;
     case HW_UART_NODE2:
         HW_GPIO_ModeConfig(1, 10, HW_GPIO_AF_PP_H);   // TX: PB10
         HW_GPIO_ModeConfig(1, 11, HW_GPIO_PUSH_UP);   // RX: PB11
-        
+        break;
     case HW_UART_NODE3:
         HW_GPIO_ModeConfig(2, 10, HW_GPIO_AF_PP_H);   // TX: PC10
         HW_GPIO_ModeConfig(2, 11, HW_GPIO_PUSH_UP);   // RX: PC11
-        
         break;
     default : break;
     }

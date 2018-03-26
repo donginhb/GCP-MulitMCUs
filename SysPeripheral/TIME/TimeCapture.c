@@ -58,6 +58,19 @@ void TIME_CAP_SetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum, uBit8 uTrgSourc
 
 
 /**
+  * @brief  捕获源获取
+  * @param  uTimeNode 定时器节点
+  * @param  uChannelNum 通道编号(从0算起) 
+  * @retval 触发源(1-上升沿捕获 2-下降沿捕获 3-双边沿捕获)
+  */
+uBit8 TIME_CAP_GetCaptureEdge(uBit8 uTimeNode, uBit8 uChannelNum)
+{
+    
+    return HAL_TIME_GetCaptureEdge(uTimeNode, uChannelNum);
+}
+
+
+/**
   * @brief  定时器输入使能
   * @param  uTimeNode 定时器节点
   * @param  bIsEnable 定时器使能位

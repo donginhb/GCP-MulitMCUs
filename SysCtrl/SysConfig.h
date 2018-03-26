@@ -123,7 +123,7 @@
 #endif
 
 #ifndef SYS_KEY_SCAN_GROUP
-#define SYS_KEY_SCAN_GROUP              (4)     //最大支持扫描的按键
+#define SYS_KEY_SCAN_GROUP              (16)    //最大支持扫描的按键
 #endif  
 
 #ifndef SYS_CAN_TX_BUFF_LEN
